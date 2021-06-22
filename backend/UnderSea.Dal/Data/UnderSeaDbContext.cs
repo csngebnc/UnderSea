@@ -31,6 +31,33 @@ namespace UnderSea.Dal.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<BuildingEffect>().HasKey(be => new { be.BuildingId, be.EffectId });
+            modelBuilder.Entity<CountryUnit>().HasKey(cu => new { cu.CountryId, cu.UnitId });
+            modelBuilder.Entity<CountryUpgrade>().HasKey(cu => new { cu.CountryId, cu.UpgradeId });
+            modelBuilder.Entity<UpgradeEffect>().HasKey(ue => new { ue.EffectId, ue.UpgradeId });
+
+            modelBuilder.Entity<Effect>()
+                .HasDiscriminator<string>("effect_type")
+                .HasValue<Effect>("effect_base")
+                .HasValue<CoralEffect>("effect_coral")
+                .HasValue<MilitaryEffect>("effect_military")
+                .HasValue<PopulationEffect>("effect_population");
+
+            modelBuilder.Entity<Upgrade>()
+                .HasDiscriminator<string>("upgrade_type")
+                .HasValue<Upgrade>("upgrade_base")
+                .HasValue<Alchemy>("upgrade_alchemy")
+                .HasValue<CoralWall>("upgrade_coralwall")
+                .HasValue<MudCombine>("upgrade_mudcombine")
+                .HasValue<MudTractor>("upgrade_mudtractor")
+                .HasValue<SonarCanon>("upgrade_sonarcannon")
+                .HasValue<UnderwaterVehicles>("upgrade_underwater_vehicles");
+        }
+
 
     }
 }
