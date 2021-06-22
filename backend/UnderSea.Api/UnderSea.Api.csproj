@@ -13,4 +13,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\UnderSea.Dal\UnderSea.Dal.csproj" />
+    <ProjectReference Include="..\UnderSea.Model\UnderSea.Model.csproj" />
+  </ItemGroup>
+
 </Project>
