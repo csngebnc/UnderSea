@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'Baloo';
+    src: url('./assets/fonts/Baloo-Regular.ttf')  format('truetype');
+}
+
+$font: 'Baloo';
+$background: url('./assets/img/background_hd.png'); 
+
+html{
+    height: 100%;
+}
+
+body{
+    height: 100%;
+    font-family: $font;
+    margin: 0;
+    background-image: $background;
+    background-position: center top;
+    background-size: cover;
+}
