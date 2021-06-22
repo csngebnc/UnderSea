@@ -1652,43 +1652,6 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
-      },
-      "UnderSea.Bll/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "dependencies": {
-          "UnderSea.Dal": "1.0.0",
-          "UnderSea.Model": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/UnderSea.Bll.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/UnderSea.Bll.dll": {}
-        }
-      },
-      "UnderSea.Dal/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "dependencies": {
-          "UnderSea.Model": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/UnderSea.Dal.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/UnderSea.Dal.dll": {}
-        }
-      },
-      "UnderSea.Model/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "compile": {
-          "bin/placeholder/UnderSea.Model.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/UnderSea.Model.dll": {}
-        }
       }
     }
   },
@@ -6166,21 +6129,6 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
-    },
-    "UnderSea.Bll/1.0.0": {
-      "type": "project",
-      "path": "../UnderSea.Bll/UnderSea.Bll.csproj",
-      "msbuildProject": "../UnderSea.Bll/UnderSea.Bll.csproj"
-    },
-    "UnderSea.Dal/1.0.0": {
-      "type": "project",
-      "path": "../UnderSea.Dal/UnderSea.Dal.csproj",
-      "msbuildProject": "../UnderSea.Dal/UnderSea.Dal.csproj"
-    },
-    "UnderSea.Model/1.0.0": {
-      "type": "project",
-      "path": "../UnderSea.Model/UnderSea.Model.csproj",
-      "msbuildProject": "../UnderSea.Model/UnderSea.Model.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -6189,8 +6137,7 @@
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 5.0.7",
       "Microsoft.AspNetCore.Identity.UI >= 5.0.7",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.7",
-      "Microsoft.EntityFrameworkCore.Tools >= 5.0.7",
-      "UnderSea.Bll >= 1.0.0"
+      "Microsoft.EntityFrameworkCore.Tools >= 5.0.7"
     ]
   },
   "packageFolders": {
@@ -6224,11 +6171,7 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {
-            "U:\\Probaprojekt\\UnderSea\\backend\\UnderSea.Bll\\UnderSea.Bll.csproj": {
-              "projectPath": "U:\\Probaprojekt\\UnderSea\\backend\\UnderSea.Bll\\UnderSea.Bll.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {

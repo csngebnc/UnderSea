@@ -1,49 +1,11 @@
 {
   "version": 3,
   "targets": {
-    "net5.0": {
-      "UnderSea.Dal/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "dependencies": {
-          "UnderSea.Model": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/UnderSea.Dal.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/UnderSea.Dal.dll": {}
-        }
-      },
-      "UnderSea.Model/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "compile": {
-          "bin/placeholder/UnderSea.Model.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/UnderSea.Model.dll": {}
-        }
-      }
-    }
+    "net5.0": {}
   },
-  "libraries": {
-    "UnderSea.Dal/1.0.0": {
-      "type": "project",
-      "path": "../UnderSea.Dal/UnderSea.Dal.csproj",
-      "msbuildProject": "../UnderSea.Dal/UnderSea.Dal.csproj"
-    },
-    "UnderSea.Model/1.0.0": {
-      "type": "project",
-      "path": "../UnderSea.Model/UnderSea.Model.csproj",
-      "msbuildProject": "../UnderSea.Model/UnderSea.Model.csproj"
-    }
-  },
+  "libraries": {},
   "projectFileDependencyGroups": {
-    "net5.0": [
-      "UnderSea.Dal >= 1.0.0",
-      "UnderSea.Model >= 1.0.0"
-    ]
+    "net5.0": []
   },
   "packageFolders": {
     "C:\\Users\\surmann.roland\\.nuget\\packages\\": {},
@@ -76,14 +38,7 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {
-            "U:\\Probaprojekt\\UnderSea\\backend\\UnderSea.Dal\\UnderSea.Dal.csproj": {
-              "projectPath": "U:\\Probaprojekt\\UnderSea\\backend\\UnderSea.Dal\\UnderSea.Dal.csproj"
-            },
-            "U:\\Probaprojekt\\UnderSea\\backend\\UnderSea.Model\\UnderSea.Model.csproj": {
-              "projectPath": "U:\\Probaprojekt\\UnderSea\\backend\\UnderSea.Model\\UnderSea.Model.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
