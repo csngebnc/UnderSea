@@ -55,7 +55,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: ExpansionTile(
-                title: Text("expansion cucli"),
+                title: Center(child: Icon(Icons.expand_less)),
+                backgroundColor: Colors.white38,
+                iconColor: Colors.black,
+                trailing: null,
+                collapsedBackgroundColor: Colors.white,
                 expandedAlignment: Alignment.topCenter,
                 children: [
                   Icon(Icons.ac_unit),
@@ -87,38 +91,58 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: const Text('Undersea ~~~~~'),
-      ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Colors.blueAccent),
-            label: 'Kezdőlap',
+        //backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text('Undersea ~~~~~'),
+        ),
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xff9FFFF0), Color(0xff6BEEE9), Color(0xff0FCFDE)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              //tileMode: TileMode.,
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business, color: Colors.blueAccent),
-            label: 'Városom',
+          child: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home, color: Color(0xff001234)),
+                label: 'Kezdőlap',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.business, color: Color(0xff001234)),
+                label: 'Városom',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.school, color: Color(0xff001234)),
+                label: 'Támadás',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.school, color: Color(0xff001234)),
+                label: 'Csapataim',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Color(0xff001234),
+            onTap: _onItemTapped,
+            type: BottomNavigationBarType.fixed,
+            showUnselectedLabels: true,
+            backgroundColor: Colors.transparent,
+            selectedLabelStyle: TextStyle(
+                color: Color(0xff001234),
+                fontFamily: 'Baloo 2',
+                fontSize: 11,
+                fontStyle: FontStyle.normal),
+            unselectedLabelStyle: TextStyle(
+                color: Color(0xff001234),
+                fontFamily: 'Baloo 2',
+                fontSize: 11,
+                fontStyle: FontStyle.normal),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school, color: Colors.blueAccent),
-            label: 'Támadás',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school, color: Colors.blueAccent),
-            label: 'Csapataim',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
-        onTap: _onItemTapped,
-        showUnselectedLabels: true,
-        backgroundColor: Colors.lightBlue,
-      ),
-    );
+        ));
   }
 }
