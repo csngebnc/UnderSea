@@ -40,6 +40,8 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<CountryUpgrade>().HasKey(cu => new { cu.CountryId, cu.UpgradeId });
             modelBuilder.Entity<UpgradeEffect>().HasKey(ue => new { ue.EffectId, ue.UpgradeId });
 
+            modelBuilder.Entity<Country>().OwnsOne(p => p.Production);
+
             modelBuilder.Entity<Effect>()
                 .HasDiscriminator<string>("effect_type")
                 .HasValue<Effect>("effect_base")

@@ -31,6 +31,8 @@ namespace UnderSea.Model.Models
         [Required(ErrorMessage = "A egység mennyiségének kötelező megadni!")]
         public int UnitCount { get; set; }
 
+        public Production Production { get; set; }
+
         public string OwnerId { get; set; }
         public User Owner { get; set; }
     }
