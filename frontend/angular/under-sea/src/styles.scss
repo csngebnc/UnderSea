@@ -29,6 +29,7 @@ $white: #ffffff;
 $light-grey: #dfe3ee;
 $teal: #9ffff0;
 $blue: #428dff;
+$dark-blue: #03255F;
 $navy: #1c3e76;
 $dark-navy: #001234;
 
@@ -77,6 +78,22 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   border-radius: 16px;
   padding: 1rem;
   backdrop-filter: $blur;
+}
+
+.modal{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  overflow: visible;
+}
+
+.modal-content{
+  position: relative;
+  background-color: $dark-blue;
+  border-radius: 16px;
+  box-shadow: 0px 3px 34px $dark-blue;
+  padding: 1rem;
 }
 
 .stack {
@@ -135,6 +152,10 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 
 .to-sides {
   justify-content: space-between;
+}
+
+.to-center{
+  justify-content: center;
 }
 
 .w-100 {
