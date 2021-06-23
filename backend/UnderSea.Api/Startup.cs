@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnderSea.Bll.Mapper;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -37,6 +38,11 @@ namespace UnderSea.Api
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<UnderSeaDbContext>();
+
+            services.AddAutoMapper(typeof(BattleProfile));
+            services.AddAutoMapper(typeof(BuildingProfile));
+            services.AddAutoMapper(typeof(UpgradeProfile));
+            services.AddAutoMapper(typeof(UserProfile));
 
             services.AddIdentityServer()
                 .AddApiAuthorization<User, UnderSeaDbContext>();
