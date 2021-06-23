@@ -1,0 +1,22 @@
+@import 'src/assets/scss/common.scss';
+
+.title{
+    font-size: 2.4rem;
+    color: $teal;
+}
+
+.text{
+    font-size: 1.3rem;
+    color: $white;
+    background: none;
+    border: none;
+    font-family: 'Baloo';
+}
+
+.button-text{
+    font-size: 1.8rem;
+}
+
+.mt{
+    margin-top: 0.6rem;
+}
