@@ -13,5 +13,7 @@ namespace UnderSea.Model.Models
         [Required(ErrorMessage = "A hatás nevét kötelező megadni!")]
         [StringLength(100, ErrorMessage = "A hatás neve maximum 100 karakter hosszú lehet!")]
         public string Name { get; set; }
+
+        public abstract void ApplyEffect(Country country);
     }
 }
