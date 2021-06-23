@@ -23,5 +23,7 @@ namespace UnderSea.Model.Models
 
         public int DefenderCountryId { get; set; }
         public Country DefenderCountry { get; set; }
+
+        public ICollection<AttackUnit> AttackUnits { get; set; }
     }
 }

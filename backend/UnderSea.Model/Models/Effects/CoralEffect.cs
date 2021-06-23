@@ -9,7 +9,7 @@ namespace UnderSea.Model.Models
 {
     public class CoralEffect : Effect
     {
-        public override void Affect(Country country)
+        public override void ApplyEffect(Country country)
         {
             country.Production.BaseCoralProduction += EffectConstants.CoralNumber;
         }

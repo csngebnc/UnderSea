@@ -16,5 +16,7 @@ namespace UnderSea.Model.Models
         [Range(0, int.MaxValue, ErrorMessage = "Az építési idő nem lehet negatív szám!")]
         [Required(ErrorMessage = "Az építési időt kötelező megadni!")]
         public int ConstructionTime { get; set; }
+
+        public ICollection<CountryBuilding> CountryBuildings { get; set; }
     }
 }

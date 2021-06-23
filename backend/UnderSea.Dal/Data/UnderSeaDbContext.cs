@@ -35,6 +35,19 @@ namespace UnderSea.Dal.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Country>()
+                .HasOne(c => c.Owner)
+                .WithOne(u => u.Country);
+
+            modelBuilder.Entity<Attack>()
+                .HasOne(a => a.AttackerCountry)
+                .WithMany(c => c.Attacks);
+
+            modelBuilder.Entity<Attack>()
+                .HasOne(a => a.DefenderCountry)
+                .WithMany(c => c.Defenses);
+
+
             modelBuilder.Entity<BuildingEffect>().HasKey(be => new { be.BuildingId, be.EffectId });
             modelBuilder.Entity<CountryUnit>().HasKey(cu => new { cu.CountryId, cu.UnitId });
             modelBuilder.Entity<CountryUpgrade>().HasKey(cu => new { cu.CountryId, cu.UpgradeId });

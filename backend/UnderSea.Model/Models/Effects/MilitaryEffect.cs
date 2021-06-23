@@ -9,7 +9,7 @@ namespace UnderSea.Model.Models
 {
     public class MilitaryEffect : Effect
     {
-        public override void Affect(Country country)
+        public override void ApplyEffect(Country country)
         {
             country.UnitCount += EffectConstants.SoldierNumber;
         }
