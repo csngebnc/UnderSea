@@ -13,7 +13,7 @@ namespace UnderSea.Model.Models
         {
             RemoveAllUpgradeFromCountry(country);
 
-            country.UnitCount += EffectConstants.SoldierNumber;
+            country.MaxUnitCount += EffectConstants.SoldierNumber;
 
             ApplyAllUpgradeToCountry(country);
         }
@@ -22,7 +22,7 @@ namespace UnderSea.Model.Models
         {
             RemoveAllUpgradeFromCountry(country);
 
-            country.UnitCount -= EffectConstants.SoldierNumber;
+            country.MaxUnitCount -= EffectConstants.SoldierNumber;
 
             ApplyAllUpgradeToCountry(country);
         }

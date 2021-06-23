@@ -70,7 +70,7 @@ namespace UnderSea.Dal.Data
                 .HasValue<MudCombine>("upgrade_mudcombine")
                 .HasValue<MudTractor>("upgrade_mudtractor")
                 .HasValue<SonarCanon>("upgrade_sonarcannon")
-                .HasValue<UnderwaterVehicles>("upgrade_underwater_vehicles");
+                .HasValue<UnderwaterMartialArt>("upgrade_martialart");
         }
 
 
