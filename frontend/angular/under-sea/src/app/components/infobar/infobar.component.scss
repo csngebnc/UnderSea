@@ -1,0 +1,24 @@
+@import 'src/assets/scss/common.scss';
+
+.text{
+    font-size: 2rem;
+    color: $navy;
+}
+
+.bar{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.plr-1{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.d-flex{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}

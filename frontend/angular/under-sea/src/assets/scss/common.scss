@@ -30,7 +30,7 @@ $blur: blur(8px);
 $foggy: 0.39;
 $gradient: linear-gradient(258deg, #9FFFF0 0%, #9FFFF0 36%, #0FCFDE 100%);
 
-//component styles
+//css classes
 
 .text-input{
     font-size: 1.1rem;;
@@ -53,9 +53,21 @@ $gradient: linear-gradient(258deg, #9FFFF0 0%, #9FFFF0 36%, #0FCFDE 100%);
     align-items: center;
 }
 
+.low-opacity-white{
+    background-color: $white;
+    opacity: 0.2;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    border-radius: inherit;
+    margin: -1rem;
+}
+
 .blurry-panel{   
+    position: relative;
     border-radius: 16px;
-    padding: 2rem;
+    padding: 1rem;
     backdrop-filter: $blur;
 }
 
@@ -80,4 +92,27 @@ $gradient: linear-gradient(258deg, #9FFFF0 0%, #9FFFF0 36%, #0FCFDE 100%);
     font-family: 'Baloo';
     font-size: 1rem;
     text-decoration: none;
+}
+
+.icon-frame{
+    background: $teal;
+    border-radius: 14px;
+    border: 2px solid $blue;
+}
+
+.w-100{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.w-15{
+    width: 15%;
+}
+
+.w-85{
+    width: 85%;
+}
+
+.p-1_5{
+    padding: 1.5rem;
 }
