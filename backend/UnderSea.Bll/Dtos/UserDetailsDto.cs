@@ -11,6 +11,8 @@ namespace UnderSea.Bll.Dtos
     {
         public int MaxUnitCount { get; set; }
 
+        public ICollection<BattleUnitDto> Units { get; set; }
+
         public int CurrentCoral { get; set; }
         public int CurrentPearl { get; set; }
 
