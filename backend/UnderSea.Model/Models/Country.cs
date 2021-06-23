@@ -29,7 +29,7 @@ namespace UnderSea.Model.Models
 
         [Range(0, int.MaxValue, ErrorMessage = "Az egység mennyisége nem lehet negatív szám!")]
         [Required(ErrorMessage = "A egység mennyiségének kötelező megadni!")]
-        public int UnitCount { get; set; }
+        public int MaxUnitCount { get; set; }
 
         public Production Production { get; set; }
 

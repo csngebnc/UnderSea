@@ -11,7 +11,7 @@ namespace UnderSea.Model.Models
     {
         public override void ApplyEffect(Country country)
         {
-            country.UnitCount += EffectConstants.SoldierNumber;
+            country.MaxUnitCount += EffectConstants.SoldierNumber;
         }
     }
 }
