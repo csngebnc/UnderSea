@@ -10,6 +10,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ProfilecardComponent } from './components/profilecard/profilecard.component';
 import { BuildingContainerComponent } from './components/building-container/building-container.component';
 import { MainComponent } from './pages/main/main.component';
+import { ResourceInfoComponent } from './components/resource-info/resource-info.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { MainComponent } from './pages/main/main.component';
     SidebarComponent,
     ProfilecardComponent,
     BuildingContainerComponent,
-    MainComponent
+    MainComponent,
+    ResourceInfoComponent
   ],
   imports: [
     BrowserModule,

@@ -1,16 +1,8 @@
-@import 'src/assets/scss/common.scss';
+@import 'src/styles.scss';
 
 .title{
     font-size: 2.4rem;
     color: $teal;
-}
-
-.text{
-    font-size: 1.3rem;
-    color: $white;
-    background: none;
-    border: none;
-    font-family: 'Baloo';
 }
 
 .sidebar-button{

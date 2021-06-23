@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserData } from 'src/app/models/userdata.model';
 import { Resources } from 'src/app/models/resources.model';
 
 @Component({
@@ -9,7 +8,8 @@ import { Resources } from 'src/app/models/resources.model';
 })
 export class InfobarComponent implements OnInit {
 
-  @Input() userData: UserData;
+  @Input() round: number;
+  @Input() placement: number;
   @Input()  resources: Resources;
 
 
