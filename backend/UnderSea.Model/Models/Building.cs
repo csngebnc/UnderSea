@@ -18,5 +18,6 @@ namespace UnderSea.Model.Models
         public int ConstructionTime { get; set; }
 
         public ICollection<CountryBuilding> CountryBuildings { get; set; }
+        public ICollection<BuildingEffect> BuildingEffects { get; set; }
     }
 }

@@ -18,5 +18,8 @@ namespace UnderSea.Model.Models
         [Range(0, int.MaxValue, ErrorMessage = "A fejlesztési idő nem lehet negatív szám!")]
         [Required(ErrorMessage = "A fejlesztési időt kötelező megadni!")]
         public int UpgradeTime { get; set; }
+
+        public ICollection<CountryUpgrade> CountryUpgrades { get; set; }
+        public ICollection<UpgradeEffect> UpgradeEffects { get; set; }
     }
 }

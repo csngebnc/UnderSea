@@ -34,5 +34,7 @@ namespace UnderSea.Model.Models
         [Range(0, int.MaxValue, ErrorMessage = "Az egység ára nem lehet negatív szám!")]
         [Required(ErrorMessage = "Az egység árát kötelező megadni!")]
         public int Price { get; set; }
+
+        public ICollection<CountryUnit> CountryUnits { get; set; }
     }
 }
