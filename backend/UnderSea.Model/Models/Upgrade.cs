@@ -21,5 +21,8 @@ namespace UnderSea.Model.Models
 
         public ICollection<CountryUpgrade> CountryUpgrades { get; set; }
         public ICollection<UpgradeEffect> UpgradeEffects { get; set; }
+
+        public abstract void ApplyUpgrade(Country country);
+        public abstract void RemoveUpgrade(Country country);
     }
 }
