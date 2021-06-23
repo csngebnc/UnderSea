@@ -11,7 +11,14 @@ namespace UnderSea.Model.Models
     {
         public override void ApplyEffect(Country country)
         {
+            var upgrades = country.CountryUpgrades;
+
             country.Production.BaseCoralProduction += EffectConstants.CoralNumber;
+
+            foreach (var upgrade in upgrades)
+            {
+                ;
+            }
         }
     }
 }
