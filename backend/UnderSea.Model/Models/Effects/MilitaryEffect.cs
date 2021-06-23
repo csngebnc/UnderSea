@@ -11,7 +11,20 @@ namespace UnderSea.Model.Models
     {
         public override void ApplyEffect(Country country)
         {
+            RemoveAllUpgradeFromCountry(country);
+
             country.UnitCount += EffectConstants.SoldierNumber;
+
+            ApplyAllUpgradeToCountry(country);
+        }
+
+        public override void RemoveEffect(Country country)
+        {
+            RemoveAllUpgradeFromCountry(country);
+
+            country.UnitCount -= EffectConstants.SoldierNumber;
+
+            ApplyAllUpgradeToCountry(country);
         }
     }
 }
