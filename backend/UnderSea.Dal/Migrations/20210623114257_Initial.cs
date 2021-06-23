@@ -140,8 +140,7 @@ namespace UnderSea.Dal.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    UpgradeTime = table.Column<int>(type: "int", nullable: false),
-                    upgrade_type = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UpgradeTime = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -267,8 +266,8 @@ namespace UnderSea.Dal.Migrations
                     MaxUnitCount = table.Column<int>(type: "int", nullable: false),
                     Production_BaseCoralProduction = table.Column<int>(type: "int", nullable: true),
                     Production_BasePearlProduction = table.Column<int>(type: "int", nullable: true),
-                    Production_CurrentCoralProduction = table.Column<int>(type: "int", nullable: true),
-                    Production_CurrentPearlProduction = table.Column<int>(type: "int", nullable: true),
+                    Production_CoralProductionMultiplier = table.Column<double>(type: "float", nullable: true),
+                    Production_PearlProductionMultiplier = table.Column<double>(type: "float", nullable: true),
                     OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -354,14 +353,12 @@ namespace UnderSea.Dal.Migrations
                         name: "FK_Attacks_Countries_AttackerCountryId",
                         column: x => x.AttackerCountryId,
                         principalTable: "Countries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Attacks_Countries_DefenderCountryId",
                         column: x => x.DefenderCountryId,
                         principalTable: "Countries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

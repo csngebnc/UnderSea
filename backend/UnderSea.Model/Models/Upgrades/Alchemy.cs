@@ -7,16 +7,16 @@ using UnderSea.Model.Constants;
 
 namespace UnderSea.Model.Models
 {
-    public class Alchemy : Upgrade
+    public class Alchemy : Effect
     {
-        public override void ApplyUpgrade(Country country)
+        public override void ApplyEffect(Country country)
         {
-            country.Production.CurrentPearlProduction = (int)Math.Round(country.Production.BasePearlProduction * UpgradeConstants.Alchemy + country.Production.CurrentPearlProduction);
+            country.Production.PearlProductionMultiplier *= UpgradeConstants.Alchemy;
         }
 
-        public override void RemoveUpgrade(Country country)
+        public override void RemoveEffect(Country country)
         {
-            country.Production.CurrentPearlProduction = (int)Math.Round(country.Production.CurrentPearlProduction - country.Production.BasePearlProduction * UpgradeConstants.Alchemy);
+            country.Production.PearlProductionMultiplier /= UpgradeConstants.Alchemy;
         }
     }
 }

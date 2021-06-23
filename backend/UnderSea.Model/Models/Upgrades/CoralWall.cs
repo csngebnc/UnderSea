@@ -7,9 +7,9 @@ using UnderSea.Model.Constants;
 
 namespace UnderSea.Model.Models
 {
-    public class CoralWall : Upgrade
+    public class CoralWall : Effect
     {
-        public override void ApplyUpgrade(Country country)
+        public override void ApplyEffect(Country country)
         {
             var units = country.CountryUnits;
             foreach(var u in units)
@@ -18,7 +18,7 @@ namespace UnderSea.Model.Models
             }
         }
 
-        public override void RemoveUpgrade(Country country)
+        public override void RemoveEffect(Country country)
         {
             var units = country.CountryUnits;
             foreach (var u in units)

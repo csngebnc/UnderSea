@@ -7,16 +7,16 @@ using UnderSea.Model.Constants;
 
 namespace UnderSea.Model.Models
 {
-    public class MudTractor : Upgrade
+    public class MudTractor : Effect
     {
-        public override void ApplyUpgrade(Country country)
+        public override void ApplyEffect(Country country)
         {
-            country.Production.CurrentCoralProduction = (int)Math.Round(country.Production.BaseCoralProduction * UpgradeConstants.MudTractor + country.Production.CurrentCoralProduction);
+            country.Production.CoralProductionMultiplier *= UpgradeConstants.MudTractor;
         }
 
-        public override void RemoveUpgrade(Country country)
+        public override void RemoveEffect(Country country)
         {
-            country.Production.CurrentCoralProduction = (int)Math.Round(country.Production.CurrentCoralProduction - country.Production.BaseCoralProduction * UpgradeConstants.MudTractor);
+            country.Production.CoralProductionMultiplier /= UpgradeConstants.MudTractor;
         }
     }
 }

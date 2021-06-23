@@ -41,11 +41,13 @@ namespace UnderSea.Dal.Data
 
             modelBuilder.Entity<Attack>()
                 .HasOne(a => a.AttackerCountry)
-                .WithMany(c => c.Attacks);
+                .WithMany(c => c.Attacks)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Attack>()
                 .HasOne(a => a.DefenderCountry)
-                .WithMany(c => c.Defenses);
+                .WithMany(c => c.Defenses)
+                .OnDelete(DeleteBehavior.NoAction);
 
 
             modelBuilder.Entity<BuildingEffect>().HasKey(be => new { be.BuildingId, be.EffectId });
@@ -60,17 +62,13 @@ namespace UnderSea.Dal.Data
                 .HasValue<Effect>("effect_base")
                 .HasValue<CoralEffect>("effect_coral")
                 .HasValue<MilitaryEffect>("effect_military")
-                .HasValue<PopulationEffect>("effect_population");
-
-            modelBuilder.Entity<Upgrade>()
-                .HasDiscriminator<string>("upgrade_type")
-                .HasValue<Upgrade>("upgrade_base")
-                .HasValue<Alchemy>("upgrade_alchemy")
-                .HasValue<CoralWall>("upgrade_coralwall")
-                .HasValue<MudCombine>("upgrade_mudcombine")
-                .HasValue<MudTractor>("upgrade_mudtractor")
-                .HasValue<SonarCanon>("upgrade_sonarcannon")
-                .HasValue<UnderwaterMartialArt>("upgrade_martialart");
+                .HasValue<PopulationEffect>("effect_population")
+                .HasValue<Alchemy>("upgrade_effect_alchemy")
+                .HasValue<CoralWall>("upgrade_effect_coralwall")
+                .HasValue<MudCombine>("upgrade_effect_mudcombine")
+                .HasValue<MudTractor>("upgrade_effect_mudtractor")
+                .HasValue<SonarCanon>("upgrade_effect_sonarcannon")
+                .HasValue<UnderwaterMartialArt>("upgrade_effect_martialart");
         }
 
 

@@ -20,22 +20,5 @@ namespace UnderSea.Model.Models
         public abstract void ApplyEffect(Country country);
         public abstract void RemoveEffect(Country country);
 
-        public void ApplyAllUpgradeToCountry(Country country)
-        {
-            foreach (var country_upgrade in country.CountryUpgrades)
-            {
-                country_upgrade.Upgrade.ApplyUpgrade(country);
-            }
-        }
-
-        public void RemoveAllUpgradeFromCountry(Country country)
-        {
-            foreach (var country_upgrade in country.CountryUpgrades)
-            {
-                country_upgrade.Upgrade.RemoveUpgrade(country);
-            }
-        }
-
-
     }
 }

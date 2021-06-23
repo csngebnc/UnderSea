@@ -12,7 +12,7 @@ namespace UnderSea.Model.Models
     {
         public int BaseCoralProduction { get; set; }
         public int BasePearlProduction { get; set; }
-        public int CurrentCoralProduction { get; set; }
-        public int CurrentPearlProduction { get; set; }
+        public double CoralProductionMultiplier { get; set; }
+        public double PearlProductionMultiplier { get; set; }
     }
 }
