@@ -1,9 +1,11 @@
+import { Resource } from './resource.model';
+
 export type Resources = {
-    units: Array<[string, number]>;
-    buildings: Array<[string, number]>;
-    buildingsUnderConstruction: Array<[string, number]>;
+    units: Array<Resource>;
+    buildings: Array<Resource>;
+    buildingsUnderConstruction: Array<Resource>;
     shells: number;
-    shellsPerRound:number;
+    shellsPerRound: number;
     corals: number;
     coralsPerRound: number;
 }
