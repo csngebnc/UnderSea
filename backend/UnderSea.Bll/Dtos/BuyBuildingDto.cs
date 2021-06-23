@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnderSea.Bll.Dtos
 {
-    class BuyBuildingDto
+    public class BuyBuildingDto
     {
         [Required(ErrorMessage = "Az épület azonosítójának megadása kötelező!")]
         public int BuildingId { get; set; }
