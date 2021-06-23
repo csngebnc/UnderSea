@@ -5,6 +5,12 @@
     color: $navy;
 }
 
+.secondary-text{
+    font-size: 1.25rem;
+    color: $navy;
+    margin-top: -0.5rem;
+}
+
 .bar{
     width: 100%;
     display: flex;
@@ -17,8 +23,20 @@
     padding-right: 1rem;
 }
 
+.pl-2_5{
+    padding-left: 2.5rem;
+}
+
 .d-flex{
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    align-items: center;
+}
+
+.to-flex-end{
+    justify-content: flex-end; 
+}
+
+.to-sides{
+    justify-content: space-between;
 }
