@@ -11,6 +11,13 @@ import { ProfilecardComponent } from './components/profilecard/profilecard.compo
 import { BuildingContainerComponent } from './components/building-container/building-container.component';
 import { MainComponent } from './pages/main/main.component';
 import { ResourceInfoComponent } from './components/resource-info/resource-info.component';
+import { BuildingsComponent } from './components/buildings/buildings.component';
+import { AttackComponent } from './components/attack/attack.component';
+import { UpgradesComponent } from './components/upgrades/upgrades.component';
+import { BattleComponent } from './components/battle/battle.component';
+import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
+import { UnitsComponent } from './components/units/units.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +29,14 @@ import { ResourceInfoComponent } from './components/resource-info/resource-info.
     ProfilecardComponent,
     BuildingContainerComponent,
     MainComponent,
-    ResourceInfoComponent
+    ResourceInfoComponent,
+    BuildingsComponent,
+    AttackComponent,
+    UpgradesComponent,
+    BattleComponent,
+    ScoreboardComponent,
+    UnitsComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
