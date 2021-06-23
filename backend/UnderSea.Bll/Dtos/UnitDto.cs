@@ -35,5 +35,8 @@ namespace UnderSea.Bll.Dtos
         [Range(0, int.MaxValue, ErrorMessage = "Az egység ára nem lehet negatív szám!")]
         [Required(ErrorMessage = "Az egység árát kötelező megadni!")]
         public int Price { get; set; }
+        [Range(0, int.MaxValue, ErrorMessage = "Az egység ára nem lehet negatív szám!")]
+        [Required(ErrorMessage = "Az egység darabszámát kötelező megadni!")]
+        public int CurrentCount { get; set; }
     }
 }
