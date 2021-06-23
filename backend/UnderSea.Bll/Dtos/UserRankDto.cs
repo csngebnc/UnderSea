@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnderSea.Bll.Dtos
 {
-    public class RanklistDto
+    public class UserRankDto
     {
         [Required(ErrorMessage = "A felhasználó nevét kötelező megadni!")]
         [StringLength(100, ErrorMessage = "A felhasználó neve maximum 100 karakter hosszú lehet!")]
