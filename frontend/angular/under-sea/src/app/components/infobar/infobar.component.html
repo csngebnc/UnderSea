@@ -1,0 +1,42 @@
+<div class="blurry-panel bar w-100">
+  <div class="low-opacity-white"></div>
+  <div class="plr-1 d-flex w-15 to-sides">
+    <span class="text">{{ userData.round }}. kör</span>
+    <span class="text">{{ userData.placement }}. hely</span>
+  </div>
+  <div class="d-flex w-85 to-flex-end">
+    <div *ngFor="let unit of resources.units" class="d-flex w-12 to-flex-end">
+      <div class="icon-frame icon-frame-sm">
+        <img src="../../assets/img/shark.svg" alt="jajj" />
+      </div>
+      <span class="plr-1 text">{{ unit.count }}</span>
+    </div>
+    <div class="d-flex w-12 to-flex-end">
+      <div class="icon-frame icon-frame-sm">
+        <img src="../../assets/img/shell.svg" alt="shell" />
+      </div>
+      <div class="plr-1">
+        <div class="text">{{ resources.shells }}</div>
+        <div class="secondary-text">{{ resources.shellsPerRound }}/kör</div>
+      </div>
+    </div>
+    <div class="d-flex w-12 to-flex-end">
+      <div class="icon-frame icon-frame-sm">
+        <img src="../../assets/img/coral.svg" alt="coral" />
+      </div>
+      <div class="plr-1">
+        <div class="text">{{ resources.corals }}</div>
+        <div class="secondary-text">{{ resources.coralsPerRound }}/kör</div>
+      </div>
+    </div>
+    <div *ngFor="let building of resources.buildings" class="d-flex w-12 to-flex-end">
+        <div class="icon-frame icon-frame-sm">
+          <img src="../../assets/img/shark.svg" alt="jajj" />
+        </div>
+        <div class="plr-1">
+            <div class="text">{{ building.count }}</div>
+            <div class="secondary-text">{{ countUnderConstrction(building.id) }} épül</div>
+          </div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+@import 'src/assets/scss/common.scss';
+
+.text{
+    font-size: 2rem;
+    color: $navy;
+}
+
+.secondary-text{
+    font-size: 1.25rem;
+    color: $navy;
+    margin-top: -0.5rem;
+}
+
+.bar{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.plr-1{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.pl-2_5{
+    padding-left: 2.5rem;
+}
+
+
