@@ -18,5 +18,8 @@ namespace UnderSea.Model.Models
 
         public int UnitId { get; set; }
         public Unit Unit { get; set; }
+
+        public int BonusAttackPoint { get; set; }
+        public int BonusDefensePoint { get; set; }
     }
 }
