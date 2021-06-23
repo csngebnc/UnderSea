@@ -33,6 +33,8 @@ namespace UnderSea.Api
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddSwaggerDocument();
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -65,6 +67,9 @@ namespace UnderSea.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             app.UseRouting();
 
