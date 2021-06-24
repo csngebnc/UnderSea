@@ -1,0 +1,14 @@
+<input type="text" placeholder="Felhasználónév" class="text-input m-0 mt-1 w-100" />
+<div class="divider mt-05"></div>
+<ul class="p-0 m-0">
+  <li *ngFor="let item of list" class="non-styled-list-item">
+    <div class="list-item">
+      <div class="d-flex">
+        <div *ngIf="item.placement" class="w-2r">{{ item.placement }}.</div>
+        <span>{{ item.name }}</span>
+      </div>
+      <span *ngIf="item.score">{{ item.score | number: '1.' }}</span>
+    </div>
+    <div class="divider"></div>
+  </li>
+</ul>

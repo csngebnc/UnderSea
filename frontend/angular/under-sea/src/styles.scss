@@ -4,8 +4,6 @@ main {
   height: 100%;
 }
 
-
-
 //fonts
 
 @font-face {
@@ -29,7 +27,7 @@ $white: #ffffff;
 $light-grey: #dfe3ee;
 $teal: #9ffff0;
 $blue: #428dff;
-$dark-blue: #03255F;
+$dark-blue: #03255f;
 $navy: #1c3e76;
 $dark-navy: #001234;
 $selected-blue: #284474;
@@ -81,7 +79,26 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   backdrop-filter: $blur;
 }
 
-.modal-container{
+.list-item{
+  width: 100%;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'OpenSans';
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.clickable-list-item{
+  cursor: pointer;
+}
+
+.clickable-list-item:hover{
+  background: $selected-blue;
+}
+
+.modal-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -95,30 +112,30 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   align-items: center;
 }
 
-.modal{
+.modal {
   background-color: $dark-blue;
   border-radius: 16px;
   box-shadow: 0px 3px 34px $dark-blue;
-  padding: 1rem 2rem ;
+  padding: 1rem 2rem;
   color: $white;
   pointer-events: initial;
   max-width: 50%;
 }
 
-.modal-title{
+.modal-title {
   margin: 0;
   font-size: 2rem;
   font-weight: initial;
 }
 
-.modal-description{
+.modal-description {
   font-size: 1rem;
-  font-family: 'OpenSans';
+  font-family: "OpenSans";
   margin: 0;
 }
 
-.divider{
-  border-top: 1px solid #3F68AE;
+.divider {
+  border-top: 1px solid #3f68ae;
   width: 100%;
 }
 
@@ -168,12 +185,12 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   height: 6rem;
 }
 
-.item-image{
+.item-image {
   width: 100%;
   height: 100%;
 }
 
-.item-container{
+.item-container {
   width: 100%;
   display: flex;
   justify-content: space-evenly;
@@ -181,18 +198,18 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   padding: 1rem;
 }
 
-.non-styled-list-item{
+.non-styled-list-item {
   list-style-type: none;
 }
 
-.item{
+.item {
   border-radius: 16px;
   color: $white;
   padding: 0.5rem;
   box-sizing: border-box;
 }
 
-.item-btn{
+.item-btn {
   border-radius: 16px;
   background-color: transparent;
   cursor: pointer;
@@ -202,20 +219,20 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   box-sizing: border-box;
 }
 
-.item-btn:hover{
+.item-btn:hover {
   border: 1px solid $selected-blue;
 }
 
-.item-btn:focus{
+.item-btn:focus {
   background-color: $selected-blue;
 }
 
-.item-lg{
+.item-lg {
   width: 18.5rem;
   height: 19.7rem;
 }
 
-.item-sm{
+.item-sm {
   width: 14.75rem;
   height: 14.45rem;
 }
@@ -226,10 +243,9 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   align-items: center;
 }
 
-.align-center{
+.align-center {
   align-items: center;
 }
-
 
 .to-flex-end {
   justify-content: flex-end;
@@ -239,12 +255,21 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   justify-content: space-between;
 }
 
-.to-center{
+.to-center {
   justify-content: center;
 }
 
-.w-100 {
-  width: 100%;
+.w-2r{
+  width: 2rem;
+}
+
+.w-4_5r{
+  width: 4.5rem;
+}
+
+
+.w-12 {
+  width: 12%;
   box-sizing: border-box;
 }
 
@@ -253,9 +278,8 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   box-sizing: border-box;
 }
 
-.w-12 {
-  width: 12%;
-  box-sizing: border-box;
+.w-40 {
+  width: 40%;
 }
 
 .w-85 {
@@ -263,9 +287,14 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   box-sizing: border-box;
 }
 
+.w-100 {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .w-300px {
-    width: 300px;
-    box-sizing: border-box;
+  width: 300px;
+  box-sizing: border-box;
 }
 
 .h-100 {
@@ -292,18 +321,32 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   height: 70%;
 }
 
-
-
 .p-1 {
   padding: 1rem;
 }
 
-.mt-2{
+.p-0 {
+  padding: 0;
+}
+
+.pl-1{
+  padding-left: 1rem;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.mt-2 {
   margin-top: 2rem;
 }
 
-.mt-1{
+.mt-1 {
   margin-top: 1rem;
+}
+
+.mt-05 {
+  margin-top: 0.5rem;
 }
 
 body {

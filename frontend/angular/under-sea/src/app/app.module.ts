@@ -21,6 +21,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ItemImgComponent } from './components/item-img/item-img.component';
 import { BuildingDetailsComponent } from './components/building-details/building-details.component';
 import { UpgradeDetailsComponent } from './components/upgrade-details/upgrade-details.component';
+import { ListComponent } from './components/list/list.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { UpgradeDetailsComponent } from './components/upgrade-details/upgrade-de
     ProfileComponent,
     ItemImgComponent,
     BuildingDetailsComponent,
-    UpgradeDetailsComponent
+    UpgradeDetailsComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,
