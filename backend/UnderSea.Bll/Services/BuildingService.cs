@@ -33,7 +33,7 @@ namespace UnderSea.Bll.Services
 
             //var userbuildings = await _context.Buildings.Where(b => b.CountryBuildings.Where(cb => cb.CountryId == country.Id).Any()).ProjectTo<BuildingDetailsDto>(_mapper.ConfigurationProvider).ToListAsync();
             var userbuildings = await _context.CountryBuildings.Include(b => b.Building)
-                                                                .Where(c => c.CountryId == country.Id && !c.ActiveConstructions.Any())
+                                                                .Where(c => c.CountryId == country.Id)
                                                                 .Select(b => b.Building)
                                                                 .ProjectTo<BuildingDetailsDto>(_mapper.ConfigurationProvider)
                                                                 .ToListAsync();

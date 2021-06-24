@@ -46,5 +46,6 @@ namespace UnderSea.Model.Models
         public ICollection<CountryBuilding> CountryBuildings { get; set; }
         public ICollection<CountryUpgrade> CountryUpgrades { get; set; }
         public ICollection<ActiveUpgrading> ActiveUpgradings { get; set; }
+        public ICollection<ActiveConstruction> ActiveConstructions { get; set; }
     }
 }

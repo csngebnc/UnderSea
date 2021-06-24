@@ -25,5 +25,6 @@ namespace UnderSea.Model.Models
 
         public ICollection<CountryBuilding> CountryBuildings { get; set; }
         public ICollection<BuildingEffect> BuildingEffects { get; set; }
+        public ICollection<ActiveConstruction> ActiveConstructions { get; set; }
     }
 }

@@ -21,6 +21,5 @@ namespace UnderSea.Model.Models
         public int BuildingId { get; set; }
         public Building Building { get; set; }
 
-        public ICollection<ActiveConstruction> ActiveConstructions { get; set; }
     }
 }
