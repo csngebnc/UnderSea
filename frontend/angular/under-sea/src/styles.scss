@@ -80,26 +80,50 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   backdrop-filter: $blur;
 }
 
-.modal{
+.modal-container{
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
   z-index: 1;
-  overflow: visible;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.modal-content{
-  position: relative;
+.modal{
   background-color: $dark-blue;
   border-radius: 16px;
   box-shadow: 0px 3px 34px $dark-blue;
-  padding: 1rem;
+  padding: 1.5rem;
+  color: $white;
+  pointer-events: initial;
+  max-width: 40%;
+}
+
+.modal-title{
+  margin: 0;
+  font-size: 2rem;
+  font-weight: initial;
+}
+
+.modal-description{
+  font-size: 1rem;
+  font-family: 'OpenSans';
+  margin: 0;
+}
+
+.divider{
+  border-top: 1px solid #3F68AE;
+  width: 100%;
 }
 
 .stack {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .gradient-button {
@@ -112,6 +136,7 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   font-family: "Baloo";
   text-align: center;
   text-decoration: none;
+  margin: auto;
 }
 
 .link {
@@ -127,7 +152,6 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   border: 2px solid $blue;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .icon-frame-sm {
@@ -145,6 +169,11 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   flex-wrap: nowrap;
   align-items: center;
 }
+
+.align-center{
+  align-items: center;
+}
+
 
 .to-flex-end {
   justify-content: flex-end;
@@ -191,6 +220,9 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   padding: 1rem;
 }
 
+.mt-2{
+  margin-top: 2rem;
+}
 
 body {
   height: 100%;

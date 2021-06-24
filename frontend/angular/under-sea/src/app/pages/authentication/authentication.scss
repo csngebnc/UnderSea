@@ -9,6 +9,7 @@
 .title{
     font-size: 5rem;
     color: $teal;
+    margin: 0;
 }
 
 
@@ -17,8 +18,5 @@
     font-size: 2rem;
     display: flex;
     justify-content: center;
-}
-
-.m-3{
-    margin-top: 2rem;
+    margin: 0;
 }
