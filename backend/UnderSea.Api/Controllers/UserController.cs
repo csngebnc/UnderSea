@@ -32,7 +32,7 @@ namespace UnderSea.Api.Controllers
         }
 
         [HttpGet("ranklist")]
-        public async Task<ActionResult<PagedResult<UserRankDto>>> GetRanklist(PaginationData pagination) 
+        public async Task<ActionResult<PagedResult<UserRankDto>>> GetRanklist([FromQuery]PaginationData pagination) 
         {
             return Ok(new PagedResult<UserRankDto>());
         }
@@ -49,10 +49,10 @@ namespace UnderSea.Api.Controllers
             return Ok(new UserDetailsDto());
         }
 
-        [HttpPut("country-name")]
-        public async Task<ActionResult<string>> ChangeCountryName([FromBody] string countryName)
+        [HttpPut("new-country-name")]
+        public async Task<ActionResult<string>> ChangeCountryName([FromQuery] string name)
         {
-            return Ok($"success: {countryName}");
+            return Ok($"success: {name}");
         }
 
 

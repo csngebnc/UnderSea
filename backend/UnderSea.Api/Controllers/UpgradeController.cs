@@ -26,7 +26,7 @@ namespace UnderSea.Api.Controllers
         [HttpPost("buy")]
         public async Task<ActionResult> BuyUpgrade(BuyUpgradeDto buyUpgradeDto)
         {
-            return Ok("succes: buy upgrade");
+            return Ok("success: buy upgrade");
         }
     }
 }
