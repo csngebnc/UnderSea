@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnderSea.Dal.EntityConfigurations;
 using UnderSea.Model.Models;
 
 namespace UnderSea.Dal.Data
@@ -77,6 +78,10 @@ namespace UnderSea.Dal.Data
                 .Property(e => e.EffectType)
                 .HasMaxLength(200)
                 .HasColumnName("effect_type");
+
+            modelBuilder.ApplyConfiguration(new BuildingEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new WorldEntityConfiguration());
         }
 
 

@@ -42,7 +42,25 @@ namespace UnderSea.Bll.Services
 
         public async Task BuyBuildingAsync(BuyBuildingDto buildingDto)
         {
+            var country = await GetCountry();
 
+            var building = await _context.Buildings.Where(c => c.Id == buildingDto.BuildingId).FirstOrDefaultAsync();
+            if (building == null) throw new NullReferenceException();
+
+            if (building.Price <= country.Pearl)
+            {
+                ActiveConstruction activeConstruction = new ActiveConstruction()
+                {
+                    BuildingId = building.Id,
+                    CountryId = country.Id,
+                    EstimatedFinish = country.World.Round + building.ConstructionTime
+                };
+                _context.ActiveConstructions.Add(activeConstruction);
+
+                country.Pearl -= building.Price;
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         private string GetUserId()

@@ -67,34 +67,31 @@ namespace UnderSea.Bll.Services
 
             var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id).FirstOrDefaultAsync();
 
-            using (var transaction = _context.Database.BeginTransaction())
+            if ((unit.Price * unitDto.Count) <= country.Pearl)
             {
-                if ((unit.Price * unitDto.Count) <= country.Pearl)
+                if (counit == null)
                 {
-                    if(counit == null)
+                    CountryUnit countryUnit = new CountryUnit()
                     {
-                        CountryUnit countryUnit = new CountryUnit()
-                        {
-                            UnitId = unit.Id,
-                            CountryId = country.Id,
-                            Count = unitDto.Count
-                        };
-                        _context.CountryUnits.Add(countryUnit);
-                    }
-                    else
-                    {
-                        counit.Count += unitDto.Count;
-                    }
-                    
-                } else
+                        UnitId = unit.Id,
+                        CountryId = country.Id,
+                        Count = unitDto.Count
+                    };
+                    _context.CountryUnits.Add(countryUnit);
+                }
+                else
                 {
-                    await transaction.RollbackAsync();
-                    throw new InvalidOperationException();
+                    counit.Count += unitDto.Count;
                 }
 
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
+                country.Pearl -= unit.Price * unitDto.Count;
             }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         private string GetUserId()
