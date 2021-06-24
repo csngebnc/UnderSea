@@ -27,7 +27,8 @@ namespace UnderSea.Api.Controllers
         [HttpPost("buy")]
         public async Task<ActionResult> BuyBuilding(BuyBuildingDto buildingDto)
         {
-            return Ok("cső");
+            await service.BuyBuildingAsync(buildingDto);
+            return Ok();
         }
     }
 }

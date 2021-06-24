@@ -67,29 +67,74 @@ namespace UnderSea.Bll.Services
 
             var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id).FirstOrDefaultAsync();
 
+            if ((unit.Price * unitDto.Count) <= country.Pearl)
+            {
+                if (counit == null)
+                {
+                    CountryUnit countryUnit = new CountryUnit()
+                    {
+                        UnitId = unit.Id,
+                        CountryId = country.Id,
+                        Count = unitDto.Count
+                    };
+                    _context.CountryUnits.Add(countryUnit);
+                }
+                else
+                {
+                    counit.Count += unitDto.Count;
+                }
+
+                country.Pearl -= unit.Price * unitDto.Count;
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AttackAsync(SendAttackDto attackDto)
+        {
+            var attackerCountry = await GetCountry();
+
+            var attackedCountry = await _context.Countries.Where(c => c.Id == attackDto.AttackedCountryId).FirstOrDefaultAsync();
+            if (attackedCountry == null) throw new NullReferenceException();
+
             using (var transaction = _context.Database.BeginTransaction())
             {
-                if ((unit.Price * unitDto.Count) <= country.Pearl)
+                Attack attack = new Attack()
                 {
-                    if(counit == null)
-                    {
-                        CountryUnit countryUnit = new CountryUnit()
-                        {
-                            UnitId = unit.Id,
-                            CountryId = country.Id,
-                            Count = unitDto.Count
-                        };
-                        _context.CountryUnits.Add(countryUnit);
-                    }
-                    else
-                    {
-                        counit.Count += unitDto.Count;
-                    }
-                    
-                } else
+                    AttackerCountryId = attackerCountry.Id,
+                    DefenderCountryId = attackedCountry.Id,
+                    AttackRound = attackerCountry.World.Round,
+                    WinnerId = null
+                };
+
+                var newAttack = _context.Attacks.Add(attack);
+
+                if(newAttack.Entity == null)
                 {
                     await transaction.RollbackAsync();
                     throw new InvalidOperationException();
+                }
+
+                foreach(var unit in attackDto.Units)
+                {
+                    AttackUnit attackUnit = new AttackUnit()
+                    {
+                        AttackId = newAttack.Entity.Id,
+                        Count = unit.Count,
+                        UnitId = unit.UnitId
+                    };
+
+                    var newAttackUnit = _context.AttackUnits.Add(attackUnit);
+
+                    if (newAttackUnit.Entity == null)
+                    {
+                        await transaction.RollbackAsync();
+                        throw new InvalidOperationException();
+                    }
                 }
 
                 await _context.SaveChangesAsync();
@@ -109,7 +154,7 @@ namespace UnderSea.Bll.Services
         {
             var userId = GetUserId();
 
-            var country = await _context.Countries.Where(c => c.OwnerId == userId).FirstOrDefaultAsync();
+            var country = await _context.Countries.Include(w => w.World).Where(c => c.OwnerId == userId).FirstOrDefaultAsync();
             if (country == null) throw new NullReferenceException();
 
             return country;
