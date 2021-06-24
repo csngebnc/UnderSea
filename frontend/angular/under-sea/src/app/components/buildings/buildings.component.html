@@ -7,8 +7,24 @@
       </p>
       <p class="modal-description">Egyszerre csak egy épület épülhet!</p>
       <form class="stack align-center">
+        <ul class="item-container">
+          <li *ngFor="let building of buildings" class="non-styled-list-item">
+            <button type="button" class="item-btn">
+              <building-details
+                class="item item-lg stack align-center"
+                [building]="building"
+              ></building-details>
+            </button>
+          </li>
+        </ul>
         <div class="divider"></div>
-        <button type="submit" class="gradient-button mt-2">Megveszem</button>
+        <button
+          type="button"
+          class="gradient-button mt-2"
+          (click)="asd()"
+        >
+          Megveszem
+        </button>
       </form>
     </div>
   </div>

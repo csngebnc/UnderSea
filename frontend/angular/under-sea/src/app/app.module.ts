@@ -18,6 +18,9 @@ import { BattleComponent } from './components/battle/battle.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { UnitsComponent } from './components/units/units.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ItemImgComponent } from './components/item-img/item-img.component';
+import { BuildingDetailsComponent } from './components/building-details/building-details.component';
+import { UpgradeDetailsComponent } from './components/upgrade-details/upgrade-details.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +39,10 @@ import { ProfileComponent } from './components/profile/profile.component';
     BattleComponent,
     ScoreboardComponent,
     UnitsComponent,
-    ProfileComponent
+    ProfileComponent,
+    ItemImgComponent,
+    BuildingDetailsComponent,
+    UpgradeDetailsComponent
   ],
   imports: [
     BrowserModule,
