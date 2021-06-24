@@ -94,6 +94,54 @@ namespace UnderSea.Bll.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task AttackAsync(SendAttackDto attackDto)
+        {
+            var attackerCountry = await GetCountry();
+
+            var attackedCountry = await _context.Countries.Where(c => c.Id == attackDto.AttackedCountryId).FirstOrDefaultAsync();
+            if (attackedCountry == null) throw new NullReferenceException();
+
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                Attack attack = new Attack()
+                {
+                    AttackerCountryId = attackerCountry.Id,
+                    DefenderCountryId = attackedCountry.Id,
+                    AttackRound = attackerCountry.World.Round,
+                    WinnerId = null
+                };
+
+                var newAttack = _context.Attacks.Add(attack);
+
+                if(newAttack.Entity == null)
+                {
+                    await transaction.RollbackAsync();
+                    throw new InvalidOperationException();
+                }
+
+                foreach(var unit in attackDto.Units)
+                {
+                    AttackUnit attackUnit = new AttackUnit()
+                    {
+                        AttackId = newAttack.Entity.Id,
+                        Count = unit.Count,
+                        UnitId = unit.UnitId
+                    };
+
+                    var newAttackUnit = _context.AttackUnits.Add(attackUnit);
+
+                    if (newAttackUnit.Entity == null)
+                    {
+                        await transaction.RollbackAsync();
+                        throw new InvalidOperationException();
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+        }
+
         private string GetUserId()
         {
             var userId = httpContextAccessor.GetCurrentUserId();
@@ -106,7 +154,7 @@ namespace UnderSea.Bll.Services
         {
             var userId = GetUserId();
 
-            var country = await _context.Countries.Where(c => c.OwnerId == userId).FirstOrDefaultAsync();
+            var country = await _context.Countries.Include(w => w.World).Where(c => c.OwnerId == userId).FirstOrDefaultAsync();
             if (country == null) throw new NullReferenceException();
 
             return country;

@@ -38,7 +38,8 @@ namespace UnderSea.Api.Controllers
         [HttpPost("attack")]
         public async Task<ActionResult> Attack([FromBody] SendAttackDto sendAttack)
         {
-            return Ok("cső");
+            await service.AttackAsync(sendAttack);
+            return Ok();
         }
 
         [HttpGet("history")]
