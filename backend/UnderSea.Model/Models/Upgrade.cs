@@ -21,6 +21,7 @@ namespace UnderSea.Model.Models
 
         public ICollection<CountryUpgrade> CountryUpgrades { get; set; }
         public ICollection<UpgradeEffect> UpgradeEffects { get; set; }
+        public ICollection<ActiveUpgrading> ActiveUpgradings { get; set; }
 
     }
 }

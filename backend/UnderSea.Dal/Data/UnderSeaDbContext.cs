@@ -26,6 +26,7 @@ namespace UnderSea.Dal.Data
         public DbSet<Unit> Units { get; set; }
         public DbSet<Upgrade> Upgrades { get; set; }
         public DbSet<UpgradeEffect> UpgradeEffects { get; set; }
+        public DbSet<ActiveUpgrading> ActiveUpgradings { get; set; }
 
         public UnderSeaDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
@@ -58,7 +59,7 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<Country>().OwnsOne(p => p.Production);
 
             modelBuilder.Entity<Effect>()
-                .HasDiscriminator<string>("effect_type")
+                .HasDiscriminator(e => e.EffectType)
                 .HasValue<Effect>("effect_base")
                 .HasValue<CoralEffect>("effect_coral")
                 .HasValue<MilitaryEffect>("effect_military")
@@ -69,6 +70,11 @@ namespace UnderSea.Dal.Data
                 .HasValue<MudTractor>("upgrade_effect_mudtractor")
                 .HasValue<SonarCanon>("upgrade_effect_sonarcannon")
                 .HasValue<UnderwaterMartialArt>("upgrade_effect_martialart");
+
+            modelBuilder.Entity<Effect>()
+                .Property(e => e.EffectType)
+                .HasMaxLength(200)
+                .HasColumnName("effect_type");
         }
 
 

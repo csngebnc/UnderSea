@@ -16,5 +16,6 @@ namespace UnderSea.Model.Models
 
         public Country Country { get; set; }
         public ICollection<Attack> AttackWins { get; set; }
+
     }
 }

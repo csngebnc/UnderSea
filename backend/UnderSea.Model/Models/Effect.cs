@@ -14,6 +14,8 @@ namespace UnderSea.Model.Models
         [StringLength(100, ErrorMessage = "A hatás neve maximum 100 karakter hosszú lehet!")]
         public string Name { get; set; }
 
+        public string EffectType { get; set; }
+
         public ICollection<BuildingEffect> BuildingEffects { get; set; }
         public ICollection<UpgradeEffect> UpgradeEffects { get; set; }
 

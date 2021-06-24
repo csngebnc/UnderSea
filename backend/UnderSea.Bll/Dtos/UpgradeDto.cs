@@ -16,7 +16,7 @@ namespace UnderSea.Bll.Dtos
         public string Name { get; set; }
         public bool DoesExist { get; set; }
         public bool IsUnderConstruction { get; set; }
-        public int EstimatedTime { get; set; }
+        public int EstimatedFinish { get; set; }
         public ICollection<EffectDto> Effects { get; set; }
     }
 }
