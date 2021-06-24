@@ -36,6 +36,9 @@ namespace UnderSea.Model.Models
         public string OwnerId { get; set; }
         public User Owner { get; set; }
 
+        public int WorldId { get; set; }
+        public World World { get; set; }
+
         public ICollection<Attack> Attacks { get; set; }
         public ICollection<Attack> Defenses { get; set; }
         public ICollection<CountryUnit> CountryUnits { get; set; }

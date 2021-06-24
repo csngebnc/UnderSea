@@ -13,7 +13,8 @@ namespace UnderSea.Bll.Mapper
     {
         public UserProfile()
         {
-            CreateMap<User, UserInfoDto>();
+            CreateMap<User, UserInfoDto>()
+                .ForMember(dest => dest.Round, src => src.MapFrom(u => u.Country.World.Round));
             CreateMap<User, UserDetailsDto>()
                 .ForMember(dest => dest.MaxUnitCount, opt =>
                     opt.MapFrom(src => src.Country.CountryBuildings
