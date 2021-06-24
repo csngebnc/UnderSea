@@ -40,6 +40,7 @@ namespace UnderSea.Dal.Data
                 .HasOne(c => c.Owner)
                 .WithOne(u => u.Country);
 
+
             modelBuilder.Entity<Attack>()
                 .HasOne(a => a.AttackerCountry)
                 .WithMany(c => c.Attacks)
@@ -57,6 +58,7 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<UpgradeEffect>().HasKey(ue => new { ue.EffectId, ue.UpgradeId });
 
             modelBuilder.Entity<Country>().OwnsOne(p => p.Production);
+            modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint);
 
             modelBuilder.Entity<Effect>()
                 .HasDiscriminator(e => e.EffectType)

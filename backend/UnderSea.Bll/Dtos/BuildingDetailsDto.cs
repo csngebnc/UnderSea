@@ -16,8 +16,6 @@ namespace UnderSea.Bll.Dtos
         [Required(ErrorMessage = "Az épület nevét kötelező megadni!")]
         public string Name { get; set; }
 
-        public ICollection<EffectDto> Effects { get; set; }
-
         [Range(0, int.MaxValue, ErrorMessage = "Az épület darabszáma nem lehet negatív szám!")]
         [Required(ErrorMessage = "Az épület darabszámát kötelező megadni!")]
         public int Count { get; set; }
@@ -25,5 +23,7 @@ namespace UnderSea.Bll.Dtos
         [Range(0, int.MaxValue, ErrorMessage = "Az épület ára nem lehet negatív szám!")]
         [Required(ErrorMessage = "Az épület árát kötelező megadni!")]
         public int Price { get; set; }
+
+        public ICollection<EffectDto> Effects { get; set; }
     }
 }

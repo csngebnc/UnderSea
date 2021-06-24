@@ -32,6 +32,7 @@ namespace UnderSea.Model.Models
         public int MaxUnitCount { get; set; }
 
         public Production Production { get; set; }
+        public FightPoint FightPoint { get; set; }
 
         public string OwnerId { get; set; }
         public User Owner { get; set; }

@@ -11,22 +11,14 @@ namespace UnderSea.Model.Models
     {
         public override void ApplyEffect(Country country)
         {
-            var units = country.CountryUnits;
-            foreach (var u in units)
-            {
-                u.BonusAttackPoint = (int)Math.Round(u.BonusAttackPoint + u.Unit.AttackPoint * UpgradeConstants.UnderWaterMartialArt);
-                u.BonusDefensePoint = (int)Math.Round(u.BonusDefensePoint + u.Unit.DefensePoint * UpgradeConstants.UnderWaterMartialArt);
-            }
+            country.FightPoint.AttackPointMultiplier *= (1 + UpgradeConstants.UnderWaterMartialArt);
+            country.FightPoint.DefensePointMultiplier *= (1 + UpgradeConstants.UnderWaterMartialArt);
         }
 
         public override void RemoveEffect(Country country)
         {
-            var units = country.CountryUnits;
-            foreach (var u in units)
-            {
-                u.BonusAttackPoint = (int)Math.Round(u.BonusAttackPoint - u.Unit.AttackPoint * UpgradeConstants.UnderWaterMartialArt);
-                u.BonusDefensePoint = (int)Math.Round(u.BonusDefensePoint - u.Unit.DefensePoint * UpgradeConstants.UnderWaterMartialArt);
-            }
+            country.FightPoint.AttackPointMultiplier /= (1 + UpgradeConstants.UnderWaterMartialArt);
+            country.FightPoint.DefensePointMultiplier /= (1 + UpgradeConstants.UnderWaterMartialArt);
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Paging;
+using UnderSea.Bll.Services;
 
 namespace UnderSea.Api.Controllers
 {
@@ -13,21 +14,25 @@ namespace UnderSea.Api.Controllers
     [ApiController]
     public class BattleController : ControllerBase
     {
-        public BattleController()
+        private readonly BattleService service;
+
+        public BattleController(BattleService service)
         {
-             
+            this.service = service;
         }
 
         [HttpGet("attackable-users")]
         public async Task<ActionResult<PagedResult<AttackableUserDto>>> GetAttackableUsers([FromQuery] PaginationData pagination)
         {
-            return Ok(new PagedResult<AttackableUserDto>());
+            var attackableusers = await service.GetAttackableUsersAsync(pagination);
+            return Ok(attackableusers);
         }
 
         [HttpGet("available-units")]
-        public async Task<ActionResult<BattleUnitDto>> GetUserUnits()
+        public async Task<ActionResult<IEnumerable<BattleUnitDto>>> GetUserUnits()
         {
-            return Ok(new BattleUnitDto());
+            var userunits = await service.GetUserUnitsAsync();
+            return Ok(userunits);
         }
 
         [HttpPost("attack")]
@@ -37,21 +42,24 @@ namespace UnderSea.Api.Controllers
         }
 
         [HttpGet("history")]
-        public async Task<ActionResult<PagedResult<LoggedAttackDto>>> History()
+        public async Task<ActionResult<PagedResult<LoggedAttackDto>>> History([FromQuery] PaginationData pagination)
         {
-            return Ok(new PagedResult<LoggedAttackDto>());
+            var loggedattacks = await service.GetLoggedAttacksAsync(pagination);
+            return Ok(loggedattacks);
         }
 
         [HttpGet("units")]
         public async Task<ActionResult<IEnumerable<UnitDto>>> GetAllUnits()
         {
-            return Ok(new List<UnitDto>());
+            var units = await service.GetAllUnitsAsync();
+            return Ok(units);
         }
 
         [HttpPost("buy-unit")]
         public async Task<ActionResult> BuyUnit([FromBody] BuyUnitDto unitDto)
         {
-            return Ok("cső");
+            await service.BuyUnitAsync(unitDto);
+            return Ok();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Services;
 
 namespace UnderSea.Api.Controllers
 {
@@ -9,15 +10,18 @@ namespace UnderSea.Api.Controllers
     [ApiController]
     public class BuildingController : ControllerBase
     {
-        public BuildingController()
-        {
+        private readonly BuildingService service;
 
+        public BuildingController(BuildingService service)
+        {
+            this.service = service;
         }
 
         [HttpGet("user-buildings")]
         public async Task<ActionResult<IEnumerable<BuildingDetailsDto>>> GetUserBuildings()
         {
-            return Ok(new List<BuildingDetailsDto>());
+            var userbuildings = await service.GetUserBuildingAsync();
+            return Ok(userbuildings);
         }
 
         [HttpPost("buy")]
