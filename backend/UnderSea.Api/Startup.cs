@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Mapper;
+using UnderSea.Bll.Services;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -38,7 +39,8 @@ namespace UnderSea.Api
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<UnderSeaDbContext>();
 
             services.AddAutoMapper(typeof(BattleProfile));
@@ -46,11 +48,25 @@ namespace UnderSea.Api
             services.AddAutoMapper(typeof(UpgradeProfile));
             services.AddAutoMapper(typeof(UserProfile));
 
+            services.AddTransient<UserService>();
+
             services.AddIdentityServer()
-                .AddApiAuthorization<User, UnderSeaDbContext>();
+                .AddDeveloperSigningCredential()
+                .AddInMemoryPersistedGrants()
+                .AddInMemoryIdentityResources(Configuration.GetSection("IdentityServer:IdentityResources"))
+                .AddInMemoryApiResources(Configuration.GetSection("IdentityServer:ApiResources"))
+                .AddInMemoryApiScopes(Configuration.GetSection("IdentityServer:ApiScopes"))
+                .AddInMemoryClients(Configuration.GetSection("IdentityServer:Clients"))
+                .AddAspNetIdentity<User>();
 
             services.AddAuthentication()
-                .AddIdentityServerJwt();
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://localhost:5001";
+                    options.Audience = "undersea-api";
+                    options.RequireHttpsMetadata = false;
+                }
+                );
 
             services.AddControllersWithViews();
             services.AddRazorPages();
