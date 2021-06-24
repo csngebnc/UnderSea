@@ -22,6 +22,8 @@ import { ItemImgComponent } from './components/item-img/item-img.component';
 import { BuildingDetailsComponent } from './components/building-details/building-details.component';
 import { UpgradeDetailsComponent } from './components/upgrade-details/upgrade-details.component';
 import { ListComponent } from './components/list/list.component';
+import { UnitDetailsComponent } from './components/unit-details/unit-details.component';
+import { UnitSliderComponent } from './unit-slider/unit-slider.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { ListComponent } from './components/list/list.component';
     ItemImgComponent,
     BuildingDetailsComponent,
     UpgradeDetailsComponent,
-    ListComponent
+    ListComponent,
+    UnitDetailsComponent,
+    UnitSliderComponent
   ],
   imports: [
     BrowserModule,
