@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/city_tabs/city_tab_controller.dart';
+import 'package:undersea/views/profile.dart';
 import 'home_page.dart';
 
 /// This is the stateful widget that the main application instantiates.
@@ -30,7 +34,18 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Undersea ~~~~~'),
+          backgroundColor: Color(0xFF1C3E76),
+          actions: [
+            Padding(
+                padding: EdgeInsets.all(10),
+                child: GestureDetector(
+                    onTap: () {
+                      Get.to(ProfilePage(
+                          cityName: 'Óceánia', playerName: 'jakabjatekos'));
+                    },
+                    child: Image.asset('assets/buildings/seastar.png')))
+          ],
+          title: const Text('Undersea logo'),
         ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
@@ -38,7 +53,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xff9FFFF0), Color(0xff6BEEE9), Color(0xff0FCFDE)],
+              colors: UnderseaStyles.gradientColors,
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               //tileMode: TileMode.,
@@ -47,35 +62,36 @@ class _BottomNavBarState extends State<BottomNavBar> {
           child: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.home, color: Color(0xff001234)),
+                icon: Icon(Icons.home, color: UnderseaStyles.navbarIconColor),
                 label: 'Kezdőlap',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.business, color: Color(0xff001234)),
+                icon:
+                    Icon(Icons.business, color: UnderseaStyles.navbarIconColor),
                 label: 'Városom',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.school, color: Color(0xff001234)),
+                icon: Icon(Icons.school, color: UnderseaStyles.navbarIconColor),
                 label: 'Támadás',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.school, color: Color(0xff001234)),
+                icon: Icon(Icons.school, color: UnderseaStyles.navbarIconColor),
                 label: 'Csapataim',
               ),
             ],
             currentIndex: _selectedIndex,
-            selectedItemColor: Color(0xff001234),
+            selectedItemColor: UnderseaStyles.navbarIconColor,
             onTap: _onItemTapped,
             type: BottomNavigationBarType.fixed,
             showUnselectedLabels: true,
             backgroundColor: Colors.transparent,
             selectedLabelStyle: TextStyle(
-                color: Color(0xff001234),
+                color: UnderseaStyles.navbarIconColor,
                 fontFamily: 'Baloo 2',
                 fontSize: 11,
                 fontStyle: FontStyle.normal),
             unselectedLabelStyle: TextStyle(
-                color: Color(0xff001234),
+                color: UnderseaStyles.unselectedNavbarIconColor,
                 fontFamily: 'Baloo 2',
                 fontSize: 11,
                 fontStyle: FontStyle.normal),
