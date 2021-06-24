@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:undersea/views/login.dart';
 import 'views/bottom_nav_bar.dart';
 
 void main() => runApp(const MyApp());
@@ -10,9 +12,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return GetMaterialApp(
       title: _title,
-      home: BottomNavBar(),
+      home: LoginPage(title: 'loginpage'), //BottomNavBar(),
     );
   }
 }

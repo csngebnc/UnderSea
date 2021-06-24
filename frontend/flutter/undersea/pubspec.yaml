@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   get: ^4.1.4
+  flutter_sinusoidals: ^0.1.4
   flutter:
     sdk: flutter
 
