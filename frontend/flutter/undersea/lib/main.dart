@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: _title,
-      home: LoginPage(title: 'loginpage'), //BottomNavBar(),
+      home: LoginPage(), //BottomNavBar(),
     );
   }
 }

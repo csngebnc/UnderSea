@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/views/registration.dart';
 import 'bottom_nav_bar.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+class RegistrationPage extends StatefulWidget {
+  RegistrationPage({Key? key}) : super(key: key);
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -13,10 +12,10 @@ class LoginPage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegistrationPageState createState() => _RegistrationPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegistrationPageState extends State<RegistrationPage> {
   TextStyle buttonTextStyle = TextStyle(
       fontFamily: 'Baloo 2',
       fontSize: 20.0,
@@ -50,10 +49,42 @@ class _LoginPageState extends State<LoginPage> {
               border: InputBorder.none),
         ));
 
-    final loginButton = ElevatedButton(
+    final passwordValidationField = Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(32.0), color: Colors.white),
+        child: TextField(
+          obscureText: true,
+          style: inputTextStyle,
+          decoration: InputDecoration(
+              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+              hintText: "Jelszó megerősítése",
+              hintStyle: TextStyle(color: Color(0xFF1C3E76), fontSize: 19),
+              border: InputBorder.none),
+        ));
+
+    final cityNameField = Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(32.0), color: Colors.white),
+        child: TextField(
+          style: inputTextStyle,
+          decoration: InputDecoration(
+              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+              hintText: "A városod neve, amit építesz",
+              hintStyle: TextStyle(color: Color(0xFF1C3E76), fontSize: 19),
+              border: InputBorder.none),
+        ));
+
+    final registrationButton = ElevatedButton(
       onPressed: () {
-        //szerverre, ha autentikáció sikeres, zsa
-        Get.to(BottomNavBar());
+        //regisztráció felküldése a szerverre
+
+        //siker esetén:
+
+        Get.back();
+        Get.snackbar('Sikeres regisztráció!', 'Lépj be a játékhoz!',
+            icon: Icon(Icons.app_registration),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.blueAccent);
       },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,
@@ -74,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
           height: 70,
           alignment: Alignment.center,
           child: Text(
-            'Belépés',
+            'Regisztráció',
             style: buttonTextStyle.copyWith(fontSize: 24),
           ),
         ),
@@ -104,9 +135,9 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   color: Colors.transparent,
                   child: Padding(
-                    padding: const EdgeInsets.all(25.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Container(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(15.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         color: Colors.white54,
@@ -115,30 +146,33 @@ class _LoginPageState extends State<LoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          SizedBox(height: 15),
+                          // SizedBox(height: 15),
                           SizedBox(
                               height: 30,
                               child: Text(
                                 'Belépés',
                                 style: buttonTextStyle.copyWith(fontSize: 24),
                               )),
-                          SizedBox(height: 30.0),
-                          userField,
                           SizedBox(height: 25.0),
+                          userField,
+                          SizedBox(height: 20.0),
                           passwordField,
                           SizedBox(
-                            height: 35.0,
+                            height: 20.0,
                           ),
-                          loginButton,
+                          passwordValidationField,
+                          SizedBox(height: 20),
+                          cityNameField,
+                          SizedBox(height: 15),
+                          registrationButton,
                           SizedBox(
                             height: 15.0,
                           ),
                           TextButton(
                               onPressed: () {
-                                Get.to(RegistrationPage());
+                                Get.back();
                               },
-                              child:
-                                  Text('Regisztráció', style: buttonTextStyle)),
+                              child: Text('Belépés', style: buttonTextStyle)),
                         ],
                       ),
                     ),
