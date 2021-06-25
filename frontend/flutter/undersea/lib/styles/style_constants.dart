@@ -15,7 +15,7 @@ class UnderseaStyles {
     Color(0xff6BEEE9),
     Color(0xff0FCFDE)
   ];
-
+  static const menuDarkBlue = Color(0xFF03255F);
   static const LinearGradient buttonGradient = LinearGradient(
       begin: Alignment.centerRight,
       end: Alignment.centerLeft,
@@ -58,7 +58,7 @@ class UnderseaStyles {
           decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/icons/$iconName.png'),
-                fit: BoxFit.cover),
+                fit: BoxFit.contain),
           ),
         ),
       ),
@@ -161,6 +161,27 @@ class UnderseaStyles {
             text,
             style: buttonTextStyle.copyWith(fontSize: 24),
           ),
+        ),
+      ),
+    );
+  }
+
+  static const bottomNavbarTextStyle = TextStyle(
+      color: UnderseaStyles.navbarIconColor,
+      fontFamily: 'Baloo 2',
+      fontSize: 15,
+      fontStyle: FontStyle.normal,
+      fontWeight: FontWeight.bold);
+
+  static Widget tab(String text) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+        child: Text(
+          text,
+          style: UnderseaStyles.inputTextStyle.copyWith(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
         ),
       ),
     );

@@ -48,7 +48,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     child: SizedBox(
                         height: 40,
                         child:
-                            UnderseaStyles.assetIcon("coral", iconSize: 40))))
+                            UnderseaStyles.assetIcon("profile", iconSize: 40))))
           ],
           title: const Text('Undersea logo'),
         ),
@@ -102,16 +102,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 showUnselectedLabels: true,
                 backgroundColor: Color(0x00000000),
                 elevation: 0,
-                selectedLabelStyle: TextStyle(
-                    color: UnderseaStyles.navbarIconColor,
-                    fontFamily: 'Baloo 2',
-                    fontSize: 15,
-                    fontStyle: FontStyle.normal),
-                unselectedLabelStyle: TextStyle(
-                    color: UnderseaStyles.unselectedNavbarIconColor,
-                    fontFamily: 'Baloo 2',
-                    fontSize: 15,
-                    fontStyle: FontStyle.normal),
+                selectedLabelStyle: UnderseaStyles.bottomNavbarTextStyle,
+                unselectedLabelStyle: UnderseaStyles.bottomNavbarTextStyle
+                    .copyWith(color: UnderseaStyles.unselectedNavbarIconColor),
               ),
             )));
   }
