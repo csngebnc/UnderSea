@@ -28,6 +28,7 @@ namespace UnderSea.Dal.Data
         public DbSet<Upgrade> Upgrades { get; set; }
         public DbSet<UpgradeEffect> UpgradeEffects { get; set; }
         public DbSet<ActiveUpgrading> ActiveUpgradings { get; set; }
+        public DbSet<World> Worlds { get; set; }
 
         public UnderSeaDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
