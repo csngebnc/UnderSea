@@ -51,6 +51,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   fit: BoxFit.cover),
             ),
             child: Center(
+                child: SingleChildScrollView(
               child: Column(children: [
                 SizedBox(height: 30),
                 SizedBox(
@@ -108,6 +109,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                 ),
               ]),
-            )));
+            ))));
   }
 }

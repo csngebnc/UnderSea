@@ -22,8 +22,8 @@ class UnderseaStyles {
       colors: gradientColors);
   static const shadowColor = Color(0xFF3B7DBD);
   static const hintColor = Color(0xFF1C3E76);
-  static const navbarIconColor = Color(0xff001234);
-  static const unselectedNavbarIconColor = Color(0x99001234);
+  static const navbarIconColor = Color(0xFF001234);
+  static const unselectedNavbarIconColor = Color(0x33001234);
   static const hintStyle =
       TextStyle(color: UnderseaStyles.hintColor, fontSize: 19);
 
@@ -39,6 +39,93 @@ class UnderseaStyles {
               hintText: hint,
               hintStyle: UnderseaStyles.hintStyle,
               border: InputBorder.none),
+        ));
+  }
+
+  static Widget assetIcon(
+    String iconName, {
+    double iconSize = 40,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Color(0xFF9FFFF0),
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Color(0xFF428DFF), width: 3)),
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child: Container(
+          child: SizedBox(height: iconSize, width: iconSize),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/icons/$iconName.png'),
+                fit: BoxFit.cover),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Widget militaryIcon(String assetName, int current, int max) {
+    return Container(
+        margin: EdgeInsets.all(12),
+        child: Column(
+          children: [
+            UnderseaStyles.assetIcon(assetName),
+            Text(
+              '$current/$max',
+              style: UnderseaStyles.buttonTextStyle.copyWith(
+                  color: Color(0xFF1C3E76),
+                  fontWeight: FontWeight.w800,
+                  fontSize: 22),
+            )
+          ],
+        ));
+  }
+
+  static Widget resourceIcon(String assetName, int current, int production) {
+    return Container(
+        margin: EdgeInsets.all(12),
+        child: Column(
+          children: [
+            UnderseaStyles.assetIcon(assetName),
+            Column(
+              children: [
+                Text(
+                  '$current',
+                  style: UnderseaStyles.buttonTextStyle.copyWith(
+                      color: Color(0xFF1C3E76),
+                      fontWeight: FontWeight.w800,
+                      fontSize: 22,
+                      height: 1.2),
+                ),
+                Text(
+                  '$production/kör',
+                  style: UnderseaStyles.buttonTextStyle.copyWith(
+                      color: Color(0xFF1C3E76),
+                      fontWeight: FontWeight.w800,
+                      fontSize: 22,
+                      height: 1.1),
+                )
+              ],
+            )
+          ],
+        ));
+  }
+
+  static Widget buildingIcon(String assetName, int amount) {
+    return Container(
+        margin: EdgeInsets.all(12),
+        child: Column(
+          children: [
+            UnderseaStyles.assetIcon(assetName),
+            Text(
+              '$amount',
+              style: UnderseaStyles.buttonTextStyle.copyWith(
+                  color: Color(0xFF1C3E76),
+                  fontWeight: FontWeight.w800,
+                  fontSize: 22),
+            ),
+          ],
         ));
   }
 

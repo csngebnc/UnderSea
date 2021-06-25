@@ -33,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
                   fit: BoxFit.cover),
             ),
             child: Center(
+                child: SingleChildScrollView(
               child: Column(children: [
                 SizedBox(height: 30),
                 SizedBox(
@@ -87,6 +88,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ]),
-            )));
+            ))));
   }
 }

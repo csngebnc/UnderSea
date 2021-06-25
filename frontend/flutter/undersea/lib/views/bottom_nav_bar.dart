@@ -33,17 +33,22 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        //extendBody: true,
         appBar: AppBar(
+          toolbarHeight: 85,
           backgroundColor: Color(0xFF1C3E76),
           actions: [
             Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child: GestureDetector(
                     onTap: () {
                       Get.to(ProfilePage(
                           cityName: 'Óceánia', playerName: 'jakabjatekos'));
                     },
-                    child: Image.asset('assets/buildings/seastar.png')))
+                    child: SizedBox(
+                        height: 40,
+                        child:
+                            UnderseaStyles.assetIcon("coral", iconSize: 40))))
           ],
           title: const Text('Undersea logo'),
         ),
@@ -51,51 +56,63 @@ class _BottomNavBarState extends State<BottomNavBar> {
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: UnderseaStyles.gradientColors,
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              //tileMode: TileMode.,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: UnderseaStyles.gradientColors,
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                //tileMode: TileMode.,
+              ),
             ),
-          ),
-          child: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home, color: UnderseaStyles.navbarIconColor),
-                label: 'Kezdőlap',
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                // sets the background color of the `BottomNavigationBar`
+                primaryColor: Colors.green,
               ),
-              BottomNavigationBarItem(
-                icon:
-                    Icon(Icons.business, color: UnderseaStyles.navbarIconColor),
-                label: 'Városom',
+              child: BottomNavigationBar(
+                items: const <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'Kezdőlap',
+                  ),
+                  BottomNavigationBarItem(
+                      icon: Icon(
+                        Icons.business,
+                      ),
+                      label: 'Városom',
+                      backgroundColor: Colors.transparent),
+                  BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.school,
+                    ),
+                    label: 'Támadás',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.school,
+                    ),
+                    label: 'Csapataim',
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                iconSize: 30,
+                selectedItemColor: UnderseaStyles.navbarIconColor,
+                onTap: _onItemTapped,
+                type: BottomNavigationBarType.fixed,
+                showUnselectedLabels: true,
+                backgroundColor: Color(0x00000000),
+                elevation: 0,
+                selectedLabelStyle: TextStyle(
+                    color: UnderseaStyles.navbarIconColor,
+                    fontFamily: 'Baloo 2',
+                    fontSize: 15,
+                    fontStyle: FontStyle.normal),
+                unselectedLabelStyle: TextStyle(
+                    color: UnderseaStyles.unselectedNavbarIconColor,
+                    fontFamily: 'Baloo 2',
+                    fontSize: 15,
+                    fontStyle: FontStyle.normal),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.school, color: UnderseaStyles.navbarIconColor),
-                label: 'Támadás',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.school, color: UnderseaStyles.navbarIconColor),
-                label: 'Csapataim',
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: UnderseaStyles.navbarIconColor,
-            onTap: _onItemTapped,
-            type: BottomNavigationBarType.fixed,
-            showUnselectedLabels: true,
-            backgroundColor: Colors.transparent,
-            selectedLabelStyle: TextStyle(
-                color: UnderseaStyles.navbarIconColor,
-                fontFamily: 'Baloo 2',
-                fontSize: 11,
-                fontStyle: FontStyle.normal),
-            unselectedLabelStyle: TextStyle(
-                color: UnderseaStyles.unselectedNavbarIconColor,
-                fontFamily: 'Baloo 2',
-                fontSize: 11,
-                fontStyle: FontStyle.normal),
-          ),
-        ));
+            )));
   }
 }
