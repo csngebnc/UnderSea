@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Services.Interfaces;
@@ -39,26 +37,24 @@ namespace UnderSea.Bll.Services
                     .ThenInclude(ue => ue.Effect)
                 .ToListAsync();
 
-            var result = new List<UpgradeDto>();
-            foreach (var upgrade in upgrades)
+
+            return upgrades.Select(upgrade =>
             {
-                var remaining_time = country.ActiveUpgradings.Where(u => u.UpgradeId == upgrade.Id).FirstOrDefault()
-                    .EstimatedFinish - country.World.Round;
+                var remaining_time = country.ActiveUpgradings
+                .Where(u => u.UpgradeId == upgrade.Id)
+                .FirstOrDefault()
+                .EstimatedFinish - country.World.Round;
 
-                result.Add(
-                    new UpgradeDto
-                    {
-                        Id = upgrade.Id,
-                        Name = upgrade.Name,
-                        Effects = _mapper.Map<ICollection<EffectDto>>(upgrade.UpgradeEffects.Select(ue => ue.Effect)),
-                        DoesExist = country.CountryUpgrades.Select(cu => cu.UpgradeId).Contains(upgrade.Id),
-                        IsUnderConstruction = country.ActiveUpgradings.Select(au => au.UpgradeId).Contains(upgrade.Id),
-                        RemainingTime = remaining_time > 0 ? remaining_time : 0
-                    }
-                );
-            }
-
-            return result;
+                return new UpgradeDto
+                {
+                    Id = upgrade.Id,
+                    Name = upgrade.Name,
+                    Effects = _mapper.Map<ICollection<EffectDto>>(upgrade.UpgradeEffects.Select(ue => ue.Effect)),
+                    DoesExist = country.CountryUpgrades.Select(cu => cu.UpgradeId).Contains(upgrade.Id),
+                    IsUnderConstruction = country.ActiveUpgradings.Select(au => au.UpgradeId).Contains(upgrade.Id),
+                    RemainingTime = remaining_time > 0 ? remaining_time : 0
+                };
+            });
         }
 
         public async Task BuyUpgrade(BuyUpgradeDto buyUpgradeDto)
@@ -67,6 +63,12 @@ namespace UnderSea.Bll.Services
                             .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
                             .Include(c => c.World)
                             .FirstOrDefaultAsync();
+
+            if(await _context.CountryUpgrades.AnyAsync(c => c.CountryId == country.Id && c.UpgradeId == buyUpgradeDto.UpgradeId) &&
+                await _context.ActiveUpgradings.AnyAsync(au => au.CountryId == country.Id && au.UpgradeId == buyUpgradeDto.UpgradeId))
+            {
+                throw new Exception();
+            }
 
             var upgrade = await _context.Upgrades.FindAsync(buyUpgradeDto.UpgradeId);
 
