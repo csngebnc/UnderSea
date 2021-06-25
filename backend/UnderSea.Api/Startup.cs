@@ -1,3 +1,6 @@
+using Hangfire;
+using Hangfire.Common;
+using Hangfire.SqlServer;
 using IdentityServer4;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication;
@@ -36,6 +39,26 @@ namespace UnderSea.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add Hangfire services.
+            services.AddHangfire(configuration =>
+            {
+                configuration
+                            .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                            .UseSimpleAssemblyNameTypeSerializer()
+                            .UseRecommendedSerializerSettings()
+                            .UseSqlServerStorage(Configuration.GetConnectionString("HangfireUnderSeaDb"), new SqlServerStorageOptions
+                            {
+                                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                                QueuePollInterval = TimeSpan.Zero,
+                                UseRecommendedIsolationLevel = true,
+                                DisableGlobalLocks = true
+                            });
+            });
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
+
             services.AddDbContext<UnderSeaDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -85,7 +108,7 @@ namespace UnderSea.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(UnderSeaDbContext context,IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -101,6 +124,10 @@ namespace UnderSea.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseHangfireDashboard();
+
+            var manager = new RecurringJobManager();
+            manager.AddOrUpdate("Next round", Job.FromExpression(() => new RoundService(context).NextRound()), Cron.Minutely());
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
