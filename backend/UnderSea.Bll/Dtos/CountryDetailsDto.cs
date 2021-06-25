@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace UnderSea.Bll.Dtos
 {
-    public class UserDetailsDto
+    public class CountryDetailsDto
     {
         public int MaxUnitCount { get; set; }
 
         public ICollection<BattleUnitDto> Units { get; set; }
 
-        public int CurrentCoral { get; set; }
-        public int CurrentPearl { get; set; }
+        public int Coral { get; set; }
+        public int Pearl { get; set; }
 
         public int CurrentCoralProduction { get; set; }
         public int CurrentPearlProduction { get; set; }
