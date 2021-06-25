@@ -24,6 +24,8 @@ namespace UnderSea.Bll.Dtos
         [Required(ErrorMessage = "Az épület árát kötelező megadni!")]
         public int Price { get; set; }
 
+        public bool UnderConstruction { get; set; }
+
         public ICollection<EffectDto> Effects { get; set; }
     }
 }

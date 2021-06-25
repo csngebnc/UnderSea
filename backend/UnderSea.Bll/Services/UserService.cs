@@ -3,9 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Paging;
@@ -32,29 +30,45 @@ namespace UnderSea.Bll.Services
 
         public async Task<bool> Register(RegisterDto registerDto)
         {
-            var user = new User { UserName = registerDto.UserName };
+            var user = new User { UserName = registerDto.UserName.Trim() };
+            
+            if (registerDto.Password != registerDto.ConfirmPassword)
+                throw new Exception();
+
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             return result.Succeeded;
         }
 
-        public async Task<PagedResult<UserRankDto>> GetRanklist(PaginationData pagination)
+        public async Task<PagedResult<UserRankDto>> GetRanklist(PaginationData pagination, string nameFilter)
         {
-            return await _context.Users
+            var users = _context.Users
                 .OrderByDescending(u => u.Points)
-                .ProjectTo<UserRankDto>(_mapper.ConfigurationProvider)
-                .ToPagedList(pagination.PageSize, pagination.PageNumber);
+                .ProjectTo<UserRankDto>(_mapper.ConfigurationProvider);
+
+            if (!string.IsNullOrEmpty(nameFilter) && !string.IsNullOrWhiteSpace(nameFilter))
+            {
+                users = users.Where(u => u.Name.Contains(nameFilter));
+            }
+
+            return await users.ToPagedList(pagination.PageSize, pagination.PageNumber);
         }
 
         public async Task<UserInfoDto> GetUserInfo()
         {
             var user = await _context.Users
                 .Include(u => u.Country)
-                .ThenInclude(c => c.World)
+                    .ThenInclude(c => c.World)
                 .Where(u => u.Id == _identityService.GetCurrentUserId())
                 .FirstOrDefaultAsync();
-            var mapped = _mapper.Map<UserInfoDto>(user);
-            mapped.Placement = (await _context.Users.OrderByDescending(u => u.Points).ToListAsync()).FindIndex(0, u => u.Id == mapped.Id);
-            return mapped;
+
+            return new UserInfoDto
+            {
+                Id = user.Id,
+                Name = user.UserName,
+                Round = user.Country.World.Round,
+                Placement = (await _context.Users.OrderByDescending(u => u.Points).ToListAsync()).FindIndex(0, u => u.Id == user.Id)
+            };
+            
         }
 
         public async Task<CountryDetailsDto> GetUserDetails()
@@ -71,10 +85,23 @@ namespace UnderSea.Bll.Services
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<string> GetUserCountryName()
+        {
+            return (await _context.Countries
+                            .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
+                            .FirstOrDefaultAsync()
+                    ).Name;
+        }
+
         public async Task ChangeCountryName(string name)
         {
-            var country = await _context.Countries.Where(c => c.OwnerId == _identityService.GetCurrentUserId()).FirstOrDefaultAsync();
-            country.Name = name;
+            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+                throw new Exception();
+
+            var country = await _context.Countries
+                                    .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
+                                    .FirstOrDefaultAsync();
+            country.Name = name.Trim();
             await _context.SaveChangesAsync();
         }
     }

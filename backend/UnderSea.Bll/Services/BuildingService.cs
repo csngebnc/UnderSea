@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
-using UnderSea.Bll.Extensions;
+using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -17,32 +14,49 @@ namespace UnderSea.Bll.Services
     public class BuildingService
     {
         private readonly UnderSeaDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IIdentityService _identityService;
         private readonly IMapper _mapper;
 
-        public BuildingService(UnderSeaDbContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper)
+        public BuildingService(UnderSeaDbContext context, IMapper mapper, IIdentityService identityService)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
+            _identityService = identityService;
         }
 
         public async Task<IEnumerable<BuildingDetailsDto>> GetUserBuildingAsync()
         {
-            var country = GetCountry();
+            var country = await _context.Countries
+                                    .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
+                                    .Include(c => c.CountryBuildings)
+                                    .Include(c => c.ActiveConstructions)
+                                    .FirstOrDefaultAsync();
 
-            //var userbuildings = await _context.Buildings.Where(b => b.CountryBuildings.Where(cb => cb.CountryId == country.Id).Any()).ProjectTo<BuildingDetailsDto>(_mapper.ConfigurationProvider).ToListAsync();
-            var userbuildings = await _context.CountryBuildings.Include(b => b.Building)
-                                                                .Where(c => c.CountryId == country.Id)
-                                                                .Select(b => b.Building)
-                                                                .ProjectTo<BuildingDetailsDto>(_mapper.ConfigurationProvider)
-                                                                .ToListAsync();
-            return userbuildings;
+            var buildings = await _context.Buildings
+                                        .Include(b => b.BuildingEffects)
+                                        .ThenInclude(be => be.Effect)
+                                        .ToListAsync();
+
+            return buildings.Select(building =>
+            {
+                return new BuildingDetailsDto
+                {
+                    Id = building.Id,
+                    Name = building.Name,
+                    Effects = _mapper.Map<ICollection<EffectDto>>(building.BuildingEffects.Select(be => be.Effect)),
+                    Price = building.Price,
+                    Count = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).Count(),
+                    UnderConstruction = country.ActiveConstructions.Any(ac => ac.BuildingId == building.Id)
+                };
+            });
         }
 
         public async Task BuyBuildingAsync(BuyBuildingDto buildingDto)
         {
-            var country = await GetCountry();
+            var country = await _context.Countries
+                                    .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
+                                    .Include("World")
+                                    .FirstOrDefaultAsync();
 
             var building = await _context.Buildings.Where(c => c.Id == buildingDto.BuildingId).FirstOrDefaultAsync();
             if (building == null) throw new NullReferenceException();
@@ -61,24 +75,6 @@ namespace UnderSea.Bll.Services
             }
 
             await _context.SaveChangesAsync();
-        }
-
-        private string GetUserId()
-        {
-            var userId = _httpContextAccessor.GetCurrentUserId();
-            if (string.IsNullOrEmpty(userId)) throw new NullReferenceException();
-
-            return userId;
-        }
-
-        private async Task<Country> GetCountry()
-        {
-            var userId = GetUserId();
-
-            var country = await _context.Countries.Where(c => c.OwnerId == userId).FirstOrDefaultAsync();
-            if (country == null) throw new NullReferenceException();
-
-            return country;
         }
     }
 }

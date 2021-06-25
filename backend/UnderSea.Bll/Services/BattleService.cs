@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Extensions;
 using UnderSea.Bll.Paging;
+using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -18,14 +19,14 @@ namespace UnderSea.Bll.Services
     public class BattleService
     {
         private readonly UnderSeaDbContext _context;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IIdentityService _identityService;
         private readonly IMapper _mapper;
 
-        public BattleService(UnderSeaDbContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper)
+        public BattleService(UnderSeaDbContext context, IMapper mapper, IIdentityService identityService)
         {
             _context = context;
-            this.httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
+            _identityService = identityService;
         }
 
         public async Task<PagedResult<AttackableUserDto>> GetAttackableUsersAsync(PaginationData data)
@@ -53,9 +54,34 @@ namespace UnderSea.Bll.Services
         public async Task<PagedResult<LoggedAttackDto>> GetLoggedAttacksAsync(PaginationData data)
         {
             var country = await GetCountry();
+            
+            var attacks = await _context.Attacks
+                                            .Where(c => c.DefenderCountryId == country.Id || c.AttackerCountryId == country.Id)
+                                            .Include(a => a.DefenderCountry)
+                                            .ToPagedList(data.PageSize, data.PageNumber);
 
-            var loggedattacks = await _context.Attacks.Where(c => c.DefenderCountryId == country.Id || c.AttackerCountryId == country.Id).ProjectTo<LoggedAttackDto>(_mapper.ConfigurationProvider).ToPagedList(data.PageSize, data.PageNumber);
-            return loggedattacks;
+            var result = new List<LoggedAttackDto>();
+            foreach (var attack in attacks.Results)
+            {
+                result.Add(
+                    new LoggedAttackDto
+                    {
+                        AttackedCountryName = attack.DefenderCountry.Name,
+                        Units = _mapper.Map<ICollection<BattleUnitDto>>(attack.AttackUnits),
+                        Outcome = attack.WinnerId == null ? Model.Enums.FightOutcome.NotPlayedYet :
+                                    attack.WinnerId == _identityService.GetCurrentUserId() ?
+                                                Model.Enums.FightOutcome.CurrentUser : Model.Enums.FightOutcome.OtherUser
+                    }
+                );
+            }
+
+            return new PagedResult<LoggedAttackDto>
+            {
+                AllResultsCount = attacks.AllResultsCount,
+                PageNumber = attacks.PageNumber,
+                PageSize = attacks.PageSize,
+                Results = result
+            };
         }
 
         public async Task<IEnumerable<UnitDto>> GetAllUnitsAsync()
@@ -172,7 +198,7 @@ namespace UnderSea.Bll.Services
 
         private string GetUserId()
         {
-            var userId = httpContextAccessor.GetCurrentUserId();
+            var userId = _identityService.GetCurrentUserId();
             if (string.IsNullOrEmpty(userId)) throw new NullReferenceException();
 
             return userId;

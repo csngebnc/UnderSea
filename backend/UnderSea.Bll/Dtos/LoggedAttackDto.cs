@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnderSea.Model.Enums;
 
 namespace UnderSea.Bll.Dtos
 {
@@ -11,6 +12,6 @@ namespace UnderSea.Bll.Dtos
         public string AttackedCountryName { get; set; }
         public ICollection<BattleUnitDto> Units { get; set; }
 
-        public bool IsWinner { get; set; }
+        public FightOutcome Outcome { get; set; }
     }
 }

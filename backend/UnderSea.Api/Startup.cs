@@ -49,14 +49,15 @@ namespace UnderSea.Api
                 .AddEntityFrameworkStores<UnderSeaDbContext>();
 
             services.AddAutoMapper(typeof(BattleProfile));
-            services.AddAutoMapper(typeof(BuildingProfile));
-            services.AddAutoMapper(typeof(UpgradeProfile));
             services.AddAutoMapper(typeof(UserProfile));
 
             services.AddHttpContextAccessor();
             services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddTransient<UserService>();
+            services.AddTransient<UpgradeService>();
+            services.AddTransient<BattleService>();
+            services.AddTransient<BuildingService>();
 
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
