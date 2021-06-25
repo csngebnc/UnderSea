@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
@@ -73,7 +74,7 @@ namespace UnderSea.Bll.Services
 
         public async Task<CountryDetailsDto> GetUserDetails()
         {
-            return await _context.Countries
+            var country = await _context.Countries
                 .Where(u => u.OwnerId == _identityService.GetCurrentUserId())
                 .Include(c => c.CountryBuildings)
                     .ThenInclude(cb => cb.Building)
@@ -81,8 +82,29 @@ namespace UnderSea.Bll.Services
                             .ThenInclude(be => be.Effect)
                 .Include(c => c.CountryUnits)
                     .ThenInclude(cu => cu.Unit)
-                .ProjectTo<CountryDetailsDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
+
+            return new CountryDetailsDto
+            {
+                MaxUnitCount = country.CountryBuildings
+                        .Sum(b => b.Building.BuildingEffects
+                           .Count(e => e.Effect.EffectType == "effect_population")),
+                Units = _mapper.Map<ICollection<BattleUnitDto>>(country.CountryUnits.Select(cu => cu.Unit)),
+                Coral = country.Coral,
+                Pearl = country.Pearl,
+                CurrentCoralProduction = (int)(country.Production.BaseCoralProduction * country.Production.CoralProductionMultiplier),
+                CurrentPearlProduction = (int)(country.Production.BasePearlProduction * country.Production.PearlProductionMultiplier),
+                Buildings = country.CountryBuildings.Select(cb => cb.Building).Select(building =>
+                {
+                    return new BuildingInfoDto
+                    {
+                        Id = building.Id,
+                        Name = building.Name,
+                        BuildingsCount = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).Count(),
+                        ActiveConstructionCount = country.ActiveConstructions.Where(ac => ac.BuildingId == building.Id).Count()
+                    };
+                })
+            };
         }
 
         public async Task<string> GetUserCountryName()

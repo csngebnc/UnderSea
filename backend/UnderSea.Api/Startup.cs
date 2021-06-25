@@ -48,8 +48,7 @@ namespace UnderSea.Api
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<UnderSeaDbContext>();
 
-            services.AddAutoMapper(typeof(BattleProfile));
-            services.AddAutoMapper(typeof(UserProfile));
+            services.AddAutoMapper(typeof(AutoMapperProfiles));
 
             services.AddHttpContextAccessor();
             services.AddScoped<IIdentityService, IdentityService>();

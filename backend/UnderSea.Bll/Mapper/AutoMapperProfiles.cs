@@ -9,10 +9,12 @@ using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Mapper
 {
-    public class BattleProfile : Profile
+    public class AutoMapperProfiles : Profile
     {
-        public BattleProfile()
+        public AutoMapperProfiles()
         {
+            CreateMap<User, UserRankDto>();
+
             CreateMap<User, AttackableUserDto>()
                 .ForMember(e => e.Id, a => a.MapFrom(s => s.Id))
                 .ForMember(e => e.UserName, a => a.MapFrom(s => s.UserName))
