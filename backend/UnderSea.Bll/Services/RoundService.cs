@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnderSea.Bll.Extensions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
 
-namespace UnderSea.Bll.Mapper
+namespace UnderSea.Bll.Services
 {
     public class RoundService
     {
@@ -145,7 +146,7 @@ namespace UnderSea.Bll.Mapper
             }
         }
 
-        public async Task CalculatePoints(ICollection<Country> countries)
+        public void CalculatePoints(ICollection<Country> countries)
         {
             foreach (var country in countries)
             {
@@ -171,10 +172,20 @@ namespace UnderSea.Bll.Mapper
                         case UnitConstants.RohamFoka:
                             militaryPoints += unit.Count * PointConstants.Military;
                             break;
-                        case:
+                        case UnitConstants.Csatacsiko:
+                            militaryPoints += unit.Count * PointConstants.Military;
+                            break;
+                        case UnitConstants.Lezercapa:
+                            militaryPoints += unit.Count * PointConstants.MilitaryShark;
+                            break;
+                        default:
+                            militaryPoints += unit.Count * PointConstants.Military;
+                            break;
                     }
                     militaryPoints += unit.Count * PointConstants.Military;
                 }
+
+                country.Owner.Points = populationPoints + buildingPoints + upgradePoints + militaryPoints;
             }
         }
 
@@ -205,7 +216,7 @@ namespace UnderSea.Bll.Mapper
 
                 await Fights(countries);
 
-                await CalculatePoints(countries);
+                CalculatePoints(countries);
 
                 world.Round++;
 
