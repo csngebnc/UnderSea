@@ -40,7 +40,13 @@ namespace UnderSea.Bll.Services
         {
             var country = await GetCountry();
 
-            var userunits = await _context.Units.Where(c => c.CountryUnits.Where(a => a.CountryId == country.Id).Any()).ProjectTo<BattleUnitDto>(_mapper.ConfigurationProvider).ToListAsync();
+            var userunits = await _context.CountryUnits
+                .Include(c => c.Unit)
+                .Where(c => c.CountryId == country.Id)
+                .Select(c => c.Unit)
+                .ProjectTo<BattleUnitDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            
             return userunits;
         }
 
@@ -101,6 +107,11 @@ namespace UnderSea.Bll.Services
             var attackedCountry = await _context.Countries.Where(c => c.Id == attackDto.AttackedCountryId).FirstOrDefaultAsync();
             if (attackedCountry == null) throw new NullReferenceException();
 
+            await AttackLogic(attackerCountry, attackedCountry, attackDto);
+        }
+
+        public async Task AttackLogic(Country attackerCountry, Country attackedCountry, SendAttackDto attackDto)
+        {
             using (var transaction = _context.Database.BeginTransaction())
             {
                 Attack attack = new Attack()
@@ -113,13 +124,13 @@ namespace UnderSea.Bll.Services
 
                 var newAttack = _context.Attacks.Add(attack);
 
-                if(newAttack.Entity == null)
+                if (newAttack.Entity == null)
                 {
                     await transaction.RollbackAsync();
                     throw new InvalidOperationException();
                 }
 
-                foreach(var unit in attackDto.Units)
+                foreach (var unit in attackDto.Units)
                 {
                     AttackUnit attackUnit = new AttackUnit()
                     {
@@ -127,6 +138,23 @@ namespace UnderSea.Bll.Services
                         Count = unit.Count,
                         UnitId = unit.UnitId
                     };
+
+                    var cunit = attackerCountry.CountryUnits.Where(c => c.CountryId == attackerCountry.Id && c.UnitId == unit.UnitId).FirstOrDefault();
+                    if (cunit == null)
+                    {
+                        await transaction.RollbackAsync();
+                        throw new InvalidOperationException();
+                    }
+
+                    if (cunit.Count >= unit.Count)
+                    {
+                        cunit.Count -= unit.Count;
+                    }
+                    else
+                    {
+                        await transaction.RollbackAsync();
+                        throw new InvalidOperationException();
+                    }
 
                     var newAttackUnit = _context.AttackUnits.Add(attackUnit);
 
@@ -154,7 +182,7 @@ namespace UnderSea.Bll.Services
         {
             var userId = GetUserId();
 
-            var country = await _context.Countries.Include(w => w.World).Where(c => c.OwnerId == userId).FirstOrDefaultAsync();
+            var country = await _context.Countries.Include(w => w.World).Include(c => c.CountryUnits).Where(c => c.OwnerId == userId).FirstOrDefaultAsync();
             if (country == null) throw new NullReferenceException();
 
             return country;
