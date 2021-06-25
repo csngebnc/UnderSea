@@ -9,7 +9,11 @@
       <form class="stack align-center">
         <ul class="item-container">
           <li *ngFor="let building of buildings" class="non-styled-list-item">
-            <button type="button" class="item-btn">
+            <button
+              type="button"
+              class="item-btn"
+              (click)="setBuilding(building.id)"
+            >
               <building-details
                 class="item item-lg stack align-center"
                 [building]="building"
@@ -18,8 +22,12 @@
           </li>
         </ul>
         <div class="divider"></div>
-        <button type="button" class="gradient-button mt-2" (click)="asd()">
-          Megveszem
+        <button
+          type="button"
+          [disabled]="!selectedBuilding || isUnderConstruction"
+          class="gradient-button mt-2"
+        >
+          {{ isUnderConstruction ? "Folyamatban..." : "Megveszem" }}
         </button>
       </form>
     </div>

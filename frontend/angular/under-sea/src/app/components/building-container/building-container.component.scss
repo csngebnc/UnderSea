@@ -1,0 +1,24 @@
+.img {
+  position: absolute;
+}
+
+.castle {
+  left: 40%;
+  top: 55%;
+  height: 30%;
+  z-index: 2;
+}
+
+.sonar {
+  left: 47%;
+  top: 20%;
+  height: 60%;
+  z-index: 1;
+}
+
+.flow-control {
+  left: 55%;
+  top: 60%;
+  height: 30%;
+  z-index: 3;
+}

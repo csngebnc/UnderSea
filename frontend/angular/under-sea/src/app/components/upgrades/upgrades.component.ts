@@ -7,6 +7,9 @@ import { Upgrade } from 'src/app/models/upgrade.model';
   styleUrls: ['./upgrades.component.scss'],
 })
 export class UpgradesComponent implements OnInit {
+  selectedUpgrade: string = '';
+  isResearching: boolean = false;
+
   upgrades: Array<Upgrade> = [
     {
       id: 'coral_wall',
@@ -55,4 +58,8 @@ export class UpgradesComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  setUpgrade(id: string): void {
+    this.selectedUpgrade = id;
+  }
 }

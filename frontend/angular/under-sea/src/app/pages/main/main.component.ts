@@ -5,14 +5,12 @@ import { Resources } from 'src/app/models/resources.model';
 @Component({
   selector: 'main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   userData: UserData = {
     name: 'Pepsi Béla',
@@ -28,8 +26,9 @@ export class MainComponent implements OnInit {
       { id: 1, name: 'shark', count: 10 },
     ],
     buildings: [
-      { id: 1, name: 'shark', count: 11 },
-      { id: 2, name: 'shark', count: 12 },
+      { id: 1, name: 'sonar', count: 1 },
+      { id: 2, name: 'flow-control', count: 12 },
+      { id: 2, name: 'castle', count: 12 },
     ],
     buildingsUnderConstruction: [
       { id: 1, name: 'shark', count: 1 },
@@ -40,5 +39,4 @@ export class MainComponent implements OnInit {
     corals: 126,
     coralsPerRound: 32,
   };
-  
 }

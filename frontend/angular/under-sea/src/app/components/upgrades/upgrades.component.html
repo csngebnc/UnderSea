@@ -13,7 +13,11 @@
       <form class="stack align-center">
         <ul class="item-container">
           <li *ngFor="let upgrade of upgrades" class="non-styled-list-item">
-            <button type="button" class="item-btn">
+            <button
+              type="button"
+              class="item-btn"
+              (click)="setUpgrade(upgrade.id)"
+            >
               <upgrade-details
                 class="item item-sm stack align-center"
                 [upgrade]="upgrade"
@@ -22,7 +26,13 @@
           </li>
         </ul>
         <div class="divider"></div>
-        <button type="submit" class="gradient-button mt-2">Megveszem</button>
+        <button
+          type="submit"
+          [disabled]="!selectedUpgrade || isResearching"
+          class="gradient-button mt-2"
+        >
+          {{ isResearching ? "Folyamatban..." : "Megveszem" }}
+        </button>
       </form>
     </div>
   </div>

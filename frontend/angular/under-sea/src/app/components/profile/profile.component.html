@@ -4,10 +4,22 @@
     <p class="modal-description">
       Országod jelenlegi neve: <strong>Kukutyim</strong>
     </p>
-    
-    <form class="stack align-center">
-        <input type="text" placeholder="Új név..." class="text-input mt-1">
-        <button type="submit" class="gradient-button mt-1">Átnevezés</button>
-    </form>
+
+    <div class="stack align-center">
+      <input
+        type="text"
+        placeholder="Új név..."
+        class="text-input mt-1"
+        [(ngModel)]="newName"
+      />
+      <button
+        type="button"
+        class="gradient-button mt-1"
+        (click)="setNewName()"
+        [disabled]="!newName"
+      >
+        Átnevezés
+      </button>
+    </div>
   </div>
 </div>
