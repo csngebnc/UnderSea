@@ -21,13 +21,10 @@ namespace UnderSea.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
-        private readonly IIdentityService _identityService;
-        //private readonly JwtSecurityTokenHandler jwth;
 
-        public UserController(UserService userService, IIdentityService identityService)
+        public UserController(UserService userService)
         {
             _userService = userService;
-            _identityService = identityService;
         }
 
         [HttpPost("register")]
@@ -39,25 +36,26 @@ namespace UnderSea.Api.Controllers
         [HttpGet("ranklist")]
         public async Task<ActionResult<PagedResult<UserRankDto>>> GetRanklist([FromQuery] PaginationData pagination)
         {
-            return Ok(new PagedResult<UserRankDto>());
+            return Ok(await _userService.GetRanklist(pagination));
         }
 
         [HttpGet]
         public async Task<ActionResult<UserInfoDto>> GetUserInfo()
         {
-            return Ok(new UserInfoDto { Id = new Guid().ToString("N"), Name = "Teszt User", Placement = 1, Round = 1 });
+            return Ok(await _userService.GetUserInfo());
         }
 
         [HttpGet("details")]
-        public async Task<ActionResult<UserDetailsDto>> GetUserDetails()
+        public async Task<ActionResult<CountryDetailsDto>> GetUserDetails()
         {
-            return Ok(new UserDetailsDto());
+            return Ok(await _userService.GetUserDetails());
         }
 
         [HttpPut("new-country-name")]
-        public async Task<ActionResult<string>> ChangeCountryName([FromQuery] string name)
+        public async Task<ActionResult> ChangeCountryName([FromQuery] string name)
         {
-            return Ok($"success: {name}");
+            await _userService.ChangeCountryName(name);
+            return Ok();
         }
 
 
