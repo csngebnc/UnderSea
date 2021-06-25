@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:undersea/styles/style_constants.dart';
 
 class ProfilePage extends StatelessWidget {
   final String cityName;
@@ -17,26 +18,80 @@ class ProfilePage extends StatelessWidget {
       body: Column(children: [
         Center(
             child: Column(children: [
-          Image.asset('assets/buildings/seastar.png'),
-          Text(playerName),
-          Divider()
+          SizedBox(
+            height: 40,
+          ),
+          UnderseaStyles.assetIcon("profile", iconSize: 70),
+          SizedBox(
+            height: 25,
+          ),
+          Text(playerName,
+              style: UnderseaStyles.inputTextStyle.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 21)),
+          SizedBox(
+            height: 10,
+          ),
+          UnderseaStyles.divider(),
+          SizedBox(
+            height: 10,
+          ),
         ])),
         Align(
             alignment: Alignment.centerLeft,
             child: Column(children: [
-              Row(children: [
-                Text('Városom neve'),
-                Icon(Icons.mode_edit_outline_outlined)
-              ]),
-              Text(cityName),
-              Divider(),
-              TextButton(
-                onPressed: () {
-                  //logout
-                },
-                child: Text('Kijelentkezés'),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Városom neve',
+                              style: UnderseaStyles.inputTextStyle.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 21),
+                            ),
+                            Text(
+                              cityName,
+                              style: UnderseaStyles.inputTextStyle
+                                  .copyWith(color: Colors.white, fontSize: 21),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(),
+                      ),
+                      Icon(
+                        Icons.mode_edit_outline_outlined,
+                        color: Colors.white,
+                        size: 30,
+                      )
+                    ]),
               ),
-              Divider()
+              UnderseaStyles.divider(),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: TextButton(
+                    onPressed: () {
+                      //logout
+                    },
+                    child: Text('Kijelentkezés',
+                        style: UnderseaStyles.buttonTextStyle
+                            .copyWith(color: UnderseaStyles.underseaLogoColor)),
+                  ),
+                ),
+              ),
+              UnderseaStyles.divider()
             ]))
       ]),
     );

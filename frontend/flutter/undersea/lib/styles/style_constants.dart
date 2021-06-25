@@ -129,6 +129,15 @@ class UnderseaStyles {
         ));
   }
 
+  static divider() {
+    return Divider(
+        color: Color(0xFF3F68AE),
+        thickness: 2,
+        indent: 20,
+        endIndent: 20,
+        height: 32);
+  }
+
   static Widget elevatedButton(
       {required String text, required Function onPressed}) {
     return ElevatedButton(
