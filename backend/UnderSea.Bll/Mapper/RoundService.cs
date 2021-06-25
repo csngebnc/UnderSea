@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Dal.Data;
+using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Mapper
@@ -77,19 +78,62 @@ namespace UnderSea.Bll.Mapper
             }
         }
 
-        public async Task MakeUpgrades(ICollection<Country> countries, World world)
+        public void MakeUpgrades(ICollection<Country> countries, World world)
         {
             foreach (var country in countries)
             {
-                
+                foreach(var upgrade in country.ActiveUpgradings.Where(c => c.EstimatedFinish == world.Round))
+                {
+                    CountryUpgrade newCountryUpgrade = new CountryUpgrade()
+                    {
+                        CountryId = country.Id,
+                        UpgradeId = upgrade.Id,
+                        EstimatedFinish = world.Round + upgrade.Upgrade.UpgradeTime
+                    };
+
+                    _context.CountryUpgrades.Add(newCountryUpgrade);
+
+                    foreach(var effect in upgrade.Upgrade.UpgradeEffects)
+                    {
+                        effect.Effect.ApplyEffect(country);
+                    }
+
+                    _context.ActiveUpgradings.Remove(upgrade);
+                }
             }
         }
 
-        public async Task MakeBuildings(ICollection<Country> countries, World world)
+        public void MakeBuildings(ICollection<Country> countries, World world)
         {
             foreach (var country in countries)
             {
+                foreach (var building in country.ActiveConstructions.Where(c => c.EstimatedFinish == world.Round))
+                {
+                    var cbuilding = country.CountryBuildings.Where(c => c.BuildingId == building.BuildingId).FirstOrDefault();
 
+                    if(cbuilding == null)
+                    {
+                        CountryBuilding newCountryBuilding = new CountryBuilding()
+                        {
+                            CountryId = country.Id,
+                            Count = 1,
+                            BuildingId = building.BuildingId,
+                        };
+
+                        _context.CountryBuildings.Add(newCountryBuilding);
+                    }
+                    else
+                    {
+                        cbuilding.Count++;
+                    }
+
+                    foreach (var effect in building.Building.BuildingEffects)
+                    {
+                        effect.Effect.ApplyEffect(country);
+                    }
+
+                    _context.ActiveConstructions.Remove(building);
+                }
             }
         }
 
@@ -105,7 +149,32 @@ namespace UnderSea.Bll.Mapper
         {
             foreach (var country in countries)
             {
+                int populationPoints = country.Population * PointConstants.Population;
 
+                int buildingPoints = 0;
+                foreach(var building in country.CountryBuildings)
+                {
+                    buildingPoints += building.Count * PointConstants.Buildings;
+                }
+
+                int upgradePoints = 0;
+                foreach (var upgrade in country.CountryUpgrades)
+                {
+                    upgradePoints += PointConstants.Science;
+                }
+
+                int militaryPoints = 0;
+                foreach(var unit in country.CountryUnits)
+                {
+                    switch (unit.Unit.Name)
+                    {
+                        case UnitConstants.RohamFoka:
+                            militaryPoints += unit.Count * PointConstants.Military;
+                            break;
+                        case:
+                    }
+                    militaryPoints += unit.Count * PointConstants.Military;
+                }
             }
         }
 
@@ -114,7 +183,13 @@ namespace UnderSea.Bll.Mapper
             var world = await _context.Worlds.FirstOrDefaultAsync();
             if (world == null) throw new NullReferenceException();
 
-            var countries = await _context.Countries.Include(e => e.CountryUnits).ThenInclude(e => e.Unit).Include(e => e.Production).ToListAsync();
+            var countries = await _context.Countries.Include(e => e.CountryUnits).ThenInclude(e => e.Unit)
+                                                    .Include(e => e.Production)
+                                                    .Include(e => e.CountryBuildings).ThenInclude(e => e.Building)
+                                                    .Include(e => e.CountryUpgrades).ThenInclude(e => e.Upgrade)
+                                                    .Include(e => e.ActiveUpgradings).ThenInclude(e => e.Upgrade).ThenInclude(e => e.UpgradeEffects)
+                                                    .Include(e => e.ActiveConstructions).ThenInclude(e => e.Building).ThenInclude(e => e.BuildingEffects)
+                                                    .ToListAsync();
 
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -124,9 +199,9 @@ namespace UnderSea.Bll.Mapper
 
                 PayMercenaryAndFeedSoldiers(countries);
 
-                await MakeUpgrades(countries,world);
+                MakeUpgrades(countries,world);
 
-                await MakeBuildings(countries,world);
+                MakeBuildings(countries,world);
 
                 await Fights(countries);
 
