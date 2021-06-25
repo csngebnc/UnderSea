@@ -1,4 +1,7 @@
+using IdentityServer4;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,10 +13,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Mapper;
 using UnderSea.Bll.Services;
+using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -48,6 +53,9 @@ namespace UnderSea.Api
             services.AddAutoMapper(typeof(UpgradeProfile));
             services.AddAutoMapper(typeof(UserProfile));
 
+            services.AddHttpContextAccessor();
+            services.AddScoped<IIdentityService, IdentityService>();
+
             services.AddTransient<UserService>();
 
             services.AddIdentityServer()
@@ -59,7 +67,11 @@ namespace UnderSea.Api
                 .AddInMemoryClients(Configuration.GetSection("IdentityServer:Clients"))
                 .AddAspNetIdentity<User>();
 
-            services.AddAuthentication()
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(options =>
                 {
                     options.Authority = "https://localhost:5001";
