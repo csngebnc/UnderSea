@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,7 +24,7 @@ import { BuildingDetailsComponent } from './components/building-details/building
 import { UpgradeDetailsComponent } from './components/upgrade-details/upgrade-details.component';
 import { ListComponent } from './components/list/list.component';
 import { UnitDetailsComponent } from './components/unit-details/unit-details.component';
-import { UnitSliderComponent } from './unit-slider/unit-slider.component';
+import { UnitSliderComponent } from './components/unit-slider/unit-slider.component';
 
 @NgModule({
   declarations: [
@@ -48,13 +49,10 @@ import { UnitSliderComponent } from './unit-slider/unit-slider.component';
     UpgradeDetailsComponent,
     ListComponent,
     UnitDetailsComponent,
-    UnitSliderComponent
+    UnitSliderComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

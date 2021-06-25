@@ -1,0 +1,27 @@
+<div class="modal-container">
+  <div class="modal">
+    <h2 class="modal-title">Támadás</h2>
+    <div class="d-flex to-sides mt-1">
+      <div class="pr-1 b-r-1">
+        <h3 class="modal-description mb-1">
+          <strong>1. Jelöld ki, kit szeretnél megtámadni:</strong>
+        </h3>
+        <list [list]="players"></list>
+      </div>
+      <div class="pl-1">
+        <h3 class="modal-description mb-1">
+          <strong>2. Állítsd be, kiket küldesz harcba:</strong>
+        </h3>
+        <unit-slider
+          *ngFor="let unit of units"
+          [unit]="unit"
+          class="d-flex w-100 p-1"
+        ></unit-slider>
+      </div>
+    </div>
+    <div class="stack align-center">
+      <div class="divider mt-1"></div>
+      <button type="button" class="gradient-button mt-2">Megtámadom!</button>
+    </div>
+  </div>
+</div>

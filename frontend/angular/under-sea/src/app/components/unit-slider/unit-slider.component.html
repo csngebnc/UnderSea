@@ -1,0 +1,17 @@
+<div class="icon-frame icon-frame-sm">
+  <img src="../../../assets/img/{{ unit.id }}.svg" [alt]="unit.id" />
+</div>
+<div class="pl-1 stack to-center w-200px">
+  <label for="unit_count" class="modal-description w-100"
+    >{{ unit.name }}: {{ selectedCount }} példány</label
+  >
+  <input
+    type="range"
+    name="unit_count"
+    min="0"
+    [max]="unit.count"
+    step="1"
+    [(ngModel)]="selectedCount"
+    class="slider"
+  />
+</div>
