@@ -57,6 +57,7 @@ namespace UnderSea.Api
             services.AddTransient<UpgradeService>();
             services.AddTransient<BattleService>();
             services.AddTransient<BuildingService>();
+            services.AddTransient<RoundService>();
 
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()

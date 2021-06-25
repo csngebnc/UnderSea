@@ -1,0 +1,14 @@
+[
+  {
+    "BuildingId": 1,
+    "EffectId": 1
+  },
+  {
+    "BuildingId": 1,
+    "EffectId": 2
+  },
+  {
+    "BuildingId": 2,
+    "EffectId": 3
+  },
+]

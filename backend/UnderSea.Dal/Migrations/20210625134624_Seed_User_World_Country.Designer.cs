@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UnderSea.Dal.Data;
 
 namespace UnderSea.Dal.Migrations
 {
     [DbContext(typeof(UnderSeaDbContext))]
-    partial class UnderSeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210625134624_Seed_User_World_Country")]
+    partial class Seed_User_World_Country
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -383,22 +385,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Buildings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ConstructionTime = 5,
-                            Name = "Áramlásirányító",
-                            Price = 1000
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ConstructionTime = 5,
-                            Name = "Zátonyvár",
-                            Price = 1000
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.BuildingEffect", b =>
@@ -414,23 +400,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasIndex("EffectId");
 
                     b.ToTable("BuildingEffects");
-
-                    b.HasData(
-                        new
-                        {
-                            BuildingId = 1,
-                            EffectId = 1
-                        },
-                        new
-                        {
-                            BuildingId = 1,
-                            EffectId = 2
-                        },
-                        new
-                        {
-                            BuildingId = 2,
-                            EffectId = 3
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.Country", b =>
@@ -702,38 +671,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Units");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AttackPoint = 6,
-                            DefensePoint = 2,
-                            MercenaryPerRound = 1,
-                            Name = "Rohamfóka",
-                            Price = 50,
-                            SupplyPerRound = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AttackPoint = 2,
-                            DefensePoint = 6,
-                            MercenaryPerRound = 1,
-                            Name = "Csatacsikó",
-                            Price = 50,
-                            SupplyPerRound = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AttackPoint = 5,
-                            DefensePoint = 5,
-                            MercenaryPerRound = 3,
-                            Name = "Lézercápa",
-                            Price = 100,
-                            SupplyPerRound = 2
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.Upgrade", b =>
@@ -754,44 +691,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Upgrades");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Iszaptraktor",
-                            UpgradeTime = 15
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Iszapkombájn",
-                            UpgradeTime = 15
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Korallfal",
-                            UpgradeTime = 15
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Szonárágyú",
-                            UpgradeTime = 15
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Vízalatti harcművészetek",
-                            UpgradeTime = 15
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Alkímia",
-                            UpgradeTime = 15
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.UpgradeEffect", b =>
@@ -807,38 +706,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasIndex("UpgradeId");
 
                     b.ToTable("UpgradeEffects");
-
-                    b.HasData(
-                        new
-                        {
-                            EffectId = 4,
-                            UpgradeId = 1
-                        },
-                        new
-                        {
-                            EffectId = 5,
-                            UpgradeId = 2
-                        },
-                        new
-                        {
-                            EffectId = 6,
-                            UpgradeId = 3
-                        },
-                        new
-                        {
-                            EffectId = 7,
-                            UpgradeId = 4
-                        },
-                        new
-                        {
-                            EffectId = 8,
-                            UpgradeId = 5
-                        },
-                        new
-                        {
-                            EffectId = 9,
-                            UpgradeId = 6
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.User", b =>
@@ -1088,13 +955,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("upgrade_effect_alchemy");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 9,
-                            Name = "Növeli a beszedett adót 30%-kal"
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.CoralEffect", b =>
@@ -1102,13 +962,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("effect_coral");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 2,
-                            Name = "200 korallt termel körönként"
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.CoralWall", b =>
@@ -1116,13 +969,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("upgrade_effect_coralwall");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 6,
-                            Name = "Növeli a védelmi pontokat 20%-kal"
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.MilitaryEffect", b =>
@@ -1130,13 +976,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("effect_military");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 3,
-                            Name = "200 egység katonának nyújt szállást"
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.MudCombine", b =>
@@ -1144,13 +983,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("upgrade_effect_mudcombine");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 5,
-                            Name = "Növeli a korall termesztést 15%-kal"
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.MudTractor", b =>
@@ -1158,13 +990,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("upgrade_effect_mudtractor");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 4,
-                            Name = "Növeli a korall termesztést 10%-kal"
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.PopulationEffect", b =>
@@ -1172,13 +997,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("effect_population");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "50 lakost ad a népességhez"
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.SonarCanon", b =>
@@ -1186,13 +1004,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("upgrade_effect_sonarcannon");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 7,
-                            Name = "Növeli a támadó pontokat 20%-kal"
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.UnderwaterMartialArt", b =>
@@ -1200,13 +1011,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("upgrade_effect_martialart");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 8,
-                            Name = "Növeli a védelmi és támadóerőt pontokat 10%-kal"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

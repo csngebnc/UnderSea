@@ -78,23 +78,22 @@ namespace UnderSea.Bll.Services
                 .Where(u => u.OwnerId == _identityService.GetCurrentUserId())
                 .Include(c => c.CountryBuildings)
                     .ThenInclude(cb => cb.Building)
-                        .ThenInclude(b => b.BuildingEffects)
-                            .ThenInclude(be => be.Effect)
                 .Include(c => c.CountryUnits)
                     .ThenInclude(cu => cu.Unit)
                 .FirstOrDefaultAsync();
 
+            var buildings = await _context.Buildings
+                                .Include(b => b.ActiveConstructions).ToListAsync();
+
             return new CountryDetailsDto
             {
-                MaxUnitCount = country.CountryBuildings
-                        .Sum(b => b.Building.BuildingEffects
-                           .Count(e => e.Effect.EffectType == "effect_population")),
+                MaxUnitCount = country.MaxUnitCount,
                 Units = _mapper.Map<ICollection<BattleUnitDto>>(country.CountryUnits.Select(cu => cu.Unit)),
                 Coral = country.Coral,
                 Pearl = country.Pearl,
                 CurrentCoralProduction = (int)(country.Production.BaseCoralProduction * country.Production.CoralProductionMultiplier),
                 CurrentPearlProduction = (int)(country.Production.BasePearlProduction * country.Production.PearlProductionMultiplier),
-                Buildings = country.CountryBuildings.Select(cb => cb.Building).Select(building =>
+                Buildings = buildings.Select(building =>
                 {
                     return new BuildingInfoDto
                     {
@@ -104,6 +103,16 @@ namespace UnderSea.Bll.Services
                         ActiveConstructionCount = country.ActiveConstructions.Where(ac => ac.BuildingId == building.Id).Count()
                     };
                 })
+                /*Buildings = country.CountryBuildings.Select(cb => cb.Building).Select(building =>
+                {
+                    return new BuildingInfoDto
+                    {
+                        Id = building.Id,
+                        Name = building.Name,
+                        BuildingsCount = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).Count(),
+                        ActiveConstructionCount = country.ActiveConstructions.Where(ac => ac.BuildingId == building.Id).Count()
+                    };
+                })*/
             };
         }
 

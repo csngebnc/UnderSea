@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Services;
 
 namespace UnderSea.Api.Controllers
 {
@@ -12,21 +13,23 @@ namespace UnderSea.Api.Controllers
     [ApiController]
     public class UpgradeController : ControllerBase
     {
-        public UpgradeController()
+        private readonly UpgradeService _upgradeService;
+        public UpgradeController(UpgradeService upgradeService)
         {
-
+            _upgradeService = upgradeService;
         }
 
         [HttpGet("list")]
-        public async Task<IEnumerable<UpgradeDto>> GetUpgrades()
+        public async Task<ActionResult<IEnumerable<UpgradeDto>>> GetUpgrades()
         {
-            return new List<UpgradeDto>();
+            return Ok(await _upgradeService.GetUpgrades());
         }
 
         [HttpPost("buy")]
         public async Task<ActionResult> BuyUpgrade(BuyUpgradeDto buyUpgradeDto)
         {
-            return Ok("success: buy upgrade");
+            await _upgradeService.BuyUpgrade(buyUpgradeDto);
+            return Ok();
         }
     }
 }

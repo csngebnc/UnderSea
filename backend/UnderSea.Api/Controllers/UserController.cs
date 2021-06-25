@@ -21,11 +21,21 @@ namespace UnderSea.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly RoundService _roundService;
 
-        public UserController(UserService userService)
+
+        public UserController(UserService userService, RoundService roundService)
         {
             _userService = userService;
+            _roundService = roundService;
         }
+
+        [HttpGet("call-next-round")]
+        public async Task NextRound()
+        {
+            await _roundService.NextRound();
+        }
+
 
         [HttpPost("register")]
         public async Task<ActionResult<string>> Register(RegisterDto registerDto)

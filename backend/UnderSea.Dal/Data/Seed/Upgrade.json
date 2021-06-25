@@ -1,0 +1,32 @@
+[
+  {
+    "Id": 1,
+    "Name": "Iszaptraktor",
+	"UpgradeTime": 15
+  },
+  {
+    "Id": 2,
+    "Name": "Iszapkombájn",
+	"UpgradeTime": 15
+  },
+  {
+    "Id": 3,
+    "Name": "Korallfal",
+	"UpgradeTime": 15
+  },
+  {
+    "Id": 4,
+    "Name": "Szonárágyú",
+	"UpgradeTime": 15
+  },
+  {
+    "Id": 5,
+    "Name": "Vízalatti harcművészetek",
+	"UpgradeTime": 15
+  },
+  {
+    "Id": 6,
+    "Name": "Alkímia",
+	"UpgradeTime": 15
+  },
+]
