@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Services;
+using UnderSea.Bll.Services.Interfaces;
 
 namespace UnderSea.Api.Controllers
 {
@@ -13,8 +14,8 @@ namespace UnderSea.Api.Controllers
     [ApiController]
     public class UpgradeController : ControllerBase
     {
-        private readonly UpgradeService _upgradeService;
-        public UpgradeController(UpgradeService upgradeService)
+        private readonly IUpgradeService _upgradeService;
+        public UpgradeController(IUpgradeService upgradeService)
         {
             _upgradeService = upgradeService;
         }

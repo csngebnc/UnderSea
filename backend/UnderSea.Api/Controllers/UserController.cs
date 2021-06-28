@@ -20,11 +20,11 @@ namespace UnderSea.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
-        private readonly RoundService _roundService;
+        private readonly IUserService _userService;
+        private readonly IRoundService _roundService;
 
 
-        public UserController(UserService userService, RoundService roundService)
+        public UserController(IUserService userService, IRoundService roundService)
         {
             _userService = userService;
             _roundService = roundService;

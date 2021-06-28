@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
+using UnderSea.Bll.Services.Interfaces;
 
 namespace UnderSea.Api.Controllers
 {
@@ -14,9 +15,9 @@ namespace UnderSea.Api.Controllers
     [ApiController]
     public class BattleController : ControllerBase
     {
-        private readonly BattleService service;
+        private readonly IBattleService service;
 
-        public BattleController(BattleService service)
+        public BattleController(IBattleService service)
         {
             this.service = service;
         }

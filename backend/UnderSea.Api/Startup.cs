@@ -76,11 +76,11 @@ namespace UnderSea.Api
             services.AddHttpContextAccessor();
             services.AddScoped<IIdentityService, IdentityService>();
 
-            services.AddTransient<UserService>();
-            services.AddTransient<UpgradeService>();
-            services.AddTransient<BattleService>();
-            services.AddTransient<BuildingService>();
-            services.AddTransient<RoundService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUpgradeService, UpgradeService>();
+            services.AddTransient<IBattleService, BattleService>();
+            services.AddTransient<IBuildingService, BuildingService>();
+            services.AddTransient<IRoundService, RoundService>();
 
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Services;
+using UnderSea.Bll.Services.Interfaces;
 
 namespace UnderSea.Api.Controllers
 {
@@ -10,9 +11,9 @@ namespace UnderSea.Api.Controllers
     [ApiController]
     public class BuildingController : ControllerBase
     {
-        private readonly BuildingService service;
+        private readonly IBuildingService service;
 
-        public BuildingController(BuildingService service)
+        public BuildingController(IBuildingService service)
         {
             this.service = service;
         }
