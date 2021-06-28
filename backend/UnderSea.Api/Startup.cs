@@ -41,7 +41,7 @@ namespace UnderSea.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            /*
+            
 
             // Add Hangfire services.
             services.AddHangfire(configuration =>
@@ -50,7 +50,7 @@ namespace UnderSea.Api
                             .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                             .UseSimpleAssemblyNameTypeSerializer()
                             .UseRecommendedSerializerSettings()
-                            .UseSqlServerStorage(Configuration.GetConnectionString("HangfireUnderSeaDb"), new SqlServerStorageOptions
+                            .UseSqlServerStorage(Configuration.GetConnectionString("AzureHangfireDbConnection"), new SqlServerStorageOptions
                             {
                                 CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
                                 SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
@@ -63,7 +63,7 @@ namespace UnderSea.Api
             // Add the processing server as IHostedService
             services.AddHangfireServer();
 
-            */
+            
 
             services.AddDbContext<UnderSeaDbContext>(options =>
                 options.UseSqlServer(
@@ -132,9 +132,9 @@ namespace UnderSea.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            //app.UseHangfireDashboard("/hangfire");
+            app.UseHangfireDashboard("/hangfire");
 
-            //var manager = new RecurringJobManager();
+            var manager = new RecurringJobManager();
             //manager.AddOrUpdate("Next round", Job.FromExpression(() => new RoundService(context).NextRound()), Cron.Minutely());
 
             app.UseOpenApi();
