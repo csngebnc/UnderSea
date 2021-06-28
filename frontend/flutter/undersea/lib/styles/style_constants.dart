@@ -173,6 +173,19 @@ class UnderseaStyles {
       fontStyle: FontStyle.normal,
       fontWeight: FontWeight.bold);
 
+  static Widget appBarTitle(String text) {
+    return Row(children: [
+      SizedBox(
+        width: 15,
+      ),
+      Text(
+        text,
+        style: UnderseaStyles.inputTextStyle.copyWith(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 19),
+      ),
+    ]);
+  }
+
   static Widget tab(String text) {
     return Align(
       alignment: Alignment.bottomCenter,
