@@ -9,10 +9,6 @@ namespace UnderSea.Model.Models
 {
     public class CountryUpgrade
     {
-        [Range(0, int.MaxValue, ErrorMessage = "A fejlesztés befejezése nem lehet negatív szám!")]
-        [Required(ErrorMessage = "A fejlesztés befejezésének idejét kötelező megadni!")]
-        public int EstimatedFinish { get; set; }
-
         public int CountryId { get; set; }
         public Country Country { get; set; }
 

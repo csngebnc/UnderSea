@@ -89,8 +89,7 @@ namespace UnderSea.Bll.Services
                     CountryUpgrade newCountryUpgrade = new CountryUpgrade()
                     {
                         CountryId = country.Id,
-                        UpgradeId = upgrade.Id,
-                        EstimatedFinish = world.Round + upgrade.Upgrade.UpgradeTime
+                        UpgradeId = upgrade.UpgradeId,
                     };
 
                     _context.CountryUpgrades.Add(newCountryUpgrade);
@@ -244,11 +243,12 @@ namespace UnderSea.Bll.Services
                                                     .Include(e => e.Production)
                                                     .Include(e => e.FightPoint)
                                                     .Include(e => e.Attacks).ThenInclude(e => e.AttackUnits).ThenInclude(e => e.Unit)
-                                                    .Include(e => e.Attacks).ThenInclude(e => e.DefenderCountry).ThenInclude(e => e.FightPoint).Include(e => e.CountryUnits)
+                                                    .Include(e => e.Attacks).ThenInclude(e => e.DefenderCountry).ThenInclude(e => e.FightPoint).Include(e => e.CountryUnits).ThenInclude(e => e.Unit)
                                                     .Include(e => e.CountryBuildings).ThenInclude(e => e.Building)
                                                     .Include(e => e.CountryUpgrades).ThenInclude(e => e.Upgrade)
-                                                    .Include(e => e.ActiveUpgradings).ThenInclude(e => e.Upgrade).ThenInclude(e => e.UpgradeEffects)
-                                                    .Include(e => e.ActiveConstructions).ThenInclude(e => e.Building).ThenInclude(e => e.BuildingEffects)
+                                                    .Include(e => e.ActiveUpgradings).ThenInclude(e => e.Upgrade).ThenInclude(e => e.UpgradeEffects).ThenInclude(e => e.Effect)
+                                                    .Include(e => e.ActiveConstructions).ThenInclude(e => e.Building).ThenInclude(e => e.BuildingEffects).ThenInclude(e => e.Effect)
+                                                    .Include(e => e.Owner)
                                                     .ToListAsync();
 
             using (var transaction = _context.Database.BeginTransaction())

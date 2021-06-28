@@ -37,6 +37,8 @@ namespace UnderSea.Bll.Services
                 throw new Exception();
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
+            _context.Countries.Add(new Country { Name = registerDto.CountryName, OwnerId = user.Id, Production = new Production(), FightPoint = new FightPoint() });
+            await _context.SaveChangesAsync();
             return result.Succeeded;
         }
 
@@ -74,8 +76,10 @@ namespace UnderSea.Bll.Services
 
         public async Task<CountryDetailsDto> GetUserDetails()
         {
+            var userid = _identityService.GetCurrentUserId();
             var country = await _context.Countries
-                .Where(u => u.OwnerId == _identityService.GetCurrentUserId())
+                .Where(u => u.OwnerId == userid)
+                .Include(c => c.ActiveConstructions)
                 .Include(c => c.CountryBuildings)
                     .ThenInclude(cb => cb.Building)
                 .Include(c => c.CountryUnits)
@@ -91,6 +95,7 @@ namespace UnderSea.Bll.Services
                 Units = _mapper.Map<ICollection<BattleUnitDto>>(country.CountryUnits.Select(cu => cu.Unit)),
                 Coral = country.Coral,
                 Pearl = country.Pearl,
+                Population = country.Population,
                 CurrentCoralProduction = (int)(country.Production.BaseCoralProduction * country.Production.CoralProductionMultiplier),
                 CurrentPearlProduction = (int)(country.Production.BasePearlProduction * country.Production.PearlProductionMultiplier),
                 Buildings = buildings.Select(building =>
@@ -103,16 +108,6 @@ namespace UnderSea.Bll.Services
                         ActiveConstructionCount = country.ActiveConstructions.Where(ac => ac.BuildingId == building.Id).Count()
                     };
                 })
-                /*Buildings = country.CountryBuildings.Select(cb => cb.Building).Select(building =>
-                {
-                    return new BuildingInfoDto
-                    {
-                        Id = building.Id,
-                        Name = building.Name,
-                        BuildingsCount = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).Count(),
-                        ActiveConstructionCount = country.ActiveConstructions.Where(ac => ac.BuildingId == building.Id).Count()
-                    };
-                })*/
             };
         }
 
