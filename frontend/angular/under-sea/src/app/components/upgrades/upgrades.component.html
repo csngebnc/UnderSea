@@ -10,7 +10,7 @@
         fejleszthető és minden csak egyszer fejleszthető ki (nem lehet két
         kombájn).
       </p>
-      <form class="stack align-center">
+      <div class="stack align-center">
         <ul class="item-container">
           <li *ngFor="let upgrade of upgrades" class="non-styled-list-item">
             <button
@@ -30,10 +30,11 @@
           type="submit"
           [disabled]="!selectedUpgrade || isResearching"
           class="gradient-button mt-2"
+          (click)="onBuy()"
         >
           {{ isResearching ? "Folyamatban..." : "Megveszem" }}
         </button>
-      </form>
+      </div>
     </div>
   </div>
 </div>

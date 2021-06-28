@@ -6,7 +6,7 @@
         <strong>Kattints rá, amelyiket szeretnéd megvenni.</strong>
       </p>
       <p class="modal-description">Egyszerre csak egy épület épülhet!</p>
-      <form class="stack align-center">
+      <div class="stack align-center">
         <ul class="item-container">
           <li *ngFor="let building of buildings" class="non-styled-list-item">
             <button
@@ -26,10 +26,11 @@
           type="button"
           [disabled]="!selectedBuilding || isUnderConstruction"
           class="gradient-button mt-2"
+          (click)="onBuy()"
         >
           {{ isUnderConstruction ? "Folyamatban..." : "Megveszem" }}
         </button>
-      </form>
+      </div>
     </div>
   </div>
 </div>

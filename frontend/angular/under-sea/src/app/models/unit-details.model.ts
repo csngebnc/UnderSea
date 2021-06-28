@@ -1,5 +1,5 @@
 export type UnitDetails = {
-  id: string;
+  id: number;
   name: string;
   count: number;
   attack: number;

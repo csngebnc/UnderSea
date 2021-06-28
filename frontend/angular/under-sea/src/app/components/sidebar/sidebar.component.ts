@@ -7,10 +7,7 @@ import { Resources } from 'src/app/models/resources.model';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-
   @Input() userName: string;
-  @Input() country: string;
-  @Input() resources: Resources;
 
   constructor() {}
 

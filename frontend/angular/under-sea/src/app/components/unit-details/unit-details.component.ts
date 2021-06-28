@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UnitDetails } from 'src/app/models/unit-details.model';
+import { CartUnit } from 'src/app/models/cart-unit.model';
 
 @Component({
   selector: 'unit-details',
@@ -9,11 +10,7 @@ import { UnitDetails } from 'src/app/models/unit-details.model';
 export class UnitDetailsComponent implements OnInit {
   @Input() unit: UnitDetails;
   @Input() remainingMoney: number;
-  @Output() countModified: EventEmitter<{
-    id: string;
-    count: number;
-    price: number;
-  }> = new EventEmitter();
+  @Output() countModified: EventEmitter<CartUnit> = new EventEmitter();
   selected: number = 0;
 
   constructor() {}
@@ -39,7 +36,7 @@ export class UnitDetailsComponent implements OnInit {
   }
 
   canIncrement(): boolean {
-    return this.remainingMoney >= (this.selected + 1) * this.unit.price;
+    return this.remainingMoney >= this.unit.price;
   }
 
   canDecrement(): boolean {

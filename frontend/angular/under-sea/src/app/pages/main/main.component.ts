@@ -16,7 +16,6 @@ export class MainComponent implements OnInit {
     name: 'Pepsi Béla',
     round: 12,
     placement: 11,
-    country: 'Neverland',
   };
 
   resources: Resources = {

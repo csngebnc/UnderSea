@@ -6,7 +6,11 @@
         <h3 class="modal-description mb-1">
           <strong>1. Jelöld ki, kit szeretnél megtámadni:</strong>
         </h3>
-        <list [list]="players"></list>
+        <list
+          [list]="players"
+          [clickable]="true"
+          (selectTarget)="onSelectTarget($event)"
+        ></list>
       </div>
       <div class="pl-1">
         <h3 class="modal-description mb-1">
@@ -16,12 +20,19 @@
           *ngFor="let unit of units"
           [unit]="unit"
           class="d-flex w-100 p-1"
+          (setUnit)="onSetUnit($event)"
         ></unit-slider>
       </div>
     </div>
     <div class="stack align-center">
       <div class="divider mt-1"></div>
-      <button type="button" class="gradient-button mt-2">Megtámadom!</button>
+      <button
+        type="button"
+        class="gradient-button mt-2"
+        [disabled]="isButtonDisabled()"
+      >
+        Megtámadom!
+      </button>
     </div>
   </div>
 </div>

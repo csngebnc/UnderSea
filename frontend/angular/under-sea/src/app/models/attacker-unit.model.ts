@@ -1,5 +1,5 @@
 export type AttackerUnit = {
-  id: string;
+  id: number;
   name: string;
   count: number;
 };

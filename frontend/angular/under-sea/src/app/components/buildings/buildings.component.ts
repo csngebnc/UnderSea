@@ -9,18 +9,18 @@ import { BuildingDetails } from 'src/app/models/building-details.model';
 export class BuildingsComponent implements OnInit {
   selectedBuilding: string = '';
 
-  isUnderConstruction: boolean = true;
+  isUnderConstruction: boolean = false;
 
   buildings: Array<BuildingDetails> = [
     {
-      id: 'coral_wall',
+      id: 1,
       name: 'Korall fal',
       effects: [{ id: 1, name: 'asd' }],
       count: 0,
       price: 123,
     },
     {
-      id: 'coral_wall',
+      id: 2,
       name: 'Korall fal',
       effects: [{ id: 1, name: 'asd' }],
       count: 0,
@@ -34,5 +34,10 @@ export class BuildingsComponent implements OnInit {
 
   setBuilding(id: string): void {
     this.selectedBuilding = id;
+  }
+
+  onBuy(): void {
+    console.log(this.selectedBuilding);
+    this.isUnderConstruction = true;
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UnitDetails } from 'src/app/models/unit-details.model';
 import { UnitsDto } from 'src/app/models/dto/units-dto.model';
 import { UnitSliderComponent } from '../unit-slider/unit-slider.component';
+import { CartUnit } from 'src/app/models/cart-unit.model';
 
 @Component({
   selector: 'units',
@@ -11,7 +12,7 @@ import { UnitSliderComponent } from '../unit-slider/unit-slider.component';
 export class UnitsComponent implements OnInit {
   units: Array<UnitDetails> = [
     {
-      id: 'shark',
+      id: 1,
       name: 'Lézercápa',
       count: 12,
       price: 200,
@@ -21,7 +22,7 @@ export class UnitsComponent implements OnInit {
       defense: 6,
     },
     {
-      id: 'seal',
+      id: 2,
       name: 'Rohamfóka',
       count: 12,
       price: 200,
@@ -31,7 +32,7 @@ export class UnitsComponent implements OnInit {
       defense: 6,
     },
     {
-      id: 'seahorse',
+      id: 3,
       name: 'Csatacsikó',
       count: 12,
       price: 200,
@@ -57,15 +58,13 @@ export class UnitsComponent implements OnInit {
     });
   }
 
-  addToCart(asd: any): void {
-    console.log(asd);
-
-    /*let index = this.cart.findIndex((u) => u.id === id);
+  addToCart(unit: CartUnit): void {
+    let index = this.cart.findIndex((u) => u.id === unit.id);
     if (index !== -1) {
-      this.remainingMoney += this.cart[index].count * price;
-      this.cart[index].count = count;
-      this.remainingMoney -= count * price;
-    }*/
+      this.remainingMoney += this.cart[index].count * unit.price;
+      this.cart[index].count = unit.count;
+      this.remainingMoney -= unit.count * unit.price;
+    }
   }
 
   isCartEmpty(): boolean {
@@ -74,7 +73,10 @@ export class UnitsComponent implements OnInit {
       sum += unit.count;
     });
 
-    if (!sum) return true;
-    else return true;
+    return !sum;
+  }
+
+  onBuy(): void {
+    console.log(JSON.stringify(this.cart));
   }
 }

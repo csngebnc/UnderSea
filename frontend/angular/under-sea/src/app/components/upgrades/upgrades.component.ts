@@ -12,42 +12,42 @@ export class UpgradesComponent implements OnInit {
 
   upgrades: Array<Upgrade> = [
     {
-      id: 'coral_wall',
+      id: 1,
       name: 'Korall fal',
       exists: true,
       underConstruction: false,
       effects: [{ id: 1, name: 'asd' }],
     },
     {
-      id: 'coral_wall',
+      id: 2,
       name: 'Korall fal',
       exists: true,
       underConstruction: false,
       effects: [{ id: 1, name: 'asd' }],
     },
     {
-      id: 'coral_wall',
+      id: 3,
       name: 'Korall fal',
       exists: true,
       underConstruction: false,
       effects: [{ id: 1, name: 'asd' }],
     },
     {
-      id: 'coral_wall',
+      id: 4,
       name: 'Korall fal',
       exists: true,
       underConstruction: false,
       effects: [{ id: 1, name: 'asd' }],
     },
     {
-      id: 'coral_wall',
+      id: 5,
       name: 'Korall fal',
       exists: true,
       underConstruction: false,
       effects: [{ id: 1, name: 'asd' }],
     },
     {
-      id: 'coral_wall',
+      id: 6,
       name: 'Korall fal',
       exists: true,
       underConstruction: false,
@@ -61,5 +61,10 @@ export class UpgradesComponent implements OnInit {
 
   setUpgrade(id: string): void {
     this.selectedUpgrade = id;
+  }
+
+  onBuy(): void {
+    console.log(this.selectedUpgrade);
+    this.isResearching = true;
   }
 }
