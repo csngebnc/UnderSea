@@ -24,7 +24,7 @@ const Map<String, String> hu_HU = {
   Strings.registr_snackbar_body: 'Lépj be a játékhoz!',
   Strings.round_resources: 'kör',
   Strings.undersea: 'Undersea',
-  Strings.buildings_manual_title: 'Jelöld ki, amelyiket szeretnét megvenni.',
+  Strings.buildings_manual_title: 'Jelöld ki, amelyiket szeretnéd megvenni.',
   Strings.buildings_manual_hint: 'Egyszerre csak egy épület épülhet',
   Strings.city_modified_snack_body: 'A városod új neve',
   Strings.city_modified_snack_title: 'Sikeres névváltoztatás!',

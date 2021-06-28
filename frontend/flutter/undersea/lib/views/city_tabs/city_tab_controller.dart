@@ -22,6 +22,7 @@ class CityTabBar extends StatelessWidget {
                 color: UnderseaStyles.menuDarkBlue,
                 child: TabBar(
                   indicatorColor: UnderseaStyles.underseaLogoColor,
+
                   //labelColor: UnderseaStyles.menuDarkBlue,
                   //unselectedLabelColor: UnderseaStyles.menuDarkBlue,
                   indicatorSize: TabBarIndicatorSize.label,

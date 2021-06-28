@@ -61,18 +61,22 @@ class UnderseaStyles {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-            padding: EdgeInsets.fromLTRB(20, 30, 50, 0),
+            padding: EdgeInsets.fromLTRB(20, 30, 0, 0),
             child: Text(title,
                 style: UnderseaStyles.whiteOpenSans
                     .copyWith(fontWeight: FontWeight.bold, fontSize: 20))),
         if (hint.isNotEmpty)
           Padding(
-            padding: EdgeInsets.fromLTRB(20, 5, 60, 0),
+            padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
             child: Text(hint,
                 style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 20)),
           ),
       ],
     );
+  }
+
+  static Widget buildingImage(String name) {
+    return Image.asset('assets/buildings/$name.png');
   }
 
   static Widget assetIcon(
@@ -97,6 +101,12 @@ class UnderseaStyles {
       ),
     );
   }
+
+  static TextStyle listRegular = UnderseaStyles.whiteOpenSans
+      .copyWith(fontWeight: FontWeight.normal, fontSize: 18, height: 1.5);
+  static TextStyle listBold = UnderseaStyles.listRegular.copyWith(
+    fontWeight: FontWeight.bold,
+  );
 
   static Widget militaryIcon(String assetName, int current, int max) {
     return Container(
