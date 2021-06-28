@@ -78,11 +78,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 label: 'Kezdőlap',
               ),
               BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.business,
-                  ),
-                  label: 'Városom',
-                  backgroundColor: Colors.transparent),
+                icon: Icon(
+                  Icons.business,
+                ),
+                label: 'Városom',
+              ),
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.school,
@@ -98,11 +98,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ],
             currentIndex: _selectedIndex,
             iconSize: 30,
+            backgroundColor: Colors.transparent,
             selectedItemColor: UnderseaStyles.navbarIconColor,
             onTap: _onItemTapped,
             type: BottomNavigationBarType.fixed,
             showUnselectedLabels: true,
-            backgroundColor: Color(0x00000000),
             elevation: 0,
             selectedLabelStyle: UnderseaStyles.bottomNavbarTextStyle,
             unselectedLabelStyle: UnderseaStyles.bottomNavbarTextStyle

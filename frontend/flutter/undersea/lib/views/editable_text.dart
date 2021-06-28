@@ -26,11 +26,10 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
           children: [
             Text(
               'Városom neve',
-              style: UnderseaStyles.inputTextStyle.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 21),
+              style: UnderseaStyles.whiteOpenSans
+                  .copyWith(fontWeight: FontWeight.bold, fontSize: 21),
             ),
+            SizedBox(height: 5),
             _editableText(),
           ],
         ),
@@ -60,14 +59,10 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
           child: TextField(
             decoration: InputDecoration(
                 hintText: 'Új városnév',
-                hintStyle: UnderseaStyles.inputTextStyle.copyWith(
-                    color: Colors.white54,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 17)),
-            style: UnderseaStyles.inputTextStyle.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-                fontSize: 21),
+                hintStyle: UnderseaStyles.inputTextStyle
+                    .copyWith(color: Colors.white54, fontSize: 17)),
+            style: UnderseaStyles.whiteOpenSans
+                .copyWith(fontWeight: FontWeight.normal, fontSize: 21),
             onSubmitted: (newValue) {
               setState(() {
                 _cityName = newValue;
@@ -86,8 +81,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
     else
       return Text(
         _cityName,
-        style: UnderseaStyles.inputTextStyle.copyWith(
-            color: Colors.white, fontWeight: FontWeight.normal, fontSize: 21),
+        style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 21),
       );
   }
 

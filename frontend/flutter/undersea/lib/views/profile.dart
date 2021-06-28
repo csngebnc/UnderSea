@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/editable_text.dart';
+import 'package:undersea/views/login.dart';
 
 class ProfilePage extends StatelessWidget {
   final String cityName;
@@ -11,10 +13,10 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFF03255F),
+        backgroundColor: UnderseaStyles.menuDarkBlue,
         appBar: AppBar(
           title: Text('Profil'),
-          backgroundColor: Color(0xFF1C3E76),
+          backgroundColor: UnderseaStyles.hintColor,
         ),
         body: SingleChildScrollView(
           child: Column(children: [
@@ -53,6 +55,7 @@ class ProfilePage extends StatelessWidget {
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: TextButton(
                         onPressed: () {
+                          Get.off(LoginPage());
                           //logout
                         },
                         child: Text('Kijelentkezés',

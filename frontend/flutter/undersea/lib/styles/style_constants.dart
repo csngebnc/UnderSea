@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:undersea/views/leaderboard.dart';
+
+import 'disablable_elevated_button.dart';
 
 class UnderseaStyles {
   static const TextStyle buttonTextStyle = TextStyle(
@@ -9,11 +13,20 @@ class UnderseaStyles {
   static const TextStyle inputTextStyle =
       TextStyle(fontFamily: 'Open Sans', fontSize: 15);
 
+  static final whiteOpenSans = UnderseaStyles.inputTextStyle
+      .copyWith(color: Colors.white, fontWeight: FontWeight.normal);
+
   static const Color underseaLogoColor = Color(0xFF9FFFF0);
   static const gradientColors = [
     Color(0xff9FFFF0),
     Color(0xff6BEEE9),
     Color(0xff0FCFDE)
+  ];
+
+  static const opaqueGradientColors = [
+    Color(0x449FFFF0),
+    Color(0x446BEEE9),
+    Color(0x440FCFDE)
   ];
   static const menuDarkBlue = Color(0xFF03255F);
   static const LinearGradient buttonGradient = LinearGradient(
@@ -129,7 +142,46 @@ class UnderseaStyles {
         ));
   }
 
-  static divider() {
+  static Widget leaderboardButton(
+      {required int roundNumber, required int placement}) {
+    return ElevatedButton(
+      onPressed: () {
+        Get.to(Leaderboard());
+      },
+      child: SizedBox(
+          width: 180,
+          child: Padding(
+              padding: EdgeInsets.fromLTRB(5, 7, 5, 5),
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(children: [
+                    _leaderboardText(roundNumber, '. kör'),
+                    _leaderboardText(placement, '. hely'),
+                  ])))),
+      style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          padding: EdgeInsets.all(5),
+          elevation: 10,
+          shadowColor: UnderseaStyles.shadowColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+    );
+  }
+
+  static Widget _leaderboardText(int number, String text) {
+    return Expanded(
+        child: Align(
+            alignment: Alignment.center,
+            child: Text(
+              number.toString() + text,
+              style: UnderseaStyles.buttonTextStyle.copyWith(
+                  color: UnderseaStyles.hintColor,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 22),
+            )));
+  }
+
+  static Widget divider() {
     return Divider(
         color: Color(0xFF3F68AE),
         thickness: 2,
@@ -198,5 +250,35 @@ class UnderseaStyles {
         ),
       ),
     );
+  }
+
+  static Widget cityTabSkeleton({required Widget list}) {
+    return Expanded(
+        child: Stack(fit: StackFit.expand, children: [
+      Container(
+        decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
+      ),
+      list,
+      Column(
+        children: [
+          Expanded(
+              flex: 8,
+              child: Container(
+                decoration: BoxDecoration(color: Colors.transparent),
+              )),
+          Expanded(
+              flex: 2,
+              child: Container(
+                  decoration: BoxDecoration(color: Colors.white54),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: ToggleableElevatedButton(
+                        text: "Megveszem",
+                        onPressed: () {},
+                        initiallyDisabled: true,
+                      ))))
+        ],
+      ),
+    ]));
   }
 }
