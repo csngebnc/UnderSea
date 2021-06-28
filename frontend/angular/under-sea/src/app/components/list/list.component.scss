@@ -1,0 +1,9 @@
+@import "src/styles.scss";
+
+.clickable-list-item {
+  cursor: pointer;
+}
+
+.clickable-list-item:hover {
+  background: $selected-blue;
+}

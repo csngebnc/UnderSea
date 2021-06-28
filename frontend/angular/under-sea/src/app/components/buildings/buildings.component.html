@@ -1,0 +1,37 @@
+<div class="modal-container">
+  <div class="modal">
+    <div class="stack">
+      <h2 class="modal-title">Épületek</h2>
+      <p class="modal-description">
+        <strong>Kattints rá, amelyiket szeretnéd megvenni.</strong>
+      </p>
+      <p class="modal-description">Egyszerre csak egy épület épülhet!</p>
+      <div class="stack align-center">
+        <ul class="item-container">
+          <li *ngFor="let building of buildings" class="non-styled-list-item">
+            <button
+              type="button"
+              class="item-btn"
+              (click)="setBuilding(building.id)"
+              [disabled]="isUnderConstruction"
+            >
+              <building-details
+                class="item item-lg stack align-center"
+                [building]="building"
+              ></building-details>
+            </button>
+          </li>
+        </ul>
+        <div class="divider"></div>
+        <button
+          type="button"
+          [disabled]="!selectedBuilding || isUnderConstruction"
+          class="gradient-button mt-2"
+          (click)="onBuy()"
+        >
+          {{ isUnderConstruction ? "Folyamatban..." : "Megveszem" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

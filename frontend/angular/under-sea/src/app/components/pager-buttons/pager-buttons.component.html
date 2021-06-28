@@ -1,0 +1,17 @@
+<button
+  type="button"
+  (click)="onClick(pageNumber - 1)"
+  [disabled]="pageNumber <= 1"
+  class="pager-button"
+>
+  &#5130;
+</button>
+<span class="page-number">{{ pageNumber }}</span>
+<button
+  type="button"
+  (click)="onClick(pageNumber + 1)"
+  [disabled]="pageNumber * pageSize >= allResultsCount"
+  class="pager-button"
+>
+  &#5125;
+</button>

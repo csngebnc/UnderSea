@@ -1,21 +1,12 @@
-<div class="stack to-sides h-100">
-  <div class="stack w-100">
-    <button class="gradient-button sidebar-button">Épületek</button>
-    <button class="gradient-button sidebar-button">Támadás</button>
-    <button class="gradient-button sidebar-button">Fejlesztések</button>
-    <button class="gradient-button sidebar-button">Harc</button>
-    <button class="gradient-button sidebar-button">Ranglista</button>
-    <button class="gradient-button sidebar-button">Sereg</button>
+<div class="stack to-sides h-100 align-center">
+  <div class="stack w-100 align-center">
+    <a class="gradient-button sidebar-button" routerLink="/main/buildings">Épületek</a>
+    <a class="gradient-button sidebar-button" routerLink="/main/attack">Támadás</a>
+    <a class="gradient-button sidebar-button" routerLink="/main/upgrades">Fejlesztések</a>
+    <a class="gradient-button sidebar-button" routerLink="/main/battle">Harc</a>
+    <a class="gradient-button sidebar-button" routerLink="/main/scoreboard">Ranglista</a>
+    <a class="gradient-button sidebar-button" routerLink="/main/units">Sereg</a>
   </div>
-  <div class="blurry-panel w-85 stack">
-    <div class="low-opacity-white"></div>
-
-    <div class="icon-frame icon-frame-lg">
-      <img src="../../../assets/img/profile.svg" alt="profile" />
-    </div>
-    <span class="mt text">{{ userData.name }}</span>
-    <button class="mt text">Profil</button>
-    <button class="mt text">Kijelentkezés</button>
-  </div>
-  <span class="title">UNDERSEA</span>
+  <profilecard class="blurry-panel w-85 stack align-center" [name]="userName"> </profilecard>
+  <h1 class="title">UNDERSEA</h1>
 </div>

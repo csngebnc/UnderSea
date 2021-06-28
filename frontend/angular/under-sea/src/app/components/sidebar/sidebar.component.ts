@@ -1,21 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserData } from 'src/app/models/userdata.model';
 import { Resources } from 'src/app/models/resources.model';
 
 @Component({
   selector: 'sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
+  @Input() userName: string;
 
-  @Input() userData: UserData;
-  @Input()  resources: Resources;
+  constructor() {}
 
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

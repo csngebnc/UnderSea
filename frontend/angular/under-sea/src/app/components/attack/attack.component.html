@@ -1,0 +1,47 @@
+<div class="modal-container">
+  <div class="modal">
+    <h2 class="modal-title">Támadás</h2>
+    <div class="d-flex to-sides mt-1">
+      <div class="pr-2 b-r-1 w-50">
+        <h3 class="modal-description mb-1">
+          <strong>1. Jelöld ki, kit szeretnél megtámadni:</strong>
+        </h3>
+        <list
+          [list]="players"
+          [clickable]="true"
+          (selectTarget)="onSelectTarget($event)"
+        ></list>
+        <pager-buttons
+          [pageSize]="pageSize"
+          [pageNumber]="pageNumber"
+          [allResultsCount]="allResultsCount"
+          (switchPage)="onSwitchPage($event)"
+          class="w-100 d-flex align-center to-center mt-1"
+        ></pager-buttons>
+      </div>
+      <div class="pl-2 w-50">
+        <h3 class="modal-description mb-1">
+          <strong>2. Állítsd be, kiket küldesz harcba:</strong>
+        </h3>
+        <div class="stack align-center">
+          <unit-slider
+            *ngFor="let unit of units"
+            [unit]="unit"
+            class="d-flex w-100 p-1 to-center"
+            (setUnit)="onSetUnit($event)"
+          ></unit-slider>
+        </div>
+      </div>
+    </div>
+    <div class="stack align-center">
+      <div class="divider mt-1"></div>
+      <button
+        type="button"
+        class="gradient-button mt-2"
+        [disabled]="isButtonDisabled()"
+      >
+        Megtámadom!
+      </button>
+    </div>
+  </div>
+</div>
