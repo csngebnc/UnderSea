@@ -57,6 +57,8 @@ namespace UnderSea.Bll.Services
             
             var attacks = await _context.Attacks
                                             .Where(c => c.DefenderCountryId == country.Id || c.AttackerCountryId == country.Id)
+                                            .Include(a => a.AttackUnits)
+                                                .ThenInclude(au => au.Unit)
                                             .Include(a => a.DefenderCountry)
                                             .ToPagedList(data.PageSize, data.PageNumber);
 
@@ -180,6 +182,7 @@ namespace UnderSea.Bll.Services
                 };
 
                 var newAttack = _context.Attacks.Add(attack);
+                await _context.SaveChangesAsync();
 
                 if (newAttack.Entity == null)
                 {
