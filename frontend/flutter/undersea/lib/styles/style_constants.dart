@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/views/leaderboard.dart';
 
 import 'disablable_elevated_button.dart';
@@ -112,7 +113,7 @@ class UnderseaStyles {
                       height: 1.2),
                 ),
                 Text(
-                  '$production/kör',
+                  '$production/${Strings.round_resources.tr}',
                   style: UnderseaStyles.buttonTextStyle.copyWith(
                       color: Color(0xFF1C3E76),
                       fontWeight: FontWeight.w800,
@@ -155,8 +156,8 @@ class UnderseaStyles {
               child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Row(children: [
-                    _leaderboardText(roundNumber, '. kör'),
-                    _leaderboardText(placement, '. hely'),
+                    _leaderboardText(roundNumber, Strings.round.tr),
+                    _leaderboardText(placement, Strings.placement.tr),
                   ])))),
       style: ElevatedButton.styleFrom(
           primary: Colors.white,
@@ -262,10 +263,12 @@ class UnderseaStyles {
       Column(
         children: [
           Expanded(
-              flex: 8,
-              child: Container(
-                decoration: BoxDecoration(color: Colors.transparent),
-              )),
+            flex: 8,
+            child: IgnorePointer(
+                child: Container(
+              decoration: BoxDecoration(color: Colors.transparent),
+            )),
+          ),
           Expanded(
               flex: 2,
               child: Container(
@@ -273,7 +276,7 @@ class UnderseaStyles {
                   child: Align(
                       alignment: Alignment.center,
                       child: ToggleableElevatedButton(
-                        text: "Megveszem",
+                        text: Strings.buy_button.tr,
                         onPressed: () {},
                         initiallyDisabled: true,
                       ))))

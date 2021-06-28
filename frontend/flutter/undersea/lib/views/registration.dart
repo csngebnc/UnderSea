@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
-import 'bottom_nav_bar.dart';
 
 class RegistrationPage extends StatefulWidget {
   RegistrationPage({Key? key}) : super(key: key);
@@ -19,23 +19,24 @@ class RegistrationPage extends StatefulWidget {
 class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
-    final userField = UnderseaStyles.inputField(hint: "Felhasználónév");
+    final userField = UnderseaStyles.inputField(hint: Strings.username.tr);
     final passwordField =
-        UnderseaStyles.inputField(hint: "Jelszó", isPassword: true);
+        UnderseaStyles.inputField(hint: Strings.password.tr, isPassword: true);
     final passwordValidationField = UnderseaStyles.inputField(
-        hint: "Jelszó megerősítése", isPassword: true);
+        hint: Strings.password_again.tr, isPassword: true);
     final cityNameField =
-        UnderseaStyles.inputField(hint: "A városod neve, amit építesz");
+        UnderseaStyles.inputField(hint: Strings.city_name_hint.tr);
 
     final registrationButton = UnderseaStyles.elevatedButton(
-        text: "Regisztráció",
+        text: Strings.registration.tr,
         onPressed: () {
           //regisztráció felküldése a szerverre
 
           //siker esetén:
 
           Get.back();
-          Get.snackbar('Sikeres regisztráció!', 'Lépj be a játékhoz!',
+          Get.snackbar(Strings.registr_snackbar_title.tr,
+              Strings.registr_snackbar_body.tr,
               icon: Icon(Icons.app_registration),
               snackPosition: SnackPosition.BOTTOM,
               backgroundColor: Colors.blueAccent);
@@ -78,7 +79,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           SizedBox(
                               height: 30,
                               child: Text(
-                                'Belépés',
+                                Strings.login.tr,
                                 style: UnderseaStyles.buttonTextStyle
                                     .copyWith(fontSize: 24),
                               )),
@@ -101,7 +102,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               onPressed: () {
                                 Get.back();
                               },
-                              child: Text('Belépés',
+                              child: Text(Strings.login.tr,
                                   style: UnderseaStyles.buttonTextStyle)),
                         ],
                       ),

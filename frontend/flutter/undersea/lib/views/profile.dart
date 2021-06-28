@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/editable_text.dart';
 import 'package:undersea/views/login.dart';
@@ -15,7 +16,7 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
         backgroundColor: UnderseaStyles.menuDarkBlue,
         appBar: AppBar(
-          title: Text('Profil'),
+          title: Text(Strings.profile.tr),
           backgroundColor: UnderseaStyles.hintColor,
         ),
         body: SingleChildScrollView(
@@ -58,7 +59,7 @@ class ProfilePage extends StatelessWidget {
                           Get.off(LoginPage());
                           //logout
                         },
-                        child: Text('Kijelentkezés',
+                        child: Text(Strings.logout.tr,
                             style: UnderseaStyles.buttonTextStyle.copyWith(
                                 color: UnderseaStyles.underseaLogoColor)),
                       ),

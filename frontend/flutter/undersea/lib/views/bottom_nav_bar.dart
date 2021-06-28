@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/city_tabs/city_tab_controller.dart';
 import 'package:undersea/views/profile.dart';
@@ -18,10 +19,10 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
   static List<Widget> _appbarTitleOptions = <Widget>[
-    UnderseaStyles.appBarTitle('Undersea'),
-    UnderseaStyles.appBarTitle('Városom'),
-    UnderseaStyles.appBarTitle('Támadás'),
-    UnderseaStyles.appBarTitle('Csapataim'),
+    UnderseaStyles.appBarTitle(Strings.undersea.tr),
+    UnderseaStyles.appBarTitle(Strings.my_city.tr),
+    UnderseaStyles.appBarTitle(Strings.attack.tr),
+    UnderseaStyles.appBarTitle(Strings.my_forces.tr),
   ];
   static List<Widget> _widgetOptions = <Widget>[
     HomePage(),
@@ -72,28 +73,28 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
           ),
           child: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                label: 'Kezdőlap',
+                label: Strings.home_page.tr,
               ),
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.business,
                 ),
-                label: 'Városom',
+                label: Strings.my_city.tr,
               ),
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.school,
                 ),
-                label: 'Támadás',
+                label: Strings.attack.tr,
               ),
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.school,
                 ),
-                label: 'Csapataim',
+                label: Strings.my_forces.tr,
               ),
             ],
             currentIndex: _selectedIndex,

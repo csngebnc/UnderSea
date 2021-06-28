@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/city_tabs/buildings.dart';
 import 'package:undersea/views/city_tabs/military.dart';
 import 'package:undersea/views/city_tabs/upgrades.dart';
+import 'package:get/get.dart';
 
 class CityTabBar extends StatelessWidget {
   CityTabBar();
@@ -26,9 +28,9 @@ class CityTabBar extends StatelessWidget {
                   indicatorWeight: 5,
 
                   tabs: [
-                    UnderseaStyles.tab("Épületek"),
-                    UnderseaStyles.tab("Fejlesztések"),
-                    UnderseaStyles.tab("Sereg"),
+                    UnderseaStyles.tab(Strings.my_city.tr),
+                    UnderseaStyles.tab(Strings.upgrades.tr),
+                    UnderseaStyles.tab(Strings.my_forces.tr),
                   ],
                 ),
               ),

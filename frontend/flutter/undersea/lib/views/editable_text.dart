@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class CityNameEditableText extends StatefulWidget {
@@ -25,7 +26,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Városom neve',
+              Strings.city_name.tr,
               style: UnderseaStyles.whiteOpenSans
                   .copyWith(fontWeight: FontWeight.bold, fontSize: 21),
             ),
@@ -58,7 +59,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
           width: 150,
           child: TextField(
             decoration: InputDecoration(
-                hintText: 'Új városnév',
+                hintText: Strings.new_city_name.tr,
                 hintStyle: UnderseaStyles.inputTextStyle
                     .copyWith(color: Colors.white54, fontSize: 17)),
             style: UnderseaStyles.whiteOpenSans
@@ -69,8 +70,8 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
                 _isEditingText = false;
               });
 
-              Get.snackbar(
-                  'Városnév módosítva', 'A városod új neve: $_cityName',
+              Get.snackbar(Strings.city_modified_snack_title.tr,
+                  Strings.city_modified_snack_body.tr + ': $_cityName',
                   icon: Icon(Icons.save_sharp),
                   snackPosition: SnackPosition.BOTTOM,
                   backgroundColor: Colors.blueAccent);

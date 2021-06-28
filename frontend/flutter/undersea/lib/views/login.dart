@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/views/registration.dart';
 import 'bottom_nav_bar.dart';
 import 'package:undersea/styles/style_constants.dart';
@@ -13,12 +14,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    final userField = UnderseaStyles.inputField(hint: 'Felhasználónév');
+    final userField = UnderseaStyles.inputField(hint: Strings.username.tr);
     final passwordField =
-        UnderseaStyles.inputField(hint: "Jelszó", isPassword: true);
+        UnderseaStyles.inputField(hint: Strings.password.tr, isPassword: true);
 
     final loginButton = UnderseaStyles.elevatedButton(
-        text: 'Belépés',
+        text: Strings.login.tr,
         onPressed: () {
           Get.off(BottomNavBar());
         });
@@ -61,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                           SizedBox(
                               height: 30,
                               child: Text(
-                                'Belépés',
+                                Strings.login.tr,
                                 style: UnderseaStyles.buttonTextStyle
                                     .copyWith(fontSize: 24),
                               )),
@@ -80,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                               onPressed: () {
                                 Get.to(RegistrationPage());
                               },
-                              child: Text('Regisztráció',
+                              child: Text(Strings.registration.tr,
                                   style: UnderseaStyles.buttonTextStyle)),
                         ],
                       ),

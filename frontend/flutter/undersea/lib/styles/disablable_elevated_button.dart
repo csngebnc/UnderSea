@@ -19,6 +19,7 @@ class _ToggleableElevatedButtonState extends State<ToggleableElevatedButton> {
 
   @override
   void initState() {
+    super.initState();
     _isDisabled = widget.initiallyDisabled;
   }
 
