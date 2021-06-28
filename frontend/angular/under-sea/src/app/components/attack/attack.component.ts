@@ -63,6 +63,9 @@ export class AttackComponent implements OnInit {
   targetId: number;
   attackerUnits: Array<AttackerUnitDto> = [];
 
+  pageNumber: number = 1;
+  pageSize: number = 2;
+  allResultsCount: number = 5;
   constructor() {}
 
   ngOnInit(): void {
@@ -87,5 +90,9 @@ export class AttackComponent implements OnInit {
     });
 
     return !(this.targetId && sum);
+  }
+
+  onSwitchPage(pageNumber: number): void {
+    this.pageNumber = pageNumber;
   }
 }

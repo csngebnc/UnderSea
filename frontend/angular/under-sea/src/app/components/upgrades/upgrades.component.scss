@@ -1,0 +1,14 @@
+@import "src/styles.scss";
+
+.overlay {
+  position: absolute;
+  left: 5%;
+  top: 5%;
+  z-index: 2;
+  align-self: flex-end;
+}
+
+.remaining-text {
+  font-size: 0.8rem;
+  color: $teal;
+}

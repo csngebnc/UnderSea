@@ -80,12 +80,16 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .dot {
+  font-size: 1rem;
+  font-family: "OpenSans";
   border-radius: 50%;
   background-color: $teal;
   color: $navy;
   height: 1.375rem;
   width: 1.375rem;
   text-align: center;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 
 .list-item {
@@ -120,7 +124,12 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   padding: 1rem 2rem;
   color: $white;
   pointer-events: initial;
-  max-width: 45%;
+  width: 869px;
+  box-sizing: border-box;
+}
+
+.modal-lg {
+  width: 1267px;
 }
 
 .modal-title {
@@ -246,11 +255,17 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .item-btn:hover {
-  border: 1px solid $selected-blue;
+  border-color: $selected-blue;
 }
 
 .item-btn:focus {
   background-color: $selected-blue;
+}
+
+.item-btn:disabled {
+  border: none;
+  background-color: none;
+  cursor: not-allowed;
 }
 
 .item-lg {
@@ -306,8 +321,9 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   width: 40%;
 }
 
-.w-45 {
-  width: 45%;
+.w-50 {
+  width: 50%;
+  box-sizing: border-box;
 }
 
 .w-85 {
@@ -365,7 +381,11 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   padding-left: 1rem;
 }
 
-.pr-1 {
+.pl-2 {
+  padding-left: 2rem;
+}
+
+.pr-2 {
   padding-right: 2rem;
 }
 
@@ -392,12 +412,16 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   margin-bottom: 1rem;
 }
 
+.pos-rel {
+  position: relative;
+}
+
 body {
   height: 100%;
   font-family: "Baloo";
   margin: 0;
   background-image: $background;
-  background-position: center top;
+  background-position: center bottom;
   background-size: cover;
   overflow: hidden;
 }

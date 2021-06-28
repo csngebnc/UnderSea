@@ -13,39 +13,46 @@ export class BattleComponent implements OnInit {
       units: [
         {
           count: 32,
-          name: "Kiskutya",
+          name: 'Kiskutya',
         },
         {
           count: 22,
-          name: "Csicskalángos",
+          name: 'Csicskalángos',
         },
         {
           count: 32,
-          name: "Volkswagen",
+          name: 'Volkswagen',
         },
       ],
     },
     {
       target: 'Románia',
-      result: "győzelem",
+      result: 'győzelem',
       units: [
         {
           count: 32,
-          name: "asdasd",
+          name: 'asdasd',
         },
         {
           count: 22,
-          name: "V4",
+          name: 'V4',
         },
         {
           count: 32,
-          name: "lorem ipsum",
+          name: 'lorem ipsum',
         },
       ],
     },
   ];
 
+  pageNumber: number = 1;
+  pageSize: number = 2;
+  allResultsCount: number = 5;
   constructor() {}
 
   ngOnInit(): void {}
+
+  onSwitchPage(pageNumber: number): void {
+    this.pageNumber = pageNumber;
+  }
 }

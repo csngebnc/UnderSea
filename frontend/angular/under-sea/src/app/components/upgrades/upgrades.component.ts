@@ -14,50 +14,55 @@ export class UpgradesComponent implements OnInit {
     {
       id: 1,
       name: 'Korall fal',
-      exists: true,
-      underConstruction: false,
+      doesExist: true,
+      isUnderConstruction: false,
       effects: [{ id: 1, name: 'asd' }],
     },
     {
       id: 2,
       name: 'Korall fal',
-      exists: true,
-      underConstruction: false,
+      doesExist: false,
+      isUnderConstruction: false,
       effects: [{ id: 1, name: 'asd' }],
     },
     {
       id: 3,
       name: 'Korall fal',
-      exists: true,
-      underConstruction: false,
+      doesExist: false,
+      isUnderConstruction: true,
+      remainingTime: 12,
       effects: [{ id: 1, name: 'asd' }],
     },
     {
       id: 4,
       name: 'Korall fal',
-      exists: true,
-      underConstruction: false,
+      doesExist: true,
+      isUnderConstruction: false,
       effects: [{ id: 1, name: 'asd' }],
     },
     {
       id: 5,
       name: 'Korall fal',
-      exists: true,
-      underConstruction: false,
+      doesExist: true,
+      isUnderConstruction: false,
       effects: [{ id: 1, name: 'asd' }],
     },
     {
       id: 6,
       name: 'Korall fal',
-      exists: true,
-      underConstruction: false,
+      doesExist: true,
+      isUnderConstruction: false,
       effects: [{ id: 1, name: 'asd' }],
     },
   ];
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.upgrades.forEach((u) => {
+      if (u.isUnderConstruction) this.isResearching = true;
+    });
+  }
 
   setUpgrade(id: string): void {
     this.selectedUpgrade = id;

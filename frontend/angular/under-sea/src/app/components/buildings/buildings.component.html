@@ -13,6 +13,7 @@
               type="button"
               class="item-btn"
               (click)="setBuilding(building.id)"
+              [disabled]="isUnderConstruction"
             >
               <building-details
                 class="item item-lg stack align-center"

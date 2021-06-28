@@ -25,6 +25,7 @@ import { UpgradeDetailsComponent } from './components/upgrade-details/upgrade-de
 import { ListComponent } from './components/list/list.component';
 import { UnitDetailsComponent } from './components/unit-details/unit-details.component';
 import { UnitSliderComponent } from './components/unit-slider/unit-slider.component';
+import { PagerButtonsComponent } from './components/pager-buttons/pager-buttons.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { UnitSliderComponent } from './components/unit-slider/unit-slider.compon
     ListComponent,
     UnitDetailsComponent,
     UnitSliderComponent,
+    PagerButtonsComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],

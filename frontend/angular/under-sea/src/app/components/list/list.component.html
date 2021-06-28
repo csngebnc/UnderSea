@@ -2,6 +2,7 @@
   type="text"
   placeholder="Felhasználónév"
   class="text-input m-0 mt-1 w-100"
+  (keyup)="search($event.target.value)"
 />
 <div class="divider mt-05"></div>
 <ul class="p-0 m-0">

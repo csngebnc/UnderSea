@@ -3,8 +3,8 @@ import { Effect } from './effect.model';
 export type Upgrade = {
   id: number;
   name: string;
-  exists: boolean;
-  underConstruction: boolean;
-  timeRemaining?: number;
+  doesExist: boolean;
+  isUnderConstruction: boolean;
+  remainingTime?: number;
   effects: Array<Effect>;
 };

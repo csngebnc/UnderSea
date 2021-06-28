@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UserListItem } from '../../models/userlist-item.model';
+import { debounce } from 'lodash';
 
 @Component({
   selector: 'list',
@@ -12,12 +13,18 @@ export class ListComponent implements OnInit {
   @Output() selectTarget = new EventEmitter<number>();
   selectedTargetId: number | null = null;
 
-  constructor() {}
+  constructor() {
+    this.search = debounce(this.search, 1000);
+  }
 
   ngOnInit(): void {}
 
   onSelect(id: number): void {
     this.selectedTargetId = id;
     this.selectTarget.emit(this.selectedTargetId);
+  }
+
+  search(text: string): void {
+    console.log(text);
   }
 }

@@ -19,4 +19,8 @@ export class BuildingContainerComponent implements OnInit {
     if (!result || result.count === 0) return false;
     else return true;
   }
+
+  nextRound(): void {
+    console.log('kövi kör');
+  }
 }

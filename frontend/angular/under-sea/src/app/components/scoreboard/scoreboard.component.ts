@@ -33,7 +33,15 @@ export class ScoreboardComponent implements OnInit {
       score: 1234,
     },
   ];
+
+  pageNumber: number = 1;
+  pageSize: number = 2;
+  allResultsCount: number = 5;
   constructor() {}
 
   ngOnInit(): void {}
+
+  onSwitchPage(pageNumber: number): void {
+    this.pageNumber = pageNumber;
+  }
 }

@@ -15,9 +15,18 @@
           <li *ngFor="let upgrade of upgrades" class="non-styled-list-item">
             <button
               type="button"
-              class="item-btn"
+              class="item-btn pos-rel"
               (click)="setUpgrade(upgrade.id)"
+              disabled="upgrade.doesExist || upgrade.isUnderConstruction"
             >
+              <span *ngIf="upgrade.doesExist" class="dot overlay"
+                >&#x2714;</span
+              >
+              <span
+                *ngIf="upgrade.isUnderConstruction"
+                class="remaining-text overlay"
+                >még {{ upgrade.remainingTime }} kör</span
+              >
               <upgrade-details
                 class="item item-sm stack align-center"
                 [upgrade]="upgrade"

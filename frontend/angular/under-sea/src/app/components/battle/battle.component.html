@@ -16,5 +16,12 @@
         <div class="divider"></div>
       </li>
     </ul>
+    <pager-buttons
+      [pageSize]="pageSize"
+      [pageNumber]="pageNumber"
+      [allResultsCount]="allResultsCount"
+      (switchPage)="onSwitchPage($event)"
+      class="w-100 d-flex align-center to-center mt-1"
+    ></pager-buttons>
   </div>
 </div>

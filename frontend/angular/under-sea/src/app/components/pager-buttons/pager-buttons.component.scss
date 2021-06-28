@@ -1,0 +1,26 @@
+@import "src/styles.scss";
+
+.pager-button {
+  background: none;
+  text-align: center;
+  color: $white;
+  font-weight: bolder;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.pager-button:hover {
+  color: $blue;
+}
+
+.pager-button:disabled {
+  opacity: $foggy;
+  cursor: not-allowed;
+}
+
+.page-number {
+  width: 1rem;
+  margin: 0 0.5rem;
+  text-align: center;
+}
