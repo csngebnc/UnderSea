@@ -157,6 +157,8 @@ namespace UnderSea.Bll.Services
             var attackedCountry = await _context.Countries.Where(c => c.Id == attackDto.AttackedCountryId).FirstOrDefaultAsync();
             if (attackedCountry == null) throw new NullReferenceException();
 
+            if(attackerCountry.Id == attackDto.AttackedCountryId) throw new InvalidOperationException();
+
             await AttackLogic(attackerCountry, attackedCountry, attackDto);
         }
 
