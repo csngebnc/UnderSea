@@ -14,7 +14,7 @@ using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
         private readonly UnderSeaDbContext _context;

@@ -10,7 +10,7 @@ using UnderSea.Dal.Data;
 
 namespace UnderSea.Bll.Services
 {
-    public class UpgradeService
+    public class UpgradeService : IUpgradeService
     {
         private readonly UnderSeaDbContext _context;
         private readonly IIdentityService _identityService;

@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Extensions;
+using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Services
 {
-    public class RoundService
+    public class RoundService : IRoundService
     {
         private readonly UnderSeaDbContext _context;
 

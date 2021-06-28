@@ -16,7 +16,7 @@ using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Services
 {
-    public class BattleService
+    public class BattleService : IBattleService
     {
         private readonly UnderSeaDbContext _context;
         private readonly IIdentityService _identityService;

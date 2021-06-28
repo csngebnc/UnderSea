@@ -11,7 +11,7 @@ using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Services
 {
-    public class BuildingService
+    public class BuildingService : IBuildingService
     {
         private readonly UnderSeaDbContext _context;
         private readonly IIdentityService _identityService;
