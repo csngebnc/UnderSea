@@ -6,11 +6,14 @@ import 'package:get/get.dart';
 class Buildings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return UnderseaStyles.cityTabSkeleton(
+    return UnderseaStyles.tabSkeleton(
         list: ListView.builder(
             itemCount: 30,
             itemBuilder: (BuildContext context, int i) {
-              if (i == 0) return _infoPanel();
+              if (i == 0)
+                return UnderseaStyles.infoPanel(
+                    Strings.buildings_manual_title.tr,
+                    Strings.buildings_manual_hint.tr);
 
               return _buildRow(i);
             }));
@@ -19,15 +22,6 @@ class Buildings extends StatelessWidget {
   Widget _buildRow(int index) {
     return ListTile(
       title: Text(index.toString()),
-    );
-  }
-
-  Widget _infoPanel() {
-    return Column(
-      children: [
-        Text(Strings.buildings_manual_title.tr),
-        Text(Strings.buildings_manual_hint.tr),
-      ],
     );
   }
 }

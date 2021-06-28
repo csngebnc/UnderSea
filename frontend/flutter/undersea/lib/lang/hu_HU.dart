@@ -29,4 +29,9 @@ const Map<String, String> hu_HU = {
   Strings.city_modified_snack_body: 'A városod új neve',
   Strings.city_modified_snack_title: 'Sikeres névváltoztatás!',
   Strings.new_city_name: 'Új városnév',
+  Strings.upgrades_manual_title: 'Jelöld ki, amelyiket szeretnéd megvenni.',
+  Strings.upgrades_manual_hint:
+      'Minden fejlesztés 15 kört vesz igénybe, egyszerre csak egy dolog fejleszthető és minden csak egyszer fejleszthető ki (nem lehet két kombájn).',
+  Strings.military_manual_title: 'Jelöld ki, amelyiket szeretnéd',
+  Strings.military_manual_hint: ''
 };

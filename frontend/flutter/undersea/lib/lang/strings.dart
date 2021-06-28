@@ -31,4 +31,10 @@ class Strings {
   static const city_modified_snack_title = 'city_modified_snack_title';
 
   static const new_city_name = 'new_city_name';
+
+  static const upgrades_manual_title = 'upgrades_manual_title';
+  static const upgrades_manual_hint = 'upgrades_manual_hint';
+
+  static const military_manual_title = 'military_manual_title';
+  static const military_manual_hint = 'military_manual_hint';
 }

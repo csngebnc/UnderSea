@@ -56,6 +56,25 @@ class UnderseaStyles {
         ));
   }
 
+  static Widget infoPanel(String title, String hint) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+            padding: EdgeInsets.fromLTRB(20, 30, 50, 0),
+            child: Text(title,
+                style: UnderseaStyles.whiteOpenSans
+                    .copyWith(fontWeight: FontWeight.bold, fontSize: 20))),
+        if (hint.isNotEmpty)
+          Padding(
+            padding: EdgeInsets.fromLTRB(20, 5, 60, 0),
+            child: Text(hint,
+                style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 20)),
+          ),
+      ],
+    );
+  }
+
   static Widget assetIcon(
     String iconName, {
     double iconSize = 40,
@@ -253,7 +272,7 @@ class UnderseaStyles {
     );
   }
 
-  static Widget cityTabSkeleton({required Widget list}) {
+  static Widget tabSkeleton({required Widget list}) {
     return Expanded(
         child: Stack(fit: StackFit.expand, children: [
       Container(
