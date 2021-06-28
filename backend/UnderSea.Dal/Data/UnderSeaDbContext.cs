@@ -81,8 +81,8 @@ namespace UnderSea.Dal.Data
                 });
             }
 
-            modelBuilder.Entity<Country>().OwnsOne(p => p.Production).HasData(productions);
-            modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint).HasData(fightpoints);
+            modelBuilder.Entity<Country>().OwnsOne(p => p.Production);//.HasData(productions);
+            modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint);//.HasData(fightpoints);
 
             modelBuilder.Entity<Effect>()
                 .HasDiscriminator(e => e.EffectType)
@@ -101,7 +101,7 @@ namespace UnderSea.Dal.Data
                 .Property(e => e.EffectType)
                 .HasMaxLength(200)
                 .HasColumnName("effect_type");
-
+            /*
             List<Effect> effects = new List<Effect>();
             effects.Add(new PopulationEffect { Id = 1, Name = "50 lakost ad a népességhez" });
             effects.Add(new CoralEffect { Id = 2, Name = "200 korallt termel körönként" });
@@ -132,6 +132,7 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<Upgrade>().HasData(JsonDataLoader.LoadJson<Upgrade>("../UnderSea.Dal/Data/Seed/Upgrade"));
             modelBuilder.Entity<BuildingEffect>().HasData(JsonDataLoader.LoadJson<BuildingEffect>("../UnderSea.Dal/Data/Seed/BuildingEffect"));
             modelBuilder.Entity<UpgradeEffect>().HasData(JsonDataLoader.LoadJson<UpgradeEffect>("../UnderSea.Dal/Data/Seed/UpgradeEffect"));
+            */
         }
 
 

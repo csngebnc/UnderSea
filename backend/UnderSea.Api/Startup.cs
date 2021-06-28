@@ -41,6 +41,8 @@ namespace UnderSea.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /*
+
             // Add Hangfire services.
             services.AddHangfire(configuration =>
             {
@@ -61,9 +63,12 @@ namespace UnderSea.Api
             // Add the processing server as IHostedService
             services.AddHangfireServer();
 
+            */
+
             services.AddDbContext<UnderSeaDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    //Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("AzureSqlDbConnection")));
 
             services.AddSwaggerDocument();
 
@@ -127,9 +132,9 @@ namespace UnderSea.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseHangfireDashboard("/hangfire");
+            //app.UseHangfireDashboard("/hangfire");
 
-            var manager = new RecurringJobManager();
+            //var manager = new RecurringJobManager();
             //manager.AddOrUpdate("Next round", Job.FromExpression(() => new RoundService(context).NextRound()), Cron.Minutely());
 
             app.UseOpenApi();
