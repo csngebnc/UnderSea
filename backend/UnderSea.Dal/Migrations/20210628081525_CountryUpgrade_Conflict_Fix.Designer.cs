@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UnderSea.Dal.Data;
 
 namespace UnderSea.Dal.Migrations
 {
     [DbContext(typeof(UnderSeaDbContext))]
-    partial class UnderSeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210628081525_CountryUpgrade_Conflict_Fix")]
+    partial class CountryUpgrade_Conflict_Fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1389,68 +1391,6 @@ namespace UnderSea.Dal.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("CountryId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    CountryId = 1,
-                                    AttackPointMultiplier = 1.0,
-                                    DefensePointMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 2,
-                                    AttackPointMultiplier = 1.0,
-                                    DefensePointMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 3,
-                                    AttackPointMultiplier = 1.0,
-                                    DefensePointMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 4,
-                                    AttackPointMultiplier = 1.0,
-                                    DefensePointMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 5,
-                                    AttackPointMultiplier = 1.0,
-                                    DefensePointMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 6,
-                                    AttackPointMultiplier = 1.0,
-                                    DefensePointMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 7,
-                                    AttackPointMultiplier = 1.0,
-                                    DefensePointMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 8,
-                                    AttackPointMultiplier = 1.0,
-                                    DefensePointMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 9,
-                                    AttackPointMultiplier = 1.0,
-                                    DefensePointMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 10,
-                                    AttackPointMultiplier = 1.0,
-                                    DefensePointMultiplier = 1.0
-                                });
                         });
 
                     b.OwnsOne("UnderSea.Model.Models.Production", "Production", b1 =>
@@ -1478,88 +1418,6 @@ namespace UnderSea.Dal.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("CountryId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    CountryId = 1,
-                                    BaseCoralProduction = 10,
-                                    BasePearlProduction = 200,
-                                    CoralProductionMultiplier = 1.0,
-                                    PearlProductionMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 2,
-                                    BaseCoralProduction = 10,
-                                    BasePearlProduction = 200,
-                                    CoralProductionMultiplier = 1.0,
-                                    PearlProductionMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 3,
-                                    BaseCoralProduction = 10,
-                                    BasePearlProduction = 200,
-                                    CoralProductionMultiplier = 1.0,
-                                    PearlProductionMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 4,
-                                    BaseCoralProduction = 10,
-                                    BasePearlProduction = 200,
-                                    CoralProductionMultiplier = 1.0,
-                                    PearlProductionMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 5,
-                                    BaseCoralProduction = 10,
-                                    BasePearlProduction = 200,
-                                    CoralProductionMultiplier = 1.0,
-                                    PearlProductionMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 6,
-                                    BaseCoralProduction = 10,
-                                    BasePearlProduction = 200,
-                                    CoralProductionMultiplier = 1.0,
-                                    PearlProductionMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 7,
-                                    BaseCoralProduction = 10,
-                                    BasePearlProduction = 200,
-                                    CoralProductionMultiplier = 1.0,
-                                    PearlProductionMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 8,
-                                    BaseCoralProduction = 10,
-                                    BasePearlProduction = 200,
-                                    CoralProductionMultiplier = 1.0,
-                                    PearlProductionMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 9,
-                                    BaseCoralProduction = 10,
-                                    BasePearlProduction = 200,
-                                    CoralProductionMultiplier = 1.0,
-                                    PearlProductionMultiplier = 1.0
-                                },
-                                new
-                                {
-                                    CountryId = 10,
-                                    BaseCoralProduction = 10,
-                                    BasePearlProduction = 200,
-                                    CoralProductionMultiplier = 1.0,
-                                    PearlProductionMultiplier = 1.0
-                                });
                         });
 
                     b.Navigation("FightPoint");

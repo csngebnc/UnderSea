@@ -32,8 +32,8 @@ namespace UnderSea.Bll.Services
         public async Task<PagedResult<AttackableUserDto>> GetAttackableUsersAsync(PaginationData data)
         {
             var userId = GetUserId();
-
-            var attackableusers = await _context.Users.Where(c => c.Id != userId).ProjectTo<AttackableUserDto>(_mapper.ConfigurationProvider).ToPagedList(data.PageSize,data.PageNumber);
+            var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Country).ThenInclude(c => c.Attacks).ThenInclude(a => a.DefenderCountry).FirstOrDefaultAsync();
+            var attackableusers = await _context.Users.Where(c => c.Id != userId && !user.Country.Attacks.Select(a => a.DefenderCountry.OwnerId).Contains(c.Id)).ProjectTo<AttackableUserDto>(_mapper.ConfigurationProvider).ToPagedList(data.PageSize,data.PageNumber);
             return attackableusers;
         }
 
@@ -120,6 +120,11 @@ namespace UnderSea.Bll.Services
 
             var unit = await _context.Units.Where(c => c.Id == unitDto.UnitId).FirstOrDefaultAsync();
             if (unit == null) throw new NullReferenceException();
+
+            var unitSum = country.CountryUnits.Select(cu => cu.Count).Sum();
+            if (country.MaxUnitCount - unitSum - unitDto.Count < 0)
+                throw new InvalidOperationException();
+
 
             var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id).FirstOrDefaultAsync();
 

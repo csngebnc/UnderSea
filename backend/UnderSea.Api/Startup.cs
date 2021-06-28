@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -125,10 +127,10 @@ namespace UnderSea.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard("/hangfire");
 
             var manager = new RecurringJobManager();
-            manager.AddOrUpdate("Next round", Job.FromExpression(() => new RoundService(context).NextRound()), Cron.Minutely());
+            //manager.AddOrUpdate("Next round", Job.FromExpression(() => new RoundService(context).NextRound()), Cron.Minutely());
 
             app.UseOpenApi();
             app.UseSwaggerUi3();

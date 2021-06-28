@@ -60,8 +60,29 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<CountryUpgrade>().HasKey(cu => new { cu.CountryId, cu.UpgradeId });
             modelBuilder.Entity<UpgradeEffect>().HasKey(ue => new { ue.EffectId, ue.UpgradeId });
 
-            modelBuilder.Entity<Country>().OwnsOne(p => p.Production);
-            modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint);
+            List<object> productions = new List<object>();
+            List<object> fightpoints = new List<object>();
+            for (int i = 1; i <= 10; i++)
+            {
+                productions.Add(new
+                {
+                    CountryId = i,
+                    BaseCoralProduction = 10,
+                    BasePearlProduction = 200,
+                    CoralProductionMultiplier = 1.0,
+                    PearlProductionMultiplier = 1.0
+                });
+
+                fightpoints.Add(new
+                {
+                    CountryId = i,
+                    AttackPointMultiplier = 1.0,
+                    DefensePointMultiplier = 1.0
+                });
+            }
+
+            modelBuilder.Entity<Country>().OwnsOne(p => p.Production).HasData(productions);
+            modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint).HasData(fightpoints);
 
             modelBuilder.Entity<Effect>()
                 .HasDiscriminator(e => e.EffectType)
@@ -91,6 +112,7 @@ namespace UnderSea.Dal.Data
             effects.Add(new SonarCanon { Id = 7, Name = "Növeli a támadó pontokat 20%-kal" });
             effects.Add(new UnderwaterMartialArt { Id = 8, Name = "Növeli a védelmi és támadóerőt pontokat 10%-kal" });
             effects.Add(new Alchemy { Id = 9, Name = "Növeli a beszedett adót 30%-kal" });
+
 
 
             modelBuilder.Entity<User>().HasData(JsonDataLoader.LoadJson<User>("../UnderSea.Dal/Data/Seed/Users"));

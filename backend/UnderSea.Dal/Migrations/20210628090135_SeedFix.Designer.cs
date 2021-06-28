@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UnderSea.Dal.Data;
 
 namespace UnderSea.Dal.Migrations
 {
     [DbContext(typeof(UnderSeaDbContext))]
-    partial class UnderSeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210628090135_SeedFix")]
+    partial class SeedFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1483,7 +1485,7 @@ namespace UnderSea.Dal.Migrations
                                 new
                                 {
                                     CountryId = 1,
-                                    BaseCoralProduction = 10,
+                                    BaseCoralProduction = 0,
                                     BasePearlProduction = 200,
                                     CoralProductionMultiplier = 1.0,
                                     PearlProductionMultiplier = 1.0
@@ -1491,7 +1493,7 @@ namespace UnderSea.Dal.Migrations
                                 new
                                 {
                                     CountryId = 2,
-                                    BaseCoralProduction = 10,
+                                    BaseCoralProduction = 0,
                                     BasePearlProduction = 200,
                                     CoralProductionMultiplier = 1.0,
                                     PearlProductionMultiplier = 1.0
@@ -1499,7 +1501,7 @@ namespace UnderSea.Dal.Migrations
                                 new
                                 {
                                     CountryId = 3,
-                                    BaseCoralProduction = 10,
+                                    BaseCoralProduction = 0,
                                     BasePearlProduction = 200,
                                     CoralProductionMultiplier = 1.0,
                                     PearlProductionMultiplier = 1.0
@@ -1507,7 +1509,7 @@ namespace UnderSea.Dal.Migrations
                                 new
                                 {
                                     CountryId = 4,
-                                    BaseCoralProduction = 10,
+                                    BaseCoralProduction = 0,
                                     BasePearlProduction = 200,
                                     CoralProductionMultiplier = 1.0,
                                     PearlProductionMultiplier = 1.0
@@ -1515,7 +1517,7 @@ namespace UnderSea.Dal.Migrations
                                 new
                                 {
                                     CountryId = 5,
-                                    BaseCoralProduction = 10,
+                                    BaseCoralProduction = 0,
                                     BasePearlProduction = 200,
                                     CoralProductionMultiplier = 1.0,
                                     PearlProductionMultiplier = 1.0
@@ -1523,7 +1525,7 @@ namespace UnderSea.Dal.Migrations
                                 new
                                 {
                                     CountryId = 6,
-                                    BaseCoralProduction = 10,
+                                    BaseCoralProduction = 0,
                                     BasePearlProduction = 200,
                                     CoralProductionMultiplier = 1.0,
                                     PearlProductionMultiplier = 1.0
@@ -1531,7 +1533,7 @@ namespace UnderSea.Dal.Migrations
                                 new
                                 {
                                     CountryId = 7,
-                                    BaseCoralProduction = 10,
+                                    BaseCoralProduction = 0,
                                     BasePearlProduction = 200,
                                     CoralProductionMultiplier = 1.0,
                                     PearlProductionMultiplier = 1.0
@@ -1539,7 +1541,7 @@ namespace UnderSea.Dal.Migrations
                                 new
                                 {
                                     CountryId = 8,
-                                    BaseCoralProduction = 10,
+                                    BaseCoralProduction = 0,
                                     BasePearlProduction = 200,
                                     CoralProductionMultiplier = 1.0,
                                     PearlProductionMultiplier = 1.0
@@ -1547,7 +1549,7 @@ namespace UnderSea.Dal.Migrations
                                 new
                                 {
                                     CountryId = 9,
-                                    BaseCoralProduction = 10,
+                                    BaseCoralProduction = 0,
                                     BasePearlProduction = 200,
                                     CoralProductionMultiplier = 1.0,
                                     PearlProductionMultiplier = 1.0
@@ -1555,7 +1557,7 @@ namespace UnderSea.Dal.Migrations
                                 new
                                 {
                                     CountryId = 10,
-                                    BaseCoralProduction = 10,
+                                    BaseCoralProduction = 0,
                                     BasePearlProduction = 200,
                                     CoralProductionMultiplier = 1.0,
                                     PearlProductionMultiplier = 1.0
