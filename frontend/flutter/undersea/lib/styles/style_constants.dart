@@ -108,6 +108,10 @@ class UnderseaStyles {
     fontWeight: FontWeight.bold,
   );
 
+  static Widget text(String text) {
+    return Text(text, style: listRegular);
+  }
+
   static Widget militaryIcon(String assetName, int current, int max) {
     return Container(
         margin: EdgeInsets.all(12),

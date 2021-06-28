@@ -3,7 +3,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/views/attack_page.dart';
 import 'package:undersea/views/city_tabs/city_tab_controller.dart';
+import 'package:undersea/views/my_army.dart';
 import 'package:undersea/views/profile.dart';
 import 'home_page.dart';
 
@@ -27,8 +29,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
   static List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     CityTabBar(),
-    Text('Index 2: Támadás'),
-    Text('Index 3: Csapataim'),
+    AttackPage(),
+    MyArmyPage(),
   ];
 
   void _onItemTapped(int index) {
