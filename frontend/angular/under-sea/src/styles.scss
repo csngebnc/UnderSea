@@ -51,6 +51,16 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   width: 80%;
   padding: 0.5rem 1rem;
   margin: 0.5rem;
+  border: 2px solid transparent;
+}
+
+.text-input.ng-invalid.ng-touched {
+  border-color: red;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: $dark-navy;
 }
 
 .container {

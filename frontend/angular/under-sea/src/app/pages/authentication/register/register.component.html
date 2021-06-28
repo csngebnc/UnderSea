@@ -1,17 +1,49 @@
 <div class="container bg">
-    <div>
-    <h1 class="title">
-        UNDERSEA
-    </h1>
-    <form class="blurry-panel stack align-center">
-        <h2 class="login-title">Regisztráció</h2>
-        <input type="text" placeholder="Felhasználónév" class="text-input">
-        <input type="password" placeholder="Jelszó" class="text-input">
-        <input type="password" placeholder="Jelszó megerősítése" class="text-input">
-        <input type="text" placeholder="A városod neve, amit építesz" class="text-input">
-        <button type="submit" class="gradient-button mt-2">Regisztráció</button>
-        <a class="link mt-2" href="login">Bejelentkezés</a>
-        <div class="low-opacity-white"></div>
+  <div>
+    <h1 class="title">UNDERSEA</h1>
+    <form
+      class="blurry-panel stack align-center"
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <h2 class="login-title">Regisztráció</h2>
+      <input
+        type="text"
+        placeholder="Felhasználónév"
+        class="text-input"
+        required
+        formControlName="userName"
+      />
+      <input
+        type="text"
+        placeholder="Jelszó"
+        class="text-input"
+        required
+        formControlName="password"
+      />
+      <input
+        type="text"
+        placeholder="Jelszó megerősítése"
+        class="text-input"
+        required
+        formControlName="confirmPassword"
+      />
+      <input
+        type="text"
+        placeholder="A városod neve, amit építesz"
+        class="text-input"
+        required
+        formControlName="countryName"
+      />
+      <button
+        type="submit"
+        class="gradient-button mt-2"
+        [disabled]="!registerForm.valid"
+      >
+        Regisztráció
+      </button>
+      <a class="link mt-2" routerLink="/login">Bejelentkezés</a>
+      <div class="low-opacity-white"></div>
     </form>
-</div>
+  </div>
 </div>
