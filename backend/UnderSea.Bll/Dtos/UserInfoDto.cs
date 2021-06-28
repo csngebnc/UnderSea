@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnderSea.Model.Dtos
+namespace UnderSea.Bll.Dtos
 {
     public class UserInfoDto
     {

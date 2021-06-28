@@ -15,7 +15,10 @@ namespace UnderSea.Model.Models
         [Required(ErrorMessage = "A befejezés idejét kötelező megadni!")]
         public int EstimatedFinish { get; set; }
 
-        public int CountryBuildingId { get; set; }
-        public CountryBuilding CountryBuilding { get; set; }
+        public int CountryId { get; set; }
+        public Country Country { get; set; }
+
+        public int BuildingId { get; set; }
+        public Building Building { get; set; }
     }
 }

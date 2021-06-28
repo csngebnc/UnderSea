@@ -14,28 +14,13 @@ namespace UnderSea.Model.Models
         [StringLength(100, ErrorMessage = "A hatás neve maximum 100 karakter hosszú lehet!")]
         public string Name { get; set; }
 
+        public string EffectType { get; set; }
+
         public ICollection<BuildingEffect> BuildingEffects { get; set; }
         public ICollection<UpgradeEffect> UpgradeEffects { get; set; }
 
         public abstract void ApplyEffect(Country country);
         public abstract void RemoveEffect(Country country);
-
-        public void ApplyAllUpgradeToCountry(Country country)
-        {
-            foreach (var country_upgrade in country.CountryUpgrades)
-            {
-                country_upgrade.Upgrade.ApplyUpgrade(country);
-            }
-        }
-
-        public void RemoveAllUpgradeFromCountry(Country country)
-        {
-            foreach (var country_upgrade in country.CountryUpgrades)
-            {
-                country_upgrade.Upgrade.RemoveUpgrade(country);
-            }
-        }
-
 
     }
 }

@@ -1,0 +1,26 @@
+[
+  {
+    "UpgradeId": 1,
+    "EffectId": 4
+  },
+  {
+    "UpgradeId": 2,
+    "EffectId": 5
+  },
+  {
+    "UpgradeId": 3,
+    "EffectId": 6
+  },
+  {
+    "UpgradeId": 4,
+    "EffectId": 7
+  },
+  {
+    "UpgradeId": 5,
+    "EffectId": 8
+  },
+  {
+    "UpgradeId": 6,
+    "EffectId": 9
+  }
+]

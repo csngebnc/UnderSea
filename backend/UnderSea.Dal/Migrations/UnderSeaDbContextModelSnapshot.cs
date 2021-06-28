@@ -264,7 +264,10 @@ namespace UnderSea.Dal.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CountryBuildingId")
+                    b.Property<int>("BuildingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<int>("EstimatedFinish")
@@ -272,9 +275,36 @@ namespace UnderSea.Dal.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryBuildingId");
+                    b.HasIndex("BuildingId");
+
+                    b.HasIndex("CountryId");
 
                     b.ToTable("ActiveConstructions");
+                });
+
+            modelBuilder.Entity("UnderSea.Model.Models.ActiveUpgrading", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EstimatedFinish")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpgradeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("UpgradeId");
+
+                    b.ToTable("ActiveUpgradings");
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.Attack", b =>
@@ -353,6 +383,22 @@ namespace UnderSea.Dal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Buildings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ConstructionTime = 5,
+                            Name = "Áramlásirányító",
+                            Price = 1000
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ConstructionTime = 5,
+                            Name = "Zátonyvár",
+                            Price = 1000
+                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.BuildingEffect", b =>
@@ -368,6 +414,23 @@ namespace UnderSea.Dal.Migrations
                     b.HasIndex("EffectId");
 
                     b.ToTable("BuildingEffects");
+
+                    b.HasData(
+                        new
+                        {
+                            BuildingId = 1,
+                            EffectId = 1
+                        },
+                        new
+                        {
+                            BuildingId = 1,
+                            EffectId = 2
+                        },
+                        new
+                        {
+                            BuildingId = 2,
+                            EffectId = 3
+                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.Country", b =>
@@ -397,13 +460,130 @@ namespace UnderSea.Dal.Migrations
                     b.Property<int>("Population")
                         .HasColumnType("int");
 
+                    b.Property<int>("WorldId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId")
                         .IsUnique()
                         .HasFilter("[OwnerId] IS NOT NULL");
 
+                    b.HasIndex("WorldId");
+
                     b.ToTable("Countries");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Coral = 10000,
+                            MaxUnitCount = 100,
+                            Name = "Center",
+                            OwnerId = "af378505-14cb-4f49-bb01-ba2c8fdef77d",
+                            Pearl = 10000,
+                            Population = 100,
+                            WorldId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Coral = 10000,
+                            MaxUnitCount = 100,
+                            Name = "Melrose",
+                            OwnerId = "72ff37e8-5888-47c6-9ad7-15844a6449b1",
+                            Pearl = 10000,
+                            Population = 100,
+                            WorldId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Coral = 10000,
+                            MaxUnitCount = 100,
+                            Name = "Gale",
+                            OwnerId = "a63a97aa-4ae8-4185-8621-be02286b1542",
+                            Pearl = 10000,
+                            Population = 100,
+                            WorldId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Coral = 10000,
+                            MaxUnitCount = 100,
+                            Name = "Algoma",
+                            OwnerId = "c4393fff-8d3a-4508-9245-794916e9e997",
+                            Pearl = 10000,
+                            Population = 100,
+                            WorldId = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Coral = 10000,
+                            MaxUnitCount = 100,
+                            Name = "Carioca",
+                            OwnerId = "cbbd70fb-06cd-4368-af10-93c237980d8c",
+                            Pearl = 10000,
+                            Population = 100,
+                            WorldId = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Coral = 10000,
+                            MaxUnitCount = 100,
+                            Name = "Norway Maple",
+                            OwnerId = "392a9574-11a7-4f01-add1-4980933cc7a6",
+                            Pearl = 10000,
+                            Population = 100,
+                            WorldId = 1
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Coral = 10000,
+                            MaxUnitCount = 100,
+                            Name = "Melody",
+                            OwnerId = "bf37d8cc-0744-4054-9fe1-603e6829799a",
+                            Pearl = 10000,
+                            Population = 100,
+                            WorldId = 1
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Coral = 10000,
+                            MaxUnitCount = 100,
+                            Name = "Kipling",
+                            OwnerId = "488d40fe-e2c5-41e3-b2d9-dea16b7c2897",
+                            Pearl = 10000,
+                            Population = 100,
+                            WorldId = 1
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Coral = 10000,
+                            MaxUnitCount = 100,
+                            Name = "Londonderry",
+                            OwnerId = "0b62f843-4357-423b-83d0-a2506ac91d5c",
+                            Pearl = 10000,
+                            Population = 100,
+                            WorldId = 1
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Coral = 10000,
+                            MaxUnitCount = 100,
+                            Name = "Arkansas",
+                            OwnerId = "c0b59d8d-58cc-4a54-a045-bf2a9341c658",
+                            Pearl = 10000,
+                            Population = 100,
+                            WorldId = 1
+                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.CountryBuilding", b =>
@@ -439,12 +619,6 @@ namespace UnderSea.Dal.Migrations
                     b.Property<int>("UnitId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BonusAttackPoint")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BonusDefensePoint")
-                        .HasColumnType("int");
-
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
@@ -463,9 +637,6 @@ namespace UnderSea.Dal.Migrations
                     b.Property<int>("UpgradeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EstimatedFinish")
-                        .HasColumnType("int");
-
                     b.HasKey("CountryId", "UpgradeId");
 
                     b.HasIndex("UpgradeId");
@@ -480,20 +651,22 @@ namespace UnderSea.Dal.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("EffectType")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasColumnName("effect_type");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("effect_type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Effects");
 
-                    b.HasDiscriminator<string>("effect_type").HasValue("effect_base");
+                    b.HasDiscriminator<string>("EffectType").HasValue("effect_base");
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.Unit", b =>
@@ -526,6 +699,38 @@ namespace UnderSea.Dal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Units");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AttackPoint = 6,
+                            DefensePoint = 2,
+                            MercenaryPerRound = 1,
+                            Name = "Rohamfóka",
+                            Price = 50,
+                            SupplyPerRound = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AttackPoint = 2,
+                            DefensePoint = 6,
+                            MercenaryPerRound = 1,
+                            Name = "Csatacsikó",
+                            Price = 50,
+                            SupplyPerRound = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AttackPoint = 5,
+                            DefensePoint = 5,
+                            MercenaryPerRound = 3,
+                            Name = "Lézercápa",
+                            Price = 100,
+                            SupplyPerRound = 2
+                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.Upgrade", b =>
@@ -543,15 +748,47 @@ namespace UnderSea.Dal.Migrations
                     b.Property<int>("UpgradeTime")
                         .HasColumnType("int");
 
-                    b.Property<string>("upgrade_type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Upgrades");
 
-                    b.HasDiscriminator<string>("upgrade_type").HasValue("upgrade_base");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Iszaptraktor",
+                            UpgradeTime = 15
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Iszapkombájn",
+                            UpgradeTime = 15
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Korallfal",
+                            UpgradeTime = 15
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Szonárágyú",
+                            UpgradeTime = 15
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Vízalatti harcművészetek",
+                            UpgradeTime = 15
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Alkímia",
+                            UpgradeTime = 15
+                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.UpgradeEffect", b =>
@@ -567,6 +804,38 @@ namespace UnderSea.Dal.Migrations
                     b.HasIndex("UpgradeId");
 
                     b.ToTable("UpgradeEffects");
+
+                    b.HasData(
+                        new
+                        {
+                            EffectId = 4,
+                            UpgradeId = 1
+                        },
+                        new
+                        {
+                            EffectId = 5,
+                            UpgradeId = 2
+                        },
+                        new
+                        {
+                            EffectId = 6,
+                            UpgradeId = 3
+                        },
+                        new
+                        {
+                            EffectId = 7,
+                            UpgradeId = 4
+                        },
+                        new
+                        {
+                            EffectId = 8,
+                            UpgradeId = 5
+                        },
+                        new
+                        {
+                            EffectId = 9,
+                            UpgradeId = 6
+                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.User", b =>
@@ -635,6 +904,194 @@ namespace UnderSea.Dal.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "af378505-14cb-4f49-bb01-ba2c8fdef77d",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "SSTRAHAN0",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                            PhoneNumberConfirmed = false,
+                            Points = 0,
+                            SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                            TwoFactorEnabled = false,
+                            UserName = "sstrahan0"
+                        },
+                        new
+                        {
+                            Id = "72ff37e8-5888-47c6-9ad7-15844a6449b1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "LTIPPIN1",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                            PhoneNumberConfirmed = false,
+                            Points = 0,
+                            SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                            TwoFactorEnabled = false,
+                            UserName = "ltippin1"
+                        },
+                        new
+                        {
+                            Id = "a63a97aa-4ae8-4185-8621-be02286b1542",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "BLYPTRATT2",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                            PhoneNumberConfirmed = false,
+                            Points = 0,
+                            SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                            TwoFactorEnabled = false,
+                            UserName = "blyptratt2"
+                        },
+                        new
+                        {
+                            Id = "c4393fff-8d3a-4508-9245-794916e9e997",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "JMELIOR3",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                            PhoneNumberConfirmed = false,
+                            Points = 0,
+                            SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                            TwoFactorEnabled = false,
+                            UserName = "jmelior3"
+                        },
+                        new
+                        {
+                            Id = "cbbd70fb-06cd-4368-af10-93c237980d8c",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "TMAXWORTHY4",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                            PhoneNumberConfirmed = false,
+                            Points = 0,
+                            SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                            TwoFactorEnabled = false,
+                            UserName = "tmaxworthy4"
+                        },
+                        new
+                        {
+                            Id = "392a9574-11a7-4f01-add1-4980933cc7a6",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "HCHEVERELL5",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                            PhoneNumberConfirmed = false,
+                            Points = 0,
+                            SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                            TwoFactorEnabled = false,
+                            UserName = "hcheverell5"
+                        },
+                        new
+                        {
+                            Id = "bf37d8cc-0744-4054-9fe1-603e6829799a",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "GBOSKELL6",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                            PhoneNumberConfirmed = false,
+                            Points = 0,
+                            SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                            TwoFactorEnabled = false,
+                            UserName = "gboskell6"
+                        },
+                        new
+                        {
+                            Id = "488d40fe-e2c5-41e3-b2d9-dea16b7c2897",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "ERYLETT7",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                            PhoneNumberConfirmed = false,
+                            Points = 0,
+                            SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                            TwoFactorEnabled = false,
+                            UserName = "erylett7"
+                        },
+                        new
+                        {
+                            Id = "0b62f843-4357-423b-83d0-a2506ac91d5c",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "KSEELY8",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                            PhoneNumberConfirmed = false,
+                            Points = 0,
+                            SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                            TwoFactorEnabled = false,
+                            UserName = "kseely8"
+                        },
+                        new
+                        {
+                            Id = "c0b59d8d-58cc-4a54-a045-bf2a9341c658",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "HFILINKOV9",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                            PhoneNumberConfirmed = false,
+                            Points = 0,
+                            SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                            TwoFactorEnabled = false,
+                            UserName = "hfilinkov9"
+                        });
+                });
+
+            modelBuilder.Entity("UnderSea.Model.Models.World", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Round")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Worlds");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Round = 1
+                        });
+                });
+
+            modelBuilder.Entity("UnderSea.Model.Models.Alchemy", b =>
+                {
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
+
+                    b.HasDiscriminator().HasValue("upgrade_effect_alchemy");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 9,
+                            Name = "Növeli a beszedett adót 30%-kal"
+                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.CoralEffect", b =>
@@ -642,6 +1099,27 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("effect_coral");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            Name = "200 korallt termel körönként"
+                        });
+                });
+
+            modelBuilder.Entity("UnderSea.Model.Models.CoralWall", b =>
+                {
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
+
+                    b.HasDiscriminator().HasValue("upgrade_effect_coralwall");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 6,
+                            Name = "Növeli a védelmi pontokat 20%-kal"
+                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.MilitaryEffect", b =>
@@ -649,6 +1127,41 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("effect_military");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 3,
+                            Name = "200 egység katonának nyújt szállást"
+                        });
+                });
+
+            modelBuilder.Entity("UnderSea.Model.Models.MudCombine", b =>
+                {
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
+
+                    b.HasDiscriminator().HasValue("upgrade_effect_mudcombine");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 5,
+                            Name = "Növeli a korall termesztést 15%-kal"
+                        });
+                });
+
+            modelBuilder.Entity("UnderSea.Model.Models.MudTractor", b =>
+                {
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
+
+                    b.HasDiscriminator().HasValue("upgrade_effect_mudtractor");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 4,
+                            Name = "Növeli a korall termesztést 10%-kal"
+                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.PopulationEffect", b =>
@@ -656,48 +1169,41 @@ namespace UnderSea.Dal.Migrations
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("effect_population");
-                });
 
-            modelBuilder.Entity("UnderSea.Model.Models.Alchemy", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
-
-                    b.HasDiscriminator().HasValue("upgrade_alchemy");
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.CoralWall", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
-
-                    b.HasDiscriminator().HasValue("upgrade_coralwall");
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.MudCombine", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
-
-                    b.HasDiscriminator().HasValue("upgrade_mudcombine");
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.MudTractor", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
-
-                    b.HasDiscriminator().HasValue("upgrade_mudtractor");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "50 lakost ad a népességhez"
+                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.SonarCanon", b =>
                 {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
 
-                    b.HasDiscriminator().HasValue("upgrade_sonarcannon");
+                    b.HasDiscriminator().HasValue("upgrade_effect_sonarcannon");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 7,
+                            Name = "Növeli a támadó pontokat 20%-kal"
+                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.UnderwaterMartialArt", b =>
                 {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
 
-                    b.HasDiscriminator().HasValue("upgrade_martialart");
+                    b.HasDiscriminator().HasValue("upgrade_effect_martialart");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 8,
+                            Name = "Növeli a védelmi és támadóerőt pontokat 10%-kal"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -753,13 +1259,40 @@ namespace UnderSea.Dal.Migrations
 
             modelBuilder.Entity("UnderSea.Model.Models.ActiveConstruction", b =>
                 {
-                    b.HasOne("UnderSea.Model.Models.CountryBuilding", "CountryBuilding")
+                    b.HasOne("UnderSea.Model.Models.Building", "Building")
                         .WithMany("ActiveConstructions")
-                        .HasForeignKey("CountryBuildingId")
+                        .HasForeignKey("BuildingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CountryBuilding");
+                    b.HasOne("UnderSea.Model.Models.Country", "Country")
+                        .WithMany("ActiveConstructions")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Building");
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("UnderSea.Model.Models.ActiveUpgrading", b =>
+                {
+                    b.HasOne("UnderSea.Model.Models.Country", "Country")
+                        .WithMany("ActiveUpgradings")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UnderSea.Model.Models.Upgrade", "Upgrade")
+                        .WithMany("ActiveUpgradings")
+                        .HasForeignKey("UpgradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Upgrade");
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.Attack", b =>
@@ -767,13 +1300,13 @@ namespace UnderSea.Dal.Migrations
                     b.HasOne("UnderSea.Model.Models.Country", "AttackerCountry")
                         .WithMany("Attacks")
                         .HasForeignKey("AttackerCountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("UnderSea.Model.Models.Country", "DefenderCountry")
                         .WithMany("Defenses")
                         .HasForeignKey("DefenderCountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("UnderSea.Model.Models.User", "Winner")
@@ -831,6 +1364,95 @@ namespace UnderSea.Dal.Migrations
                         .WithOne("Country")
                         .HasForeignKey("UnderSea.Model.Models.Country", "OwnerId");
 
+                    b.HasOne("UnderSea.Model.Models.World", "World")
+                        .WithMany("Countries")
+                        .HasForeignKey("WorldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("UnderSea.Model.Models.FightPoint", "FightPoint", b1 =>
+                        {
+                            b1.Property<int>("CountryId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int")
+                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                            b1.Property<double>("AttackPointMultiplier")
+                                .HasColumnType("float");
+
+                            b1.Property<double>("DefensePointMultiplier")
+                                .HasColumnType("float");
+
+                            b1.HasKey("CountryId");
+
+                            b1.ToTable("Countries");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CountryId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    CountryId = 1,
+                                    AttackPointMultiplier = 1.0,
+                                    DefensePointMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 2,
+                                    AttackPointMultiplier = 1.0,
+                                    DefensePointMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 3,
+                                    AttackPointMultiplier = 1.0,
+                                    DefensePointMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 4,
+                                    AttackPointMultiplier = 1.0,
+                                    DefensePointMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 5,
+                                    AttackPointMultiplier = 1.0,
+                                    DefensePointMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 6,
+                                    AttackPointMultiplier = 1.0,
+                                    DefensePointMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 7,
+                                    AttackPointMultiplier = 1.0,
+                                    DefensePointMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 8,
+                                    AttackPointMultiplier = 1.0,
+                                    DefensePointMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 9,
+                                    AttackPointMultiplier = 1.0,
+                                    DefensePointMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 10,
+                                    AttackPointMultiplier = 1.0,
+                                    DefensePointMultiplier = 1.0
+                                });
+                        });
+
                     b.OwnsOne("UnderSea.Model.Models.Production", "Production", b1 =>
                         {
                             b1.Property<int>("CountryId")
@@ -844,11 +1466,11 @@ namespace UnderSea.Dal.Migrations
                             b1.Property<int>("BasePearlProduction")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("CurrentCoralProduction")
-                                .HasColumnType("int");
+                            b1.Property<double>("CoralProductionMultiplier")
+                                .HasColumnType("float");
 
-                            b1.Property<int>("CurrentPearlProduction")
-                                .HasColumnType("int");
+                            b1.Property<double>("PearlProductionMultiplier")
+                                .HasColumnType("float");
 
                             b1.HasKey("CountryId");
 
@@ -856,11 +1478,97 @@ namespace UnderSea.Dal.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("CountryId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    CountryId = 1,
+                                    BaseCoralProduction = 10,
+                                    BasePearlProduction = 200,
+                                    CoralProductionMultiplier = 1.0,
+                                    PearlProductionMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 2,
+                                    BaseCoralProduction = 10,
+                                    BasePearlProduction = 200,
+                                    CoralProductionMultiplier = 1.0,
+                                    PearlProductionMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 3,
+                                    BaseCoralProduction = 10,
+                                    BasePearlProduction = 200,
+                                    CoralProductionMultiplier = 1.0,
+                                    PearlProductionMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 4,
+                                    BaseCoralProduction = 10,
+                                    BasePearlProduction = 200,
+                                    CoralProductionMultiplier = 1.0,
+                                    PearlProductionMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 5,
+                                    BaseCoralProduction = 10,
+                                    BasePearlProduction = 200,
+                                    CoralProductionMultiplier = 1.0,
+                                    PearlProductionMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 6,
+                                    BaseCoralProduction = 10,
+                                    BasePearlProduction = 200,
+                                    CoralProductionMultiplier = 1.0,
+                                    PearlProductionMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 7,
+                                    BaseCoralProduction = 10,
+                                    BasePearlProduction = 200,
+                                    CoralProductionMultiplier = 1.0,
+                                    PearlProductionMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 8,
+                                    BaseCoralProduction = 10,
+                                    BasePearlProduction = 200,
+                                    CoralProductionMultiplier = 1.0,
+                                    PearlProductionMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 9,
+                                    BaseCoralProduction = 10,
+                                    BasePearlProduction = 200,
+                                    CoralProductionMultiplier = 1.0,
+                                    PearlProductionMultiplier = 1.0
+                                },
+                                new
+                                {
+                                    CountryId = 10,
+                                    BaseCoralProduction = 10,
+                                    BasePearlProduction = 200,
+                                    CoralProductionMultiplier = 1.0,
+                                    PearlProductionMultiplier = 1.0
+                                });
                         });
+
+                    b.Navigation("FightPoint");
 
                     b.Navigation("Owner");
 
                     b.Navigation("Production");
+
+                    b.Navigation("World");
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.CountryBuilding", b =>
@@ -946,6 +1654,8 @@ namespace UnderSea.Dal.Migrations
 
             modelBuilder.Entity("UnderSea.Model.Models.Building", b =>
                 {
+                    b.Navigation("ActiveConstructions");
+
                     b.Navigation("BuildingEffects");
 
                     b.Navigation("CountryBuildings");
@@ -953,6 +1663,10 @@ namespace UnderSea.Dal.Migrations
 
             modelBuilder.Entity("UnderSea.Model.Models.Country", b =>
                 {
+                    b.Navigation("ActiveConstructions");
+
+                    b.Navigation("ActiveUpgradings");
+
                     b.Navigation("Attacks");
 
                     b.Navigation("CountryBuildings");
@@ -962,11 +1676,6 @@ namespace UnderSea.Dal.Migrations
                     b.Navigation("CountryUpgrades");
 
                     b.Navigation("Defenses");
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.CountryBuilding", b =>
-                {
-                    b.Navigation("ActiveConstructions");
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.Effect", b =>
@@ -983,6 +1692,8 @@ namespace UnderSea.Dal.Migrations
 
             modelBuilder.Entity("UnderSea.Model.Models.Upgrade", b =>
                 {
+                    b.Navigation("ActiveUpgradings");
+
                     b.Navigation("CountryUpgrades");
 
                     b.Navigation("UpgradeEffects");
@@ -993,6 +1704,11 @@ namespace UnderSea.Dal.Migrations
                     b.Navigation("AttackWins");
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("UnderSea.Model.Models.World", b =>
+                {
+                    b.Navigation("Countries");
                 });
 #pragma warning restore 612, 618
         }

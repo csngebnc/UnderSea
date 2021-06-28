@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnderSea.Model.Models
 {
-    public abstract class Upgrade
+    public class Upgrade
     {
         public int Id { get; set; }
 
@@ -21,8 +21,7 @@ namespace UnderSea.Model.Models
 
         public ICollection<CountryUpgrade> CountryUpgrades { get; set; }
         public ICollection<UpgradeEffect> UpgradeEffects { get; set; }
+        public ICollection<ActiveUpgrading> ActiveUpgradings { get; set; }
 
-        public abstract void ApplyUpgrade(Country country);
-        public abstract void RemoveUpgrade(Country country);
     }
 }

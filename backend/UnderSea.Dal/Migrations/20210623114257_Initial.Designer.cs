@@ -10,7 +10,7 @@ using UnderSea.Dal.Data;
 namespace UnderSea.Dal.Migrations
 {
     [DbContext(typeof(UnderSeaDbContext))]
-    [Migration("20210623102933_Initial")]
+    [Migration("20210623114257_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -545,15 +545,9 @@ namespace UnderSea.Dal.Migrations
                     b.Property<int>("UpgradeTime")
                         .HasColumnType("int");
 
-                    b.Property<string>("upgrade_type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Upgrades");
-
-                    b.HasDiscriminator<string>("upgrade_type").HasValue("upgrade_base");
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.UpgradeEffect", b =>
@@ -639,11 +633,25 @@ namespace UnderSea.Dal.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("UnderSea.Model.Models.Alchemy", b =>
+                {
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
+
+                    b.HasDiscriminator().HasValue("upgrade_effect_alchemy");
+                });
+
             modelBuilder.Entity("UnderSea.Model.Models.CoralEffect", b =>
                 {
                     b.HasBaseType("UnderSea.Model.Models.Effect");
 
                     b.HasDiscriminator().HasValue("effect_coral");
+                });
+
+            modelBuilder.Entity("UnderSea.Model.Models.CoralWall", b =>
+                {
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
+
+                    b.HasDiscriminator().HasValue("upgrade_effect_coralwall");
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.MilitaryEffect", b =>
@@ -653,6 +661,20 @@ namespace UnderSea.Dal.Migrations
                     b.HasDiscriminator().HasValue("effect_military");
                 });
 
+            modelBuilder.Entity("UnderSea.Model.Models.MudCombine", b =>
+                {
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
+
+                    b.HasDiscriminator().HasValue("upgrade_effect_mudcombine");
+                });
+
+            modelBuilder.Entity("UnderSea.Model.Models.MudTractor", b =>
+                {
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
+
+                    b.HasDiscriminator().HasValue("upgrade_effect_mudtractor");
+                });
+
             modelBuilder.Entity("UnderSea.Model.Models.PopulationEffect", b =>
                 {
                     b.HasBaseType("UnderSea.Model.Models.Effect");
@@ -660,46 +682,18 @@ namespace UnderSea.Dal.Migrations
                     b.HasDiscriminator().HasValue("effect_population");
                 });
 
-            modelBuilder.Entity("UnderSea.Model.Models.Alchemy", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
-
-                    b.HasDiscriminator().HasValue("upgrade_alchemy");
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.CoralWall", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
-
-                    b.HasDiscriminator().HasValue("upgrade_coralwall");
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.MudCombine", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
-
-                    b.HasDiscriminator().HasValue("upgrade_mudcombine");
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.MudTractor", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
-
-                    b.HasDiscriminator().HasValue("upgrade_mudtractor");
-                });
-
             modelBuilder.Entity("UnderSea.Model.Models.SonarCanon", b =>
                 {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
 
-                    b.HasDiscriminator().HasValue("upgrade_sonarcannon");
+                    b.HasDiscriminator().HasValue("upgrade_effect_sonarcannon");
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.UnderwaterMartialArt", b =>
                 {
-                    b.HasBaseType("UnderSea.Model.Models.Upgrade");
+                    b.HasBaseType("UnderSea.Model.Models.Effect");
 
-                    b.HasDiscriminator().HasValue("upgrade_martialart");
+                    b.HasDiscriminator().HasValue("upgrade_effect_martialart");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -769,13 +763,13 @@ namespace UnderSea.Dal.Migrations
                     b.HasOne("UnderSea.Model.Models.Country", "AttackerCountry")
                         .WithMany("Attacks")
                         .HasForeignKey("AttackerCountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("UnderSea.Model.Models.Country", "DefenderCountry")
                         .WithMany("Defenses")
                         .HasForeignKey("DefenderCountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("UnderSea.Model.Models.User", "Winner")
@@ -846,11 +840,11 @@ namespace UnderSea.Dal.Migrations
                             b1.Property<int>("BasePearlProduction")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("CurrentCoralProduction")
-                                .HasColumnType("int");
+                            b1.Property<double>("CoralProductionMultiplier")
+                                .HasColumnType("float");
 
-                            b1.Property<int>("CurrentPearlProduction")
-                                .HasColumnType("int");
+                            b1.Property<double>("PearlProductionMultiplier")
+                                .HasColumnType("float");
 
                             b1.HasKey("CountryId");
 

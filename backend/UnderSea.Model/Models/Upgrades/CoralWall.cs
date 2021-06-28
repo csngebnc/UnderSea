@@ -7,24 +7,16 @@ using UnderSea.Model.Constants;
 
 namespace UnderSea.Model.Models
 {
-    public class CoralWall : Upgrade
+    public class CoralWall : Effect
     {
-        public override void ApplyUpgrade(Country country)
+        public override void ApplyEffect(Country country)
         {
-            var units = country.CountryUnits;
-            foreach(var u in units)
-            {
-                u.BonusDefensePoint = (int)Math.Round(u.BonusDefensePoint + u.Unit.DefensePoint * UpgradeConstants.CoralWall);
-            }
+            country.FightPoint.DefensePointMultiplier *= (1 + UpgradeConstants.CoralWall);
         }
 
-        public override void RemoveUpgrade(Country country)
+        public override void RemoveEffect(Country country)
         {
-            var units = country.CountryUnits;
-            foreach (var u in units)
-            {
-                u.BonusDefensePoint = (int)Math.Round(u.BonusDefensePoint - u.Unit.DefensePoint * UpgradeConstants.CoralWall);
-            }
+            country.FightPoint.DefensePointMultiplier /= (1 + UpgradeConstants.CoralWall);
         }
     }
 }
