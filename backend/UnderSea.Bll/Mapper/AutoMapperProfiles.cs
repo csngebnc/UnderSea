@@ -13,7 +13,10 @@ namespace UnderSea.Bll.Mapper
     {
         public AutoMapperProfiles()
         {
-            CreateMap<User, UserRankDto>();
+            CreateMap<User, UserRankDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.UserName));
+
+            CreateMap<Effect, EffectDto>();
 
             CreateMap<User, AttackableUserDto>()
                 .ForMember(e => e.Id, a => a.MapFrom(s => s.Id))
@@ -23,7 +26,7 @@ namespace UnderSea.Bll.Mapper
             CreateMap<Unit, BattleUnitDto>()
                 .ForMember(e => e.Id, a => a.MapFrom(s => s.Id))
                 .ForMember(e => e.Name, a => a.MapFrom(s => s.Name))
-                .ForMember(e => e.Count, a => a.MapFrom(s => s.CountryUnits.Count));
+                .ForMember(e => e.Count, a => a.MapFrom(s => s.CountryUnits.Where(cu => cu.UnitId == s.Id).FirstOrDefault().Count));
 
             CreateMap<SendAttackDto, Attack>()
                 .ForMember(e => e.DefenderCountryId, a => a.MapFrom(s => s.AttackedCountryId))
@@ -37,15 +40,6 @@ namespace UnderSea.Bll.Mapper
                 .ForMember(e => e.Id, a => a.MapFrom(s => s.UnitId))
                 .ForMember(e => e.Name, a => a.MapFrom(s => s.Unit.Name))
                 .ForMember(e => e.Count, a => a.MapFrom(s => s.Count));
-
-            CreateMap<Unit, UnitDto>()
-                .ForMember(e => e.Id, a => a.MapFrom(s => s.Id))
-                .ForMember(e => e.Name, a => a.MapFrom(s => s.Name))
-                .ForMember(e => e.MercenaryPerRound, a => a.MapFrom(s => s.MercenaryPerRound))
-                .ForMember(e => e.Price, a => a.MapFrom(s => s.Price))
-                .ForMember(e => e.SupplyPerRound, a => a.MapFrom(s => s.SupplyPerRound));
-
-
         }
     }
 }

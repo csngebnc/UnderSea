@@ -86,8 +86,32 @@ namespace UnderSea.Bll.Services
 
         public async Task<IEnumerable<UnitDto>> GetAllUnitsAsync()
         {
-            var units = await _context.Units.ProjectTo<UnitDto>(_mapper.ConfigurationProvider).ToListAsync();
-            return units;
+            var country = await _context.Countries.Where(c => c.OwnerId == _identityService.GetCurrentUserId()).Include(c => c.CountryUnits).FirstOrDefaultAsync();
+            if (country == null)
+                throw new Exception();
+
+            return (await _context.Units.ToListAsync())
+                .Select(unit =>
+                {
+                    var unitCount = country.CountryUnits.Where(cu => cu.UnitId == unit.Id).FirstOrDefault();
+                    var count = 0;
+                    if (unitCount != null)
+                        count = unitCount.Count;
+
+                    return new UnitDto
+                    {
+                        Id = unit.Id,
+                        Name = unit.Name,
+                        AttackPoint = unit.AttackPoint,
+                        DefensePoint = unit.DefensePoint,
+                        MercenaryPerRound = unit.MercenaryPerRound,
+                        SupplyPerRound = unit.SupplyPerRound,
+                        Price = unit.Price,
+                        CurrentCount = count
+                    };
+
+
+                });
         }
 
         public async Task BuyUnitAsync(BuyUnitDto unitDto)
@@ -174,7 +198,8 @@ namespace UnderSea.Bll.Services
 
                     if (cunit.Count >= unit.Count)
                     {
-                        cunit.Count -= unit.Count;
+                        cunit
+                            .Count -= unit.Count;
                     }
                     else
                     {

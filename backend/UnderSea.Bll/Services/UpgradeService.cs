@@ -40,10 +40,17 @@ namespace UnderSea.Bll.Services
 
             return upgrades.Select(upgrade =>
             {
-                var remaining_time = country.ActiveUpgradings
+                var _upgrade = country.ActiveUpgradings
                 .Where(u => u.UpgradeId == upgrade.Id)
-                .FirstOrDefault()
-                .EstimatedFinish - country.World.Round;
+                .FirstOrDefault();
+
+                var remaining_time = 0;
+                
+                if(_upgrade != null)
+                {
+                    remaining_time = _upgrade.EstimatedFinish - country.World.Round;
+                }
+            
 
                 return new UpgradeDto
                 {
@@ -52,7 +59,7 @@ namespace UnderSea.Bll.Services
                     Effects = _mapper.Map<ICollection<EffectDto>>(upgrade.UpgradeEffects.Select(ue => ue.Effect)),
                     DoesExist = country.CountryUpgrades.Select(cu => cu.UpgradeId).Contains(upgrade.Id),
                     IsUnderConstruction = country.ActiveUpgradings.Select(au => au.UpgradeId).Contains(upgrade.Id),
-                    RemainingTime = remaining_time > 0 ? remaining_time : 0
+                    RemainingTime = remaining_time
                 };
             });
         }
