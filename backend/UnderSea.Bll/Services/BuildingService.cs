@@ -61,6 +61,9 @@ namespace UnderSea.Bll.Services
             var building = await _context.Buildings.Where(c => c.Id == buildingDto.BuildingId).FirstOrDefaultAsync();
             if (building == null) throw new NullReferenceException();
 
+            var activebuilding = await _context.ActiveConstructions.Where(ac => ac.CountryId == country.Id).FirstOrDefaultAsync();
+            if (activebuilding != null) throw new InvalidOperationException();
+
             if (building.Price <= country.Pearl)
             {
                 ActiveConstruction activeConstruction = new ActiveConstruction()

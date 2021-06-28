@@ -64,6 +64,9 @@ namespace UnderSea.Bll.Services
                             .Include(c => c.World)
                             .FirstOrDefaultAsync();
 
+            var activeupgrade = await _context.ActiveUpgradings.Where(c => c.CountryId == country.Id).FirstOrDefaultAsync();
+            if (activeupgrade != null) throw new InvalidOperationException();
+
             if(await _context.CountryUpgrades.AnyAsync(c => c.CountryId == country.Id && c.UpgradeId == buyUpgradeDto.UpgradeId) &&
                 await _context.ActiveUpgradings.AnyAsync(au => au.CountryId == country.Id && au.UpgradeId == buyUpgradeDto.UpgradeId))
             {
