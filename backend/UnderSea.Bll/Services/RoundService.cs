@@ -189,6 +189,25 @@ namespace UnderSea.Bll.Services
                     }
                 }
             }
+
+        }
+
+        public async Task ReturnAttackUnits(ICollection<Country> countries, World world)
+        {
+            foreach (var attackerCountry in countries)
+            {
+                foreach (var attack in attackerCountry.Attacks.Where(c => world.Round == c.AttackRound)) 
+                {
+                    var attackUnits = attack.AttackUnits;
+
+                    foreach(var attackUnit in attackUnits)
+                    {
+                        var unit = attackerCountry.CountryUnits.Where(ac => ac.UnitId == attackUnit.UnitId).FirstOrDefault();
+                        unit.Count += attackUnit.Count;
+                    }
+                }
+            }
+            await _context.SaveChangesAsync();
         }
 
         public void CalculatePoints(ICollection<Country> countries)
@@ -264,6 +283,8 @@ namespace UnderSea.Bll.Services
                 MakeBuildings(countries,world);
 
                 Fights(countries,world);
+
+                await ReturnAttackUnits(countries, world);
 
                 CalculatePoints(countries);
 
