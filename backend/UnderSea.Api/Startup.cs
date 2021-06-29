@@ -1,30 +1,28 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Hangfire;
 using Hangfire.Common;
 using Hangfire.SqlServer;
-using IdentityServer4;
-using IdentityServer4.AccessTokenValidation;
-using Microsoft.AspNetCore.Authentication;
+using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NSwag;
-using NSwag.Generation.Processors.Security;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Threading.Tasks;
+using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Mapper;
+using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.SignalR;
+using UnderSea.Bll.Validation;
+using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -71,8 +69,6 @@ namespace UnderSea.Api
             // Add the processing server as IHostedService
             services.AddHangfireServer();
 
-            
-
             services.AddDbContext<UnderSeaDbContext>(options =>
                 options.UseSqlServer(
                     //Configuration.GetConnectionString("DefaultConnection")));
@@ -97,6 +93,13 @@ namespace UnderSea.Api
             services.AddTransient<IBuildingService, BuildingService>();
             services.AddTransient<IRoundService, RoundService>();
 
+            services.AddTransient<IValidator<BuyBuildingDto>, BuyBuildingValidator>();
+            services.AddTransient<IValidator<BuyUnitDto>, BuyUnitValidator>();
+            services.AddTransient<IValidator<BuyUpgradeDto>, BuyUpgradeValidator>();
+            services.AddTransient<IValidator<PaginationData>, PaginationDataValidator>();
+            services.AddTransient<IValidator<RegisterDto>, RegisterValidation>();
+            services.AddTransient<IValidator<SendAttackDto>, SendAttackValidator>();
+
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
                 .AddInMemoryPersistedGrants()
@@ -119,13 +122,15 @@ namespace UnderSea.Api
                 }
                 );
 
-            services.AddControllersWithViews();
+            services.AddProblemDetails(ConfigureProblemDetails);
+
+            services.AddControllersWithViews().AddFluentValidation();
             services.AddRazorPages(); 
             services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(UnderSeaDbContext context,IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -146,12 +151,14 @@ namespace UnderSea.Api
             app.UseHangfireDashboard("/hangfire");
 
             var manager = new RecurringJobManager();
-            //manager.AddOrUpdate("Next round", Job.FromExpression(() => new RoundService(context).NextRound()), Cron.Minutely());
+            manager.AddOrUpdate<IRoundService>("Next round", (roundService) => roundService.NextRound(), Cron.Hourly());
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
 
             app.UseRouting();
+
+            app.UseProblemDetails();
 
             app.UseAuthentication();
             app.UseIdentityServer();
@@ -165,6 +172,15 @@ namespace UnderSea.Api
                 endpoints.MapRazorPages();
                 endpoints.MapHub<RoundHub>("/roundHub");
             });
+        }
+
+        private void ConfigureProblemDetails(ProblemDetailsOptions options)
+        {
+            options.MapToStatusCode<NotExistsException>(StatusCodes.Status404NotFound);
+
+            options.MapToStatusCode<InvalidParameterException>(StatusCodes.Status400BadRequest);
+
+            options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
         }
     }
 }
