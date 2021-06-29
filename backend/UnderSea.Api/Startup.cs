@@ -1,3 +1,4 @@
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
 using Hangfire.Common;
@@ -22,9 +23,12 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Mapper;
+using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
+using UnderSea.Bll.Validation;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -84,6 +88,13 @@ namespace UnderSea.Api
             services.AddTransient<IBattleService, BattleService>();
             services.AddTransient<IBuildingService, BuildingService>();
             services.AddTransient<IRoundService, RoundService>();
+
+            services.AddTransient<IValidator<BuyBuildingDto>, BuyBuildingValidator>();
+            services.AddTransient<IValidator<BuyUnitDto>, BuyUnitValidator>();
+            services.AddTransient<IValidator<BuyUpgradeDto>, BuyUpgradeValidator>();
+            services.AddTransient<IValidator<PaginationData>, PaginationDataValidator>();
+            services.AddTransient<IValidator<RegisterDto>, RegisterValidation>();
+            services.AddTransient<IValidator<SendAttackDto>, SendAttackValidator>();
 
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
