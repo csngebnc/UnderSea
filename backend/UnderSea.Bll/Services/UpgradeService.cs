@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Services.Interfaces;
+using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 
 namespace UnderSea.Bll.Services
@@ -31,6 +32,9 @@ namespace UnderSea.Bll.Services
                 .Include(c => c.ActiveUpgradings)
                 .Include(c => c.CountryUpgrades)
                 .FirstOrDefaultAsync();
+
+            if (country == null)
+                throw new NotExistsException("Nem létezik ilyen ország.");
 
             var upgrades = await _context.Upgrades
                 .Include(u => u.UpgradeEffects)
@@ -71,16 +75,23 @@ namespace UnderSea.Bll.Services
                             .Include(c => c.World)
                             .FirstOrDefaultAsync();
 
-            var activeupgrade = await _context.ActiveUpgradings.Where(c => c.CountryId == country.Id).FirstOrDefaultAsync();
-            if (activeupgrade != null) throw new InvalidOperationException();
+            if (country == null)
+                throw new NotExistsException("Nem létezik ilyen ország.");
 
-            if(await _context.CountryUpgrades.AnyAsync(c => c.CountryId == country.Id && c.UpgradeId == buyUpgradeDto.UpgradeId) &&
+            var activeupgrade = await _context.ActiveUpgradings.Where(c => c.CountryId == country.Id).FirstOrDefaultAsync();
+            if (activeupgrade != null)
+                throw new InvalidParameterException("Már folyamatban van egy fejlesztés.");
+
+            if (await _context.CountryUpgrades.AnyAsync(c => c.CountryId == country.Id && c.UpgradeId == buyUpgradeDto.UpgradeId)  ||
                 await _context.ActiveUpgradings.AnyAsync(au => au.CountryId == country.Id && au.UpgradeId == buyUpgradeDto.UpgradeId))
             {
-                throw new Exception();
+                throw new InvalidParameterException("Már folyamatban van / megépítetted az adott fejlesztés.");
             }
 
             var upgrade = await _context.Upgrades.FindAsync(buyUpgradeDto.UpgradeId);
+
+            if (upgrade == null)
+                throw new NotExistsException("Nincs ilyen fejlesztés.");
 
             _context.ActiveUpgradings.Add(new Model.Models.ActiveUpgrading
             {

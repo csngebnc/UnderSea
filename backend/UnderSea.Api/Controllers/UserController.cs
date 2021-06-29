@@ -16,6 +16,7 @@ using UnderSea.Dal.Data;
 
 namespace UnderSea.Api.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
