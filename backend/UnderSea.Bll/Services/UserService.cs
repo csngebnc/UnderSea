@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services.Interfaces;
+using UnderSea.Bll.Validation;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -31,6 +32,10 @@ namespace UnderSea.Bll.Services
 
         public async Task<bool> Register(RegisterDto registerDto)
         {
+            RegisterValidation validator = new RegisterValidation(_context);
+            var validationResults = await validator.ValidateAsync(registerDto);
+
+
             var user = new User { UserName = registerDto.UserName.Trim() };
             
             if (registerDto.Password != registerDto.ConfirmPassword)

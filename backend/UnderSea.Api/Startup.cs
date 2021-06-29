@@ -19,6 +19,7 @@ using UnderSea.Bll.Mapper;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
+using UnderSea.Bll.SignalR;
 using UnderSea.Bll.Validation;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
@@ -38,6 +39,15 @@ namespace UnderSea.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder
+                .WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200" })
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+            });
+
             // Add Hangfire services.
             services.AddHangfire(configuration =>
             {
@@ -45,7 +55,7 @@ namespace UnderSea.Api
                             .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                             .UseSimpleAssemblyNameTypeSerializer()
                             .UseRecommendedSerializerSettings()
-                            .UseSqlServerStorage(Configuration.GetConnectionString("HangfireUnderSeaDb"), new SqlServerStorageOptions
+                            .UseSqlServerStorage(Configuration.GetConnectionString("AzureHangfireDbConnection"), new SqlServerStorageOptions
                             {
                                 CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
                                 SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
@@ -60,7 +70,8 @@ namespace UnderSea.Api
 
             services.AddDbContext<UnderSeaDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    //Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("AzureSqlDbConnection")));
 
             services.AddSwaggerDocument();
 
@@ -113,7 +124,8 @@ namespace UnderSea.Api
             services.AddProblemDetails(ConfigureProblemDetails);
 
             services.AddControllersWithViews().AddFluentValidation();
-            services.AddRazorPages();
+            services.AddRazorPages(); 
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -130,6 +142,8 @@ namespace UnderSea.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -155,13 +169,14 @@ namespace UnderSea.Api
                        name: "default",
                        pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<RoundHub>("/roundHub");
             });
         }
 
         private void ConfigureProblemDetails(ProblemDetailsOptions options)
         {
             options.MapToStatusCode<NotExistsException>(StatusCodes.Status404NotFound);
-            
+
             options.MapToStatusCode<InvalidParameterException>(StatusCodes.Status400BadRequest);
 
             options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
