@@ -30,16 +30,18 @@ class _ExpandableMenuState extends State<ExpandableMenu> {
             header: Container(
               padding: EdgeInsets.zero,
               child: isExpanded
-                  ? Icon(
+                  ? UnderseaStyles.imageIcon('caret_down', size: 35)
+                  /*Icon(
                       Icons.keyboard_arrow_down,
                       size: 40,
                       color: UnderseaStyles.navbarIconColor,
-                    )
-                  : Icon(
+                    )*/
+                  : UnderseaStyles.imageIcon('caret_up', size: 35),
+              /*Icon(
                       Icons.keyboard_arrow_up,
                       size: 40,
                       color: UnderseaStyles.navbarIconColor,
-                    ),
+                    ),*/
               decoration: BoxDecoration(color: Colors.white),
             ),
             theme: ExpandableThemeData(

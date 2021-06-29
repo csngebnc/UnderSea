@@ -72,11 +72,12 @@ class Buildings extends StatelessWidget {
                                     style: UnderseaStyles.listBold)
                                 : Container(),
                             Text(
-                                actualBuilding.currentAmount.toString() + ' db',
+                                actualBuilding.currentAmount.toString() +
+                                    Strings.amount.tr,
                                 style: UnderseaStyles.listRegular),
                             Text(
                                 actualBuilding.price.toString() +
-                                    ' Gyöngy / db',
+                                    Strings.pearl_cost_per_unit.tr,
                                 style: UnderseaStyles.listRegular)
                           ],
                         ),
@@ -93,7 +94,11 @@ class Buildings extends StatelessWidget {
                           ? Padding(
                               padding: EdgeInsets.all(10),
                               child: Text(
-                                'még ${actualBuilding.availableIn} kör',
+                                Strings.rounds_remaining.trParams({
+                                  'round': actualBuilding.availableIn.toString()
+                                })!,
+
+                                //'még ${actualBuilding.availableIn} kör',
                                 style: TextStyle(
                                     color: UnderseaStyles.underseaLogoColor,
                                     fontSize: 16),

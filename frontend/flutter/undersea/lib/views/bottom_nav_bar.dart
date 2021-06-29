@@ -21,7 +21,13 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
   static List<Widget> _appbarTitleOptions = <Widget>[
-    UnderseaStyles.appBarTitle(Strings.undersea.tr),
+    // UnderseaStyles.appBarTitle(Strings.undersea.tr),
+    SizedBox(
+      height: 35,
+      width: 100,
+      child: UnderseaStyles.imageIcon("undersea_small",
+          color: UnderseaStyles.underseaLogoColor),
+    ),
     UnderseaStyles.appBarTitle(Strings.my_city.tr),
     UnderseaStyles.appBarTitle(Strings.attack.tr),
     UnderseaStyles.appBarTitle(Strings.my_forces.tr),
@@ -45,7 +51,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         //extendBody: true,
         appBar: AppBar(
           toolbarHeight: 85,
-          backgroundColor: Color(0xFF1C3E76),
+          backgroundColor: UnderseaStyles.hintColor,
           actions: [
             if (_selectedIndex == 0)
               Padding(
@@ -58,7 +64,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       child: SizedBox(
                           height: 40,
                           child: UnderseaStyles.assetIcon("profile",
-                              iconSize: 40))))
+                              iconSize: 42))))
           ],
           title: _appbarTitleOptions.elementAt(_selectedIndex),
         ),
@@ -77,25 +83,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
           child: BottomNavigationBar(
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: UnderseaStyles.imageIcon('tab_home'),
                 label: Strings.home_page.tr,
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.business,
-                ),
+                icon: UnderseaStyles.imageIcon('tab_city'),
                 label: Strings.my_city.tr,
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.school,
-                ),
+                icon: UnderseaStyles.imageIcon('tab_attack'),
                 label: Strings.attack.tr,
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.school,
-                ),
+                icon: UnderseaStyles.imageIcon('tab_units'),
                 label: Strings.my_forces.tr,
               ),
             ],

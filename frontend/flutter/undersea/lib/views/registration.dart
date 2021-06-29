@@ -54,14 +54,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
             child: Center(
                 child: SingleChildScrollView(
               child: Column(children: [
-                SizedBox(height: 30),
+                SizedBox(height: 25),
                 SizedBox(
-                  child: Text('UNDERSEA',
-                      style: UnderseaStyles.buttonTextStyle.copyWith(
-                          fontSize: 46,
-                          color: UnderseaStyles.underseaLogoColor)),
-                ),
-                //SizedBox(height: 25),
+                    height: 100,
+                    child: UnderseaStyles.imageIcon("undersea_big",
+                        color: UnderseaStyles.underseaLogoColor, size: 250)),
                 Container(
                   color: Colors.transparent,
                   child: Padding(

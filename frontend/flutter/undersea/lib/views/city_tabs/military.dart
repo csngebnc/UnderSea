@@ -81,37 +81,41 @@ class Military extends StatelessWidget {
               SizedBox(height: 8),
               Row(
                 children: [
-                  UnderseaStyles.text('Birtokodban:'),
+                  UnderseaStyles.text(Strings.you_possess.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text('5 db'),
+                  UnderseaStyles.text(
+                      actualSoldier.amount.toString() + Strings.amount.tr),
                 ],
               ),
               Row(
                 children: [
-                  UnderseaStyles.text('Támadás/Védekezés:'),
+                  UnderseaStyles.text(Strings.attack_defence.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text('5/5'),
+                  UnderseaStyles.text(actualSoldier.attackDefence()),
                 ],
               ),
               Row(
                 children: [
-                  UnderseaStyles.text('Zsold(/kör/példány)'),
+                  UnderseaStyles.text(Strings.mercenary_payment.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text('1 Gyöngy'),
+                  UnderseaStyles.text(
+                      actualSoldier.payment.toString() + Strings.pearl_cost.tr),
                 ],
               ),
               Row(
                 children: [
-                  UnderseaStyles.text('Ellátmány:'),
+                  UnderseaStyles.text(Strings.supply_needs.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text('1 korall'),
+                  UnderseaStyles.text(
+                      actualSoldier.supplyNeeds.toString() + Strings.coral.tr),
                 ],
               ),
               Row(
                 children: [
-                  UnderseaStyles.text('Ár:'),
+                  UnderseaStyles.text(Strings.price.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text('200 gyöngy'),
+                  UnderseaStyles.text(
+                      actualSoldier.price.toString() + Strings.pearl_cost.tr),
                 ],
               ),
               SizedBox(height: 20),
@@ -122,10 +126,7 @@ class Military extends StatelessWidget {
                     onPressed: () {},
                     elevation: 2.0,
                     fillColor: UnderseaStyles.underseaLogoColor,
-                    child: Icon(
-                      Icons.exposure_minus_1,
-                      size: 35.0,
-                    ),
+                    child: UnderseaStyles.iconsFromImages('minus'),
                     padding: EdgeInsets.all(5.0),
                     shape: CircleBorder(),
                   ),
@@ -135,10 +136,7 @@ class Military extends StatelessWidget {
                     onPressed: () {},
                     elevation: 2.0,
                     fillColor: UnderseaStyles.underseaLogoColor,
-                    child: Icon(
-                      Icons.plus_one,
-                      size: 35.0,
-                    ),
+                    child: UnderseaStyles.iconsFromImages('plus'),
                     padding: EdgeInsets.all(5.0),
                     shape: CircleBorder(),
                   ),
@@ -148,9 +146,6 @@ class Military extends StatelessWidget {
           ),
         ),
       ),
-      /*decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: UnderseaStyles.hintColor))*/
     ));
   }
 }

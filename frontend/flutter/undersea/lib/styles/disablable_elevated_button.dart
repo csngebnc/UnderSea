@@ -27,7 +27,10 @@ class _ToggleableElevatedButtonState extends State<ToggleableElevatedButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        _isDisabled ? null : widget.onPressed();
+        if (_isDisabled)
+          () {};
+        else
+          widget.onPressed();
       },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,

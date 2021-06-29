@@ -20,8 +20,8 @@ class ExpandedMenu extends StatelessWidget {
         children: [
           UnderseaStyles.resourceIcon("pearl", 230, 12),
           UnderseaStyles.resourceIcon("coral", 230, 12),
-          UnderseaStyles.buildingIcon("coral", 1),
-          UnderseaStyles.buildingIcon("coral", 0),
+          UnderseaStyles.buildingIcon("zatonyvar@3x", 1),
+          UnderseaStyles.buildingIcon("aramlasiranyito@3x", 0),
         ],
       )
     ]);

@@ -39,17 +39,14 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
         child: Container(),
       ),
       InkWell(
-          onTap: () {
-            setState(() {
-              _editingController.text = _cityName;
-              _isEditingText = true;
-            });
-          },
-          child: Icon(
-            Icons.mode_edit_outline_outlined,
-            color: Colors.white,
-            size: 30,
-          ))
+        onTap: () {
+          setState(() {
+            _editingController.text = _cityName;
+            _isEditingText = true;
+          });
+        },
+        child: UnderseaStyles.imageIcon("edit", color: Colors.white, size: 32),
+      )
     ]);
   }
 

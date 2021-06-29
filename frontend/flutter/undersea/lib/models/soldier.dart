@@ -9,6 +9,10 @@ class Soldier {
   String name;
   String iconName;
 
+  String attackDefence() {
+    return '$attack/$defence';
+  }
+
   Soldier(
       {required this.amount,
       required this.attack,

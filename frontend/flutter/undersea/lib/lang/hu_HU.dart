@@ -33,5 +33,17 @@ const Map<String, String> hu_HU = {
   Strings.upgrades_manual_hint:
       'Minden fejlesztés 15 kört vesz igénybe, egyszerre csak egy dolog fejleszthető és minden csak egyszer fejleszthető ki (nem lehet két kombájn).',
   Strings.military_manual_title: 'Jelöld ki, amelyiket szeretnéd',
-  Strings.military_manual_hint: ''
+  Strings.military_manual_hint: '',
+  Strings.rounds_remaining: 'még @round kör',
+  Strings.amount: ' db',
+  Strings.pearl_cost: ' Gyöngy',
+  Strings.price: 'Ár:',
+  Strings.supply_needs: 'Ellátmány:',
+  Strings.mercenary_payment: 'Zsold(/kör/példány)',
+  Strings.attack_defence: 'Támadás/Védekezés',
+  Strings.you_possess: 'Birtokodban:',
+  Strings.coral: 'korall ',
+  Strings.pearl_cost_per_unit: ' Gyöngy / db',
+  Strings.proceed: 'Tovább',
+  Strings.lets_attack: 'Megtámadom!',
 };

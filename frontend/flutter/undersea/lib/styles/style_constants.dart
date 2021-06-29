@@ -36,32 +36,46 @@ class UnderseaStyles {
       colors: gradientColors);
   static const shadowColor = Color(0xFF3B7DBD);
   static const hintColor = Color(0xFF1C3E76);
+  static const alternativeHintColor = Color(0xFF001234);
   static const navbarIconColor = Color(0xFF001234);
   static const unselectedNavbarIconColor = Color(0x33001234);
   static const hintStyle =
       TextStyle(color: UnderseaStyles.hintColor, fontSize: 19);
 
-  static Widget inputField({required String hint, bool isPassword = false}) {
+  static void _defaultOnChanged(String s) {}
+
+  static Widget inputField({
+    required String hint,
+    bool isPassword = false,
+    Color color = Colors.white,
+    Color hintColor = hintColor,
+    void Function(String) onChanged = _defaultOnChanged,
+  }) {
     return Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(32.0), color: Colors.white),
+            borderRadius: BorderRadius.circular(32.0), color: color),
         child: TextField(
           obscureText: isPassword,
           style: UnderseaStyles.inputTextStyle,
+          onChanged: onChanged,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
               hintText: hint,
-              hintStyle: UnderseaStyles.hintStyle,
+              hintStyle: UnderseaStyles.hintStyle.copyWith(color: hintColor),
               border: InputBorder.none),
         ));
   }
 
-  static Widget infoPanel(String title, String hint) {
+  static Widget infoPanel(
+    String title,
+    String hint, {
+    EdgeInsets padding = const EdgeInsets.fromLTRB(20, 30, 0, 0),
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-            padding: EdgeInsets.fromLTRB(20, 30, 0, 0),
+            padding: padding,
             child: Text(title,
                 style: UnderseaStyles.whiteOpenSans
                     .copyWith(fontWeight: FontWeight.bold, fontSize: 20))),
@@ -79,17 +93,17 @@ class UnderseaStyles {
     return Image.asset('assets/buildings/$name.png');
   }
 
-  static Widget assetIcon(
-    String iconName, {
-    double iconSize = 40,
-  }) {
+  static Widget assetIcon(String iconName,
+      {double iconSize = 40, bool isBuilding = false}) {
     return Container(
-      decoration: BoxDecoration(
-          color: Color(0xFF9FFFF0),
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Color(0xFF428DFF), width: 3)),
+      decoration: isBuilding
+          ? null
+          : BoxDecoration(
+              color: Color(0xFF9FFFF0),
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: Color(0xFF428DFF), width: 3.5)),
       child: Padding(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(isBuilding ? 0 : 8),
         child: Container(
           child: SizedBox(height: iconSize, width: iconSize),
           decoration: BoxDecoration(
@@ -164,7 +178,7 @@ class UnderseaStyles {
         margin: EdgeInsets.all(12),
         child: Column(
           children: [
-            UnderseaStyles.assetIcon(assetName),
+            UnderseaStyles.assetIcon(assetName, isBuilding: true, iconSize: 60),
             Text(
               '$amount',
               style: UnderseaStyles.buttonTextStyle.copyWith(
@@ -286,7 +300,32 @@ class UnderseaStyles {
     );
   }
 
-  static Widget tabSkeleton({required Widget list}) {
+  static Widget imageIcon(String name,
+      {String additional = '@3x', Color? color, double? size}) {
+    return ImageIcon(
+      AssetImage(
+        "assets/icons/$name$additional.png",
+      ),
+      color: color,
+      size: size,
+    );
+  }
+
+  static Widget iconsFromImages(String name, {double size = 35}) {
+    return SizedBox(
+        child: Image.asset(
+          "assets/icons/$name@3x.png",
+        ),
+        height: size,
+        width: size);
+  }
+
+  static void _emptyFunction() {}
+  static Widget tabSkeleton(
+      {required Widget list,
+      String buttonText = Strings.buy_button,
+      bool buttonInitiallyDisabled = true,
+      Function onButtonPressed = _emptyFunction}) {
     return Expanded(
         child: Stack(fit: StackFit.expand, children: [
       Container(
@@ -309,9 +348,9 @@ class UnderseaStyles {
                   child: Align(
                       alignment: Alignment.center,
                       child: ToggleableElevatedButton(
-                        text: Strings.buy_button.tr,
-                        onPressed: () {},
-                        initiallyDisabled: true,
+                        text: buttonText.tr,
+                        onPressed: onButtonPressed,
+                        initiallyDisabled: buttonInitiallyDisabled,
                       ))))
         ],
       ),
