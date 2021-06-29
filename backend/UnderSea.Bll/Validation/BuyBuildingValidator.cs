@@ -10,14 +10,14 @@ using UnderSea.Dal.Data;
 
 namespace UnderSea.Bll.Validation
 {
-    public class BuildingValidator : AbstractValidator<BuyBuildingDto>
+    public class BuyBuildingValidator : AbstractValidator<BuyBuildingDto>
     {
         private readonly UnderSeaDbContext _context;
 
-        public BuildingValidator(UnderSeaDbContext context)
+        public BuyBuildingValidator(UnderSeaDbContext context)
         {
             this._context = context;
-            RuleFor(building => building.BuildingId).NotNull().MustAsync(async (buildingId, cancellation) =>await BuildingExist(buildingId));
+            RuleFor(building => building.BuildingId).NotNull().MustAsync(async (buildingId, cancellation) =>await BuildingExist(buildingId)).WithMessage("Nem létezik ilyen építmény!");
         }
 
         private async Task<bool> BuildingExist(int buildingId) 
