@@ -11,6 +11,8 @@ using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Extensions;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services.Interfaces;
+using UnderSea.Bll.Validation;
+using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -31,6 +33,9 @@ namespace UnderSea.Bll.Services
 
         public async Task<PagedResult<AttackableUserDto>> GetAttackableUsersAsync(PaginationData data)
         {
+            PaginationDataValidator validator = new PaginationDataValidator();
+            validator.Validate(data);
+
             var userId = GetUserId();
             var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Country).ThenInclude(c => c.Attacks).ThenInclude(a => a.DefenderCountry).FirstOrDefaultAsync();
             var attackableusers = await _context.Users.Where(c => c.Id != userId && !user.Country.Attacks.Select(a => a.DefenderCountry.OwnerId).Contains(c.Id)).ProjectTo<AttackableUserDto>(_mapper.ConfigurationProvider).ToPagedList(data.PageSize,data.PageNumber);
@@ -53,6 +58,9 @@ namespace UnderSea.Bll.Services
 
         public async Task<PagedResult<LoggedAttackDto>> GetLoggedAttacksAsync(PaginationData data)
         {
+            PaginationDataValidator validator = new PaginationDataValidator();
+            validator.Validate(data);
+
             var country = await GetCountry();
             
             var attacks = await _context.Attacks
@@ -90,7 +98,7 @@ namespace UnderSea.Bll.Services
         {
             var country = await _context.Countries.Where(c => c.OwnerId == _identityService.GetCurrentUserId()).Include(c => c.CountryUnits).FirstOrDefaultAsync();
             if (country == null)
-                throw new Exception();
+                throw new NotExistsException("A bejelentkezett felhasználóhoz nem tartozik ország.");
 
             return (await _context.Units.ToListAsync())
                 .Select(unit =>
@@ -118,14 +126,17 @@ namespace UnderSea.Bll.Services
 
         public async Task BuyUnitAsync(BuyUnitDto unitDto)
         {
+            BuyUnitValidator validator = new BuyUnitValidator(_context);
+            await validator.ValidateAsync(unitDto);
+
             var country = await GetCountry();
 
             var unit = await _context.Units.Where(c => c.Id == unitDto.UnitId).FirstOrDefaultAsync();
-            if (unit == null) throw new NullReferenceException();
+            if (unit == null) throw new NotExistsException("Nem létezik ilyen egység, amit meg lehetne vásárolni.");
 
             var unitSum = country.CountryUnits.Select(cu => cu.Count).Sum();
             if (country.MaxUnitCount - unitSum - unitDto.Count < 0)
-                throw new InvalidOperationException();
+                throw new InvalidParameterException("Nem lehetséges ez a művelet: a maximális egység számánál nem lehet több a felhasználó egységeinek száma.");
 
 
             var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id).FirstOrDefaultAsync();
@@ -151,7 +162,7 @@ namespace UnderSea.Bll.Services
             }
             else
             {
-                throw new InvalidOperationException();
+                throw new InvalidParameterException("Nincs elég gyöngy az egységek megvásárlásához.");
             }
 
             await _context.SaveChangesAsync();
@@ -159,12 +170,15 @@ namespace UnderSea.Bll.Services
 
         public async Task AttackAsync(SendAttackDto attackDto)
         {
+            SendAttackValidator validatior = new SendAttackValidator(_context);
+            await validatior.ValidateAsync(attackDto);
+
             var attackerCountry = await GetCountry();
 
             var attackedCountry = await _context.Countries.Where(c => c.Id == attackDto.AttackedCountryId).FirstOrDefaultAsync();
-            if (attackedCountry == null) throw new NullReferenceException();
+            if (attackedCountry == null) throw new NotExistsException("Nem létezik ilyen ország, ami megtámadható lenne.");
 
-            if(attackerCountry.Id == attackDto.AttackedCountryId) throw new InvalidOperationException();
+            if(attackerCountry.Id == attackDto.AttackedCountryId) throw new InvalidParameterException("Nem támadhatja meg saját magát az ország.");
 
             await AttackLogic(attackerCountry, attackedCountry, attackDto);
         }
@@ -187,7 +201,7 @@ namespace UnderSea.Bll.Services
                 if (newAttack.Entity == null)
                 {
                     await transaction.RollbackAsync();
-                    throw new InvalidOperationException();
+                    throw new InvalidParameterException("Nem sikerült létrehozni a támadást.");
                 }
 
                 foreach (var unit in attackDto.Units)
@@ -203,7 +217,7 @@ namespace UnderSea.Bll.Services
                     if (cunit == null)
                     {
                         await transaction.RollbackAsync();
-                        throw new InvalidOperationException();
+                        throw new InvalidParameterException("Nincsen ilyen egysége az országnak.");
                     }
 
                     if (cunit.Count >= unit.Count)
@@ -214,7 +228,7 @@ namespace UnderSea.Bll.Services
                     else
                     {
                         await transaction.RollbackAsync();
-                        throw new InvalidOperationException();
+                        throw new InvalidParameterException("Nincs elegendő egység amit a támadáshoz kértek.");
                     }
 
                     var newAttackUnit = _context.AttackUnits.Add(attackUnit);
@@ -222,7 +236,7 @@ namespace UnderSea.Bll.Services
                     if (newAttackUnit.Entity == null)
                     {
                         await transaction.RollbackAsync();
-                        throw new InvalidOperationException();
+                        throw new InvalidParameterException("Nem sikerült a támadáshoz rendelni az egységet.");
                     }
                 }
 
@@ -234,7 +248,7 @@ namespace UnderSea.Bll.Services
         private string GetUserId()
         {
             var userId = _identityService.GetCurrentUserId();
-            if (string.IsNullOrEmpty(userId)) throw new NullReferenceException();
+            if (string.IsNullOrEmpty(userId)) throw new NotExistsException("Nincs felhasználó bejelentkezve.");
 
             return userId;
         }
@@ -244,7 +258,7 @@ namespace UnderSea.Bll.Services
             var userId = GetUserId();
 
             var country = await _context.Countries.Include(w => w.World).Include(c => c.CountryUnits).Where(c => c.OwnerId == userId).FirstOrDefaultAsync();
-            if (country == null) throw new NullReferenceException();
+            if (country == null) throw new NotExistsException("A bejelentkezett felhasználóhoz nem tartozik ország.");
 
             return country;
         }
