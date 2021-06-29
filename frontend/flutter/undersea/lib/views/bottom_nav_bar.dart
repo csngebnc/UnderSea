@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/navbar_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/attack_page.dart';
@@ -19,6 +20,7 @@ class BottomNavBar extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _BottomNavBarState extends State<BottomNavBar> {
+  final BottomNavBarController controller = Get.put(BottomNavBarController());
   int _selectedIndex = 0;
   static List<Widget> _appbarTitleOptions = <Widget>[
     // UnderseaStyles.appBarTitle(Strings.undersea.tr),
@@ -41,19 +43,20 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      //_selectedIndex = index;
+      controller.selectedTab.value = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(() => Scaffold(
         //extendBody: true,
         appBar: AppBar(
           toolbarHeight: 85,
           backgroundColor: UnderseaStyles.hintColor,
           actions: [
-            if (_selectedIndex == 0)
+            /*_selectedIndex*/ if (controller.selectedTab.value == 0)
               Padding(
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: GestureDetector(
@@ -66,10 +69,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
                           child: UnderseaStyles.assetIcon("profile",
                               iconSize: 42))))
           ],
-          title: _appbarTitleOptions.elementAt(_selectedIndex),
+          title: _appbarTitleOptions.elementAt(controller.selectedTab.value),
         ),
         body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
+          child: _widgetOptions.elementAt(controller.selectedTab.value),
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -99,7 +102,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 label: Strings.my_forces.tr,
               ),
             ],
-            currentIndex: _selectedIndex,
+            currentIndex: controller.selectedTab.value,
             iconSize: 30,
             backgroundColor: Colors.transparent,
             selectedItemColor: UnderseaStyles.navbarIconColor,
@@ -111,6 +114,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
             unselectedLabelStyle: UnderseaStyles.bottomNavbarTextStyle
                 .copyWith(color: UnderseaStyles.unselectedNavbarIconColor),
           ),
-        ));
+        )));
   }
 }

@@ -2,16 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/navbar_controller.dart';
 import 'package:undersea/styles/style_constants.dart';
-import 'package:undersea/views/attack_page.dart';
 
-class Leaderboard extends StatelessWidget {
+class Leaderboard extends StatefulWidget {
   Leaderboard({Key? key}) : super(key: key);
 
-  late final Timer? _debounce;
+  @override
+  _LeaderboardState createState() => _LeaderboardState();
+}
+
+class _LeaderboardState extends State<Leaderboard> {
+  final BottomNavBarController controller = Get.find<BottomNavBarController>();
+
+  Timer? _debounce;
   void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 1000), () {
+    _debounce = Timer(const Duration(milliseconds: 2000), () {
       Get.snackbar("Query changed", query,
           icon: Icon(Icons.app_registration),
           snackPosition: SnackPosition.TOP,
@@ -32,7 +39,8 @@ class Leaderboard extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(20, 10, 30, 10),
               child: GestureDetector(
                   onTap: () {
-                    Get.to(AttackPage());
+                    Get.back();
+                    controller.selectedTab.value = 2;
                   },
                   child: SizedBox(
                     height: 40,
