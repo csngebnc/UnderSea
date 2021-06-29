@@ -17,13 +17,17 @@ namespace UnderSea.Bll.Validation
         public RegisterValidation(UnderSeaDbContext context)
         {
             this._context = context;
-            RuleFor(user => user.UserName).NotNull().NotEmpty().MustAsync(async (userName, cancellation) 
-                => await UsernameNotExist(userName)).WithMessage("A megadott felhasználónévvel már létezik felhasználó.");
+            RuleFor(user => user.UserName).NotNull().NotEmpty()
+                .MustAsync(async (userName, cancellation) => await UsernameNotExist(userName)).WithMessage("A megadott felhasználónévvel már létezik felhasználó.")
+                .MustAsync(async (userName, cancellation) => NotContainsSpace(userName)).WithMessage("A felhasználónév nem tartalmazhat szóközt.");
             RuleFor(user => user.Password).NotNull().NotEmpty().Equal(u => u.ConfirmPassword).WithMessage("A megadott jelszavaknak egyezni kell.");
             RuleFor(user => user.CountryName).NotNull().NotEmpty().WithMessage("Az ország nevének megadása kötelező.");
         }
 
         private async Task<bool> UsernameNotExist(string userName)
             => await _context.Users.Where(u => u.UserName == userName).AnyAsync();
+
+        private bool NotContainsSpace(string userName)
+            => !userName.Contains(" ") ;
     }
 }
