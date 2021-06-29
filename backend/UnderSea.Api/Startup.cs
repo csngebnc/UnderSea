@@ -1,34 +1,26 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
-using Hangfire.Common;
 using Hangfire.SqlServer;
-using IdentityServer4;
-using IdentityServer4.AccessTokenValidation;
-using Microsoft.AspNetCore.Authentication;
+using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NSwag;
-using NSwag.Generation.Processors.Security;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Mapper;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation;
+using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -118,6 +110,8 @@ namespace UnderSea.Api
                 }
                 );
 
+            services.AddProblemDetails(ConfigureProblemDetails);
+
             services.AddControllersWithViews().AddFluentValidation();
             services.AddRazorPages();
         }
@@ -149,6 +143,8 @@ namespace UnderSea.Api
 
             app.UseRouting();
 
+            app.UseProblemDetails();
+
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
@@ -160,6 +156,15 @@ namespace UnderSea.Api
                        pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+        }
+
+        private void ConfigureProblemDetails(ProblemDetailsOptions options)
+        {
+            options.MapToStatusCode<NotExistsException>(StatusCodes.Status404NotFound);
+            
+            options.MapToStatusCode<InvalidParameterException>(StatusCodes.Status400BadRequest);
+
+            options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
         }
     }
 }
