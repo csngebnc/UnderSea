@@ -122,24 +122,10 @@ class Military extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  RawMaterialButton(
-                    onPressed: () {},
-                    elevation: 2.0,
-                    fillColor: UnderseaStyles.underseaLogoColor,
-                    child: UnderseaStyles.iconsFromImages('minus'),
-                    padding: EdgeInsets.all(5.0),
-                    shape: CircleBorder(),
-                  ),
+                  UnderseaStyles.circleButton("minus"),
                   Text('0',
                       style: UnderseaStyles.listBold.copyWith(fontSize: 22)),
-                  RawMaterialButton(
-                    onPressed: () {},
-                    elevation: 2.0,
-                    fillColor: UnderseaStyles.underseaLogoColor,
-                    child: UnderseaStyles.iconsFromImages('plus'),
-                    padding: EdgeInsets.all(5.0),
-                    shape: CircleBorder(),
-                  ),
+                  UnderseaStyles.circleButton("plus"),
                 ],
               )
             ],

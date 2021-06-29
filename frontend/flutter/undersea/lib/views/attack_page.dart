@@ -14,7 +14,6 @@ class AttackPage extends StatefulWidget {
 class _AttackPageState extends State<AttackPage> {
   var sliderValues = List<int>.generate(3, (index) => 0);
   var mercenaryPrice = 0;
-  //var sliderMaxValues = List<int>.generate(3, (index) => 50);
   var soldierList = <Soldier>[
     Soldier(
         amount: 20,
@@ -44,7 +43,6 @@ class _AttackPageState extends State<AttackPage> {
         price: 50,
         iconName: 'seahorse')
   ];
-  final iconNames = ['shark', 'seal', 'seahorse'];
   bool firstPage = true;
   late final Timer? _debounce;
   void _onSearchChanged(String query) {
@@ -84,15 +82,15 @@ class _AttackPageState extends State<AttackPage> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('1. LÉPÉS',
+                        Text(Strings.first_step.tr,
                             style:
                                 UnderseaStyles.listBold.copyWith(fontSize: 22)),
-                        Text('Jelöld ki, kit szeretnél megtámadni:',
+                        Text(Strings.select.tr,
                             style: UnderseaStyles.listRegular
                                 .copyWith(fontSize: 22)),
                         SizedBox(height: 20),
                         UnderseaStyles.inputField(
-                            hint: 'Felhasználónév',
+                            hint: Strings.username.tr,
                             color: Color(0xFF657A9D),
                             hintColor: UnderseaStyles.alternativeHintColor,
                             onChanged: _onSearchChanged),
@@ -148,7 +146,7 @@ class _AttackPageState extends State<AttackPage> {
                                   firstPage = true;
                                 });
                               },
-                              child: Text("vissza",
+                              child: Text(Strings.back.tr,
                                   style: UnderseaStyles.buttonTextStyle
                                       .copyWith(
                                           color:
@@ -159,7 +157,7 @@ class _AttackPageState extends State<AttackPage> {
                         ),
                       ),
                       UnderseaStyles.infoPanel(
-                          '2. LÉPÉS', 'Állítsd be, kiket küldesz harcba:',
+                          Strings.second_step, Strings.unit_select,
                           padding: EdgeInsets.fromLTRB(20, 10, 0, 0)),
                       SizedBox(
                         height: 20,
@@ -175,11 +173,9 @@ class _AttackPageState extends State<AttackPage> {
                         SizedBox(
                           height: 70,
                           width: 70,
-                          child: UnderseaStyles.assetIcon(iconNames[i - 1]),
+                          child: UnderseaStyles.assetIcon(
+                              soldierList[i - 1].iconName),
                         ),
-                        /*SizedBox(
-                          width: 8,
-                        ),*/
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

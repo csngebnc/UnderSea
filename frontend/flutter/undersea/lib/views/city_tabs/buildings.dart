@@ -97,8 +97,6 @@ class Buildings extends StatelessWidget {
                                 Strings.rounds_remaining.trParams({
                                   'round': actualBuilding.availableIn.toString()
                                 })!,
-
-                                //'még ${actualBuilding.availableIn} kör',
                                 style: TextStyle(
                                     color: UnderseaStyles.underseaLogoColor,
                                     fontSize: 16),

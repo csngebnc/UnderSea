@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/lang/strings.dart';
@@ -89,8 +91,16 @@ class UnderseaStyles {
     );
   }
 
-  static Widget buildingImage(String name) {
-    return Image.asset('assets/buildings/$name.png');
+  static Widget building(String name, Random rng) {
+    return Positioned(
+        height: 180,
+        top: rng.nextDouble() * 200,
+        left: rng.nextDouble() * 500,
+        child: UnderseaStyles.buildingImage(name, additional: "@3x"));
+  }
+
+  static Widget buildingImage(String name, {String additional = ''}) {
+    return Image.asset('assets/buildings/$name$additional.png');
   }
 
   static Widget assetIcon(String iconName,
@@ -141,6 +151,18 @@ class UnderseaStyles {
             )
           ],
         ));
+  }
+
+  static Widget circleButton(String iconName,
+      {void Function()? onPressed = _emptyFunction}) {
+    return RawMaterialButton(
+      onPressed: onPressed,
+      elevation: 2.0,
+      fillColor: UnderseaStyles.underseaLogoColor,
+      child: UnderseaStyles.iconsFromImages(iconName),
+      padding: EdgeInsets.all(5.0),
+      shape: CircleBorder(),
+    );
   }
 
   static Widget resourceIcon(String assetName, int current, int production) {

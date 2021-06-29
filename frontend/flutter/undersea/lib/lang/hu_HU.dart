@@ -46,4 +46,10 @@ const Map<String, String> hu_HU = {
   Strings.pearl_cost_per_unit: ' Gyöngy / db',
   Strings.proceed: 'Tovább',
   Strings.lets_attack: 'Megtámadom!',
+  Strings.first_step: '1. LÉPÉS',
+  Strings.select: 'Jelöld ki, kit szeretnél megtámadni:',
+  Strings.unit_select: 'Állítsd be, kiket küldesz harcba:',
+  Strings.second_step: '2. LÉPÉS',
+  Strings.back: 'vissza',
+  Strings.leaderboard: 'Ranglista',
 };
