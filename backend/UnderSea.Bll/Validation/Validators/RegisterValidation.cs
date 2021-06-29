@@ -19,7 +19,7 @@ namespace UnderSea.Bll.Validation
             this._context = context;
             RuleFor(user => user.UserName).NotNull().NotEmpty()
                 .MustAsync(async (userName, cancellation) => await UsernameNotExist(userName)).WithMessage("A megadott felhasználónévvel már létezik felhasználó.")
-                .MustAsync(async (userName, cancellation) => NotContainsSpace(userName)).WithMessage("A felhasználónév nem tartalmazhat szóközt.");
+                .Must( (user, cancellation) => NotContainsSpace(user.UserName)).WithMessage("A felhasználónév nem tartalmazhat szóközt.");
             RuleFor(user => user.Password).NotNull().NotEmpty().Equal(u => u.ConfirmPassword).WithMessage("A megadott jelszavaknak egyezni kell.");
             RuleFor(user => user.CountryName).NotNull().NotEmpty().WithMessage("Az ország nevének megadása kötelező.");
         }
