@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Resource } from 'src/app/models/resource.model';
+import { Building } from 'src/app/models/building.model';
 
 @Component({
   selector: 'building-container',
@@ -7,7 +7,7 @@ import { Resource } from 'src/app/models/resource.model';
   styleUrls: ['./building-container.component.scss'],
 })
 export class BuildingContainerComponent implements OnInit {
-  @Input() buildings: Array<Resource>;
+  @Input() buildings: Array<Building>;
 
   constructor() {}
 
@@ -16,7 +16,7 @@ export class BuildingContainerComponent implements OnInit {
   playerHasBuilding(name: string): boolean {
     let result = this.buildings.find((c) => c.name === name);
 
-    if (!result || result.count === 0) return false;
+    if (!result || result.buildingsCount === 0) return false;
     else return true;
   }
 

@@ -14,8 +14,8 @@
 
     <resource-info
       id="shell"
-      [count]="resources.shells"
-      [perRound]="resources.shellsPerRound"
+      [count]="resources.pearls"
+      [perRound]="resources.pearlsPerRound"
       class="d-flex w-12 to-flex-end align-center"
     ></resource-info>
     <resource-info
@@ -29,7 +29,7 @@
       *ngFor="let building of resources.buildings"
       id="shark"
       [count]="building.count"
-      [underConstruction]="countUnderConstrction(building.id)"
+      [underConstruction]="building.activeConstructionCount"
       class="d-flex w-12 to-flex-end align-center"
     ></resource-info>
   </div>

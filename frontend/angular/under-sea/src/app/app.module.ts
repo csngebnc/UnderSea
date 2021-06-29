@@ -31,6 +31,7 @@ import { PagerButtonsComponent } from './components/pager-buttons/pager-buttons.
 
 import * as generated from './services/generated-code/generated-api-code';
 import * as config from 'src/assets/config.json';
+import { LoadingComponent } from './components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import * as config from 'src/assets/config.json';
     UnitDetailsComponent,
     UnitSliderComponent,
     PagerButtonsComponent,
+    LoadingComponent,
   ],
   imports: [
     BrowserModule,

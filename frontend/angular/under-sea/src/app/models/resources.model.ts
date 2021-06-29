@@ -1,11 +1,11 @@
-import { Resource } from './resource.model';
+import { Unit } from './unit.model';
+import { Building } from './building.model';
 
 export type Resources = {
-  units: Array<Resource>;
-  buildings: Array<Resource>;
-  buildingsUnderConstruction: Array<Resource>;
-  shells: number;
-  shellsPerRound: number;
+  units: Array<Unit>;
+  buildings: Array<Building>;
+  pearls: number;
+  pearlsPerRound: number;
   corals: number;
   coralsPerRound: number;
 };
