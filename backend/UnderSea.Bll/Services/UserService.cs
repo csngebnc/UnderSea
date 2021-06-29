@@ -10,6 +10,7 @@ using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation;
+using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -32,15 +33,11 @@ namespace UnderSea.Bll.Services
 
         public async Task<bool> Register(RegisterDto registerDto)
         {
-            RegisterValidation validator = new RegisterValidation(_context);
-            var validationResults = await validator.ValidateAsync(registerDto);
-
+            var validator = new RegisterValidation(_context);
+            await validator.ValidateAsync(registerDto);
 
             var user = new User { UserName = registerDto.UserName.Trim() };
             
-            if (registerDto.Password != registerDto.ConfirmPassword)
-                throw new Exception();
-
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             
             var country = new Country { Name = registerDto.CountryName, OwnerId = user.Id, WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id };
@@ -51,6 +48,9 @@ namespace UnderSea.Bll.Services
 
         public async Task<PagedResult<UserRankDto>> GetRanklist(PaginationData pagination, string nameFilter)
         {
+            var validator = new PaginationDataValidator();
+            validator.Validate(pagination);
+
             var users = _context.Users
                 .OrderByDescending(u => u.Points)
                 .ProjectTo<UserRankDto>(_mapper.ConfigurationProvider);
@@ -71,6 +71,9 @@ namespace UnderSea.Bll.Services
                 .Where(u => u.Id == _identityService.GetCurrentUserId())
                 .FirstOrDefaultAsync();
 
+            if (user == null)
+                throw new NotExistsException("Nem létezik ilyen felhasználó.");
+
             return new UserInfoDto
             {
                 Id = user.Id,
@@ -84,6 +87,10 @@ namespace UnderSea.Bll.Services
         public async Task<CountryDetailsDto> GetUserDetails()
         {
             var userid = _identityService.GetCurrentUserId();
+
+            if (userid == null)
+                throw new NotExistsException("Nem létezik ilyen felhasználó.");
+
             var country = await _context.Countries
                 .Where(u => u.OwnerId == userid)
                 .Include(c => c.ActiveConstructions)
@@ -92,6 +99,9 @@ namespace UnderSea.Bll.Services
                 .Include(c => c.CountryUnits)
                     .ThenInclude(cu => cu.Unit)
                 .FirstOrDefaultAsync();
+
+            if (country == null)
+                throw new NotExistsException("Nem létezik ilyen ország.");
 
             var buildings = await _context.Buildings
                                 .Include(b => b.ActiveConstructions).ToListAsync();
@@ -123,17 +133,20 @@ namespace UnderSea.Bll.Services
             return (await _context.Countries
                             .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
                             .FirstOrDefaultAsync()
-                    ).Name;
+                    )?.Name;
         }
 
         public async Task ChangeCountryName(string name)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
-                throw new Exception();
+                throw new InvalidParameterException("Az ország nevének megadása kötelező.");
 
             var country = await _context.Countries
                                     .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
                                     .FirstOrDefaultAsync();
+            if (country == null)
+                throw new NotExistsException("Nem létezik ilyen ország.");
+
             country.Name = name.Trim();
             await _context.SaveChangesAsync();
         }

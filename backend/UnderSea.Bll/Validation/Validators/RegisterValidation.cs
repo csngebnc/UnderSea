@@ -25,7 +25,7 @@ namespace UnderSea.Bll.Validation
         }
 
         private async Task<bool> UsernameNotExist(string userName)
-            => await _context.Users.Where(u => u.UserName == userName).AnyAsync();
+            => await _context.Users.Where(u => u.UserName != userName).AnyAsync();
 
         private bool NotContainsSpace(string userName)
             => !userName.Contains(" ") ;
