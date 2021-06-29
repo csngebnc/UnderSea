@@ -37,7 +37,7 @@ namespace UnderSea.Api.Controllers
             await _roundService.NextRound();
         }
 
-
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<string>> Register(RegisterDto registerDto)
         {
