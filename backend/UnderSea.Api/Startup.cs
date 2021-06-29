@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
+using Hangfire.Common;
 using Hangfire.SqlServer;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -129,7 +130,7 @@ namespace UnderSea.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(UnderSeaDbContext context,IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -150,7 +151,7 @@ namespace UnderSea.Api
             app.UseHangfireDashboard("/hangfire");
 
             var manager = new RecurringJobManager();
-            //manager.AddOrUpdate("Next round", Job.FromExpression(() => new RoundService(context).NextRound()), Cron.Minutely());
+            manager.AddOrUpdate<IRoundService>("Next round", (roundService) => roundService.NextRound(), Cron.Hourly());
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
