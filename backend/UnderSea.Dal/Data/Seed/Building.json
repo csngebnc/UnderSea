@@ -1,0 +1,14 @@
+[
+  {
+    "Id": 1,
+    "Name": "Áramlásirányító",
+	"Price": 1000,
+	"ConstructionTime": 5
+  },
+  {
+    "Id": 2,
+    "Name": "Zátonyvár",
+	"Price": 1000,
+	"ConstructionTime": 5
+  }
+]

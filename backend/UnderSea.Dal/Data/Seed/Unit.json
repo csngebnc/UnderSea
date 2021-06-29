@@ -1,0 +1,29 @@
+[
+  {
+    "Id": 1,
+    "Name": "Rohamfóka",
+	"Price": 50,
+	"MercenaryPerRound": 1,
+	"SupplyPerRound": 1,
+	"AttackPoint": 6,
+	"DefensePoint": 2,
+  },
+  {
+    "Id": 2,
+    "Name": "Csatacsikó",
+	"Price": 50,
+	"MercenaryPerRound": 1,
+	"SupplyPerRound": 1,
+	"AttackPoint": 2,
+	"DefensePoint": 6,
+  },
+  {
+    "Id": 3,
+    "Name": "Lézercápa",
+	"Price": 100,
+	"MercenaryPerRound": 3,
+	"SupplyPerRound": 2,
+	"AttackPoint": 5,
+	"DefensePoint": 5,
+  }
+]

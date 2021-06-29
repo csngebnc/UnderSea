@@ -1,0 +1,47 @@
+[
+  {
+    "Id": 1,
+    "Name": "50 lakost ad a népességhez",
+	"EffectType": "effect_population"
+  },
+  {
+    "Id": 2,
+    "Name": "200 korallt termel körönként",
+	"EffectType": "effect_coral"
+  },
+  {
+    "Id": 3,
+    "Name": "200 egység katonának nyújt szállást",
+	"EffectType": "effect_military"
+  },
+  {
+    "Id": 4,
+    "Name": "Növeli a korall termesztést 10%-kal",
+	"EffectType": "upgrade_effect_mudtractor"
+  },
+  {
+    "Id": 5,
+    "Name": "Növeli a korall termesztést 15%-kal",
+	"EffectType": "upgrade_effect_mudcombine"
+  },
+  {
+    "Id": 6,
+    "Name": "Növeli a védelmi pontokat 20%-kal",
+	"EffectType": "upgrade_effect_coralwall"
+  },
+  {
+    "Id": 7,
+    "Name": "Növeli a támadó pontokat 20%-kal",
+	"EffectType": "upgrade_effect_sonarcannon"
+  },
+  {
+    "Id": 8,
+    "Name": "Növeli a védelmi és támadóerőt pontokat 10%-kal",
+	"EffectType": "upgrade_effect_martialart"
+  },
+  {
+    "Id": 9,
+    "Name": "Növeli a beszedett adót 30%-kal",
+	"EffectType": "upgrade_effect_alchemy"
+  }
+]
