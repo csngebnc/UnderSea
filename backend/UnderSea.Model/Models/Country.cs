@@ -17,11 +17,11 @@ namespace UnderSea.Model.Models
 
         [Range(0, int.MaxValue, ErrorMessage = "A népesség nem lehet negatív szám!")]
         [Required(ErrorMessage = "A népességet kötelező megadni!")]
-        public int Population { get; set; }
+        public int Population { get; set; } = 100;
 
         [Range(0, int.MaxValue, ErrorMessage = "A gyöngy mennyisége nem lehet negatív szám!")]
         [Required(ErrorMessage = "A gyöngy mennyiségét kötelező megadni!")]
-        public int Pearl { get; set; }
+        public int Pearl { get; set; } = 1000;
 
         [Range(0, int.MaxValue, ErrorMessage = "A korall mennyisége nem lehet negatív szám!")]
         [Required(ErrorMessage = "A korall mennyiségét kötelező megadni!")]
@@ -31,8 +31,8 @@ namespace UnderSea.Model.Models
         [Required(ErrorMessage = "A egység mennyiségének kötelező megadni!")]
         public int MaxUnitCount { get; set; }
 
-        public Production Production { get; set; }
-        public FightPoint FightPoint { get; set; }
+        public Production Production { get; set; } = new Production();
+        public FightPoint FightPoint { get; set; } = new FightPoint();
 
         public string OwnerId { get; set; }
         public User Owner { get; set; }

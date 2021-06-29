@@ -37,7 +37,9 @@ namespace UnderSea.Bll.Services
                 throw new Exception();
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
-            _context.Countries.Add(new Country { Name = registerDto.CountryName, OwnerId = user.Id, Production = new Production(), FightPoint = new FightPoint() });
+            
+            var country = new Country { Name = registerDto.CountryName, OwnerId = user.Id, WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id };
+            _context.Countries.Add(country);
             await _context.SaveChangesAsync();
             return result.Succeeded;
         }
