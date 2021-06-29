@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:undersea/controllers/navbar_controller.dart';
+import 'package:undersea/lang/strings.dart';
+import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/views/attack_page.dart';
 import 'package:undersea/views/city_tabs/city_tab_controller.dart';
+import 'package:undersea/views/my_army.dart';
+import 'package:undersea/views/profile.dart';
 import 'home_page.dart';
 
 /// This is the stateful widget that the main application instantiates.
@@ -12,74 +20,100 @@ class BottomNavBar extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _BottomNavBarState extends State<BottomNavBar> {
+  final BottomNavBarController controller = Get.put(BottomNavBarController());
   int _selectedIndex = 0;
+  static List<Widget> _appbarTitleOptions = <Widget>[
+    // UnderseaStyles.appBarTitle(Strings.undersea.tr),
+    SizedBox(
+      height: 35,
+      width: 100,
+      child: UnderseaStyles.imageIcon("undersea_small",
+          color: UnderseaStyles.underseaLogoColor),
+    ),
+    UnderseaStyles.appBarTitle(Strings.my_city.tr),
+    UnderseaStyles.appBarTitle(Strings.attack.tr),
+    UnderseaStyles.appBarTitle(Strings.my_forces.tr),
+  ];
   static List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     CityTabBar(),
-    Text('Index 2: Támadás'),
-    Text('Index 3: Csapataim'),
+    AttackPage(),
+    MyArmyPage(),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      //_selectedIndex = index;
+      controller.selectedTab.value = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(() => Scaffold(
+        //extendBody: true,
         appBar: AppBar(
-          title: const Text('Undersea ~~~~~'),
+          toolbarHeight: 85,
+          backgroundColor: UnderseaStyles.hintColor,
+          actions: [
+            /*_selectedIndex*/ if (controller.selectedTab.value == 0)
+              Padding(
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: GestureDetector(
+                      onTap: () {
+                        Get.to(ProfilePage(
+                            cityName: 'Óceánia', playerName: 'jakabjatekos'));
+                      },
+                      child: SizedBox(
+                          height: 40,
+                          child: UnderseaStyles.assetIcon("profile",
+                              iconSize: 42))))
+          ],
+          title: _appbarTitleOptions.elementAt(controller.selectedTab.value),
         ),
         body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
+          child: _widgetOptions.elementAt(controller.selectedTab.value),
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xff9FFFF0), Color(0xff6BEEE9), Color(0xff0FCFDE)],
+              colors: UnderseaStyles.gradientColors,
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               //tileMode: TileMode.,
             ),
           ),
           child: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.home, color: Color(0xff001234)),
-                label: 'Kezdőlap',
+                icon: UnderseaStyles.imageIcon('tab_home'),
+                label: Strings.home_page.tr,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.business, color: Color(0xff001234)),
-                label: 'Városom',
+                icon: UnderseaStyles.imageIcon('tab_city'),
+                label: Strings.my_city.tr,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.school, color: Color(0xff001234)),
-                label: 'Támadás',
+                icon: UnderseaStyles.imageIcon('tab_attack'),
+                label: Strings.attack.tr,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.school, color: Color(0xff001234)),
-                label: 'Csapataim',
+                icon: UnderseaStyles.imageIcon('tab_units'),
+                label: Strings.my_forces.tr,
               ),
             ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Color(0xff001234),
+            currentIndex: controller.selectedTab.value,
+            iconSize: 30,
+            backgroundColor: Colors.transparent,
+            selectedItemColor: UnderseaStyles.navbarIconColor,
             onTap: _onItemTapped,
             type: BottomNavigationBarType.fixed,
             showUnselectedLabels: true,
-            backgroundColor: Colors.transparent,
-            selectedLabelStyle: TextStyle(
-                color: Color(0xff001234),
-                fontFamily: 'Baloo 2',
-                fontSize: 11,
-                fontStyle: FontStyle.normal),
-            unselectedLabelStyle: TextStyle(
-                color: Color(0xff001234),
-                fontFamily: 'Baloo 2',
-                fontSize: 11,
-                fontStyle: FontStyle.normal),
+            elevation: 0,
+            selectedLabelStyle: UnderseaStyles.bottomNavbarTextStyle,
+            unselectedLabelStyle: UnderseaStyles.bottomNavbarTextStyle
+                .copyWith(color: UnderseaStyles.unselectedNavbarIconColor),
           ),
-        ));
+        )));
   }
 }

@@ -22,7 +22,8 @@ environment:
 
 dependencies:
   get: ^4.1.4
-  flutter_sinusoidals: ^0.1.4
+  flutter_svg: ^0.22.0
+  expandable: ^5.0.1
   flutter:
     sdk: flutter
 
@@ -51,6 +52,7 @@ flutter:
   assets:
      - assets/icons/
      - assets/background/
+     - assets/buildings/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
