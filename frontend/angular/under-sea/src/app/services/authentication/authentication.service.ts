@@ -1,14 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { RegisterDto } from 'src/app/models/dto/register-dto.model';
 import * as config from 'src/assets/config.json';
 import { Observable } from 'rxjs';
+import {
+  UserService,
+  API_BASE_URL,
+  RegisterDto,
+} from '../generated-code/generated-api-code';
+import { Router } from '@angular/router';
+import { TokenService } from '../token/token.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+    private router: Router,
+    private tokenService: TokenService
+  ) {}
 
   login(userName: string, password: string): Observable<any> {
     let body = new URLSearchParams();
@@ -32,12 +43,13 @@ export class AuthenticationService {
     );
   }
 
-  register(data: RegisterDto): void {
-    this.http
-      .post('https://api-undersea.azurewebsites.net/api/user/register', data)
-      .subscribe(
-        (r) => console.log(r),
-        (error) => console.log('baj van', error)
-      );
+  register(data: RegisterDto): Observable<string> {
+    console.log(API_BASE_URL);
+    return this.userService.register(data);
+  }
+
+  logout(): void {
+    this.tokenService.deleteToken();
+    this.router.navigate(['login']);
   }
 }

@@ -35,6 +35,9 @@
         required
         formControlName="countryName"
       />
+      <span *ngIf="loginFailed.value" class="error-text"
+        >Sikertelen regisztráció!</span
+      >
       <button
         type="submit"
         class="gradient-button mt-2"

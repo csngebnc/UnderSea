@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { TokenService } from 'src/app/services/token/token.service';
-import { Token } from '@angular/compiler/src/ml_parser/lexer';
+import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'login',
@@ -18,9 +19,12 @@ export class LoginComponent implements OnInit {
     ]),
   });
 
+  loginFailed = new BehaviorSubject(false);
+
   constructor(
     private authService: AuthenticationService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -34,12 +38,17 @@ export class LoginComponent implements OnInit {
       .subscribe(
         (r) => {
           this.tokenService.setToken(r['access_token']);
-          console.log(this.tokenService.getToken());
-          console.log(this.tokenService.isTokenValid());
+          this.router.navigate(['main']);
         },
-        (error) => {
-          console.log(error);
+        () => {
+          this.setFormInvalid();
         }
       );
+  }
+
+  private setFormInvalid(): void {
+    this.loginFailed.next(true);
+    this.loginForm.controls['userName'].setErrors({ incorrect: true });
+    this.loginForm.controls['password'].setErrors({ incorrect: true });
   }
 }

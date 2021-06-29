@@ -11,6 +11,8 @@ import { ScoreboardComponent } from './components/scoreboard/scoreboard.componen
 import { UnitsComponent } from './components/units/units.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
+import { AuthGuard } from './guards/auth/auth.guard';
+
 const routes: Routes = [
   {
     path: 'login',
@@ -23,6 +25,7 @@ const routes: Routes = [
   {
     path: 'main',
     component: MainComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'buildings',
