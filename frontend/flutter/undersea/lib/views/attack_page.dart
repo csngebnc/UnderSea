@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
@@ -14,35 +15,7 @@ class AttackPage extends StatefulWidget {
 class _AttackPageState extends State<AttackPage> {
   var sliderValues = List<int>.generate(3, (index) => 0);
   var mercenaryPrice = 0;
-  var soldierList = <Soldier>[
-    Soldier(
-        amount: 20,
-        attack: 5,
-        defence: 5,
-        payment: 1,
-        supplyNeeds: 1,
-        name: 'Lézercápa',
-        price: 200,
-        iconName: 'shark'),
-    Soldier(
-        amount: 30,
-        attack: 2,
-        defence: 6,
-        payment: 1,
-        supplyNeeds: 1,
-        name: 'Rohamfóka',
-        price: 50,
-        iconName: 'seal'),
-    Soldier(
-        amount: 52,
-        attack: 6,
-        defence: 2,
-        payment: 1,
-        supplyNeeds: 1,
-        name: 'Csatacsikó',
-        price: 50,
-        iconName: 'seahorse')
-  ];
+  List<Soldier> soldierList = Get.find<SoldiersController>().soldierList;
   bool firstPage = true;
   late final Timer? _debounce;
   void _onSearchChanged(String query) {
@@ -157,7 +130,7 @@ class _AttackPageState extends State<AttackPage> {
                         ),
                       ),
                       UnderseaStyles.infoPanel(
-                          Strings.second_step, Strings.unit_select,
+                          Strings.second_step.tr, Strings.unit_select.tr,
                           padding: EdgeInsets.fromLTRB(20, 10, 0, 0)),
                       SizedBox(
                         height: 20,
@@ -185,7 +158,7 @@ class _AttackPageState extends State<AttackPage> {
                                   left: 25,
                                 ),
                                 child: Text(
-                                    '${soldierList[i - 1].name} ${sliderValues[i - 1]}/${soldierList[i - 1].amount}',
+                                    '${soldierList[i - 1].name} ${sliderValues[i - 1]}/${soldierList[i - 1].available}',
                                     style: UnderseaStyles.listRegular),
                               ),
                               SizedBox(height: 8),
@@ -206,7 +179,7 @@ class _AttackPageState extends State<AttackPage> {
                                     });
                                   },
                                   min: 0,
-                                  max: soldierList[i - 1].amount.toDouble(),
+                                  max: soldierList[i - 1].available.toDouble(),
                                   activeColor: UnderseaStyles.underseaLogoColor,
                                   inactiveColor: Color(0x883B7DBD),
                                 ),

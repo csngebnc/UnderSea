@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
+import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/attack_page.dart';
@@ -11,7 +12,8 @@ import 'home_page.dart';
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({Key? key}) : super(key: key);
-  final BottomNavBarController controller = Get.put(BottomNavBarController());
+  final BottomNavBarController controller = Get.find<BottomNavBarController>();
+  final playerController = Get.find<PlayerController>();
   static List<Widget> _appbarTitleOptions = <Widget>[
     SizedBox(
       height: 35,
@@ -47,7 +49,10 @@ class BottomNavBar extends StatelessWidget {
                   child: GestureDetector(
                       onTap: () {
                         Get.to(ProfilePage(
-                            cityName: 'Óceánia', playerName: 'jakabjatekos'));
+                            cityName:
+                                playerController.playerData.value.cityName,
+                            playerName:
+                                playerController.playerData.value.playerName));
                       },
                       child: SizedBox(
                           height: 40,

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 
@@ -68,6 +69,8 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
                   setState(() {
                     _cityName = newValue;
                     _isEditingText = false;
+                    Get.find<PlayerController>().playerData.value.cityName =
+                        _cityName;
                   });
 
                   Get.snackbar(Strings.city_modified_snack_title.tr,

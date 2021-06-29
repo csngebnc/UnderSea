@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:get/get.dart';
 import 'package:undersea/models/soldier.dart';
@@ -7,35 +8,7 @@ import 'package:undersea/styles/style_constants.dart';
 class Military extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var soldierList = <Soldier>[
-      Soldier(
-          amount: 0,
-          attack: 5,
-          defence: 5,
-          payment: 1,
-          supplyNeeds: 1,
-          name: 'Lézercápa',
-          price: 200,
-          iconName: 'shark'),
-      Soldier(
-          amount: 5,
-          attack: 2,
-          defence: 6,
-          payment: 1,
-          supplyNeeds: 1,
-          name: 'Rohamfóka',
-          price: 50,
-          iconName: 'seal'),
-      Soldier(
-          amount: 0,
-          attack: 6,
-          defence: 2,
-          payment: 1,
-          supplyNeeds: 1,
-          name: 'Csatacsikó',
-          price: 50,
-          iconName: 'seahorse')
-    ];
+    var soldierList = Get.find<SoldiersController>().soldierList;
     var count = 2 + soldierList.length * 2 - 1;
     return UnderseaStyles.tabSkeleton(
         list: ListView.builder(
@@ -84,7 +57,7 @@ class Military extends StatelessWidget {
                   UnderseaStyles.text(Strings.you_possess.tr),
                   Expanded(child: Container()),
                   UnderseaStyles.text(
-                      actualSoldier.amount.toString() + Strings.amount.tr),
+                      actualSoldier.totalAmount.toString() + Strings.amount.tr),
                 ],
               ),
               Row(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/editable_text.dart';
@@ -48,7 +49,7 @@ class ProfilePage extends StatelessWidget {
                 child: Column(children: [
                   Padding(
                       padding: EdgeInsets.all(10),
-                      child: CityNameEditableText('Óceánia')),
+                      child: CityNameEditableText(cityName)),
                   UnderseaStyles.divider(),
                   Align(
                     alignment: Alignment.centerLeft,
