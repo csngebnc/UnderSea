@@ -31,6 +31,7 @@ $dark-blue: #03255f;
 $navy: #1c3e76;
 $dark-navy: #001234;
 $selected-blue: #284474;
+$invalid: red;
 
 //effects
 
@@ -55,12 +56,20 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .text-input.ng-invalid.ng-touched {
-  border-color: red;
+  border-color: $invalid;
 }
 
 .text-input:focus {
   outline: none;
   border-color: $dark-navy;
+}
+
+.error-text {
+  color: $invalid;
+  font-family: "OpenSans";
+  font-weight: bolder;
+  margin: 0;
+  padding: 0;
 }
 
 .container {

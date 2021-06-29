@@ -6,20 +6,12 @@ import { Injectable } from '@angular/core';
 export class TokenService {
   constructor() {}
 
-  private token: string = '';
-
   getToken(): string {
-    return this.token;
-  }
-
-  loadToken(): void {
-    const lst = localStorage.getItem('token');
-    if (lst) this.token = lst;
+    return localStorage.getItem('token');
   }
 
   setToken(token: string): void {
     localStorage.setItem('token', token);
-    this.token = token;
   }
 
   deleteToken(): void {
@@ -27,8 +19,9 @@ export class TokenService {
   }
 
   isTokenValid(): boolean {
-    if (!this.token) return false;
-    const arr = this.token.split('.');
+    const token = this.getToken();
+    if (!token) return false;
+    const arr = token.split('.');
 
     const decoded = JSON.parse(atob(arr[1]));
 

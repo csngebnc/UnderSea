@@ -21,6 +21,9 @@
         formControlName="password"
         required
       />
+      <span *ngIf="loginFailed.value" class="error-text"
+        >Hibás felhasználónév vagy jelszó!</span
+      >
       <button
         type="submit"
         class="gradient-button mt-2"

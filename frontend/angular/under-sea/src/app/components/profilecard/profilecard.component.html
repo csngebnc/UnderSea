@@ -4,5 +4,7 @@
   <img src="../../../assets/img/profile.svg" alt="profile" />
 </div>
 <span class="mt text">{{ name }}</span>
-<a class="mt text" routerLink="/main/profile">Profil</a>
-<button class="mt text">Kijelentkezés</button>
+<a class="mt text clickable-text" routerLink="/main/profile">Profil</a>
+<button type="button " class="mt text clickable-text" (click)="onLogout()">
+  Kijelentkezés
+</button>
