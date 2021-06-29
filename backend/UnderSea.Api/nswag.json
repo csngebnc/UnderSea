@@ -116,7 +116,7 @@
       "checksumCacheEnabled": false,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "./GeneratedTSCode/angular.ts",
+      "output": "../../frontend/angular/under-sea/src/app/services/generated-code/generated-api-code.ts",
       "newLineBehavior": "Auto"
     }
   }
