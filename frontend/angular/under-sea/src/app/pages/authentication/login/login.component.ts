@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { TokenService } from 'src/app/services/token/token.service';
+import { Token } from '@angular/compiler/src/ml_parser/lexer';
 
 @Component({
   selector: 'login',
@@ -15,11 +18,28 @@ export class LoginComponent implements OnInit {
     ]),
   });
 
-  constructor() {}
+  constructor(
+    private authService: AuthenticationService,
+    private tokenService: TokenService
+  ) {}
 
   ngOnInit(): void {}
 
   onSubmit(): void {
-    console.warn(this.loginForm.value);
+    this.authService
+      .login(
+        this.loginForm.get('userName').value,
+        this.loginForm.get('password').value
+      )
+      .subscribe(
+        (r) => {
+          this.tokenService.setToken(r['access_token']);
+          console.log(this.tokenService.getToken());
+          console.log(this.tokenService.isTokenValid());
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 }

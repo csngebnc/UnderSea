@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+
 import {
   FormControl,
   FormGroup,
@@ -6,8 +8,8 @@ import {
   ValidationErrors,
   AbstractControl,
   ValidatorFn,
-  Validator,
 } from '@angular/forms';
+import { RegisterDto } from 'src/app/models/dto/register-dto.model';
 
 @Component({
   selector: 'register',
@@ -30,12 +32,18 @@ export class RegisterComponent implements OnInit {
     countryName: new FormControl('', Validators.required),
   });
 
-  constructor() {}
+  constructor(private authService: AuthenticationService) {}
 
   ngOnInit(): void {}
 
   onSubmit(): void {
-    console.log(this.registerForm.value);
+    const data: RegisterDto = {
+      userName: this.registerForm.value.userName,
+      password: this.registerForm.value.password,
+      confirmPassword: this.registerForm.value.confirmPassword,
+      countryName: this.registerForm.value.countryName,
+    };
+    this.authService.register(data);
   }
 
   private passwordRequirementValidator(pwRe: RegExp): ValidatorFn {
@@ -48,7 +56,10 @@ export class RegisterComponent implements OnInit {
   private doPasswordsMatch(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const fg = control.parent;
-      console.log(fg.get('controls'));
+      if (fg) {
+        const matching = control.value === fg.controls['password'].value;
+        return matching ? null : { passwordMismatch: true };
+      }
       return null;
     };
   }
