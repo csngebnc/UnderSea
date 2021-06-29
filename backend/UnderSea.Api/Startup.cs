@@ -45,8 +45,7 @@ namespace UnderSea.Api
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder => builder
-                //.WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200", "https://api-undersea.azurewebsites.net/" })
-                .AllowAnyOrigin()
+                .WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200" })
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
@@ -140,6 +139,8 @@ namespace UnderSea.Api
                 app.UseHsts();
             }
 
+            app.UseCors("CorsPolicy");
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseHangfireDashboard("/hangfire");
@@ -151,8 +152,6 @@ namespace UnderSea.Api
             app.UseSwaggerUi3();
 
             app.UseRouting();
-
-            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseIdentityServer();
