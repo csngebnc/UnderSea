@@ -14,9 +14,8 @@ namespace UnderSea.Bll.Validation
     public class SendAttackValidator : AbstractValidator<SendAttackDto>
     {
         private readonly UnderSeaDbContext _context;
-        private readonly IIdentityService identityService;
 
-        public SendAttackValidator(UnderSeaDbContext context, IIdentityService identityService)
+        public SendAttackValidator(UnderSeaDbContext context)
         {
             this._context = context;
             RuleFor(attack => attack.AttackedCountryId).NotNull().MustAsync(async (countryId, cancellation) => await CountryExist(countryId)).WithMessage("Nem létezik ilyen ország, amit megtámadtál!");

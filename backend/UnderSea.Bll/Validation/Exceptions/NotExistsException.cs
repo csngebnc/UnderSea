@@ -8,5 +8,8 @@ namespace UnderSea.Bll.Validation.Exceptions
 {
     public class NotExistsException : Exception
     {
+        public NotExistsException(string message) : base(message)
+        {
+        }
     }
 }
