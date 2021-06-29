@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using UnderSea.Bll.Mapper;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
+using UnderSea.Bll.SignalR;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -41,7 +42,14 @@ namespace UnderSea.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder
+                .WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200", "https://api-undersea.azurewebsites.net/" })
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+            });
 
             // Add Hangfire services.
             services.AddHangfire(configuration =>
@@ -112,7 +120,8 @@ namespace UnderSea.Api
                 );
 
             services.AddControllersWithViews();
-            services.AddRazorPages();
+            services.AddRazorPages(); 
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -142,6 +151,8 @@ namespace UnderSea.Api
 
             app.UseRouting();
 
+            app.UseCors("CorsPolicy");
+
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
@@ -152,6 +163,7 @@ namespace UnderSea.Api
                        name: "default",
                        pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<RoundHub>("/roundHub");
             });
         }
     }

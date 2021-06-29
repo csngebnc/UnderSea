@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Extensions;
 using UnderSea.Bll.Services.Interfaces;
+using UnderSea.Bll.SignalR;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
@@ -16,10 +18,12 @@ namespace UnderSea.Bll.Services
     public class RoundService : IRoundService
     {
         private readonly UnderSeaDbContext _context;
+        private readonly IHubContext<RoundHub> _roundHub;
 
-        public RoundService(UnderSeaDbContext context)
+        public RoundService(UnderSeaDbContext context, IHubContext<RoundHub> roundHub)
         {
-            _context = context;
+            _context = context; 
+            _roundHub = roundHub;
         }
 
         public void PayTax(ICollection<Country> countries)
@@ -293,7 +297,7 @@ namespace UnderSea.Bll.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-
+            await _roundHub.Clients.All.SendAsync("SendMessage", world.Round);
         }
     }
 }
