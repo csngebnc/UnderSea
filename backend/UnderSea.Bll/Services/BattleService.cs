@@ -174,7 +174,7 @@ namespace UnderSea.Bll.Services
             if (world == null) throw new NotExistsException("Nem létezik ilyen világ, ahol támadni lehet.");
 
             var secondAttack = await _context.Attacks
-                .AnyAsync(c => c.AttackerCountryId == attackerCountry.Id && c.DefenderCountryId == attackDto.AttackedCountryId && c.AttackerCountry.World.Round == world.Round);
+                .AnyAsync(c => c.AttackerCountryId == attackerCountry.Id && c.DefenderCountryId == attackDto.AttackedCountryId && c.AttackRound == world.Round);
             if (secondAttack) throw new InvalidParameterException("Nem támadható ugyanaz az ország egy körben!");
 
             if(attackerCountry.Id == attackDto.AttackedCountryId) throw new InvalidParameterException("Nem támadhatja meg saját magát az ország.");
