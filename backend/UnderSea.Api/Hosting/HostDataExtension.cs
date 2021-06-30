@@ -11,7 +11,7 @@ namespace UnderSea.Api.Hosting
 {
     public static class HostDataExtension
     {
-        public static IHost MigrateDatabase<TContext>(this IHost host) where TContext : UnderSeaDbContext
+        public static IHost MigrateDatabase<TContext>(this IHost host) where TContext : DbContext
         {
             using (var scope = host.Services.CreateScope())
             {
