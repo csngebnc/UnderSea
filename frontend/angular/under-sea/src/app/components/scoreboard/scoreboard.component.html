@@ -1,14 +1,24 @@
 <div class="modal-container">
   <div class="modal w-40">
     <h2 class="modal-title">Ranglista</h2>
-
-    <list class="w-100" [list]="scoreboard" [clickable]="false"></list>
-    <pager-buttons
-      [pageSize]="pageSize"
-      [pageNumber]="pageNumber"
-      [allResultsCount]="allResultsCount"
-      (switchPage)="onSwitchPage($event)"
-      class="w-100 d-flex align-center to-center mt-1"
-    ></pager-buttons>
+    <ng-container *ngIf="!(isLoading | async); else loading">
+      <list
+        class="w-100"
+        [list]="scoreboard.list"
+        [clickable]="false"
+        (filter)="onFilter($event)"
+      ></list>
+      <pager-buttons
+        [pageSize]="scoreboard.pageSize"
+        [pageNumber]="scoreboard.pageNumber"
+        [allResultsCount]="scoreboard.allResultsCount"
+        (switchPage)="onSwitchPage($event)"
+        class="w-100 d-flex align-center to-center mt-1"
+      ></pager-buttons>
+    </ng-container>
   </div>
 </div>
+
+<ng-template #loading>
+  <loading class="w-100 h-100 d-flex to-center align-center"></loading>
+</ng-template>

@@ -13,8 +13,8 @@ export class BuildingContainerComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  playerHasBuilding(name: string): boolean {
-    let result = this.buildings.find((c) => c.name === name);
+  playerHasBuilding(id: number): boolean {
+    let result = this.buildings.find((c) => c.id === id);
 
     if (!result || result.buildingsCount === 0) return false;
     else return true;

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user/user.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'profile',
@@ -6,13 +8,37 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  newName: string = '';
+  name: string = '';
+  private countryRegex = /^(?!\s*$).+/;
 
-  constructor() {}
+  countryForm = new FormGroup({
+    newName: new FormControl('', [
+      Validators.required,
+      Validators.pattern(this.countryRegex),
+    ]),
+  });
 
-  ngOnInit(): void {}
+  constructor(private userService: UserService) {}
 
-  setNewName() {
-    console.log(this.newName);
+  ngOnInit(): void {
+    this.getName();
+  }
+
+  private getName(): void {
+    this.userService.getCountryName().subscribe(
+      (response) => {
+        this.name = response;
+      },
+      (e) => console.log(e)
+    );
+  }
+
+  setNewName(): void {
+    this.userService
+      .setCountryName(this.countryForm.get('newName').value)
+      .subscribe(
+        () => this.getName(),
+        (e) => console.log(e)
+      );
   }
 }
