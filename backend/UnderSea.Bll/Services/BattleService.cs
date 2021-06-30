@@ -256,7 +256,6 @@ namespace UnderSea.Bll.Services
         private string GetUserId()
         {
             var userId = _identityService.GetCurrentUserId();
-            if (string.IsNullOrEmpty(userId)) throw new NotExistsException("Nincs felhasználó bejelentkezve.");
 
             return userId;
         }
