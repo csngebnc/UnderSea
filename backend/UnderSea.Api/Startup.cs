@@ -99,7 +99,7 @@ namespace UnderSea.Api
             services.AddTransient<IRoundService, RoundService>();
 
             services.AddTransient<IValidator<BuyBuildingDto>, BuyBuildingValidator>();
-            services.AddTransient<IValidator<BuyUnitDto>, BuyUnitValidator>();
+            services.AddTransient<IValidator<BuyUnitDetailsDto>, BuyUnitDetailsValidator>();
             services.AddTransient<IValidator<BuyUpgradeDto>, BuyUpgradeValidator>();
             services.AddTransient<IValidator<PaginationData>, PaginationDataValidator>();
             services.AddTransient<IValidator<RegisterDto>, RegisterValidation>();
