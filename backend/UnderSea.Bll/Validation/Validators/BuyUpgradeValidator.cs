@@ -18,7 +18,7 @@ namespace UnderSea.Bll.Validation
         {
             this._context = context;
             RuleFor(upgrade => upgrade.UpgradeId).NotNull().MustAsync(async (upgradeId, cancellation) 
-                => await UpgradeExist(upgradeId)).WithMessage("Nincs ilyen fejlesztés.");
+                => await UpgradeExist(upgradeId)).WithMessage("Nincs ilyen fejlesztés.").WithName("upgradeId").OverridePropertyName("upgradeId");
         }
 
         private async Task<bool> UpgradeExist(int upgradeId)

@@ -17,7 +17,8 @@ namespace UnderSea.Bll.Validation
         public BuyBuildingValidator(UnderSeaDbContext context)
         {
             this._context = context;
-            RuleFor(building => building.BuildingId).NotNull().MustAsync(async (buildingId, cancellation) =>await BuildingExist(buildingId)).WithMessage("Nem létezik ilyen építmény!");
+            RuleFor(building => building.BuildingId).NotNull().MustAsync(async (buildingId, cancellation) =>await BuildingExist(buildingId))
+                .WithMessage("Nem létezik ilyen építmény!").WithName("buildingId").OverridePropertyName("buildingId");
         }
 
         private async Task<bool> BuildingExist(int buildingId) 
