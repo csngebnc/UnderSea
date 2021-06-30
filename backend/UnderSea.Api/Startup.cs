@@ -79,7 +79,7 @@ namespace UnderSea.Api
                     //Configuration.GetConnectionString("DefaultConnection")));
                     Configuration.GetConnectionString("AzureSqlDbConnection")));
 
-            services.AddSwaggerDocument();
+            services.AddOpenApiDocument();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
