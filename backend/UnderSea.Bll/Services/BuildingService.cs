@@ -59,7 +59,7 @@ namespace UnderSea.Bll.Services
         {
             var country = await _context.Countries
                                     .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
-                                    .Include("World")
+                                    .Include(c => c.World)
                                     .FirstOrDefaultAsync();
 
             if (country == null)
@@ -73,7 +73,7 @@ namespace UnderSea.Bll.Services
 
             if (building.Price <= country.Pearl)
             {
-                ActiveConstruction activeConstruction = new ActiveConstruction()
+                var activeConstruction = new ActiveConstruction()
                 {
                     BuildingId = building.Id,
                     CountryId = country.Id,

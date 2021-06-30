@@ -1,17 +1,13 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
-using UnderSea.Bll.Extensions;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services.Interfaces;
-using UnderSea.Bll.Validation;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
@@ -33,9 +29,6 @@ namespace UnderSea.Bll.Services
 
         public async Task<PagedResult<AttackableUserDto>> GetAttackableUsersAsync(PaginationData data, string name)
         {
-            PaginationDataValidator validator = new PaginationDataValidator();
-            validator.Validate(data);
-
             var userId = GetUserId();
             var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Country).ThenInclude(c => c.Attacks).ThenInclude(a => a.DefenderCountry).FirstOrDefaultAsync();
 
@@ -66,9 +59,6 @@ namespace UnderSea.Bll.Services
 
         public async Task<PagedResult<LoggedAttackDto>> GetLoggedAttacksAsync(PaginationData data)
         {
-            PaginationDataValidator validator = new PaginationDataValidator();
-            validator.Validate(data);
-
             var country = await GetCountry();
             
             var attacks = await _context.Attacks
@@ -134,9 +124,6 @@ namespace UnderSea.Bll.Services
 
         public async Task BuyUnitAsync(BuyUnitDto unitDto)
         {
-            BuyUnitValidator validator = new BuyUnitValidator(_context);
-            await validator.ValidateAsync(unitDto);
-
             var country = await GetCountry();
 
             var unit = await _context.Units.Where(c => c.Id == unitDto.UnitId).FirstOrDefaultAsync();
@@ -178,9 +165,6 @@ namespace UnderSea.Bll.Services
 
         public async Task AttackAsync(SendAttackDto attackDto)
         {
-            SendAttackValidator validatior = new SendAttackValidator(_context);
-            await validatior.ValidateAsync(attackDto);
-
             var attackerCountry = await GetCountry();
 
             var attackedCountry = await _context.Countries.Where(c => c.Id == attackDto.AttackedCountryId).FirstOrDefaultAsync();

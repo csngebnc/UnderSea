@@ -1,3 +1,4 @@
+using Autofac;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
@@ -16,8 +17,10 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using UnderSea.Api.AuthFilter;
+using UnderSea.Api.Services;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Mapper;
 using UnderSea.Bll.Paging;
@@ -58,17 +61,17 @@ namespace UnderSea.Api
             services.AddHangfire(configuration =>
             {
                 configuration
-                            .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                            .UseSimpleAssemblyNameTypeSerializer()
-                            .UseRecommendedSerializerSettings()
-                            .UseSqlServerStorage(Configuration.GetConnectionString("AzureHangfireDbConnection"), new SqlServerStorageOptions
-                            {
-                                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-                                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-                                QueuePollInterval = TimeSpan.Zero,
-                                UseRecommendedIsolationLevel = true,
-                                DisableGlobalLocks = true
-                            });
+                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                    .UseSimpleAssemblyNameTypeSerializer()
+                    .UseRecommendedSerializerSettings()
+                    .UseSqlServerStorage(Configuration.GetConnectionString("AzureHangfireDbConnection"), new SqlServerStorageOptions
+                    {
+                        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                        QueuePollInterval = TimeSpan.Zero,
+                        UseRecommendedIsolationLevel = true,
+                        DisableGlobalLocks = true
+                    });
             });
 
             // Add the processing server as IHostedService
@@ -90,13 +93,8 @@ namespace UnderSea.Api
             services.AddAutoMapper(typeof(AutoMapperProfiles));
 
             services.AddHttpContextAccessor();
-            services.AddScoped<IIdentityService, IdentityService>();
 
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IUpgradeService, UpgradeService>();
-            services.AddTransient<IBattleService, BattleService>();
-            services.AddTransient<IBuildingService, BuildingService>();
-            services.AddTransient<IRoundService, RoundService>();
+            services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddTransient<IValidator<BuyBuildingDto>, BuyBuildingValidator>();
             services.AddTransient<IValidator<BuyUnitDto>, BuyUnitValidator>();
@@ -192,6 +190,14 @@ namespace UnderSea.Api
             options.MapToStatusCode<InvalidParameterException>(StatusCodes.Status400BadRequest);
 
             options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterAssemblyTypes(Assembly.Load("UnderSea.Bll"))
+                .Where(x => x.Name.EndsWith("Service"))
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
         }
     }
 }
