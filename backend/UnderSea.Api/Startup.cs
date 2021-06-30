@@ -46,7 +46,7 @@ namespace UnderSea.Api
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder => builder
-                .WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200" })
+                .WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200", "https://api-undersea.azurewebsites.net" })
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());

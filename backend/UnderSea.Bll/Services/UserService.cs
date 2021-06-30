@@ -106,10 +106,12 @@ namespace UnderSea.Bll.Services
             var buildings = await _context.Buildings
                                 .Include(b => b.ActiveConstructions).ToListAsync();
 
+            var units = await _context.Units.ToListAsync();
+
             return new CountryDetailsDto
             {
                 MaxUnitCount = country.MaxUnitCount,
-                Units = _mapper.Map<ICollection<BattleUnitDto>>(country.CountryUnits.Select(cu => cu.Unit)),
+                Units = _mapper.Map<ICollection<BattleUnitDto>>(units),
                 Coral = country.Coral,
                 Pearl = country.Pearl,
                 Population = country.Population,
