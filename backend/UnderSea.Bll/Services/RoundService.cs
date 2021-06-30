@@ -14,16 +14,15 @@ using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Services
 {
-    public class RoundService<THub> : IRoundService
-        where THub : Hub
+    public class RoundService : IRoundService
     {
         private readonly UnderSeaDbContext _context;
-        private readonly IHubContext<THub> _roundHub;
+        private readonly IHubService _hubService;
 
-        public RoundService(UnderSeaDbContext context, IHubContext<THub> roundHub)
+        public RoundService(UnderSeaDbContext context, IHubService hubService)
         {
-            _context = context; 
-            _roundHub = roundHub;
+            _context = context;
+            _hubService = hubService;
         }
 
         public void PayTax(ICollection<Country> countries)
@@ -297,7 +296,8 @@ namespace UnderSea.Bll.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            await _roundHub.Clients.All.SendAsync("SendMessage", world.Round);
+
+            await _hubService.SendNewRoundMessage(world.Round);
         }
     }
 }

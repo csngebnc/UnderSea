@@ -95,7 +95,8 @@ namespace UnderSea.Api
             services.AddHttpContextAccessor();
 
             services.AddScoped<IIdentityService, IdentityService>();
-            services.AddTransient<IRoundService, RoundService<RoundHub>>();
+            services.AddTransient<IHubService, RoundHubService>();
+            services.AddTransient<IRoundService, RoundService>();
 
             services.AddTransient<IValidator<BuyBuildingDto>, BuyBuildingValidator>();
             services.AddTransient<IValidator<BuyUnitDto>, BuyUnitValidator>();
