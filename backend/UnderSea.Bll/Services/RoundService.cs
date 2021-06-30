@@ -8,19 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Extensions;
 using UnderSea.Bll.Services.Interfaces;
-using UnderSea.Bll.SignalR;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Services
 {
-    public class RoundService : IRoundService
+    public class RoundService<THub> : IRoundService
+        where THub : Hub
     {
         private readonly UnderSeaDbContext _context;
-        private readonly IHubContext<RoundHub> _roundHub;
+        private readonly IHubContext<THub> _roundHub;
 
-        public RoundService(UnderSeaDbContext context, IHubContext<RoundHub> roundHub)
+        public RoundService(UnderSeaDbContext context, IHubContext<THub> roundHub)
         {
             _context = context; 
             _roundHub = roundHub;
