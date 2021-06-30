@@ -31,15 +31,23 @@ namespace UnderSea.Bll.Services
             _identityService = identityService;
         }
 
-        public async Task<PagedResult<AttackableUserDto>> GetAttackableUsersAsync(PaginationData data)
+        public async Task<PagedResult<AttackableUserDto>> GetAttackableUsersAsync(PaginationData data, string name)
         {
             PaginationDataValidator validator = new PaginationDataValidator();
             validator.Validate(data);
 
             var userId = GetUserId();
             var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Country).ThenInclude(c => c.Attacks).ThenInclude(a => a.DefenderCountry).FirstOrDefaultAsync();
-            var attackableusers = await _context.Users.Where(c => c.Id != userId && !user.Country.Attacks.Select(a => a.DefenderCountry.OwnerId).Contains(c.Id)).ProjectTo<AttackableUserDto>(_mapper.ConfigurationProvider).ToPagedList(data.PageSize,data.PageNumber);
-            return attackableusers;
+
+            var attackableusers = _context.Users.Where(c => c.Id != userId && !user.Country.Attacks.Select(a => a.DefenderCountry.OwnerId).Contains(c.Id)).ProjectTo<AttackableUserDto>(_mapper.ConfigurationProvider);
+
+            if (!string.IsNullOrEmpty(name) && !string.IsNullOrWhiteSpace(name))
+            {
+                attackableusers = attackableusers.Where(u => u.UserName.Contains(name));
+            }
+
+            var attackable_users = await attackableusers.ToPagedList(data.PageSize,data.PageNumber);
+            return attackable_users;
         }
 
         public async Task<IEnumerable<BattleUnitDto>> GetUserUnitsAsync()

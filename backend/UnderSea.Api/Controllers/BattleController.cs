@@ -26,9 +26,9 @@ namespace UnderSea.Api.Controllers
         }
 
         [HttpGet("attackable-users")]
-        public async Task<ActionResult<PagedResult<AttackableUserDto>>> GetAttackableUsers([FromQuery] PaginationData pagination)
+        public async Task<ActionResult<PagedResult<AttackableUserDto>>> GetAttackableUsers([FromQuery] PaginationData pagination, [FromQuery] string name)
         {
-            var attackableusers = await service.GetAttackableUsersAsync(pagination);
+            var attackableusers = await service.GetAttackableUsersAsync(pagination, name);
             return Ok(attackableusers);
         }
 

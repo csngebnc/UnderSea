@@ -11,7 +11,7 @@ namespace UnderSea.Bll.Services.Interfaces
 {
     public interface IBattleService
     {
-        Task<PagedResult<AttackableUserDto>> GetAttackableUsersAsync(PaginationData data);
+        Task<PagedResult<AttackableUserDto>> GetAttackableUsersAsync(PaginationData data, string name);
         Task<IEnumerable<BattleUnitDto>> GetUserUnitsAsync();
         Task<PagedResult<LoggedAttackDto>> GetLoggedAttacksAsync(PaginationData data);
         Task<IEnumerable<UnitDto>> GetAllUnitsAsync();
