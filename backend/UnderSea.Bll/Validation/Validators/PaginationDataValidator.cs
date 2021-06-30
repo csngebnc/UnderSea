@@ -12,8 +12,10 @@ namespace UnderSea.Bll.Validation
     {
         public PaginationDataValidator()
         {
-            RuleFor(x => x.PageSize).InclusiveBetween(1, 50).WithMessage("Az oldal mérete 1 és 50 között kell hogy legyen!");
-            RuleFor(x => x.PageNumber).GreaterThan(0).WithMessage("Az oldalszámnak minimum 1-nek kell lennie.");
+            RuleFor(x => x.PageSize).InclusiveBetween(1, 50).WithMessage("Az oldal mérete 1 és 50 között kell hogy legyen!")
+                .WithName("pageSize").OverridePropertyName("pageSize");
+            RuleFor(x => x.PageNumber).GreaterThan(0).WithMessage("Az oldalszámnak minimum 1-nek kell lennie.")
+                .WithName("pageNumber").OverridePropertyName("pageNumber");
         }
     }
 }

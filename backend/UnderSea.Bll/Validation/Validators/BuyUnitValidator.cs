@@ -18,7 +18,7 @@ namespace UnderSea.Bll.Validation
         {
             this._context = context;
             RuleFor(unit => unit.UnitId).NotNull().MustAsync(async (unitId, cancellation) 
-                => await UnitExist(unitId)).WithMessage("Nincs ilyen egység.");
+                => await UnitExist(unitId)).WithMessage("Nincs ilyen egység.").WithName("unitId").OverridePropertyName("unitId");
         }
 
         private async Task<bool> UnitExist(int unitId)

@@ -127,7 +127,9 @@ namespace UnderSea.Api
 
             services.AddProblemDetails(ConfigureProblemDetails);
 
-            services.AddControllersWithViews().AddFluentValidation();
+            services.AddControllersWithViews().AddFluentValidation(fv => {
+                fv.DisableDataAnnotationsValidation = true;
+            });
             services.AddRazorPages(); 
             services.AddSignalR();
         }
