@@ -186,6 +186,8 @@ namespace UnderSea.Bll.Services
             var attackedCountry = await _context.Countries.Where(c => c.Id == attackDto.AttackedCountryId).FirstOrDefaultAsync();
             if (attackedCountry == null) throw new NotExistsException("Nem létezik ilyen ország, ami megtámadható lenne.");
 
+
+
             if(attackerCountry.Id == attackDto.AttackedCountryId) throw new InvalidParameterException("Nem támadhatja meg saját magát az ország.");
 
             await AttackLogic(attackerCountry, attackedCountry, attackDto);
@@ -195,28 +197,19 @@ namespace UnderSea.Bll.Services
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
-                Attack attack = new Attack()
+                var attack = new Attack()
                 {
                     AttackerCountryId = attackerCountry.Id,
                     DefenderCountryId = attackedCountry.Id,
                     AttackRound = attackerCountry.World.Round,
+                    AttackUnits = new List<AttackUnit>(),
                     WinnerId = null
                 };
 
-                var newAttack = _context.Attacks.Add(attack);
-                await _context.SaveChangesAsync();
-
-                if (newAttack.Entity == null)
-                {
-                    await transaction.RollbackAsync();
-                    throw new InvalidParameterException("Nem sikerült létrehozni a támadást.");
-                }
-
                 foreach (var unit in attackDto.Units)
                 {
-                    AttackUnit attackUnit = new AttackUnit()
+                    var attackUnit = new AttackUnit()
                     {
-                        AttackId = newAttack.Entity.Id,
                         Count = unit.Count,
                         UnitId = unit.UnitId
                     };
@@ -239,14 +232,11 @@ namespace UnderSea.Bll.Services
                         throw new InvalidParameterException("Nincs elegendő egység amit a támadáshoz kértek.");
                     }
 
-                    var newAttackUnit = _context.AttackUnits.Add(attackUnit);
+                    attack.AttackUnits.Add(attackUnit);
 
-                    if (newAttackUnit.Entity == null)
-                    {
-                        await transaction.RollbackAsync();
-                        throw new InvalidParameterException("Nem sikerült a támadáshoz rendelni az egységet.");
-                    }
                 }
+
+                _context.Attacks.Add(attack);
 
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
