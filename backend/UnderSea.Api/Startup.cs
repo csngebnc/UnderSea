@@ -45,11 +45,13 @@ namespace UnderSea.Api
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy", builder => builder
-                .WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200", "https://api-undersea.azurewebsites.net" })
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.WithOrigins(Configuration.GetValue<string[]>("Clients:AllowedCorsOrigins"))
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                });
             });
 
             // Add Hangfire services.
