@@ -195,7 +195,7 @@ namespace UnderSea.Bll.Services
                     WinnerId = null
                 };
 
-                foreach (var unit in attackDto.Units)
+                var attackunits = attackDto.Units.Select(unit =>
                 {
                     var attackUnit = new AttackUnit()
                     {
@@ -206,7 +206,6 @@ namespace UnderSea.Bll.Services
                     var cunit = attackerCountry.CountryUnits.Where(c => c.CountryId == attackerCountry.Id && c.UnitId == unit.UnitId).FirstOrDefault();
                     if (cunit == null)
                     {
-                        await transaction.RollbackAsync();
                         throw new InvalidParameterException("Nincsen ilyen egysége az országnak.");
                     }
 
@@ -217,12 +216,14 @@ namespace UnderSea.Bll.Services
                     }
                     else
                     {
-                        await transaction.RollbackAsync();
                         throw new InvalidParameterException("Nincs elegendő egység amit a támadáshoz kértek.");
                     }
+                    return attackUnit;
+                });
 
-                    attack.AttackUnits.Add(attackUnit);
-
+                foreach (var unit in attackunits)
+                {
+                    attack.AttackUnits.Add(unit);
                 }
 
                 _context.Attacks.Add(attack);
