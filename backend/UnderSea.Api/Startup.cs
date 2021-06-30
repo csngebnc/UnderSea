@@ -47,7 +47,7 @@ namespace UnderSea.Api
             {
                 options.AddPolicy("CorsPolicy", builder =>
                 {
-                    builder.WithOrigins(Configuration.GetValue<string[]>("Clients:AllowedCorsOrigins"))
+                    builder.WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200", "https://api-undersea.azurewebsites.net" })
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .AllowCredentials();
@@ -79,7 +79,7 @@ namespace UnderSea.Api
                     //Configuration.GetConnectionString("DefaultConnection")));
                     Configuration.GetConnectionString("AzureSqlDbConnection")));
 
-            services.AddOpenApiDocument();
+            services.AddSwaggerDocument();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
