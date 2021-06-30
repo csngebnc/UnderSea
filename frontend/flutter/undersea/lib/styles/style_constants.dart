@@ -93,11 +93,11 @@ class UnderseaStyles {
     );
   }
 
-  static Widget building(String name, Random rng) {
+  static Widget building(String name, {double? top, double? left}) {
     return Positioned(
         height: 180,
-        top: rng.nextDouble() * 200,
-        left: rng.nextDouble() * 500,
+        top: top ?? 0,
+        left: left ?? 0,
         child: UnderseaStyles.buildingImage(name, additional: "@3x"));
   }
 

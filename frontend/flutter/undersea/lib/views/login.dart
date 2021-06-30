@@ -34,9 +34,10 @@ class _LoginPageState extends State<LoginPage> {
     final loginButton = UnderseaStyles.elevatedButton(
         text: Strings.login.tr,
         onPressed: () {
-          if (usernameController.text.isEmpty ||
+          Get.off(BottomNavBar());
+          /*if (usernameController.text.isEmpty ||
               passwordController.text.isEmpty) return;
-          controller.login(usernameController.text, passwordController.text);
+          controller.login(usernameController.text, passwordController.text);*/
         });
 
     return Scaffold(
