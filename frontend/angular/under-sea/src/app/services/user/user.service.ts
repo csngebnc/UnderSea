@@ -31,6 +31,14 @@ export class UserService {
     );
   }
 
+  getPearlCount(): Observable<number> {
+    return this.userService.details().pipe(
+      map((cd: CountryDetailsDto) => {
+        return cd.pearl;
+      })
+    );
+  }
+
   getCountryName(): Observable<string> {
     return this.userService.countryName();
   }

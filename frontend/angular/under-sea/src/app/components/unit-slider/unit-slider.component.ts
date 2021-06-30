@@ -17,6 +17,6 @@ export class UnitSliderComponent implements OnInit {
   ngOnInit(): void {}
 
   setUnitCount(id: number, count: string): void {
-    this.setUnit.emit({ id: id, count: parseInt(count) });
+    this.setUnit.emit({ unitId: id, count: parseInt(count) });
   }
 }

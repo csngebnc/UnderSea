@@ -6,14 +6,17 @@
         <strong>Kattints rá, amelyiket szeretnéd megvenni.</strong>
       </p>
       <p class="modal-description">Egyszerre csak egy épület épülhet!</p>
-      <div class="stack align-center">
+      <div
+        *ngIf="!(isLoading | async); else loading"
+        class="stack align-center"
+      >
         <ul class="item-container">
           <li *ngFor="let building of buildings" class="non-styled-list-item">
             <button
               type="button"
               class="item-btn"
               (click)="setBuilding(building.id)"
-              [disabled]="isUnderConstruction"
+              [disabled]="isUnderConstruction || building.price > money"
             >
               <building-details
                 class="item item-lg stack align-center"
@@ -35,3 +38,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  <loading class="w-100 h-100 d-flex to-center align-center"></loading>
+</ng-template>

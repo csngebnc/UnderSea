@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BuildingDetails } from 'src/app/models/building-details.model';
+import { BehaviorSubject, forkJoin } from 'rxjs';
+import { BuildingService } from 'src/app/services/building/building.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'buildings',
@@ -7,37 +10,58 @@ import { BuildingDetails } from 'src/app/models/building-details.model';
   styleUrls: ['./buildings.component.scss'],
 })
 export class BuildingsComponent implements OnInit {
-  selectedBuilding: string = '';
-
+  selectedBuilding: number | null = null;
   isUnderConstruction: boolean = false;
+  buildings: Array<BuildingDetails> = [];
+  money: number = 0;
+  isLoading = new BehaviorSubject(false);
 
-  buildings: Array<BuildingDetails> = [
-    {
-      id: 1,
-      name: 'Korall fal',
-      effects: [{ id: 1, name: 'asd' }],
-      count: 0,
-      price: 123,
-    },
-    {
-      id: 2,
-      name: 'Korall fal',
-      effects: [{ id: 1, name: 'asd' }],
-      count: 0,
-      price: 123,
-    },
-  ];
+  constructor(
+    private buildingService: BuildingService,
+    private userService: UserService
+  ) {}
 
-  constructor() {}
+  ngOnInit(): void {
+    this.initBuildings();
+  }
 
-  ngOnInit(): void {}
+  private initBuildings(): void {
+    this.isLoading.next(true);
 
-  setBuilding(id: string): void {
+    let buildings = this.buildingService.getBuildings();
+    let pearls = this.userService.getPearlCount();
+
+    forkJoin([buildings, pearls]).subscribe(
+      (responses) => {
+        this.buildings = responses[0];
+        this.money = responses[1];
+
+        this.checkUnderConstruction();
+        this.isLoading.next(false);
+      },
+      (e) => console.log(e)
+    );
+  }
+
+  private checkUnderConstruction(): void {
+    this.buildings.forEach((b) => {
+      if (b.underConstruction) this.isUnderConstruction = true;
+    });
+  }
+
+  setBuilding(id: number): void {
     this.selectedBuilding = id;
   }
 
   onBuy(): void {
-    console.log(this.selectedBuilding);
-    this.isUnderConstruction = true;
+    this.buildingService.buyBuilding(this.selectedBuilding).subscribe(
+      (r) => {
+        this.isUnderConstruction = true;
+        this.initBuildings();
+
+        console.log(r);
+      },
+      (e) => console.log(e)
+    );
   }
 }

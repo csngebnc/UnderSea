@@ -3,7 +3,8 @@ import { UnitDetails } from 'src/app/models/unit-details.model';
 import { UnitsDto } from 'src/app/models/dto/units-dto.model';
 import { CartUnit } from 'src/app/models/cart-unit.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, forkJoin } from 'rxjs';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'units',
@@ -18,17 +19,29 @@ export class UnitsComponent implements OnInit {
 
   isLoading = new BehaviorSubject(false);
 
-  constructor(private battleService: BattleService) {
-    this.money = 1300;
-    this.remainingMoney = this.money;
-  }
+  constructor(
+    private battleService: BattleService,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
+    this.initUnits();
+  }
+
+  private initUnits(): void {
     this.isLoading.next(true);
-    this.battleService.getUnits().subscribe(
-      (r) => {
-        this.units = r;
+
+    let units = this.battleService.getUnits();
+    let pearls = this.userService.getPearlCount();
+
+    forkJoin([units, pearls]).subscribe(
+      (responses) => {
+        this.units = responses[0];
         this.initCart();
+
+        this.money = responses[1];
+        this.remainingMoney = this.money;
+
         this.isLoading.next(false);
       },
       (e) => console.log(e)

@@ -74,6 +74,7 @@ import { TokenInterceptor } from './http-interceptors/token/token.interceptor';
     generated.ApiService,
     generated.BattleService,
     generated.UpgradeService,
+    generated.BuildingService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],

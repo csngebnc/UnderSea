@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import {
   BattleService as bService,
   UnitDto,
-  FightOutcome,
-  LoggedAttackDto,
-  PagedResultOfUserRankDto,
   PagedResultOfLoggedAttackDto,
+  PagedResultOfAttackableUserDto,
+  BattleUnitDto,
 } from '../generated-code/generated-api-code';
 import { Observable } from 'rxjs';
 import { UnitDetails } from 'src/app/models/unit-details.model';
 import { map } from 'rxjs/operators';
 import { PagedBattles } from 'src/app/models/paged-battles.model';
+import { PagedList } from 'src/app/models/paged-list.model';
+import { AttackerUnit } from 'src/app/models/attacker-unit.model';
+import { AttackerUnitDto } from 'src/app/models/dto/attacker-unit-dto.model';
 
 @Injectable({
   providedIn: 'root',
@@ -65,5 +67,47 @@ export class BattleService {
         return result;
       })
     );
+  }
+
+  getUsers(
+    pageNumber: number,
+    filter: string | undefined
+  ): Observable<PagedList> {
+    return this.battleService.attackableUsers(10, pageNumber).pipe(
+      map((arr: PagedResultOfAttackableUserDto) => {
+        const result: PagedList = {
+          list: [],
+          pageNumber: 1,
+          pageSize: 0,
+          allResultsCount: 0,
+        };
+
+        arr.results.forEach((u) =>
+          result.list.push({
+            id: u.id,
+            name: u.userName,
+            countryId: u.countryId,
+          })
+        );
+
+        return result;
+      })
+    );
+  }
+
+  getAttackerUnits(): Observable<Array<AttackerUnit>> {
+    return this.battleService.availableUnits().pipe(
+      map((arr: Array<BattleUnitDto>) => {
+        const result: Array<AttackerUnit> = [];
+
+        arr.forEach((u) => result.push(u as AttackerUnit));
+
+        return result;
+      })
+    );
+  }
+
+  attack(id: number, units: Array<AttackerUnitDto>): Observable<any> {
+    return this.battleService.attack({ attackedCountryId: id, units: units });
   }
 }

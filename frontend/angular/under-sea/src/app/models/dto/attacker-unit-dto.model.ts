@@ -1,4 +1,4 @@
 export type AttackerUnitDto = {
-  id: number;
+  unitId: number;
   count: number;
 };
