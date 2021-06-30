@@ -29,6 +29,8 @@ class Strings {
   static const city_modified_snack_body = 'city_modified_snack_body';
 
   static const city_modified_snack_title = 'city_modified_snack_title';
+  static const unit_select = 'unit_select';
+  static const second_step = 'second_step';
 
   static const new_city_name = 'new_city_name';
   static const rounds_remaining = 'rounds_remaining';
@@ -49,4 +51,8 @@ class Strings {
   static const coral = 'coral';
   static const proceed = 'proceed';
   static const lets_attack = 'lets_attack';
+  static const select = 'select';
+  static const first_step = 'first_step';
+  static const back = 'back';
+  static const leaderboard = 'leaderboard';
 }

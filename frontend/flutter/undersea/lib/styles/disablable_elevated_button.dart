@@ -1,36 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:undersea/styles/style_constants.dart';
 
-class ToggleableElevatedButton extends StatefulWidget {
+class ToggleableElevatedButton extends StatelessWidget {
   final String text;
   final Function onPressed;
-  final bool initiallyDisabled;
+  final bool isDisabled;
   ToggleableElevatedButton(
-      {required this.text,
-      required this.onPressed,
-      required this.initiallyDisabled});
-  @override
-  _ToggleableElevatedButtonState createState() =>
-      new _ToggleableElevatedButtonState();
-}
-
-class _ToggleableElevatedButtonState extends State<ToggleableElevatedButton> {
-  var _isDisabled;
-
-  @override
-  void initState() {
-    super.initState();
-    _isDisabled = widget.initiallyDisabled;
-  }
+      {required this.text, required this.onPressed, required this.isDisabled});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        if (_isDisabled)
+        if (isDisabled)
           () {};
         else
-          widget.onPressed();
+          onPressed();
       },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,
@@ -40,7 +25,7 @@ class _ToggleableElevatedButtonState extends State<ToggleableElevatedButton> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(200))),
       child: Ink(
         decoration: BoxDecoration(
-            gradient: _isDisabled
+            gradient: isDisabled
                 ? LinearGradient(colors: UnderseaStyles.opaqueGradientColors)
                 : UnderseaStyles.buttonGradient,
             borderRadius: BorderRadius.circular(200)),
@@ -49,7 +34,7 @@ class _ToggleableElevatedButtonState extends State<ToggleableElevatedButton> {
           height: 70,
           alignment: Alignment.center,
           child: Text(
-            widget.text,
+            text,
             style: UnderseaStyles.buttonTextStyle.copyWith(fontSize: 24),
           ),
         ),

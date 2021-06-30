@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/buildings_controller.dart';
+import 'package:undersea/controllers/navbar_controller.dart';
+import 'package:undersea/controllers/player_controller.dart';
+import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/lang/app_translations.dart';
 import 'package:undersea/views/login.dart';
+import 'controllers/upgrades_controller.dart';
 import 'lang/strings.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  await initServices();
+
+  runApp(MyApp());
+}
+
+Future<void> initServices() async {
+  Get.put(PlayerController());
+  Get.put(BottomNavBarController());
+  Get.put(SoldiersController());
+  Get.put(UpgradesController());
+  Get.put(BuildingsController());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

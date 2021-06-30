@@ -1,43 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:undersea/controllers/player_controller.dart';
+import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:get/get.dart';
 import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
 
-class Military extends StatelessWidget {
+class Military extends StatefulWidget {
+  @override
+  _MilitaryTabState createState() => _MilitaryTabState();
+}
+
+class _MilitaryTabState extends State<Military> {
+  List<Soldier> soldierList = Get.find<SoldiersController>().soldierList;
+  late List<int> buyList = List.generate(soldierList.length, (index) => 0);
+  late int count = 2 + soldierList.length * 2 - 1;
+  PlayerController playerController = Get.find<PlayerController>();
   @override
   Widget build(BuildContext context) {
-    var soldierList = <Soldier>[
-      Soldier(
-          amount: 0,
-          attack: 5,
-          defence: 5,
-          payment: 1,
-          supplyNeeds: 1,
-          name: 'Lézercápa',
-          price: 200,
-          iconName: 'shark'),
-      Soldier(
-          amount: 5,
-          attack: 2,
-          defence: 6,
-          payment: 1,
-          supplyNeeds: 1,
-          name: 'Rohamfóka',
-          price: 50,
-          iconName: 'seal'),
-      Soldier(
-          amount: 0,
-          attack: 6,
-          defence: 2,
-          payment: 1,
-          supplyNeeds: 1,
-          name: 'Csatacsikó',
-          price: 50,
-          iconName: 'seahorse')
-    ];
-    var count = 2 + soldierList.length * 2 - 1;
     return UnderseaStyles.tabSkeleton(
+        isDisabled: !_canHireSoldiers(),
         list: ListView.builder(
             itemCount: count,
             itemBuilder: (BuildContext context, int i) {
@@ -57,8 +39,24 @@ class Military extends StatelessWidget {
             }));
   }
 
+  int _calculateSoldierPrice() {
+    int totalPrice = 0;
+    for (int i = 0; i < soldierList.length; i++) {
+      totalPrice += soldierList[i].price * buyList[i];
+    }
+    return totalPrice;
+  }
+
+  bool _canHireSoldiers() {
+    if (buyList.every((element) => element == 0)) return false;
+    if (playerController.playerData.value.pearlAmount <
+        _calculateSoldierPrice()) return false;
+    return true;
+  }
+
   Widget _buildRow(int index, List<Soldier> list) {
-    var actualSoldier = list.elementAt((index - 1) ~/ 2);
+    var idx = (index - 1) ~/ 2;
+    var actualSoldier = list.elementAt(idx);
     return ListTile(
         title: Padding(
       padding: EdgeInsets.all(10),
@@ -84,7 +82,7 @@ class Military extends StatelessWidget {
                   UnderseaStyles.text(Strings.you_possess.tr),
                   Expanded(child: Container()),
                   UnderseaStyles.text(
-                      actualSoldier.amount.toString() + Strings.amount.tr),
+                      actualSoldier.totalAmount.toString() + Strings.amount.tr),
                 ],
               ),
               Row(
@@ -122,24 +120,19 @@ class Military extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  RawMaterialButton(
-                    onPressed: () {},
-                    elevation: 2.0,
-                    fillColor: UnderseaStyles.underseaLogoColor,
-                    child: UnderseaStyles.iconsFromImages('minus'),
-                    padding: EdgeInsets.all(5.0),
-                    shape: CircleBorder(),
-                  ),
-                  Text('0',
+                  UnderseaStyles.circleButton("minus", onPressed: () {
+                    setState(() {
+                      if (buyList[idx] == 0) return;
+                      --buyList[idx];
+                    });
+                  }),
+                  Text(buyList[idx].toString(),
                       style: UnderseaStyles.listBold.copyWith(fontSize: 22)),
-                  RawMaterialButton(
-                    onPressed: () {},
-                    elevation: 2.0,
-                    fillColor: UnderseaStyles.underseaLogoColor,
-                    child: UnderseaStyles.iconsFromImages('plus'),
-                    padding: EdgeInsets.all(5.0),
-                    shape: CircleBorder(),
-                  ),
+                  UnderseaStyles.circleButton("plus", onPressed: () {
+                    setState(() {
+                      ++buyList[idx];
+                    });
+                  }),
                 ],
               )
             ],

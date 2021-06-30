@@ -22,12 +22,9 @@ class CityTabBar extends StatelessWidget {
                 color: UnderseaStyles.menuDarkBlue,
                 child: TabBar(
                   indicatorColor: UnderseaStyles.underseaLogoColor,
-
-                  //labelColor: UnderseaStyles.menuDarkBlue,
-                  //unselectedLabelColor: UnderseaStyles.menuDarkBlue,
+                  indicatorPadding: EdgeInsets.zero,
                   indicatorSize: TabBarIndicatorSize.label,
-                  indicatorWeight: 5,
-
+                  indicatorWeight: 3,
                   tabs: [
                     UnderseaStyles.tab(Strings.my_city.tr),
                     UnderseaStyles.tab(Strings.upgrades.tr),

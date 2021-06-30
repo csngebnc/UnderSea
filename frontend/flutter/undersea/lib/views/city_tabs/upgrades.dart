@@ -1,65 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/upgrade.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:get/get.dart';
 
-class Upgrades extends StatelessWidget {
+class Upgrades extends StatefulWidget {
+  @override
+  _UpgradesTabState createState() => _UpgradesTabState();
+}
+
+class _UpgradesTabState extends State<Upgrades> {
+  int? _selectedIndex;
+  List<Upgrade> upgradeList = Get.find<UpgradesController>().upgradeList;
+
+  bool _canStartUpgrade() {
+    if (_selectedIndex == null) return false;
+    if (upgradeList.any((element) => element.isInProgress)) return false;
+    if (upgradeList[_selectedIndex!].isAvailable) return false;
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    var upgradeList = <Upgrade>[
-      Upgrade(
-        availableIn: 3,
-        name: "Iszaptraktor",
-        imageName: "iszaptraktor",
-        effect: "növeli a krumpli termesztést 10%-kal",
-        isAvailable: true,
-        isInProgress: false,
-      ),
-      Upgrade(
-        availableIn: 3,
-        name: "Iszapkombájn",
-        imageName: "iszapkombajn",
-        effect: "növeli a krumpli termesztést 15%-kal",
-        isAvailable: true,
-        isInProgress: false,
-      ),
-      Upgrade(
-        availableIn: 5,
-        name: "Korallfal",
-        imageName: "korallfal",
-        effect: "növeli a védelmi pontokat 20%-kal",
-        isAvailable: false,
-        isInProgress: true,
-      ),
-      Upgrade(
-        availableIn: 3,
-        name: "Szonárágyú",
-        imageName: "szonaragyu",
-        effect: "növeli a támadópontokat 20%-kal",
-        isAvailable: false,
-        isInProgress: false,
-      ),
-      Upgrade(
-        availableIn: 3,
-        name: "Vízalatti harcművészetek",
-        imageName: "vizicsillag",
-        effect: "növeli a védelmi és támadóerőt 10%-kal",
-        isAvailable: false,
-        isInProgress: false,
-      ),
-      Upgrade(
-        availableIn: 3,
-        name: "Alkímia",
-        imageName: "alkimia",
-        effect: "növeli a beszedett adót 30%-kal",
-        isAvailable: false,
-        isInProgress: false,
-      ),
-    ];
-
     return UnderseaStyles.tabSkeleton(
+        isDisabled: !_canStartUpgrade(),
         list: ListView.builder(
             itemCount: 8,
             itemBuilder: (BuildContext context, int i) {
@@ -76,6 +42,14 @@ class Upgrades extends StatelessWidget {
   Widget _buildRow(int index, List<Upgrade> list) {
     var actualUpgrade = list[index - 1];
     return ListTile(
+        onTap: () {
+          setState(() {
+            if ((index - 1) != _selectedIndex)
+              _selectedIndex = index - 1;
+            else
+              _selectedIndex = null;
+          });
+        },
         title: Padding(
             padding: EdgeInsets.all(10),
             child: Container(
@@ -128,6 +102,9 @@ class Upgrades extends StatelessWidget {
                   ),
                 ),
                 decoration: BoxDecoration(
+                    color: _selectedIndex == (index - 1)
+                        ? UnderseaStyles.hintColor
+                        : null,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: UnderseaStyles.hintColor)))));
   }

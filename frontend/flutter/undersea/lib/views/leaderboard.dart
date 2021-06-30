@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class Leaderboard extends StatefulWidget {
@@ -31,7 +32,7 @@ class _LeaderboardState extends State<Leaderboard> {
     return Scaffold(
       backgroundColor: UnderseaStyles.menuDarkBlue,
       appBar: AppBar(
-        title: Text('Ranglista', style: UnderseaStyles.listBold),
+        title: Text(Strings.leaderboard.tr, style: UnderseaStyles.listBold),
         toolbarHeight: 85,
         backgroundColor: UnderseaStyles.hintColor,
         actions: [
@@ -67,7 +68,7 @@ class _LeaderboardState extends State<Leaderboard> {
               return Padding(
                 padding: EdgeInsets.fromLTRB(15, 30, 15, 0),
                 child: UnderseaStyles.inputField(
-                    hint: 'Felhasználónév',
+                    hint: Strings.username.tr,
                     color: Color(0xFF657A9D),
                     hintColor: UnderseaStyles.alternativeHintColor,
                     onChanged: _onSearchChanged),
