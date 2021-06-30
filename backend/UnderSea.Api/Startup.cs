@@ -26,7 +26,7 @@ using UnderSea.Bll.Mapper;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
-using UnderSea.Bll.SignalR;
+using UnderSea.Api.SignalR;
 using UnderSea.Bll.Validation;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
