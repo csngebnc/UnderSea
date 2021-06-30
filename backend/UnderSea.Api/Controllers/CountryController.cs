@@ -29,13 +29,13 @@ namespace UnderSea.Api.Controllers
             return Ok(await _countryService.GetUserCountryDetails());
         }
 
-        [HttpGet("country-name")]
+        [HttpGet("name")]
         public async Task<ActionResult<string>> GetUserCountryName()
         {
             return Ok(await _countryService.GetUserCountryName());
         }
 
-        [HttpPut("new-country-name")]
+        [HttpPut("name")]
         public async Task<ActionResult> ChangeCountryName([FromQuery] string name)
         {
             await _countryService.ChangeUserCountryName(name);
