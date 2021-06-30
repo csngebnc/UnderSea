@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Services.Interfaces;
+using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -31,6 +32,9 @@ namespace UnderSea.Bll.Services
                                     .Include(c => c.CountryBuildings)
                                     .Include(c => c.ActiveConstructions)
                                     .FirstOrDefaultAsync();
+
+            if (country == null)
+                throw new NotExistsException("Nem létezik ilyen ország.");
 
             var buildings = await _context.Buildings
                                         .Include(b => b.BuildingEffects)
@@ -58,11 +62,14 @@ namespace UnderSea.Bll.Services
                                     .Include("World")
                                     .FirstOrDefaultAsync();
 
+            if (country == null)
+                throw new NotExistsException("Nem létezik ilyen ország.");
+
             var building = await _context.Buildings.Where(c => c.Id == buildingDto.BuildingId).FirstOrDefaultAsync();
-            if (building == null) throw new NullReferenceException();
+            if (building == null) throw new NotExistsException("Nem létezik ilyen épület.");
 
             var activebuilding = await _context.ActiveConstructions.Where(ac => ac.CountryId == country.Id).FirstOrDefaultAsync();
-            if (activebuilding != null) throw new InvalidOperationException();
+            if (activebuilding != null) throw new InvalidParameterException("Már folyamatban van egy építés.");
 
             if (building.Price <= country.Pearl)
             {
@@ -75,6 +82,10 @@ namespace UnderSea.Bll.Services
                 _context.ActiveConstructions.Add(activeConstruction);
 
                 country.Pearl -= building.Price;
+            }
+            else
+            {
+                throw new InvalidParameterException("Nincs elég nyersanyagod az épület megvásárlásához.");
             }
 
             await _context.SaveChangesAsync();

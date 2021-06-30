@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:undersea/lang/strings.dart';
+import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/views/city_tabs/buildings.dart';
+import 'package:undersea/views/city_tabs/military.dart';
+import 'package:undersea/views/city_tabs/upgrades.dart';
+import 'package:get/get.dart';
 
 class CityTabBar extends StatelessWidget {
   CityTabBar();
@@ -12,31 +18,30 @@ class CityTabBar extends StatelessWidget {
             preferredSize: Size(100.0, 100.0),
             child: Container(
               height: 50,
-              child: TabBar(
-                tabs: [
-                  Text(
-                    'Épületek',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  Text(
-                    "Fejlesztések",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  Text(
-                    "Sereg",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
+              child: Material(
+                color: UnderseaStyles.menuDarkBlue,
+                child: TabBar(
+                  indicatorColor: UnderseaStyles.underseaLogoColor,
+
+                  //labelColor: UnderseaStyles.menuDarkBlue,
+                  //unselectedLabelColor: UnderseaStyles.menuDarkBlue,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicatorWeight: 5,
+
+                  tabs: [
+                    UnderseaStyles.tab(Strings.my_city.tr),
+                    UnderseaStyles.tab(Strings.upgrades.tr),
+                    UnderseaStyles.tab(Strings.my_forces.tr),
+                  ],
+                ),
               ),
             ),
           ),
-          //title: Text('Tabs Demo'),
-
           body: TabBarView(
             children: [
-              Icon(Icons.directions_car),
-              Icon(Icons.directions_transit),
-              Icon(Icons.directions_bike),
+              Buildings(),
+              Upgrades(),
+              Military(),
             ],
           ),
         ),
