@@ -48,6 +48,7 @@ class UnderseaStyles {
 
   static Widget inputField({
     required String hint,
+    TextEditingController? controller,
     bool isPassword = false,
     Color color = Colors.white,
     Color hintColor = hintColor,
@@ -57,6 +58,7 @@ class UnderseaStyles {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(32.0), color: color),
         child: TextField(
+          controller: controller,
           obscureText: isPassword,
           style: UnderseaStyles.inputTextStyle,
           onChanged: onChanged,
