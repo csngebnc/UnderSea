@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.Unit;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
@@ -61,9 +62,9 @@ namespace UnderSea.Api.Controllers
         }
 
         [HttpPost("buy-unit")]
-        public async Task<ActionResult> BuyUnit([FromBody] BuyUnitDto unitDto)
+        public async Task<ActionResult> BuyUnit([FromBody] BuyUnitDto unitsDto)
         {
-            await service.BuyUnitAsync(unitDto);
+            await service.BuyUnitAsync(unitsDto);
             return Ok();
         }
     }

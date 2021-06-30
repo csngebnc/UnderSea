@@ -5,14 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnderSea.Bll.Dtos
+namespace UnderSea.Bll.Dtos.Unit
 {
     public class BuyUnitDto
     {
-        [Required(ErrorMessage = "Az egység azonosítóját kötelező megadni!")]
-        public int UnitId { get; set; }
-        [Range(0, int.MaxValue, ErrorMessage = "Az egység darabszáma nem lehet negatív szám!")]
-        [Required(ErrorMessage = "Az egységből vásárolt darabszámot kötelező megadni!")]
-        public int Count { get; set; }
+        [Required(ErrorMessage = "Egységek megadása kötelező")]
+        public ICollection<BuyUnitDetailsDto> Units { get; set; }
     }
 }

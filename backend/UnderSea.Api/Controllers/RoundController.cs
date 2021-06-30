@@ -19,7 +19,7 @@ namespace UnderSea.Api.Controllers
             _roundService = roundService;
         }
 
-        [HttpGet("call-next-round")]
+        [HttpPost("call-next-round")]
         public async Task NextRound()
         {
             await _roundService.NextRound();

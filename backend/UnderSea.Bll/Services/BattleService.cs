@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.Unit;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
@@ -122,42 +123,45 @@ namespace UnderSea.Bll.Services
                 });
         }
 
-        public async Task BuyUnitAsync(BuyUnitDto unitDto)
+        public async Task BuyUnitAsync(BuyUnitDto unitsDto)
         {
             var country = await GetCountry();
 
-            var unit = await _context.Units.Where(c => c.Id == unitDto.UnitId).FirstOrDefaultAsync();
-            if (unit == null) throw new NotExistsException("Nem létezik ilyen egység, amit meg lehetne vásárolni.");
-
-            var unitSum = country.CountryUnits.Select(cu => cu.Count).Sum();
-            if (country.MaxUnitCount - unitSum - unitDto.Count < 0)
-                throw new InvalidParameterException("Nem lehetséges ez a művelet: a maximális egység számánál nem lehet több a felhasználó egységeinek száma.");
-
-
-            var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id).FirstOrDefaultAsync();
-
-            if ((unit.Price * unitDto.Count) <= country.Pearl)
+            foreach (var unitDto in unitsDto.Units)
             {
-                if (counit == null)
+                var unit = await _context.Units.Where(c => c.Id == unitDto.UnitId).FirstOrDefaultAsync();
+                if (unit == null) throw new NotExistsException("Nem létezik ilyen egység, amit meg lehetne vásárolni.");
+
+                var unitSum = country.CountryUnits.Select(cu => cu.Count).Sum();
+                if (country.MaxUnitCount - unitSum - unitDto.Count < 0)
+                    throw new InvalidParameterException("Nem lehetséges ez a művelet: a maximális egység számánál nem lehet több a felhasználó egységeinek száma.");
+
+
+                var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id).FirstOrDefaultAsync();
+
+                if ((unit.Price * unitDto.Count) <= country.Pearl)
                 {
-                    CountryUnit countryUnit = new CountryUnit()
+                    if (counit == null)
                     {
-                        UnitId = unit.Id,
-                        CountryId = country.Id,
-                        Count = unitDto.Count
-                    };
-                    _context.CountryUnits.Add(countryUnit);
+                        CountryUnit countryUnit = new CountryUnit()
+                        {
+                            UnitId = unit.Id,
+                            CountryId = country.Id,
+                            Count = unitDto.Count
+                        };
+                        _context.CountryUnits.Add(countryUnit);
+                    }
+                    else
+                    {
+                        counit.Count += unitDto.Count;
+                    }
+
+                    country.Pearl -= unit.Price * unitDto.Count;
                 }
                 else
                 {
-                    counit.Count += unitDto.Count;
+                    throw new InvalidParameterException("Nincs elég gyöngy az egységek megvásárlásához.");
                 }
-
-                country.Pearl -= unit.Price * unitDto.Count;
-            }
-            else
-            {
-                throw new InvalidParameterException("Nincs elég gyöngy az egységek megvásárlásához.");
             }
 
             await _context.SaveChangesAsync();
