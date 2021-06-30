@@ -42,7 +42,7 @@ const Map<String, String> hu_HU = {
   Strings.mercenary_payment: 'Zsold(/kör/példány)',
   Strings.attack_defence: 'Támadás/Védekezés',
   Strings.you_possess: 'Birtokodban:',
-  Strings.coral: 'korall ',
+  Strings.coral: ' korall ',
   Strings.pearl_cost_per_unit: ' Gyöngy / db',
   Strings.proceed: 'Tovább',
   Strings.lets_attack: 'Megtámadom!',

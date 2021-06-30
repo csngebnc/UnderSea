@@ -13,6 +13,7 @@ class AttackPage extends StatefulWidget {
 }
 
 class _AttackPageState extends State<AttackPage> {
+  int? _selectedIndex;
   var sliderValues = List<int>.generate(3, (index) => 0);
   var mercenaryPrice = 0;
   List<Soldier> soldierList = Get.find<SoldiersController>().soldierList;
@@ -34,12 +35,17 @@ class _AttackPageState extends State<AttackPage> {
     super.initState();
   }
 
+  bool _canAttack() {
+    if (sliderValues.every((element) => element == 0)) return false;
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (firstPage)
       return UnderseaStyles.tabSkeleton(
         buttonText: Strings.proceed,
-        buttonInitiallyDisabled: false,
+        isDisabled: _selectedIndex == null ? true : false,
         onButtonPressed: () {
           setState(() {
             firstPage = false;
@@ -71,27 +77,38 @@ class _AttackPageState extends State<AttackPage> {
                 );
               }
               if (i == 19) return SizedBox(height: 100);
-              return Padding(
-                  padding: EdgeInsets.fromLTRB(35, 10, 15, 10),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                          child: Text('${i ~/ 2}. ',
-                              style: UnderseaStyles.listRegular),
-                          width: 30),
-                      SizedBox(width: 20),
-                      Text('kiscsiko98', style: UnderseaStyles.listRegular),
-                      Expanded(child: Container()),
-                      if (i == 4)
-                        UnderseaStyles.iconsFromImages("done", size: 28),
-                      SizedBox(width: 20)
-                    ],
-                  ));
+              return ListTile(
+                  onTap: () {
+                    setState(() {
+                      i != _selectedIndex
+                          ? _selectedIndex = i
+                          : _selectedIndex = null;
+                    });
+                  },
+                  title: Padding(
+                      padding: EdgeInsets.fromLTRB(25, 0, 15, 0),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                              child: Text('${i ~/ 2}. ',
+                                  style: UnderseaStyles.listRegular),
+                              width: 30),
+                          SizedBox(width: 20),
+                          Text('kiscsiko98',
+                              style: UnderseaStyles.listRegular
+                                  .copyWith(fontSize: 20)),
+                          Expanded(child: Container()),
+                          if (i == _selectedIndex)
+                            UnderseaStyles.iconsFromImages("done", size: 28),
+                          SizedBox(width: 20)
+                        ],
+                      )));
             }),
       );
     else
       return UnderseaStyles.tabSkeleton(
           buttonText: Strings.lets_attack,
+          isDisabled: !_canAttack(),
           onButtonPressed: () {
             setState(() {
               firstPage = true;
@@ -159,7 +176,8 @@ class _AttackPageState extends State<AttackPage> {
                                 ),
                                 child: Text(
                                     '${soldierList[i - 1].name} ${sliderValues[i - 1]}/${soldierList[i - 1].available}',
-                                    style: UnderseaStyles.listRegular),
+                                    style: UnderseaStyles.listRegular
+                                        .copyWith(height: 1.2)),
                               ),
                               SizedBox(height: 8),
                               Container(

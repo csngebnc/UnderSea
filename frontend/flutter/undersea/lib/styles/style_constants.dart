@@ -195,7 +195,8 @@ class UnderseaStyles {
         ));
   }
 
-  static Widget buildingIcon(String assetName, int amount) {
+  static Widget buildingIcon(String assetName, int amount,
+      {String additional = '@3x'}) {
     return Container(
         margin: EdgeInsets.all(12),
         child: Column(
@@ -346,7 +347,7 @@ class UnderseaStyles {
   static Widget tabSkeleton(
       {required Widget list,
       String buttonText = Strings.buy_button,
-      bool buttonInitiallyDisabled = true,
+      bool isDisabled = true,
       Function onButtonPressed = _emptyFunction}) {
     return Expanded(
         child: Stack(fit: StackFit.expand, children: [
@@ -372,7 +373,7 @@ class UnderseaStyles {
                       child: ToggleableElevatedButton(
                         text: buttonText.tr,
                         onPressed: onButtonPressed,
-                        initiallyDisabled: buttonInitiallyDisabled,
+                        isDisabled: isDisabled,
                       ))))
         ],
       ),
