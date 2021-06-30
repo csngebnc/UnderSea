@@ -10,7 +10,7 @@ namespace UnderSea.Bll.Dtos
     public class AttackableUserDto
     {
         [Required(ErrorMessage = "A felhasználó azonosítójának megadása kötelező!")]
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required(ErrorMessage = "A felhasználó nevének megadása kötelező!")]
         public string UserName { get; set; }
         [Required(ErrorMessage = "A város azonosítójának megadása kötelező!")]

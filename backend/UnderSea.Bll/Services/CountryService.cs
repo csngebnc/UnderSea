@@ -9,6 +9,7 @@ using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
+using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Services
 {
@@ -36,6 +37,10 @@ namespace UnderSea.Bll.Services
                     .ThenInclude(cb => cb.Building)
                 .Include(c => c.CountryUnits)
                     .ThenInclude(cu => cu.Unit)
+                .Include(c => c.CountryUpgrades)
+                    .ThenInclude(cu => cu.Upgrade)
+                        .ThenInclude(u => u.UpgradeEffects)
+                            .ThenInclude(ue => ue.Effect)
                 .FirstOrDefaultAsync();
 
             if (country == null)
@@ -46,6 +51,9 @@ namespace UnderSea.Bll.Services
 
             var units = await _context.Units.ToListAsync();
 
+            var effects = country.CountryUpgrades.Select(cu => cu.Upgrade).SelectMany(upgrade => upgrade.UpgradeEffects).Select(effect => effect.Effect);
+            var hasSonarCanon = effects.Any(e => e.EffectType == "upgrade_effect_sonarcannon");
+
             return new CountryDetailsDto
             {
                 MaxUnitCount = country.MaxUnitCount,
@@ -53,6 +61,7 @@ namespace UnderSea.Bll.Services
                 Coral = country.Coral,
                 Pearl = country.Pearl,
                 Population = country.Population,
+                HasSonarCanon = hasSonarCanon,
                 CurrentCoralProduction = (int)(country.Production.BaseCoralProduction * country.Production.CoralProductionMultiplier),
                 CurrentPearlProduction = (int)(country.Production.BasePearlProduction * country.Production.PearlProductionMultiplier),
                 Buildings = buildings.Select(building =>
