@@ -64,9 +64,6 @@ namespace UnderSea.Bll.Services
                 .Where(u => u.Id == _identityService.GetCurrentUserId())
                 .FirstOrDefaultAsync();
 
-            if (user == null)
-                throw new NotExistsException("Nem létezik ilyen felhasználó.");
-
             return new UserInfoDto
             {
                 Id = user.Id,

@@ -46,11 +46,12 @@ namespace UnderSea.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>
                 {
-                    builder.WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200", "https://api-undersea.azurewebsites.net" })
+                    builder.WithOrigins(Configuration.GetSection("AllowedOrigins").Get<string[]>())
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .AllowCredentials();
@@ -64,7 +65,7 @@ namespace UnderSea.Api
                     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                     .UseSimpleAssemblyNameTypeSerializer()
                     .UseRecommendedSerializerSettings()
-                    .UseSqlServerStorage(Configuration.GetConnectionString("AzureHangfireDbConnection"), new SqlServerStorageOptions
+                    .UseSqlServerStorage(Configuration.GetConnectionString("DefaultHangfireConnection"), new SqlServerStorageOptions
                     {
                         CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
                         SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
@@ -79,8 +80,7 @@ namespace UnderSea.Api
 
             services.AddDbContext<UnderSeaDbContext>(options =>
                 options.UseSqlServer(
-                    //Configuration.GetConnectionString("DefaultConnection")));
-                    Configuration.GetConnectionString("AzureSqlDbConnection")));
+                    Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSwaggerDocument();
 
