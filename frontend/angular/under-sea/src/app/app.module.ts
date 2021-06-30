@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
@@ -28,10 +28,11 @@ import { ListComponent } from './components/list/list.component';
 import { UnitDetailsComponent } from './components/unit-details/unit-details.component';
 import { UnitSliderComponent } from './components/unit-slider/unit-slider.component';
 import { PagerButtonsComponent } from './components/pager-buttons/pager-buttons.component';
+import { LoadingComponent } from './components/loading/loading.component';
 
 import * as generated from './services/generated-code/generated-api-code';
 import * as config from 'src/assets/config.json';
-import { LoadingComponent } from './components/loading/loading.component';
+import { TokenInterceptor } from './http-interceptors/token/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { LoadingComponent } from './components/loading/loading.component';
   providers: [
     { provide: generated.API_BASE_URL, useValue: config.apiUrl },
     generated.UserService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })

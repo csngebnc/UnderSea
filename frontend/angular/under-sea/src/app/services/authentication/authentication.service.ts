@@ -44,7 +44,6 @@ export class AuthenticationService {
   }
 
   register(data: RegisterDto): Observable<string> {
-    console.log(API_BASE_URL);
     return this.userService.register(data);
   }
 

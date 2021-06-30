@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserData } from 'src/app/models/userdata.model';
 import { Resources } from 'src/app/models/resources.model';
 import { UserService } from 'src/app/services/user/user.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'main',
@@ -16,10 +16,7 @@ export class MainComponent implements OnInit {
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.userService.getDetails().subscribe((r) => {
-      this.resources = r;
-      this.isLoading.next(false);
-    });
+    this.loadResources();
   }
 
   userData: UserData = {
@@ -27,4 +24,18 @@ export class MainComponent implements OnInit {
     round: 12,
     placement: 11,
   };
+
+  loadResources(): void {
+    this.isLoading.next(true);
+
+    let details = this.userService.getDetails();
+
+    forkJoin([details]).subscribe(
+      (responses) => {
+        this.resources = responses[0];
+        this.isLoading.next(false);
+      },
+      (e) => console.log(e)
+    );
+  }
 }
