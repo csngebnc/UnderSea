@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/lang/strings.dart';
@@ -89,8 +91,16 @@ class UnderseaStyles {
     );
   }
 
-  static Widget buildingImage(String name) {
-    return Image.asset('assets/buildings/$name.png');
+  static Widget building(String name, Random rng) {
+    return Positioned(
+        height: 180,
+        top: rng.nextDouble() * 200,
+        left: rng.nextDouble() * 500,
+        child: UnderseaStyles.buildingImage(name, additional: "@3x"));
+  }
+
+  static Widget buildingImage(String name, {String additional = ''}) {
+    return Image.asset('assets/buildings/$name$additional.png');
   }
 
   static Widget assetIcon(String iconName,
@@ -143,6 +153,18 @@ class UnderseaStyles {
         ));
   }
 
+  static Widget circleButton(String iconName,
+      {void Function()? onPressed = _emptyFunction}) {
+    return RawMaterialButton(
+      onPressed: onPressed,
+      elevation: 2.0,
+      fillColor: UnderseaStyles.underseaLogoColor,
+      child: UnderseaStyles.iconsFromImages(iconName),
+      padding: EdgeInsets.all(5.0),
+      shape: CircleBorder(),
+    );
+  }
+
   static Widget resourceIcon(String assetName, int current, int production) {
     return Container(
         margin: EdgeInsets.all(12),
@@ -173,7 +195,8 @@ class UnderseaStyles {
         ));
   }
 
-  static Widget buildingIcon(String assetName, int amount) {
+  static Widget buildingIcon(String assetName, int amount,
+      {String additional = '@3x'}) {
     return Container(
         margin: EdgeInsets.all(12),
         child: Column(
@@ -324,7 +347,7 @@ class UnderseaStyles {
   static Widget tabSkeleton(
       {required Widget list,
       String buttonText = Strings.buy_button,
-      bool buttonInitiallyDisabled = true,
+      bool isDisabled = true,
       Function onButtonPressed = _emptyFunction}) {
     return Expanded(
         child: Stack(fit: StackFit.expand, children: [
@@ -350,7 +373,7 @@ class UnderseaStyles {
                       child: ToggleableElevatedButton(
                         text: buttonText.tr,
                         onPressed: onButtonPressed,
-                        initiallyDisabled: buttonInitiallyDisabled,
+                        isDisabled: isDisabled,
                       ))))
         ],
       ),

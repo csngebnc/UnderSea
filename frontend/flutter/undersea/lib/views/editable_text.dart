@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 
@@ -54,33 +55,43 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
     if (_isEditingText)
       return SizedBox(
           width: 150,
-          child: TextField(
-            decoration: InputDecoration(
-                hintText: Strings.new_city_name.tr,
-                hintStyle: UnderseaStyles.inputTextStyle
-                    .copyWith(color: Colors.white54, fontSize: 17)),
-            style: UnderseaStyles.whiteOpenSans
-                .copyWith(fontWeight: FontWeight.normal, fontSize: 21),
-            onSubmitted: (newValue) {
-              setState(() {
-                _cityName = newValue;
-                _isEditingText = false;
-              });
+          height: 60,
+          child: Align(
+              alignment: Alignment.centerLeft,
+              child: TextField(
+                decoration: InputDecoration(
+                    hintText: Strings.new_city_name.tr,
+                    hintStyle: UnderseaStyles.inputTextStyle
+                        .copyWith(color: Colors.white54, fontSize: 17)),
+                style: UnderseaStyles.whiteOpenSans
+                    .copyWith(fontWeight: FontWeight.normal, fontSize: 21),
+                onSubmitted: (newValue) {
+                  setState(() {
+                    _cityName = newValue;
+                    _isEditingText = false;
+                    Get.find<PlayerController>().playerData.value.cityName =
+                        _cityName;
+                  });
 
-              Get.snackbar(Strings.city_modified_snack_title.tr,
-                  Strings.city_modified_snack_body.tr + ': $_cityName',
-                  icon: Icon(Icons.save_sharp),
-                  snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.blueAccent);
-            },
-            autofocus: true,
-            controller: _editingController,
-          ));
+                  Get.snackbar(Strings.city_modified_snack_title.tr,
+                      Strings.city_modified_snack_body.tr + ': $_cityName',
+                      icon: Icon(Icons.save_sharp),
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.blueAccent);
+                },
+                autofocus: true,
+                controller: _editingController,
+              )));
     else
-      return Text(
-        _cityName,
-        style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 21),
-      );
+      return SizedBox(
+          width: 150,
+          height: 40,
+          child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                _cityName,
+                style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 21),
+              )));
   }
 
   @override

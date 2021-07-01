@@ -46,7 +46,7 @@ namespace UnderSea.Api
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder => builder
-                .WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200" })
+                .WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200", "https://api-undersea.azurewebsites.net" })
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
@@ -119,7 +119,7 @@ namespace UnderSea.Api
             })
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "https://localhost:5001";
+                    options.Authority = "https://api-undersea.azurewebsites.net";
                     options.Audience = "undersea-api";
                     options.RequireHttpsMetadata = false;
                 }
@@ -144,7 +144,8 @@ namespace UnderSea.Api
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseDeveloperExceptionPage();
+                //app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

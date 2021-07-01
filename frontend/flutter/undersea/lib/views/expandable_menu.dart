@@ -23,7 +23,6 @@ class _ExpandableMenuState extends State<ExpandableMenu> {
     });
     return ExpandableNotifier(
       controller: _controller,
-      // <-- Provides ExpandableController to its children
       child: Column(
         children: [
           ExpandablePanel(
@@ -31,17 +30,7 @@ class _ExpandableMenuState extends State<ExpandableMenu> {
               padding: EdgeInsets.zero,
               child: isExpanded
                   ? UnderseaStyles.imageIcon('caret_down', size: 35)
-                  /*Icon(
-                      Icons.keyboard_arrow_down,
-                      size: 40,
-                      color: UnderseaStyles.navbarIconColor,
-                    )*/
                   : UnderseaStyles.imageIcon('caret_up', size: 35),
-              /*Icon(
-                      Icons.keyboard_arrow_up,
-                      size: 40,
-                      color: UnderseaStyles.navbarIconColor,
-                    ),*/
               decoration: BoxDecoration(color: Colors.white),
             ),
             theme: ExpandableThemeData(
@@ -50,11 +39,9 @@ class _ExpandableMenuState extends State<ExpandableMenu> {
               useInkWell: true,
               headerAlignment: ExpandablePanelHeaderAlignment.center,
             ),
-            // <-- Driven by ExpandableController from ExpandableNotifier
             collapsed: ExpandableButton(child: Container()),
             expanded: Column(children: [
               ExpandableButton(
-                  // <-- Collapses when tapped on
                   child: Container(
                 decoration: BoxDecoration(color: Colors.white54),
                 child: ExpandedMenu(),

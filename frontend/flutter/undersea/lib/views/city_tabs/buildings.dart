@@ -1,35 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:undersea/controllers/buildings_controller.dart';
+import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/building.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:get/get.dart';
 
-class Buildings extends StatelessWidget {
+class Buildings extends StatefulWidget {
+  @override
+  _BuildingsTabState createState() => _BuildingsTabState();
+}
+
+class _BuildingsTabState extends State<Buildings> {
+  int? _selectedIndex;
+  List<Building> buildingList = Get.find<BuildingsController>().buildingList;
+  PlayerController playerController = Get.find<PlayerController>();
   @override
   Widget build(BuildContext context) {
-    var buildingList = <Building>[
-      Building(
-          name: 'Zátonyvár',
-          effect1: '50 ember-t ad a népességhez',
-          effect2: '200 krumplit termel körönként',
-          currentAmount: 1,
-          price: 35,
-          availableIn: 0,
-          imageName: "zatonyvar",
-          isInProgress: false,
-          isAvailable: true),
-      Building(
-          name: 'Áramlásirányító',
-          effect1: '200 egységnek nyújt szállást',
-          currentAmount: 1,
-          price: 35,
-          availableIn: 4,
-          imageName: "aramlasiranyito",
-          isInProgress: true,
-          isAvailable: false),
-    ];
-
     return UnderseaStyles.tabSkeleton(
+        isDisabled: !_canStartBuilding(),
         list: ListView.builder(
             itemCount: 4,
             itemBuilder: (BuildContext context, int i) {
@@ -43,9 +32,25 @@ class Buildings extends StatelessWidget {
             }));
   }
 
+  bool _canStartBuilding() {
+    if (_selectedIndex == null) return false;
+    if (buildingList.any((element) => element.isInProgress)) return false;
+    if (buildingList[_selectedIndex!].price >
+        playerController.playerData.value.pearlAmount) return false;
+    return true;
+  }
+
   Widget _buildRow(int index, List<Building> list) {
     var actualBuilding = list[index - 1];
     return ListTile(
+        onTap: () {
+          setState(() {
+            if ((index - 1) != _selectedIndex)
+              _selectedIndex = index - 1;
+            else
+              _selectedIndex = null;
+          });
+        },
         title: Padding(
             padding: EdgeInsets.all(10),
             child: Container(
@@ -82,14 +87,6 @@ class Buildings extends StatelessWidget {
                           ],
                         ),
                       ),
-                      actualBuilding.isAvailable
-                          ? Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Icon(
-                                Icons.done_outline_sharp,
-                                color: UnderseaStyles.underseaLogoColor,
-                              ))
-                          : Container(),
                       actualBuilding.isInProgress
                           ? Padding(
                               padding: EdgeInsets.all(10),
@@ -97,8 +94,6 @@ class Buildings extends StatelessWidget {
                                 Strings.rounds_remaining.trParams({
                                   'round': actualBuilding.availableIn.toString()
                                 })!,
-
-                                //'még ${actualBuilding.availableIn} kör',
                                 style: TextStyle(
                                     color: UnderseaStyles.underseaLogoColor,
                                     fontSize: 16),
@@ -108,6 +103,9 @@ class Buildings extends StatelessWidget {
                   ),
                 ),
                 decoration: BoxDecoration(
+                    color: _selectedIndex == (index - 1)
+                        ? UnderseaStyles.hintColor
+                        : null,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: UnderseaStyles.hintColor)))));
   }

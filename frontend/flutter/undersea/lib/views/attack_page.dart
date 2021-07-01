@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
@@ -12,39 +13,10 @@ class AttackPage extends StatefulWidget {
 }
 
 class _AttackPageState extends State<AttackPage> {
+  int? _selectedIndex;
   var sliderValues = List<int>.generate(3, (index) => 0);
   var mercenaryPrice = 0;
-  //var sliderMaxValues = List<int>.generate(3, (index) => 50);
-  var soldierList = <Soldier>[
-    Soldier(
-        amount: 20,
-        attack: 5,
-        defence: 5,
-        payment: 1,
-        supplyNeeds: 1,
-        name: 'Lézercápa',
-        price: 200,
-        iconName: 'shark'),
-    Soldier(
-        amount: 30,
-        attack: 2,
-        defence: 6,
-        payment: 1,
-        supplyNeeds: 1,
-        name: 'Rohamfóka',
-        price: 50,
-        iconName: 'seal'),
-    Soldier(
-        amount: 52,
-        attack: 6,
-        defence: 2,
-        payment: 1,
-        supplyNeeds: 1,
-        name: 'Csatacsikó',
-        price: 50,
-        iconName: 'seahorse')
-  ];
-  final iconNames = ['shark', 'seal', 'seahorse'];
+  List<Soldier> soldierList = Get.find<SoldiersController>().soldierList;
   bool firstPage = true;
   late final Timer? _debounce;
   void _onSearchChanged(String query) {
@@ -63,12 +35,17 @@ class _AttackPageState extends State<AttackPage> {
     super.initState();
   }
 
+  bool _canAttack() {
+    if (sliderValues.every((element) => element == 0)) return false;
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (firstPage)
       return UnderseaStyles.tabSkeleton(
         buttonText: Strings.proceed,
-        buttonInitiallyDisabled: false,
+        isDisabled: _selectedIndex == null ? true : false,
         onButtonPressed: () {
           setState(() {
             firstPage = false;
@@ -84,15 +61,15 @@ class _AttackPageState extends State<AttackPage> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('1. LÉPÉS',
+                        Text(Strings.first_step.tr,
                             style:
                                 UnderseaStyles.listBold.copyWith(fontSize: 22)),
-                        Text('Jelöld ki, kit szeretnél megtámadni:',
+                        Text(Strings.select.tr,
                             style: UnderseaStyles.listRegular
                                 .copyWith(fontSize: 22)),
                         SizedBox(height: 20),
                         UnderseaStyles.inputField(
-                            hint: 'Felhasználónév',
+                            hint: Strings.username.tr,
                             color: Color(0xFF657A9D),
                             hintColor: UnderseaStyles.alternativeHintColor,
                             onChanged: _onSearchChanged),
@@ -100,27 +77,38 @@ class _AttackPageState extends State<AttackPage> {
                 );
               }
               if (i == 19) return SizedBox(height: 100);
-              return Padding(
-                  padding: EdgeInsets.fromLTRB(35, 10, 15, 10),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                          child: Text('${i ~/ 2}. ',
-                              style: UnderseaStyles.listRegular),
-                          width: 30),
-                      SizedBox(width: 20),
-                      Text('kiscsiko98', style: UnderseaStyles.listRegular),
-                      Expanded(child: Container()),
-                      if (i == 4)
-                        UnderseaStyles.iconsFromImages("done", size: 28),
-                      SizedBox(width: 20)
-                    ],
-                  ));
+              return ListTile(
+                  onTap: () {
+                    setState(() {
+                      i != _selectedIndex
+                          ? _selectedIndex = i
+                          : _selectedIndex = null;
+                    });
+                  },
+                  title: Padding(
+                      padding: EdgeInsets.fromLTRB(25, 0, 15, 0),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                              child: Text('${i ~/ 2}. ',
+                                  style: UnderseaStyles.listRegular),
+                              width: 30),
+                          SizedBox(width: 20),
+                          Text('kiscsiko98',
+                              style: UnderseaStyles.listRegular
+                                  .copyWith(fontSize: 20)),
+                          Expanded(child: Container()),
+                          if (i == _selectedIndex)
+                            UnderseaStyles.iconsFromImages("done", size: 28),
+                          SizedBox(width: 20)
+                        ],
+                      )));
             }),
       );
     else
       return UnderseaStyles.tabSkeleton(
           buttonText: Strings.lets_attack,
+          isDisabled: !_canAttack(),
           onButtonPressed: () {
             setState(() {
               firstPage = true;
@@ -148,7 +136,7 @@ class _AttackPageState extends State<AttackPage> {
                                   firstPage = true;
                                 });
                               },
-                              child: Text("vissza",
+                              child: Text(Strings.back.tr,
                                   style: UnderseaStyles.buttonTextStyle
                                       .copyWith(
                                           color:
@@ -159,7 +147,7 @@ class _AttackPageState extends State<AttackPage> {
                         ),
                       ),
                       UnderseaStyles.infoPanel(
-                          '2. LÉPÉS', 'Állítsd be, kiket küldesz harcba:',
+                          Strings.second_step.tr, Strings.unit_select.tr,
                           padding: EdgeInsets.fromLTRB(20, 10, 0, 0)),
                       SizedBox(
                         height: 20,
@@ -175,11 +163,9 @@ class _AttackPageState extends State<AttackPage> {
                         SizedBox(
                           height: 70,
                           width: 70,
-                          child: UnderseaStyles.assetIcon(iconNames[i - 1]),
+                          child: UnderseaStyles.assetIcon(
+                              soldierList[i - 1].iconName),
                         ),
-                        /*SizedBox(
-                          width: 8,
-                        ),*/
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,8 +175,9 @@ class _AttackPageState extends State<AttackPage> {
                                   left: 25,
                                 ),
                                 child: Text(
-                                    '${soldierList[i - 1].name} ${sliderValues[i - 1]}/${soldierList[i - 1].amount}',
-                                    style: UnderseaStyles.listRegular),
+                                    '${soldierList[i - 1].name} ${sliderValues[i - 1]}/${soldierList[i - 1].available}',
+                                    style: UnderseaStyles.listRegular
+                                        .copyWith(height: 1.2)),
                               ),
                               SizedBox(height: 8),
                               Container(
@@ -210,7 +197,7 @@ class _AttackPageState extends State<AttackPage> {
                                     });
                                   },
                                   min: 0,
-                                  max: soldierList[i - 1].amount.toDouble(),
+                                  max: soldierList[i - 1].available.toDouble(),
                                   activeColor: UnderseaStyles.underseaLogoColor,
                                   inactiveColor: Color(0x883B7DBD),
                                 ),

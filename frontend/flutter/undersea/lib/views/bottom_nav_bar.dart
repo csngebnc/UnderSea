@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
+import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/attack_page.dart';
@@ -10,20 +10,11 @@ import 'package:undersea/views/my_army.dart';
 import 'package:undersea/views/profile.dart';
 import 'home_page.dart';
 
-/// This is the stateful widget that the main application instantiates.
-class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
-
-  @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
-}
-
-/// This is the private State class that goes with MyStatefulWidget.
-class _BottomNavBarState extends State<BottomNavBar> {
-  final BottomNavBarController controller = Get.put(BottomNavBarController());
-  int _selectedIndex = 0;
+class BottomNavBar extends StatelessWidget {
+  BottomNavBar({Key? key}) : super(key: key);
+  final BottomNavBarController controller = Get.find<BottomNavBarController>();
+  final playerController = Get.find<PlayerController>();
   static List<Widget> _appbarTitleOptions = <Widget>[
-    // UnderseaStyles.appBarTitle(Strings.undersea.tr),
     SizedBox(
       height: 35,
       width: 100,
@@ -42,27 +33,26 @@ class _BottomNavBarState extends State<BottomNavBar> {
   ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      //_selectedIndex = index;
-      controller.selectedTab.value = index;
-    });
+    controller.selectedTab.value = index;
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
-        //extendBody: true,
         appBar: AppBar(
           toolbarHeight: 85,
           backgroundColor: UnderseaStyles.hintColor,
           actions: [
-            /*_selectedIndex*/ if (controller.selectedTab.value == 0)
+            if (controller.selectedTab.value == 0)
               Padding(
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: GestureDetector(
                       onTap: () {
                         Get.to(ProfilePage(
-                            cityName: 'Óceánia', playerName: 'jakabjatekos'));
+                            cityName:
+                                playerController.playerData.value.cityName,
+                            playerName:
+                                playerController.playerData.value.playerName));
                       },
                       child: SizedBox(
                           height: 40,
@@ -80,7 +70,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
               colors: UnderseaStyles.gradientColors,
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              //tileMode: TileMode.,
             ),
           ),
           child: BottomNavigationBar(
