@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnderSea.Model.Models
+namespace UnderSea.Bll.Dtos
 {
-    public class Unit
+    public class UnitDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -16,7 +16,6 @@ namespace UnderSea.Model.Models
         public int MercenaryPerRound { get; set; }
         public int SupplyPerRound { get; set; }
         public int Price { get; set; }
-
-        public ICollection<CountryUnit> CountryUnits { get; set; }
+        public int CurrentCount { get; set; }
     }
 }

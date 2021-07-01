@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnderSea.Bll.SignalR
+namespace UnderSea.Api.SignalR
 {
     public class RoundHub : Hub
     {

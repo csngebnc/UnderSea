@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.Unit;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
@@ -26,9 +27,9 @@ namespace UnderSea.Api.Controllers
         }
 
         [HttpGet("attackable-users")]
-        public async Task<ActionResult<PagedResult<AttackableUserDto>>> GetAttackableUsers([FromQuery] PaginationData pagination)
+        public async Task<ActionResult<PagedResult<AttackableUserDto>>> GetAttackableUsers([FromQuery] PaginationData pagination, [FromQuery] string name)
         {
-            var attackableusers = await service.GetAttackableUsersAsync(pagination);
+            var attackableusers = await service.GetAttackableUsersAsync(pagination, name);
             return Ok(attackableusers);
         }
 
@@ -61,9 +62,9 @@ namespace UnderSea.Api.Controllers
         }
 
         [HttpPost("buy-unit")]
-        public async Task<ActionResult> BuyUnit([FromBody] BuyUnitDto unitDto)
+        public async Task<ActionResult> BuyUnit([FromBody] BuyUnitDto unitsDto)
         {
-            await service.BuyUnitAsync(unitDto);
+            await service.BuyUnitAsync(unitsDto);
             return Ok();
         }
     }

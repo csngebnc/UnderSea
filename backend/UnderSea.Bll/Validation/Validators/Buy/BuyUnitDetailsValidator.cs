@@ -10,11 +10,11 @@ using UnderSea.Dal.Data;
 
 namespace UnderSea.Bll.Validation
 {
-    public class BuyUnitValidator : AbstractValidator<BuyUnitDto>
+    public class BuyUnitDetailsValidator : AbstractValidator<BuyUnitDetailsDto>
     {
         private readonly UnderSeaDbContext _context;
 
-        public BuyUnitValidator(UnderSeaDbContext context)
+        public BuyUnitDetailsValidator(UnderSeaDbContext context)
         {
             this._context = context;
             RuleFor(unit => unit.UnitId).NotNull().MustAsync(async (unitId, cancellation) 

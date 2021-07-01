@@ -9,9 +9,16 @@ namespace UnderSea.Model.Models
 {
     public class CountryUnit
     {
-        [Range(0, int.MaxValue, ErrorMessage = "Az ország egységének mennyisége nem lehet negatív szám!")]
-        [Required(ErrorMessage = "Az ország egységének mennyiségét kötelező megadni!")]
-        public int Count { get; set; }
+        private int count;
+        public int Count { get => count; 
+            set {
+                if(value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), "A kért egységek nem állnak rendelkezésre.");
+                }
+                count = value; 
+            } 
+        }
 
         public int CountryId { get; set; }
         public Country Country { get; set; }

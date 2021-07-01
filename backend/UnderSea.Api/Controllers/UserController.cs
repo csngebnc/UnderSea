@@ -22,19 +22,10 @@ namespace UnderSea.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IRoundService _roundService;
 
-
-        public UserController(IUserService userService, IRoundService roundService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _roundService = roundService;
-        }
-
-        [HttpGet("call-next-round")]
-        public async Task NextRound()
-        {
-            await _roundService.NextRound();
         }
 
         [AllowAnonymous]
@@ -55,26 +46,5 @@ namespace UnderSea.Api.Controllers
         {
             return Ok(await _userService.GetUserInfo());
         }
-
-        [HttpGet("details")]
-        public async Task<ActionResult<CountryDetailsDto>> GetUserDetails()
-        {
-            return Ok(await _userService.GetUserDetails());
-        }
-
-        [HttpGet("country-name")]
-        public async Task<ActionResult<string>> GetUserCountryName()
-        {
-            return Ok(await _userService.GetUserCountryName());
-        }
-
-        [HttpPut("new-country-name")]
-        public async Task<ActionResult> ChangeCountryName([FromQuery] string name)
-        {
-            await _userService.ChangeCountryName(name);
-            return Ok();
-        }
-
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
@@ -13,7 +14,7 @@ using UnderSea.Model.Models;
 
 namespace UnderSea.Dal.Data
 {
-    public class UnderSeaDbContext : ApiAuthorizationDbContext<User>
+    public class UnderSeaDbContext : IdentityDbContext<User>
     {
         public DbSet<ActiveConstruction> ActiveConstructions { get; set; }
         public DbSet<Attack> Attacks { get; set; }
@@ -31,7 +32,7 @@ namespace UnderSea.Dal.Data
         public DbSet<ActiveUpgrading> ActiveUpgradings { get; set; }
         public DbSet<World> Worlds { get; set; }
 
-        public UnderSeaDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
+        public UnderSeaDbContext(DbContextOptions options) : base(options)
         {
         }
 

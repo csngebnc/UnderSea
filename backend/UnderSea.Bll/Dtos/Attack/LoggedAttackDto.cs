@@ -11,7 +11,6 @@ namespace UnderSea.Bll.Dtos
     {
         public string AttackedCountryName { get; set; }
         public ICollection<BattleUnitDto> Units { get; set; }
-
         public FightOutcome Outcome { get; set; }
     }
 }

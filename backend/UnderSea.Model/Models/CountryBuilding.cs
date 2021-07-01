@@ -10,9 +10,6 @@ namespace UnderSea.Model.Models
     public class CountryBuilding
     {
         public int Id { get; set; }
-
-        [Range(0, int.MaxValue, ErrorMessage = "Az épület mennyisége nem lehet negatív szám!")]
-        [Required(ErrorMessage = "Az épület mennyiségét kötelező megadni!")]
         public int Count { get; set; }
 
         public int CountryId { get; set; }

@@ -10,8 +10,6 @@ namespace UnderSea.Model.Models
 {
     public class User : IdentityUser
     {
-        [Range(0, int.MaxValue, ErrorMessage = "A pont nem lehet negatív szám!")]
-        [Required(ErrorMessage = "A pontot kötelező megadni!")]
         public int Points { get; set; }
 
         public Country Country { get; set; }

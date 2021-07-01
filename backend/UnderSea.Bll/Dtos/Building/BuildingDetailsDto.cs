@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace UnderSea.Bll.Dtos
 {
-    public class EffectDto
+    public class BuildingDetailsDto
     {
-        [Required(ErrorMessage = "Az egység azonosítóját kötelező megadni!")]
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "A hatás nevét kötelező megadni!")]
-        [StringLength(100, ErrorMessage = "A hatás neve maximum 100 karakter hosszú lehet!")]
         public string Name { get; set; }
+        public int Count { get; set; }
+        public int Price { get; set; }
+        public bool UnderConstruction { get; set; }
+        public ICollection<EffectDto> Effects { get; set; }
     }
 }
