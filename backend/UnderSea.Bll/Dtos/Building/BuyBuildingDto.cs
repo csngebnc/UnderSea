@@ -9,7 +9,6 @@ namespace UnderSea.Bll.Dtos
 {
     public class BuyBuildingDto
     {
-        [Required(ErrorMessage = "Az épület azonosítójának megadása kötelező!")]
         public int BuildingId { get; set; }
     }
 }

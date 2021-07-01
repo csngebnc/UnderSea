@@ -9,7 +9,6 @@ namespace UnderSea.Bll.Dtos.Unit
 {
     public class BuyUnitDto
     {
-        [Required(ErrorMessage = "Egységek megadása kötelező")]
         public ICollection<BuyUnitDetailsDto> Units { get; set; }
     }
 }
