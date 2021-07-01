@@ -190,7 +190,7 @@ namespace UnderSea.Api
 
             options.MapToStatusCode<InvalidParameterException>(StatusCodes.Status400BadRequest);
 
-            //options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
+            options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
         }
     }
 }
