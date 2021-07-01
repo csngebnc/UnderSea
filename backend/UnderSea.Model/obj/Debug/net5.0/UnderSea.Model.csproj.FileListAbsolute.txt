@@ -1,0 +1,12 @@
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\bin\Debug\net5.0\UnderSea.Model.deps.json
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\bin\Debug\net5.0\UnderSea.Model.dll
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\bin\Debug\net5.0\ref\UnderSea.Model.dll
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\bin\Debug\net5.0\UnderSea.Model.pdb
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\obj\Debug\net5.0\UnderSea.Model.csproj.AssemblyReference.cache
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\obj\Debug\net5.0\UnderSea.Model.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\obj\Debug\net5.0\UnderSea.Model.AssemblyInfoInputs.cache
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\obj\Debug\net5.0\UnderSea.Model.AssemblyInfo.cs
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\obj\Debug\net5.0\UnderSea.Model.csproj.CoreCompileInputs.cache
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\obj\Debug\net5.0\UnderSea.Model.dll
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\obj\Debug\net5.0\ref\UnderSea.Model.dll
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Model\obj\Debug\net5.0\UnderSea.Model.pdb
