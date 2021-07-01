@@ -26,7 +26,8 @@ namespace UnderSea.Bll.Mapper
             CreateMap<Unit, BattleUnitDto>()
                 .ForMember(e => e.Id, a => a.MapFrom(s => s.Id))
                 .ForMember(e => e.Name, a => a.MapFrom(s => s.Name))
-                .ForMember(e => e.Count, a => a.MapFrom(s => s.CountryUnits.Where(cu => cu.UnitId == s.Id).FirstOrDefault().Count));
+                .ForMember(e => e.Count, a => a.MapFrom(s => s.CountryUnits.Where(cu => cu.UnitId == s.Id).FirstOrDefault().Count))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
 
             CreateMap<SendAttackDto, Attack>()
                 .ForMember(e => e.DefenderCountryId, a => a.MapFrom(s => s.AttackedCountryId))
@@ -39,7 +40,8 @@ namespace UnderSea.Bll.Mapper
             CreateMap<AttackUnit, BattleUnitDto>()
                 .ForMember(e => e.Id, a => a.MapFrom(s => s.UnitId))
                 .ForMember(e => e.Name, a => a.MapFrom(s => s.Unit.Name))
-                .ForMember(e => e.Count, a => a.MapFrom(s => s.Count));
+                .ForMember(e => e.Count, a => a.MapFrom(s => s.Count))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Unit.ImageUrl));
         }
     }
 }

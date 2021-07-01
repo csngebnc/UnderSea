@@ -16,6 +16,7 @@ namespace UnderSea.Model.Models
         public int MercenaryPerRound { get; set; }
         public int SupplyPerRound { get; set; }
         public int Price { get; set; }
+        public string ImageUrl { get; set; }
 
         public ICollection<CountryUnit> CountryUnits { get; set; }
     }
