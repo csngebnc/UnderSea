@@ -1,1 +1,4 @@
-{ "apiUrl": "https://localhost:5001" }
+{
+  "apiUrl": "https://api-undersea.azurewebsites.net",
+  "wsUrl": "wss://api-undersea.azurewebsites.net/roundhub"
+}

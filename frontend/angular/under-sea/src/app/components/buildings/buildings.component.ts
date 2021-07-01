@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BuildingDetails } from 'src/app/models/building-details.model';
 import { BehaviorSubject, forkJoin } from 'rxjs';
 import { BuildingService } from 'src/app/services/building/building.service';
-import { UserService } from 'src/app/services/user/user.service';
+import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'buildings',
@@ -18,7 +18,7 @@ export class BuildingsComponent implements OnInit {
 
   constructor(
     private buildingService: BuildingService,
-    private userService: UserService
+    private apiService: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -29,7 +29,7 @@ export class BuildingsComponent implements OnInit {
     this.isLoading.next(true);
 
     let buildings = this.buildingService.getBuildings();
-    let pearls = this.userService.getPearlCount();
+    let pearls = this.apiService.getPearlCount();
 
     forkJoin([buildings, pearls]).subscribe(
       (responses) => {

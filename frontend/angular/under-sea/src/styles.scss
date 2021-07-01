@@ -147,6 +147,10 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   box-sizing: border-box;
 }
 
+.list-modal {
+  height: 584px;
+}
+
 .modal-lg {
   width: 1267px;
 }
@@ -366,6 +370,10 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 
 .w-350px {
   width: 350px;
+}
+
+.h-list {
+  height: calc(100% - 51px);
 }
 
 .h-100 {

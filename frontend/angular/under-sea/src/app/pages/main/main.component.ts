@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserData } from 'src/app/models/userdata.model';
 import { Resources } from 'src/app/models/resources.model';
-import { UserService } from 'src/app/services/user/user.service';
-import { BehaviorSubject, forkJoin } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { ApiService } from 'src/app/services/api/api.service';
+import { WebsocketService } from 'src/app/services/websocket/websocket.service';
 
 @Component({
   selector: 'main',
@@ -12,23 +12,31 @@ import { ApiService } from 'src/app/services/api/api.service';
 })
 export class MainComponent implements OnInit {
   isLoading = new BehaviorSubject(false);
+  wsMessages: Observable<any> = null;
 
   resources: Resources | null = null;
 
   userData: UserData | null = null;
   constructor(
-    private userService: UserService,
-    private apiService: ApiService
-  ) {}
+    private apiService: ApiService,
+    private wsService: WebsocketService
+  ) {
+    this.wsService.connect();
+    this.wsMessages = this.wsService.messages;
+  }
 
   ngOnInit(): void {
+    this.wsMessages.subscribe((r) => {
+      console.log(r);
+      this.loadResources();
+    });
     this.loadResources();
   }
 
   private loadResources(): void {
     this.isLoading.next(true);
 
-    let details = this.userService.getDetails();
+    let details = this.apiService.getDetails();
     let user = this.apiService.getUser();
 
     forkJoin([details, user]).subscribe(
@@ -46,7 +54,7 @@ export class MainComponent implements OnInit {
   }
 
   private loadDetails(): void {
-    this.userService.getDetails().subscribe(
+    this.apiService.getDetails().subscribe(
       (r) => {
         this.resources = r;
       },

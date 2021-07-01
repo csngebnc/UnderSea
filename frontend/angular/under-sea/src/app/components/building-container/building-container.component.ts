@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Building } from 'src/app/models/building.model';
+import { RoundService } from 'src/app/services/round/round.service';
+import { webSocket } from 'rxjs/webSocket';
+import { WebsocketService } from 'src/app/services/websocket/websocket.service';
 
 @Component({
   selector: 'building-container',
@@ -8,8 +11,12 @@ import { Building } from 'src/app/models/building.model';
 })
 export class BuildingContainerComponent implements OnInit {
   @Input() buildings: Array<Building>;
+  @Input() hasSonar: boolean;
 
-  constructor() {}
+  constructor(
+    private roundService: RoundService,
+    private wsService: WebsocketService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -21,6 +28,6 @@ export class BuildingContainerComponent implements OnInit {
   }
 
   nextRound(): void {
-    console.log('kövi kör');
+    this.roundService.nextRound().subscribe();
   }
 }

@@ -1,7 +1,10 @@
 <div class="modal-container">
-  <div class="modal w-40">
+  <div class="modal list-modal">
     <h2 class="modal-title">Ranglista</h2>
-    <ng-container *ngIf="!(isLoading | async); else loading">
+    <div
+      *ngIf="!(isLoading | async); else loading"
+      class="to-sides h-list stack"
+    >
       <list
         class="w-100"
         [list]="scoreboard.list"
@@ -15,7 +18,7 @@
         (switchPage)="onSwitchPage($event)"
         class="w-100 d-flex align-center to-center mt-1"
       ></pager-buttons>
-    </ng-container>
+    </div>
   </div>
 </div>
 

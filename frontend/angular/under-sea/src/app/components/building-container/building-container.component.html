@@ -6,11 +6,7 @@
   class="img castle"
 />
 
-<img
-  *ngIf="playerHasBuilding(3)"
-  src="../../../assets/img/sonar.png"
-  class="img sonar"
-/>
+<img *ngIf="hasSonar" src="../../../assets/img/sonar.png" class="img sonar" />
 
 <img
   *ngIf="playerHasBuilding(1)"

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
-import { AttackerUnitDto } from 'src/app/models/dto/attacker-unit-dto.model';
 import { PagedList } from 'src/app/models/paged-list.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
 import { BehaviorSubject, forkJoin } from 'rxjs';
+import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-code';
 
 @Component({
   selector: 'attack',
@@ -23,7 +23,7 @@ export class AttackComponent implements OnInit {
   isLoading = new BehaviorSubject(false);
   filter: string | undefined = undefined;
   targetId: number;
-  attackerUnits: Array<AttackerUnitDto> = [];
+  attackerUnits: Array<AttackUnitDto> = [];
 
   constructor(private battleService: BattleService) {}
 
@@ -71,7 +71,7 @@ export class AttackComponent implements OnInit {
     this.targetId = id;
   }
 
-  onSetUnit(unit: AttackerUnitDto): void {
+  onSetUnit(unit: AttackUnitDto): void {
     let index = this.attackerUnits.findIndex((u) => u.unitId === unit.unitId);
     this.attackerUnits[index].count = unit.count;
   }

@@ -5,6 +5,8 @@ import {
   PagedResultOfLoggedAttackDto,
   PagedResultOfAttackableUserDto,
   BattleUnitDto,
+  AttackUnitDto,
+  BuyUnitDto,
 } from '../generated-code/generated-api-code';
 import { Observable } from 'rxjs';
 import { UnitDetails } from 'src/app/models/unit-details.model';
@@ -12,7 +14,6 @@ import { map } from 'rxjs/operators';
 import { PagedBattles } from 'src/app/models/paged-battles.model';
 import { PagedList } from 'src/app/models/paged-list.model';
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
-import { AttackerUnitDto } from 'src/app/models/dto/attacker-unit-dto.model';
 
 @Injectable({
   providedIn: 'root',
@@ -42,7 +43,7 @@ export class BattleService {
   }
 
   getBattles(pageNumber: number): Observable<PagedBattles> {
-    return this.battleService.history(10, pageNumber).pipe(
+    return this.battleService.history(13, pageNumber).pipe(
       map((r: PagedResultOfLoggedAttackDto) => {
         let result: PagedBattles = {
           battles: [],
@@ -57,10 +58,14 @@ export class BattleService {
         result.allResultsCount = r.allResultsCount;
 
         r.results.forEach((b) => {
+          const units = [];
+          b.units.forEach((u) => {
+            units.push({ name: u.name, count: u.count });
+          });
           result.battles.push({
             target: b.attackedCountryName,
             result: outcome[b.outcome],
-            units: b.units,
+            units: units,
           });
         });
 
@@ -73,7 +78,7 @@ export class BattleService {
     pageNumber: number,
     filter: string | undefined
   ): Observable<PagedList> {
-    return this.battleService.attackableUsers(undefined, undefined).pipe(
+    return this.battleService.attackableUsers(10, pageNumber, filter).pipe(
       map((arr: PagedResultOfAttackableUserDto) => {
         const result: PagedList = {
           list: [],
@@ -107,7 +112,11 @@ export class BattleService {
     );
   }
 
-  attack(id: number, units: Array<AttackerUnitDto>): Observable<any> {
+  attack(id: number, units: Array<AttackUnitDto>): Observable<any> {
     return this.battleService.attack({ attackedCountryId: id, units: units });
+  }
+
+  buyUnits(units: BuyUnitDto): Observable<any> {
+    return this.battleService.buyUnit(units);
   }
 }

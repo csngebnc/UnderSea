@@ -16,37 +16,6 @@ import { PagedList } from 'src/app/models/paged-list.model';
 export class UserService {
   constructor(private userService: uService) {}
 
-  getDetails(): Observable<Resources> {
-    return this.userService.details().pipe(
-      map((cd: CountryDetailsDto) => {
-        return {
-          units: cd.units,
-          buildings: cd.buildings,
-          corals: cd.coral,
-          coralsPerRound: cd.currentCoralProduction,
-          pearls: cd.pearl,
-          pearlsPerRound: cd.currentPearlProduction,
-        };
-      })
-    );
-  }
-
-  getPearlCount(): Observable<number> {
-    return this.userService.details().pipe(
-      map((cd: CountryDetailsDto) => {
-        return cd.pearl;
-      })
-    );
-  }
-
-  getCountryName(): Observable<string> {
-    return this.userService.countryName();
-  }
-
-  setCountryName(name: string): Observable<any> {
-    return this.userService.newCountryName(name);
-  }
-
   getScoreBoard(
     pageNumber: number,
     filter: string | undefined

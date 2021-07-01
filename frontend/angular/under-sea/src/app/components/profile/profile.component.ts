@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { CountryService } from 'src/app/services/country/country.service';
 
 @Component({
   selector: 'profile',
@@ -18,14 +18,14 @@ export class ProfileComponent implements OnInit {
     ]),
   });
 
-  constructor(private userService: UserService) {}
+  constructor(private countryService: CountryService) {}
 
   ngOnInit(): void {
     this.getName();
   }
 
   private getName(): void {
-    this.userService.getCountryName().subscribe(
+    this.countryService.getCountryName().subscribe(
       (response) => {
         this.name = response;
       },
@@ -34,7 +34,7 @@ export class ProfileComponent implements OnInit {
   }
 
   setNewName(): void {
-    this.userService
+    this.countryService
       .setCountryName(this.countryForm.get('newName').value)
       .subscribe(
         () => this.getName(),

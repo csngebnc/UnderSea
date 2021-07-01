@@ -8,4 +8,5 @@ export type Resources = {
   pearlsPerRound: number;
   corals: number;
   coralsPerRound: number;
+  hasSonar: boolean;
 };

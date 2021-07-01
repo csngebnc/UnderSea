@@ -27,7 +27,6 @@ export class UpgradesComponent implements OnInit {
 
     this.upgradeService.getUpgrades().subscribe(
       (r: Array<Upgrade>) => {
-        console.log(r);
         this.upgrades = r;
         this.isLoading.next(false);
       },
