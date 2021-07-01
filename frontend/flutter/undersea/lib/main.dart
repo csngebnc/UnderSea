@@ -5,13 +5,16 @@ import 'package:undersea/controllers/buildings_controller.dart';
 import 'package:undersea/controllers/login_controller.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
 import 'package:undersea/controllers/player_controller.dart';
+import 'package:undersea/controllers/registration_controller.dart';
 import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/lang/app_translations.dart';
+
 import 'package:undersea/views/login.dart';
 import 'controllers/upgrades_controller.dart';
 
+import 'controllers/user_data_controller.dart';
 import 'lang/strings.dart';
-import 'network/providers/login_provider.dart';
+import 'network/providers/user_data_provider.dart';
 
 void main() async {
   await initServices();
@@ -20,14 +23,14 @@ void main() async {
 }
 
 Future<void> initServices() async {
+  await GetStorage.init();
   Get.put(PlayerController());
   Get.put(BottomNavBarController());
   Get.put(SoldiersController());
   Get.put(UpgradesController());
   Get.put(BuildingsController());
-  Get.put(LoginProvider());
-  Get.put(LoginController(Get.find()));
-  await GetStorage.init();
+  Get.put(UserDataProvider());
+  Get.put(UserDataController(Get.find()));
 }
 
 class MyApp extends StatelessWidget {

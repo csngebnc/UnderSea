@@ -3,14 +3,32 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/buildings_controller.dart';
+import 'package:undersea/controllers/user_data_controller.dart';
+
 import 'package:undersea/models/building.dart';
+import 'package:undersea/models/response/user_info_dto.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/expandable_menu.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final List<Building> buildingList =
       Get.find<BuildingsController>().buildingList;
   final Random rng = Random();
+
+  late Future<UserInfoDto?> userInfo;
+
+  final userDataController = Get.find<UserDataController>();
+
+  @override
+  void initState() {
+    userInfo = userDataController.userInfo();
+    super.initState();
+  }
 
   List<Widget> _drawBuildings() {
     var buildings = <Widget>[];
@@ -35,7 +53,20 @@ class HomePage extends StatelessWidget {
         ),
         child: Column(children: [
           SizedBox(height: 10),
-          UnderseaStyles.leaderboardButton(roundNumber: 4, placement: 23),
+          FutureBuilder<UserInfoDto?>(
+              future: userInfo,
+              builder: (context, snapshot) {
+                if (snapshot.hasData)
+                  return UnderseaStyles.leaderboardButton(
+                      roundNumber: snapshot.data!.round,
+                      placement: snapshot.data!.placement);
+                else if (snapshot.hasError)
+                  return Text('error');
+                else
+                  return UnderseaStyles.leaderboardButton(
+                      roundNumber: 4, placement: 23);
+              }),
+          //UnderseaStyles.leaderboardButton(roundNumber: 4, placement: 23),
           Expanded(
               child: Stack(
             fit: StackFit.expand,

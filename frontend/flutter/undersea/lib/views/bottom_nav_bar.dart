@@ -48,11 +48,7 @@ class BottomNavBar extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: GestureDetector(
                       onTap: () {
-                        Get.to(ProfilePage(
-                            cityName:
-                                playerController.playerData.value.cityName,
-                            playerName:
-                                playerController.playerData.value.playerName));
+                        Get.to(ProfilePage());
                       },
                       child: SizedBox(
                           height: 40,

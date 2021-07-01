@@ -9,9 +9,9 @@ abstract class NetworkProvider extends GetConnect {
   void onInit() {
     httpClient.baseUrl = "https://api-undersea.azurewebsites.net/";
 
-    httpClient.addAuthenticator<dynamic>((request) async {
+    /*httpClient.addAuthenticator<dynamic>((request) async {
       request.headers['Authorization'] = storage.read(Constants.TOKEN);
       return request;
-    });
+    });*/
   }
 }

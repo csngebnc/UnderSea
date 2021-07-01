@@ -1,11 +1,11 @@
-import 'package:get/get.dart';
+/*import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:undersea/constants.dart';
-import 'package:undersea/network/providers/login_provider.dart';
+import 'package:undersea/network/providers/user_data_provider.dart';
 import 'package:undersea/network/response/login_response.dart';
 import 'package:undersea/views/bottom_nav_bar.dart';
 
-class LoginController extends GetxController with StateMixin<LoginResponse> {
+class LoginController extends GetxController/* with StateMixin<LoginResponse>*/ {
   final LoginProvider _loginProvider;
   var storage = GetStorage();
 
@@ -34,3 +34,4 @@ class LoginController extends GetxController with StateMixin<LoginResponse> {
     }
   }
 }
+*/

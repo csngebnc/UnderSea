@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/login_controller.dart';
+import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/views/registration.dart';
 import 'bottom_nav_bar.dart';
@@ -30,14 +31,14 @@ class _LoginPageState extends State<LoginPage> {
         hint: Strings.password.tr,
         isPassword: true,
         controller: passwordController);
-    final LoginController controller = Get.find();
+    final UserDataController controller = Get.find();
     final loginButton = UnderseaStyles.elevatedButton(
         text: Strings.login.tr,
         onPressed: () {
-          Get.off(BottomNavBar());
-          /*if (usernameController.text.isEmpty ||
+          //Get.off(BottomNavBar());
+          if (usernameController.text.isEmpty ||
               passwordController.text.isEmpty) return;
-          controller.login(usernameController.text, passwordController.text);*/
+          controller.login(usernameController.text, passwordController.text);
         });
 
     return Scaffold(
