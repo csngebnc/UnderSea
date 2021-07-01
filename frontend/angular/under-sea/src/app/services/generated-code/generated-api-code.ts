@@ -956,6 +956,7 @@ export interface BattleUnitDto {
     id: number;
     name: string;
     count: number;
+    imageUrl?: string | undefined;
 }
 
 export interface SendAttackDto {
@@ -996,6 +997,7 @@ export interface UnitDto {
     supplyPerRound: number;
     price: number;
     currentCount: number;
+    imageUrl?: string | undefined;
 }
 
 export interface BuyUnitDto {
@@ -1013,6 +1015,7 @@ export interface BuildingDetailsDto {
     count: number;
     price: number;
     underConstruction: boolean;
+    imageUrl?: string | undefined;
     effects?: EffectDto[] | undefined;
 }
 
@@ -1042,6 +1045,7 @@ export interface BuildingInfoDto {
     name: string;
     buildingsCount: number;
     activeConstructionCount: number;
+    iconImageUrl?: string | undefined;
 }
 
 export interface UpgradeDto {
@@ -1050,6 +1054,7 @@ export interface UpgradeDto {
     doesExist: boolean;
     isUnderConstruction: boolean;
     remainingTime: number;
+    imageUrl?: string | undefined;
     effects?: EffectDto[] | undefined;
 }
 

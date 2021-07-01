@@ -7,19 +7,19 @@
   <div class="d-flex align-center w-85 to-flex-end">
     <resource-info
       *ngFor="let unit of resources.units"
-      id="seal"
+      [img]="unit.icon"
       [count]="unit.count"
       class="d-flex w-12 to-flex-end align-center"
     ></resource-info>
 
     <resource-info
-      id="shell"
+      [img]="pearlImg"
       [count]="resources.pearls"
       [perRound]="resources.pearlsPerRound"
       class="d-flex w-12 to-flex-end align-center"
     ></resource-info>
     <resource-info
-      id="coral"
+      [img]="coralImg"
       [count]="resources.corals"
       [perRound]="resources.coralsPerRound"
       class="d-flex w-12 to-flex-end align-center"
@@ -27,7 +27,7 @@
 
     <resource-info
       *ngFor="let building of resources.buildings"
-      id="shark"
+      [img]="building.iconImageUrl"
       [count]="building.buildingsCount"
       [underConstruction]="building.activeConstructionCount"
       class="d-flex w-12 to-flex-end align-center"

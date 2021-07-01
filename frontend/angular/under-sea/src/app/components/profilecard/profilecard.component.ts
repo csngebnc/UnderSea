@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import * as config from 'src/assets/config.json';
 
 @Component({
   selector: 'profilecard',
@@ -9,6 +10,7 @@ import { AuthenticationService } from 'src/app/services/authentication/authentic
 export class ProfilecardComponent implements OnInit {
   @Input() name: string;
 
+  img: string = config.imageUrl + config.images.profile;
   constructor(private authService: AuthenticationService) {}
 
   ngOnInit(): void {}

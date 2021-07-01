@@ -7,4 +7,5 @@ export type BuildingDetails = {
   underConstruction: boolean;
   count: number;
   price: number;
+  imageUrl?: string;
 };

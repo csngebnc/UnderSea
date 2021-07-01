@@ -1,15 +1,11 @@
 <button type="button" (click)="nextRound()">Következő kör</button>
 
-<img
-  *ngIf="playerHasBuilding(2)"
-  src="../../../assets/img/castle_sd.png"
-  class="img castle"
-/>
+<img *ngIf="playerHasBuilding(2)" [src]="castle" class="img castle" />
 
-<img *ngIf="hasSonar" src="../../../assets/img/sonar.png" class="img sonar" />
+<img *ngIf="hasSonar" [src]="sonar" class="img sonar" />
 
 <img
   *ngIf="playerHasBuilding(1)"
-  src="../../../assets/img/flowcontrol_sd.png"
+  [src]="flowcontrol"
   class="img flow-control"
 />

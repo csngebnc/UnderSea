@@ -3,4 +3,5 @@ export type Building = {
   name: string;
   buildingsCount: number;
   activeConstructionCount: number;
+  iconImageUrl?: string;
 };

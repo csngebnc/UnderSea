@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { NgxsModule } from '@ngxs/store';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -67,6 +69,7 @@ import { TokenInterceptor } from './http-interceptors/token/token.interceptor';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxsModule.forRoot([]),
   ],
   providers: [
     { provide: generated.API_BASE_URL, useValue: config.apiUrl },
