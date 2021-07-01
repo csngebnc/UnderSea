@@ -44,14 +44,21 @@ namespace UnderSea.Bll.Services
                 .FirstOrDefaultAsync();
 
             if (country == null)
+            {
                 throw new NotExistsException("Nem létezik ilyen ország.");
+            }
 
             var buildings = await _context.Buildings
-                                .Include(b => b.ActiveConstructions).ToListAsync();
+                                .Include(b => b.ActiveConstructions)
+                                .ToListAsync();
 
             var units = await _context.Units.ToListAsync();
 
-            var effects = country.CountryUpgrades.Select(cu => cu.Upgrade).SelectMany(upgrade => upgrade.UpgradeEffects).Select(effect => effect.Effect);
+            var effects = country.CountryUpgrades
+                .Select(cu => cu.Upgrade)
+                .SelectMany(upgrade => upgrade.UpgradeEffects)
+                .Select(effect => effect.Effect);
+
             var hasSonarCanon = effects.Any(e => e.EffectType == "upgrade_effect_sonarcannon");
 
             return new CountryDetailsDto
@@ -88,13 +95,17 @@ namespace UnderSea.Bll.Services
         public async Task ChangeUserCountryName(string name)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            {
                 throw new InvalidParameterException("Az ország nevének megadása kötelező.");
+            }
 
             var country = await _context.Countries
                                     .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
                                     .FirstOrDefaultAsync();
             if (country == null)
+            {
                 throw new NotExistsException("Nem létezik ilyen ország.");
+            }
 
             country.Name = name.Trim();
             await _context.SaveChangesAsync();

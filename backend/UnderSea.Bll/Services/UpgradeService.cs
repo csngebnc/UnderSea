@@ -34,7 +34,9 @@ namespace UnderSea.Bll.Services
                 .FirstOrDefaultAsync();
 
             if (country == null)
+            {
                 throw new NotExistsException("Nem létezik ilyen ország.");
+            }
 
             var upgrades = await _context.Upgrades
                 .Include(u => u.UpgradeEffects)
@@ -76,11 +78,15 @@ namespace UnderSea.Bll.Services
                             .FirstOrDefaultAsync();
 
             if (country == null)
+            {
                 throw new NotExistsException("Nem létezik ilyen ország.");
+            }
 
             var activeupgrade = await _context.ActiveUpgradings.Where(c => c.CountryId == country.Id).FirstOrDefaultAsync();
             if (activeupgrade != null)
+            {
                 throw new InvalidParameterException("Már folyamatban van egy fejlesztés.");
+            }
 
             if (await _context.CountryUpgrades.AnyAsync(c => c.CountryId == country.Id && c.UpgradeId == buyUpgradeDto.UpgradeId)  ||
                 await _context.ActiveUpgradings.AnyAsync(au => au.CountryId == country.Id && au.UpgradeId == buyUpgradeDto.UpgradeId))
@@ -91,7 +97,9 @@ namespace UnderSea.Bll.Services
             var upgrade = await _context.Upgrades.FindAsync(buyUpgradeDto.UpgradeId);
 
             if (upgrade == null)
+            {
                 throw new NotExistsException("Nincs ilyen fejlesztés.");
+            }
 
             _context.ActiveUpgradings.Add(new Model.Models.ActiveUpgrading
             {

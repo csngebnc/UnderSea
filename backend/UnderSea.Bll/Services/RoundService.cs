@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Extensions;
 using UnderSea.Bll.Services.Interfaces;
+using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
@@ -89,7 +90,7 @@ namespace UnderSea.Bll.Services
             {
                 foreach(var upgrade in country.ActiveUpgradings.Where(c => c.EstimatedFinish == world.Round))
                 {
-                    CountryUpgrade newCountryUpgrade = new CountryUpgrade()
+                    var newCountryUpgrade = new CountryUpgrade()
                     {
                         CountryId = country.Id,
                         UpgradeId = upgrade.UpgradeId,
@@ -111,13 +112,16 @@ namespace UnderSea.Bll.Services
         {
             foreach (var country in countries)
             {
-                foreach (var building in country.ActiveConstructions.Where(c => c.EstimatedFinish == world.Round))
+                foreach (var building in country.ActiveConstructions
+                    .Where(c => c.EstimatedFinish == world.Round))
                 {
-                    var cbuilding = country.CountryBuildings.Where(c => c.BuildingId == building.BuildingId).FirstOrDefault();
+                    var cbuilding = country.CountryBuildings
+                        .Where(c => c.BuildingId == building.BuildingId)
+                        .FirstOrDefault();
 
                     if(cbuilding == null)
                     {
-                        CountryBuilding newCountryBuilding = new CountryBuilding()
+                        var newCountryBuilding = new CountryBuilding()
                         {
                             CountryId = country.Id,
                             Count = 1,
@@ -259,7 +263,10 @@ namespace UnderSea.Bll.Services
         public async Task NextRound()
         {
             var world = await _context.Worlds.FirstOrDefaultAsync();
-            if (world == null) throw new NullReferenceException();
+            if (world == null)
+            {
+                throw new NotExistsException("Nem létezik ilyen világ.");
+            }
 
             var countries = await _context.Countries.Include(e => e.CountryUnits)
                                                         .ThenInclude(e => e.Unit)
@@ -267,24 +274,22 @@ namespace UnderSea.Bll.Services
                                                     .Include(e => e.FightPoint)
                                                     .Include(e => e.Attacks)
                                                         .ThenInclude(e => e.AttackUnits)
-                                                        .ThenInclude(e => e.Unit)
+                                                            .ThenInclude(e => e.Unit)
                                                     .Include(e => e.Attacks)
                                                         .ThenInclude(e => e.DefenderCountry)
-                                                        .ThenInclude(e => e.FightPoint)
-                                                            .Include(e => e.CountryUnits)
-                                                                .ThenInclude(e => e.Unit)
+                                                            .ThenInclude(e => e.FightPoint)
                                                     .Include(e => e.CountryBuildings)
                                                         .ThenInclude(e => e.Building)
                                                     .Include(e => e.CountryUpgrades)
                                                         .ThenInclude(e => e.Upgrade)
                                                     .Include(e => e.ActiveUpgradings)
                                                         .ThenInclude(e => e.Upgrade)
-                                                        .ThenInclude(e => e.UpgradeEffects)
-                                                        .ThenInclude(e => e.Effect)
+                                                            .ThenInclude(e => e.UpgradeEffects)
+                                                                .ThenInclude(e => e.Effect)
                                                     .Include(e => e.ActiveConstructions)
                                                         .ThenInclude(e => e.Building)
-                                                        .ThenInclude(e => e.BuildingEffects)
-                                                        .ThenInclude(e => e.Effect)
+                                                            .ThenInclude(e => e.BuildingEffects)
+                                                                .ThenInclude(e => e.Effect)
                                                     .Include(e => e.Owner)
                                                     .ToListAsync();
 

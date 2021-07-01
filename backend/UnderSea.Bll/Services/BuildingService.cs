@@ -34,7 +34,10 @@ namespace UnderSea.Bll.Services
                                     .FirstOrDefaultAsync();
 
             if (country == null)
+            {
                 throw new NotExistsException("Nem létezik ilyen ország.");
+            }
+                
 
             var buildings = await _context.Buildings
                                         .Include(b => b.BuildingEffects)
@@ -63,13 +66,21 @@ namespace UnderSea.Bll.Services
                                     .FirstOrDefaultAsync();
 
             if (country == null)
+            {
                 throw new NotExistsException("Nem létezik ilyen ország.");
+            }
 
             var building = await _context.Buildings.Where(c => c.Id == buildingDto.BuildingId).FirstOrDefaultAsync();
-            if (building == null) throw new NotExistsException("Nem létezik ilyen épület.");
+            if (building == null)
+            {
+                throw new NotExistsException("Nem létezik ilyen épület.");
+            }
 
             var activebuilding = await _context.ActiveConstructions.Where(ac => ac.CountryId == country.Id).FirstOrDefaultAsync();
-            if (activebuilding != null) throw new InvalidParameterException("Már folyamatban van egy építés.");
+            if (activebuilding != null)
+            {
+                throw new InvalidParameterException("Már folyamatban van egy építés.");
+            }
 
             if (building.Price <= country.Pearl)
             {

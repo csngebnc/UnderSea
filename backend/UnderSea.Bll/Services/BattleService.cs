@@ -106,7 +106,9 @@ namespace UnderSea.Bll.Services
                                                   .Include(c => c.CountryUnits)
                                                   .FirstOrDefaultAsync();
             if (country == null)
+            {
                 throw new NotExistsException("A bejelentkezett felhasználóhoz nem tartozik ország.");
+            }
 
             return (await _context.Units.ToListAsync())
                 .Select(unit =>
@@ -127,8 +129,6 @@ namespace UnderSea.Bll.Services
                         Price = unit.Price,
                         CurrentCount = count
                     };
-
-
                 });
         }
 
@@ -139,12 +139,16 @@ namespace UnderSea.Bll.Services
             foreach (var unitDto in unitsDto.Units)
             {
                 var unit = await _context.Units.Where(c => c.Id == unitDto.UnitId).FirstOrDefaultAsync();
-                if (unit == null) throw new NotExistsException("Nem létezik ilyen egység, amit meg lehetne vásárolni.");
+                if (unit == null)
+                {
+                    throw new NotExistsException("Nem létezik ilyen egység, amit meg lehetne vásárolni.");
+                }
 
                 var unitSum = country.CountryUnits.Select(cu => cu.Count).Sum();
                 if (country.MaxUnitCount - unitSum - unitDto.Count < 0)
+                {
                     throw new InvalidParameterException("Nem lehetséges ez a művelet: a maximális egység számánál nem lehet több a felhasználó egységeinek száma.");
-
+                }
 
                 var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id)
                                                         .FirstOrDefaultAsync();
@@ -182,16 +186,31 @@ namespace UnderSea.Bll.Services
             var attackerCountry = await GetCountry();
 
             var attackedCountry = await _context.Countries.Where(c => c.Id == attackDto.AttackedCountryId).FirstOrDefaultAsync();
-            if (attackedCountry == null) throw new NotExistsException("Nem létezik ilyen ország, ami megtámadható lenne.");
+            if (attackedCountry == null)
+            {
+                throw new NotExistsException("Nem létezik ilyen ország, ami megtámadható lenne.");
+            }
 
             var world = await _context.Worlds.FirstOrDefaultAsync();
-            if (world == null) throw new NotExistsException("Nem létezik ilyen világ, ahol támadni lehet.");
+            if (world == null)
+            {
+                throw new NotExistsException("Nem létezik ilyen világ, ahol támadni lehet.");
+            }
 
             var secondAttack = await _context.Attacks
-                .AnyAsync(c => c.AttackerCountryId == attackerCountry.Id && c.DefenderCountryId == attackDto.AttackedCountryId && c.AttackRound == world.Round);
-            if (secondAttack) throw new InvalidParameterException("Nem támadható ugyanaz az ország egy körben!");
+                .AnyAsync(c => c.AttackerCountryId == attackerCountry.Id && 
+                    c.DefenderCountryId == attackDto.AttackedCountryId && 
+                    c.AttackRound == world.Round);
 
-            if(attackerCountry.Id == attackDto.AttackedCountryId) throw new InvalidParameterException("Nem támadhatja meg saját magát az ország.");
+            if (secondAttack)
+            {
+                throw new InvalidParameterException("Nem támadható ugyanaz az ország egy körben!");
+            }
+
+            if(attackerCountry.Id == attackDto.AttackedCountryId)
+            {
+                throw new InvalidParameterException("Nem támadhatja meg saját magát az ország.");
+            }
 
             await AttackLogic(attackerCountry, attackedCountry, attackDto);
         }
@@ -226,8 +245,7 @@ namespace UnderSea.Bll.Services
 
                     if (cunit.Count >= unit.Count)
                     {
-                        cunit
-                            .Count -= unit.Count;
+                        cunit.Count -= unit.Count;
                     }
                     else
                     {
@@ -257,7 +275,10 @@ namespace UnderSea.Bll.Services
                                                   .Where(c => c.OwnerId == userId)
                                                   .FirstOrDefaultAsync();
 
-            if (country == null) throw new NotExistsException("A bejelentkezett felhasználóhoz nem tartozik ország.");
+            if (country == null)
+            {
+                throw new NotExistsException("A bejelentkezett felhasználóhoz nem tartozik ország.");
+            }
 
             return country;
         }
