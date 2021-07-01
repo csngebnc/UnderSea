@@ -19,6 +19,9 @@ namespace UnderSea.Bll.Dtos
         public int CurrentCoralProduction { get; set; }
         public int CurrentPearlProduction { get; set; }
         public int Population { get; set; }
+
+        public bool HasSonarCanon { get; set; }
+
         public IEnumerable<BuildingInfoDto> Buildings { get; set; }
     }
 }

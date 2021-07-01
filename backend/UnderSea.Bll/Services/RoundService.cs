@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Extensions;
 using UnderSea.Bll.Services.Interfaces;
-using UnderSea.Bll.SignalR;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
@@ -18,12 +17,12 @@ namespace UnderSea.Bll.Services
     public class RoundService : IRoundService
     {
         private readonly UnderSeaDbContext _context;
-        private readonly IHubContext<RoundHub> _roundHub;
+        private readonly IHubService _hubService;
 
-        public RoundService(UnderSeaDbContext context, IHubContext<RoundHub> roundHub)
+        public RoundService(UnderSeaDbContext context, IHubService hubService)
         {
-            _context = context; 
-            _roundHub = roundHub;
+            _context = context;
+            _hubService = hubService;
         }
 
         public void PayTax(ICollection<Country> countries)
@@ -262,15 +261,30 @@ namespace UnderSea.Bll.Services
             var world = await _context.Worlds.FirstOrDefaultAsync();
             if (world == null) throw new NullReferenceException();
 
-            var countries = await _context.Countries.Include(e => e.CountryUnits).ThenInclude(e => e.Unit)
+            var countries = await _context.Countries.Include(e => e.CountryUnits)
+                                                        .ThenInclude(e => e.Unit)
                                                     .Include(e => e.Production)
                                                     .Include(e => e.FightPoint)
-                                                    .Include(e => e.Attacks).ThenInclude(e => e.AttackUnits).ThenInclude(e => e.Unit)
-                                                    .Include(e => e.Attacks).ThenInclude(e => e.DefenderCountry).ThenInclude(e => e.FightPoint).Include(e => e.CountryUnits).ThenInclude(e => e.Unit)
-                                                    .Include(e => e.CountryBuildings).ThenInclude(e => e.Building)
-                                                    .Include(e => e.CountryUpgrades).ThenInclude(e => e.Upgrade)
-                                                    .Include(e => e.ActiveUpgradings).ThenInclude(e => e.Upgrade).ThenInclude(e => e.UpgradeEffects).ThenInclude(e => e.Effect)
-                                                    .Include(e => e.ActiveConstructions).ThenInclude(e => e.Building).ThenInclude(e => e.BuildingEffects).ThenInclude(e => e.Effect)
+                                                    .Include(e => e.Attacks)
+                                                        .ThenInclude(e => e.AttackUnits)
+                                                        .ThenInclude(e => e.Unit)
+                                                    .Include(e => e.Attacks)
+                                                        .ThenInclude(e => e.DefenderCountry)
+                                                        .ThenInclude(e => e.FightPoint)
+                                                            .Include(e => e.CountryUnits)
+                                                                .ThenInclude(e => e.Unit)
+                                                    .Include(e => e.CountryBuildings)
+                                                        .ThenInclude(e => e.Building)
+                                                    .Include(e => e.CountryUpgrades)
+                                                        .ThenInclude(e => e.Upgrade)
+                                                    .Include(e => e.ActiveUpgradings)
+                                                        .ThenInclude(e => e.Upgrade)
+                                                        .ThenInclude(e => e.UpgradeEffects)
+                                                        .ThenInclude(e => e.Effect)
+                                                    .Include(e => e.ActiveConstructions)
+                                                        .ThenInclude(e => e.Building)
+                                                        .ThenInclude(e => e.BuildingEffects)
+                                                        .ThenInclude(e => e.Effect)
                                                     .Include(e => e.Owner)
                                                     .ToListAsync();
 
@@ -297,7 +311,8 @@ namespace UnderSea.Bll.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            await _roundHub.Clients.All.SendAsync("SendMessage", world.Round);
+
+            await _hubService.SendNewRoundMessage(world.Round);
         }
     }
 }

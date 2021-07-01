@@ -1,11 +1,9 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using UnderSea.Bll.Services.Interfaces;
 
-namespace UnderSea.Bll.Services
+namespace UnderSea.Api.Services
 {
     public class IdentityService : IIdentityService
     {
