@@ -73,7 +73,7 @@ export class BattleService {
     pageNumber: number,
     filter: string | undefined
   ): Observable<PagedList> {
-    return this.battleService.attackableUsers(10, pageNumber).pipe(
+    return this.battleService.attackableUsers(undefined, undefined).pipe(
       map((arr: PagedResultOfAttackableUserDto) => {
         const result: PagedList = {
           list: [],

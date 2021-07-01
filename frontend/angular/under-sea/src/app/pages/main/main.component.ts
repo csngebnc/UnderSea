@@ -25,7 +25,7 @@ export class MainComponent implements OnInit {
     this.loadResources();
   }
 
-  loadResources(): void {
+  private loadResources(): void {
     this.isLoading.next(true);
 
     let details = this.userService.getDetails();
@@ -36,6 +36,19 @@ export class MainComponent implements OnInit {
         this.resources = responses[0];
         this.userData = responses[1];
         this.isLoading.next(false);
+      },
+      (e) => console.log(e)
+    );
+  }
+
+  onBuy(): void {
+    this.loadDetails();
+  }
+
+  private loadDetails(): void {
+    this.userService.getDetails().subscribe(
+      (r) => {
+        this.resources = r;
       },
       (e) => console.log(e)
     );

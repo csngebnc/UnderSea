@@ -3,7 +3,7 @@ import { AttackerUnit } from 'src/app/models/attacker-unit.model';
 import { AttackerUnitDto } from 'src/app/models/dto/attacker-unit-dto.model';
 import { PagedList } from 'src/app/models/paged-list.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'attack',
@@ -34,15 +34,22 @@ export class AttackComponent implements OnInit {
   private initAttack(): void {
     this.isLoading.next(true);
 
-    this.battleService.getAttackerUnits().subscribe(
-      (r) => {
-        this.units = r;
+    let units = this.battleService.getAttackerUnits();
+    let players = this.battleService.getUsers(
+      this.players.pageNumber,
+      this.filter
+    );
+
+    forkJoin([units, players]).subscribe(
+      (responses) => {
+        this.units = responses[0];
+        this.players = responses[1];
+
         this.units.forEach((unit) => {
           this.attackerUnits.push({ unitId: unit.id, count: 0 });
         });
 
         this.isLoading.next(false);
-        this.initPlayers();
       },
       (e) => console.log(e)
     );
