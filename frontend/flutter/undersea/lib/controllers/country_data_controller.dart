@@ -1,4 +1,9 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/lang/strings.dart';
+import 'package:undersea/models/response/country_details_dto.dart';
 import 'package:undersea/network/providers/country_data_provider.dart';
 
 class CountryDataController extends GetxController {
@@ -6,12 +11,62 @@ class CountryDataController extends GetxController {
 
   CountryDataController(this._countryDataProvider);
 
-  /*Future<String> getCountryName() async {
+  Rx<CountryDetailsDto?> countryDetailsData = Rx(null);
+  Rx<String?> countryName = Rx(null);
+
+  void getCountryDetails() async {
+    try {
+      final response = await _countryDataProvider.getCountryDetails();
+      if (response.statusCode == 200) {
+        countryDetailsData = Rx(response.body);
+        update();
+        /*userInfoData.update((val) {
+          val = response.body;
+        });*/
+        //return response.body;
+      }
+    } catch (error) {
+      countryDetailsData.addError(error);
+      log('$error');
+    }
+  }
+
+  void setCountryName(String newName) async {
+    try {
+      final response = await _countryDataProvider.setCountryName(newName);
+      if (response.statusCode == 200) {
+        countryName = Rx(newName);
+        update();
+        Get.snackbar(Strings.city_modified_snack_title.tr,
+            Strings.city_modified_snack_body.tr + ': $newName',
+            icon: Icon(Icons.save_sharp),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.blueAccent);
+        /*userInfoData.update((val) {
+          val = response.body;
+        });*/
+        //return response.body;
+      }
+    } catch (error) {
+      //countryDetailsData.addError(error);
+      log('$error');
+    }
+  }
+
+  void getCountryName() async {
     try {
       final response = await _countryDataProvider.getCountryName();
-      return response;
+      if (response.statusCode == 200) {
+        countryName = Rx(response.body);
+        update();
+        /*userInfoData.update((val) {
+          val = response.body;
+        });*/
+        //return response.body;
+      }
     } catch (error) {
-      Get.snackbar('Error', '$error');
+      //countryDetailsData.addError(error);
+      log('$error');
     }
-  }*/
+  }
 }

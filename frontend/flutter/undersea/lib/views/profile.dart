@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
@@ -78,8 +79,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 alignment: Alignment.centerLeft,
                 child: Column(children: [
                   Padding(
-                      padding: EdgeInsets.all(10),
-                      child: CityNameEditableText('Óceánia')),
+                    padding: EdgeInsets.all(10),
+                    child: CityNameEditableText(),
+                  ),
                   UnderseaStyles.divider(),
                   Align(
                     alignment: Alignment.centerLeft,

@@ -26,10 +26,10 @@ class UserDataController extends GetxController {
       Function? onSuccess}) async {
     try {
       var registrationData = RegisterDto(
-          userName: 'Cece1228',
-          password: 'trOlOlO.1228',
-          confirmPassword: 'trOlOlO.1228',
-          countryName: 'Senkifölde');
+          userName: username,
+          password: password,
+          confirmPassword: confirmPassword,
+          countryName: countryName);
       final response =
           await _userDataProvider.register(registrationData.toJson());
       if (response.statusCode == 200) onSuccess != null ? onSuccess() : {};
@@ -47,11 +47,6 @@ class UserDataController extends GetxController {
       final response = await _userDataProvider.login(body);
       if (response.body != null) {
         storage.write(Constants.TOKEN, response.body!.token);
-        /*_userDataProvider.httpClient.addAuthenticator<dynamic>((request) async {
-          /*request.headers['Authorization'] =
-              'Bearer ${storage.read(Constants.TOKEN)}';*/
-          return request;
-        });*/
         Get.off(BottomNavBar());
       }
     } catch (error) {
@@ -64,9 +59,11 @@ class UserDataController extends GetxController {
     try {
       final response = await _userDataProvider.getUserInfo();
       if (response.statusCode == 200) {
-        userInfoData.update((val) {
+        userInfoData = Rx(response.body);
+        update();
+        /*userInfoData.update((val) {
           val = response.body;
-        });
+        });*/
         //return response.body;
       }
     } catch (error) {

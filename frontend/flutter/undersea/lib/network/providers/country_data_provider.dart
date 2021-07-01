@@ -15,11 +15,12 @@ class CountryDataProvider extends NetworkProvider {
   Future<Response<String>> getCountryName() => get("/api/Country/name",
       headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
       contentType: 'application/json',
-      decoder: (response) => response['name']);
+      decoder: (response) => response.toString());
 
   Future<Response<void>> setCountryName(String countryName) => put(
         "/api/Country/name",
-        countryName,
+        {},
+        query: {'name': countryName},
         contentType: 'application/json',
         headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
       );
