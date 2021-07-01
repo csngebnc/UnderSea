@@ -1,0 +1,19 @@
+@import "src/styles.scss";
+
+.count-button {
+  text-align: center;
+  background-color: $teal;
+  font-weight: lighter;
+  border-radius: 50%;
+  border: none;
+  height: 2rem;
+  width: 2rem;
+  margin: 0 0.8rem;
+  box-sizing: border-box;
+  font-size: 1.6rem;
+  padding: 0;
+}
+
+.count-button:disabled {
+  cursor: not-allowed;
+}

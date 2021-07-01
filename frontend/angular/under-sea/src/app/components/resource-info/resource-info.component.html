@@ -1,0 +1,12 @@
+<div class="icon-frame icon-frame-sm">
+  <img src="../../assets/img/{{ id }}.svg" [alt]="id" />
+</div>
+<div class="plr-1">
+  <div class="text">{{ count }}</div>
+  <div *ngIf="perRound !== undefined" class="secondary-text">
+    {{ perRound }}/kör
+  </div>
+  <div *ngIf="underConstruction !== undefined" class="secondary-text">
+    {{ underConstruction }} épül
+  </div>
+</div>

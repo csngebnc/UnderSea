@@ -1,0 +1,9 @@
+<img src="../../assets/img/{{ id }}.png" [alt]="id" class="h-60" />
+<div class="h-40 w-100 stack align-center">
+  <p class="modal-description mt-05">
+    <strong>{{ name }}</strong>
+  </p>
+  <p *ngFor="let effect of effects" class="modal-description">
+    {{ effect.name }}
+  </p>
+</div>

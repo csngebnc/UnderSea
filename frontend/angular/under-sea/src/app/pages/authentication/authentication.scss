@@ -1,0 +1,22 @@
+@import 'src/styles.scss';
+
+.bg{
+    background-image: $login;
+    background-position: center top;
+    background-size: cover;
+}
+
+.title{
+    font-size: 5rem;
+    color: $teal;
+    margin: 0;
+}
+
+
+.login-title{
+    color: $navy;
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}

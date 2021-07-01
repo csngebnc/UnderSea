@@ -1,0 +1,18 @@
+@import "src/styles.scss";
+
+.text {
+  font-size: 1.3rem;
+  color: $white;
+  background: none;
+  border: none;
+  font-family: "Baloo";
+  text-decoration: none;
+}
+
+.clickable-text {
+  cursor: pointer;
+}
+
+.clickable-text:hover {
+  color: $blue;
+}

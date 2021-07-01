@@ -1,20 +1,458 @@
+html,
+app-root,
+main {
+  height: 100%;
+}
+
+//fonts
+
 @font-face {
-    font-family: 'Baloo';
-    src: url('./assets/fonts/Baloo-Regular.ttf')  format('truetype');
+  font-family: "Baloo";
+  src: url("./assets/fonts/Baloo-Regular.ttf") format("truetype");
 }
 
-$font: 'Baloo';
-$background: url('./assets/img/background_hd.png'); 
-
-html{
-    height: 100%;
+@font-face {
+  font-family: "OpenSans";
+  src: url("./assets/fonts/OpenSans-Regular.ttf") format("truetype");
 }
 
-body{
-    height: 100%;
-    font-family: $font;
-    margin: 0;
-    background-image: $background;
-    background-position: center top;
-    background-size: cover;
+//images
+
+$background: url("./assets/img/background_hd.png");
+$login: url("./assets/img/login_hd.png");
+
+//colors
+
+$white: #ffffff;
+$light-grey: #dfe3ee;
+$teal: #9ffff0;
+$blue: #428dff;
+$dark-blue: #03255f;
+$navy: #1c3e76;
+$dark-navy: #001234;
+$selected-blue: #284474;
+$invalid: red;
+
+//effects
+
+$blur: blur(8px);
+$foggy: 0.39;
+$gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
+
+//css classes
+
+.text-input {
+  font-size: 1.1rem;
+  background: $white;
+  opacity: $foggy;
+  border-radius: 20px;
+  border: none;
+  color: navy;
+  font-family: "OpenSans";
+  width: 80%;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  border: 2px solid transparent;
+}
+
+.text-input.ng-invalid.ng-touched {
+  border-color: $invalid;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: $dark-navy;
+}
+
+.error-text {
+  color: $invalid;
+  font-family: "OpenSans";
+  font-weight: bolder;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.low-opacity-white {
+  background-color: $white;
+  opacity: 0.2;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  border-radius: inherit;
+  margin: -1rem;
+}
+
+.blurry-panel {
+  position: relative;
+  border-radius: 16px;
+  padding: 1rem;
+  backdrop-filter: $blur;
+}
+
+.dot {
+  font-size: 1rem;
+  font-family: "OpenSans";
+  border-radius: 50%;
+  background-color: $teal;
+  color: $navy;
+  height: 1.375rem;
+  width: 1.375rem;
+  text-align: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.list-item {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "OpenSans";
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.modal-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  z-index: 5;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: $dark-blue;
+  border-radius: 16px;
+  box-shadow: 0px 3px 34px $dark-blue;
+  padding: 1rem 2rem;
+  color: $white;
+  pointer-events: initial;
+  width: 869px;
+  box-sizing: border-box;
+}
+
+.list-modal {
+  height: 584px;
+}
+
+.modal-lg {
+  width: 1267px;
+}
+
+.modal-sm {
+  width: 350px;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: initial;
+}
+
+.modal-description {
+  font-size: 1rem;
+  font-family: "OpenSans";
+  margin: 0;
+}
+
+.divider {
+  border-top: 1px solid #3f68ae;
+  width: 100%;
+}
+
+.b-r-1 {
+  border-right: 1px solid #3f68ae;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.building-container-link {
+  width: 100%;
+  height: 100%;
+  cursor: default;
+}
+
+.gradient-button {
+  background: $gradient;
+  color: $dark-navy;
+  border-radius: 90px;
+  border: none;
+  font-size: 1.1rem;
+  padding: 0.5rem 3rem;
+  font-family: "Baloo";
+  text-align: center;
+  text-decoration: none;
+  margin: auto;
+  cursor: pointer;
+  box-shadow: 0px 3px 6px #3b7dbd;
+}
+
+.gradient-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.link {
+  color: $teal;
+  font-family: "Baloo";
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.icon-frame {
+  background: $teal;
+  border-radius: 14px;
+  border: 2px solid $blue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  flex-grow: 0;
+  box-sizing: border-box;
+}
+
+.icon-frame-sm {
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0.3rem;
+}
+
+.icon-frame-lg {
+  width: 6rem;
+  height: 6rem;
+}
+
+.icon-frame-xl {
+  width: 7.3rem;
+  height: 7.3rem;
+  padding: 1rem;
+}
+
+.item-image {
+  width: 100%;
+  height: 100%;
+}
+
+.item-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  padding: 1rem;
+}
+
+.non-styled-list-item {
+  list-style-type: none;
+}
+
+.item {
+  border-radius: 16px;
+  color: $white;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.item-btn {
+  border-radius: 16px;
+  background-color: transparent;
+  cursor: pointer;
+  border: 1px solid transparent;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.item-btn:hover {
+  border-color: $selected-blue;
+}
+
+.item-btn:focus {
+  background-color: $selected-blue;
+}
+
+.item-btn:disabled {
+  border: none;
+  background-color: none;
+  cursor: not-allowed;
+}
+
+.item-lg {
+  width: 18.5rem;
+  height: 19.7rem;
+}
+
+.item-sm {
+  width: 14.75rem;
+  height: 14.45rem;
+}
+
+.d-flex {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.to-flex-end {
+  justify-content: flex-end;
+}
+
+.to-sides {
+  justify-content: space-between;
+}
+
+.to-center {
+  justify-content: center;
+}
+
+.w-2r {
+  width: 2rem;
+}
+
+.w-4_5r {
+  width: 4.5rem;
+}
+
+.w-12 {
+  width: 12%;
+  box-sizing: border-box;
+}
+
+.w-15 {
+  width: 15%;
+  box-sizing: border-box;
+}
+
+.w-40 {
+  width: 40%;
+}
+
+.w-50 {
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.w-85 {
+  width: 85%;
+  box-sizing: border-box;
+}
+
+.w-100 {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.w-300px {
+  width: 300px;
+  box-sizing: border-box;
+}
+
+.w-350px {
+  width: 350px;
+}
+
+.h-list {
+  height: calc(100% - 51px);
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.h-30 {
+  height: 30%;
+}
+
+.h-40 {
+  height: 40%;
+}
+
+.h-50 {
+  height: 50%;
+}
+
+.h-60 {
+  height: 60%;
+}
+
+.h-70 {
+  height: 70%;
+}
+
+.p-1 {
+  padding: 1rem;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.pl-1 {
+  padding-left: 1rem;
+}
+
+.pl-2 {
+  padding-left: 2rem;
+}
+
+.pr-2 {
+  padding-right: 2rem;
+}
+
+.m-1 {
+  margin: 1rem;
+}
+.m-0 {
+  margin: 0;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mt-05 {
+  margin-top: 0.5rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.pos-rel {
+  position: relative;
+}
+
+body {
+  height: 100%;
+  font-family: "Baloo";
+  margin: 0;
+  background-image: $background;
+  background-position: center bottom;
+  background-size: cover;
+  overflow: hidden;
 }
