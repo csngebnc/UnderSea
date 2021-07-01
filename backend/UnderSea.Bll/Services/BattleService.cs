@@ -47,7 +47,7 @@ namespace UnderSea.Bll.Services
                 attackableusers = attackableusers.Where(u => u.UserName.Contains(name));
             }
 
-            var attackable_users = await attackableusers.ToPagedList(data.PageSize,data.PageNumber);
+            var attackable_users = await attackableusers.ToPagedList(data.PageSize, data.PageNumber);
             return attackable_users;
         }
 
@@ -61,14 +61,14 @@ namespace UnderSea.Bll.Services
                 .Select(c => c.Unit)
                 .ProjectTo<BattleUnitDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
-            
+
             return userunits;
         }
 
         public async Task<PagedResult<LoggedAttackDto>> GetLoggedAttacksAsync(PaginationData data)
         {
             var country = await GetCountry();
-            
+
             var attacks = await _context.Attacks
                                             .Where(c => c.DefenderCountryId == country.Id || c.AttackerCountryId == country.Id)
                                             .Include(a => a.AttackUnits)
@@ -198,8 +198,8 @@ namespace UnderSea.Bll.Services
             }
 
             var secondAttack = await _context.Attacks
-                .AnyAsync(c => c.AttackerCountryId == attackerCountry.Id && 
-                    c.DefenderCountryId == attackDto.AttackedCountryId && 
+                .AnyAsync(c => c.AttackerCountryId == attackerCountry.Id &&
+                    c.DefenderCountryId == attackDto.AttackedCountryId &&
                     c.AttackRound == world.Round);
 
             if (secondAttack)
@@ -207,7 +207,7 @@ namespace UnderSea.Bll.Services
                 throw new InvalidParameterException("Nem támadható ugyanaz az ország egy körben!");
             }
 
-            if(attackerCountry.Id == attackDto.AttackedCountryId)
+            if (attackerCountry.Id == attackDto.AttackedCountryId)
             {
                 throw new InvalidParameterException("Nem támadhatja meg saját magát az ország.");
             }
@@ -217,18 +217,12 @@ namespace UnderSea.Bll.Services
 
         public async Task AttackLogic(Country attackerCountry, Country attackedCountry, SendAttackDto attackDto)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            var attack = new Attack()
             {
-                var attack = new Attack()
-                {
-                    AttackerCountryId = attackerCountry.Id,
-                    DefenderCountryId = attackedCountry.Id,
-                    AttackRound = attackerCountry.World.Round,
-                    AttackUnits = new List<AttackUnit>(),
-                    WinnerId = null
-                };
-
-                var attackunits = attackDto.Units.Select(unit =>
+                AttackerCountryId = attackerCountry.Id,
+                DefenderCountryId = attackedCountry.Id,
+                AttackRound = attackerCountry.World.Round,
+                AttackUnits = attackDto.Units.Select(unit =>
                 {
                     var attackUnit = new AttackUnit()
                     {
@@ -236,34 +230,23 @@ namespace UnderSea.Bll.Services
                         UnitId = unit.UnitId
                     };
 
-                    var cunit = attackerCountry.CountryUnits.Where(c => c.CountryId == attackerCountry.Id && c.UnitId == unit.UnitId)
-                                                            .FirstOrDefault();
+                    var cunit = attackerCountry.CountryUnits.FirstOrDefault(c => c.UnitId == unit.UnitId);
                     if (cunit == null)
                     {
                         throw new InvalidParameterException("Nincsen ilyen egysége az országnak.");
                     }
 
-                    if (cunit.Count >= unit.Count)
-                    {
-                        cunit.Count -= unit.Count;
-                    }
-                    else
-                    {
-                        throw new InvalidParameterException("Nincs elegendő egység amit a támadáshoz kértek.");
-                    }
+                    cunit.Count -= unit.Count;
+
                     return attackUnit;
-                });
+                }).ToList(),
+                WinnerId = null
+            };
 
-                foreach (var unit in attackunits)
-                {
-                    attack.AttackUnits.Add(unit);
-                }
+            _context.Attacks.Add(attack);
 
-                _context.Attacks.Add(attack);
+            await _context.SaveChangesAsync();
 
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
         }
 
         private async Task<Country> GetCountry()
