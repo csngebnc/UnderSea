@@ -20,7 +20,9 @@ namespace UnderSea.Bll.Validation
             this._context = context;
             RuleFor(attack => attack.AttackedCountryId).NotNull().MustAsync(async (countryId, cancellation) => await CountryExist(countryId))
                 .WithMessage("Nem létezik ilyen ország, amit megtámadtál!").WithName("attackedCountryId").OverridePropertyName("attackedCountryId");
-            RuleForEach(attack => attack.Units).NotNull().SetValidator(new AttackUnitValidator(context)).WithName("units").OverridePropertyName("units"); ;
+            RuleForEach(attack => attack.Units).NotNull().SetValidator(new AttackUnitValidator(context)).WithName("units").OverridePropertyName("units");
+            RuleFor(attack => attack.Units).Must(cu => cu.Sum(c => c.Count) > 0).WithMessage("Legalább egy egységből el kell küldened 1-et a támadáshoz!")
+                .WithName("units").OverridePropertyName("units");
         }
 
         private async Task<bool> CountryExist(int countryId)
