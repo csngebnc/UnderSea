@@ -48,6 +48,7 @@ class UnderseaStyles {
 
   static Widget inputField({
     required String hint,
+    TextEditingController? controller,
     bool isPassword = false,
     Color color = Colors.white,
     Color hintColor = hintColor,
@@ -57,6 +58,7 @@ class UnderseaStyles {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(32.0), color: color),
         child: TextField(
+          controller: controller,
           obscureText: isPassword,
           style: UnderseaStyles.inputTextStyle,
           onChanged: onChanged,
@@ -91,11 +93,11 @@ class UnderseaStyles {
     );
   }
 
-  static Widget building(String name, Random rng) {
+  static Widget building(String name, {double? top, double? left}) {
     return Positioned(
         height: 180,
-        top: rng.nextDouble() * 200,
-        left: rng.nextDouble() * 500,
+        top: top ?? 0,
+        left: left ?? 0,
         child: UnderseaStyles.buildingImage(name, additional: "@3x"));
   }
 

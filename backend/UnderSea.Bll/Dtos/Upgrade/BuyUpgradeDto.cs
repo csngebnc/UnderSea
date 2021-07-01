@@ -9,7 +9,6 @@ namespace UnderSea.Bll.Dtos
 {
     public class BuyUpgradeDto
     {
-        [Required(ErrorMessage = "A fejlesztés azonosítójának megadása kötelező!")]
         public int UpgradeId { get; set; }
     }
 }

@@ -2,7 +2,6 @@ using Autofac;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
-using Hangfire.Common;
 using Hangfire.SqlServer;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,16 +17,12 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using UnderSea.Api.AuthFilter;
 using UnderSea.Api.Services;
-using UnderSea.Bll.Dtos;
+using UnderSea.Api.SignalR;
 using UnderSea.Bll.Mapper;
-using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
-using UnderSea.Api.SignalR;
-using UnderSea.Bll.Validation;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
@@ -98,13 +93,6 @@ namespace UnderSea.Api
             services.AddTransient<IHubService, RoundHubService>();
             services.AddTransient<IRoundService, RoundService>();
 
-            services.AddTransient<IValidator<BuyBuildingDto>, BuyBuildingValidator>();
-            services.AddTransient<IValidator<BuyUnitDetailsDto>, BuyUnitDetailsValidator>();
-            services.AddTransient<IValidator<BuyUpgradeDto>, BuyUpgradeValidator>();
-            services.AddTransient<IValidator<PaginationData>, PaginationDataValidator>();
-            services.AddTransient<IValidator<RegisterDto>, RegisterValidation>();
-            services.AddTransient<IValidator<SendAttackDto>, SendAttackValidator>();
-
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
                 .AddInMemoryPersistedGrants()
@@ -121,19 +109,33 @@ namespace UnderSea.Api
             })
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "https://localhost:5001";
-                    options.Audience = "undersea-api";
+                    options.Authority = Configuration.GetValue<string>("Authentication:Authority");
+                    options.Audience = Configuration.GetValue<string>("Authentication:Audience");
                     options.RequireHttpsMetadata = false;
                 }
                 );
 
             services.AddProblemDetails(ConfigureProblemDetails);
 
-            services.AddControllersWithViews().AddFluentValidation(fv => {
+            services.AddControllersWithViews().AddFluentValidation(fv =>
+            {
                 fv.DisableDataAnnotationsValidation = true;
             });
-            services.AddRazorPages(); 
+            services.AddRazorPages();
             services.AddSignalR();
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterAssemblyTypes(Assembly.Load("UnderSea.Bll"))
+                .Where(x => x.Name.EndsWith("Service"))
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(Assembly.Load("UnderSea.Bll"))
+                .Where(x => x.Name.EndsWith("Validator"))
+                .AsImplementedInterfaces()
+                .InstancePerDependency();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -191,16 +193,10 @@ namespace UnderSea.Api
             options.MapToStatusCode<NotExistsException>(StatusCodes.Status404NotFound);
 
             options.MapToStatusCode<InvalidParameterException>(StatusCodes.Status400BadRequest);
+            options.MapToStatusCode<ArgumentOutOfRangeException>(StatusCodes.Status400BadRequest);
 
             options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
         }
 
-        public void ConfigureContainer(ContainerBuilder builder)
-        {
-            builder.RegisterAssemblyTypes(Assembly.Load("UnderSea.Bll"))
-                .Where(x => x.Name.EndsWith("Service"))
-                .AsImplementedInterfaces()
-                .InstancePerLifetimeScope();
-        }
     }
 }

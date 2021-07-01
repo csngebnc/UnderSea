@@ -10,8 +10,6 @@ namespace UnderSea.Model.Models
     public abstract class Effect
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "A hatás nevét kötelező megadni!")]
-        [StringLength(100, ErrorMessage = "A hatás neve maximum 100 karakter hosszú lehet!")]
         public string Name { get; set; }
 
         public string EffectType { get; set; }

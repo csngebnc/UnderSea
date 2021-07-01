@@ -11,10 +11,7 @@ namespace UnderSea.Model.Models
     public class Attack
     {
         public int Id { get; set; }
-        [Range(0, int.MaxValue, ErrorMessage = "A támadás köre nem lehet negatív szám!")]
-        [Required(ErrorMessage = "A támadás körét kötelező megadni!")]
         public int AttackRound { get; set; }
-
         public string WinnerId { get; set; }
         public User Winner { get; set; }
 
