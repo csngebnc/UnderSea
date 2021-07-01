@@ -7,6 +7,7 @@
 //----------------------
 // ReSharper disable InconsistentNaming
 
+
 import {
   mergeMap as _observableMergeMap,
   catchError as _observableCatch,
@@ -24,10 +25,12 @@ import {
   HttpResponseBase,
 } from '@angular/common/http';
 
+
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 @Injectable()
 export class BattleService {
+
   private http: HttpClient;
   private baseUrl: string;
   protected jsonParseReviver:
@@ -548,10 +551,12 @@ export class BattleService {
     }
     return _observableOf<FileResponse | null>(<any>null);
   }
+  
 }
 
 @Injectable()
 export class BuildingService {
+
   private http: HttpClient;
   private baseUrl: string;
   protected jsonParseReviver:
@@ -741,6 +746,7 @@ export class BuildingService {
 
 @Injectable()
 export class UpgradeService {
+
   private http: HttpClient;
   private baseUrl: string;
   protected jsonParseReviver:
@@ -918,10 +924,12 @@ export class UpgradeService {
     }
     return _observableOf<FileResponse | null>(<any>null);
   }
+
 }
 
 @Injectable()
 export class UserService {
+
   private http: HttpClient;
   private baseUrl: string;
   protected jsonParseReviver:
@@ -1265,7 +1273,7 @@ export class UserService {
 }
 
 @Injectable()
-export class ApiService {
+
   private http: HttpClient;
   private baseUrl: string;
   protected jsonParseReviver:
@@ -1552,3 +1560,4 @@ function blobToText(blob: any): Observable<string> {
     }
   });
 }
+

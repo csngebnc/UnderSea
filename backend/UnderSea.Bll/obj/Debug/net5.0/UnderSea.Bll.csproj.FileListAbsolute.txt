@@ -1,0 +1,17 @@
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\bin\Debug\net5.0\UnderSea.Bll.deps.json
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\bin\Debug\net5.0\UnderSea.Bll.dll
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\bin\Debug\net5.0\ref\UnderSea.Bll.dll
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\bin\Debug\net5.0\UnderSea.Bll.pdb
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\bin\Debug\net5.0\UnderSea.Dal.dll
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\bin\Debug\net5.0\UnderSea.Model.dll
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\bin\Debug\net5.0\UnderSea.Dal.pdb
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\bin\Debug\net5.0\UnderSea.Model.pdb
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\obj\Debug\net5.0\UnderSea.Bll.csproj.AssemblyReference.cache
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\obj\Debug\net5.0\UnderSea.Bll.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\obj\Debug\net5.0\UnderSea.Bll.AssemblyInfoInputs.cache
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\obj\Debug\net5.0\UnderSea.Bll.AssemblyInfo.cs
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\obj\Debug\net5.0\UnderSea.Bll.csproj.CoreCompileInputs.cache
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\obj\Debug\net5.0\UnderSea.Bll.csproj.CopyComplete
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\obj\Debug\net5.0\UnderSea.Bll.dll
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\obj\Debug\net5.0\ref\UnderSea.Bll.dll
+C:\Users\czegledi.levente\Github\UnderSea\backend\UnderSea.Bll\obj\Debug\net5.0\UnderSea.Bll.pdb

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/login_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/views/registration.dart';
 import 'bottom_nav_bar.dart';
@@ -12,16 +13,31 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userField = UnderseaStyles.inputField(hint: Strings.username.tr);
-    final passwordField =
-        UnderseaStyles.inputField(hint: Strings.password.tr, isPassword: true);
-
+    final userField = UnderseaStyles.inputField(
+        hint: Strings.username.tr, controller: usernameController);
+    final passwordField = UnderseaStyles.inputField(
+        hint: Strings.password.tr,
+        isPassword: true,
+        controller: passwordController);
+    final LoginController controller = Get.find();
     final loginButton = UnderseaStyles.elevatedButton(
         text: Strings.login.tr,
         onPressed: () {
           Get.off(BottomNavBar());
+          /*if (usernameController.text.isEmpty ||
+              passwordController.text.isEmpty) return;
+          controller.login(usernameController.text, passwordController.text);*/
         });
 
     return Scaffold(
