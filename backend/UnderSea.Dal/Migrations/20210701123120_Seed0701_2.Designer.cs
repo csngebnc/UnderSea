@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UnderSea.Dal.Data;
 
 namespace UnderSea.Dal.Migrations
 {
     [DbContext(typeof(UnderSeaDbContext))]
-    partial class UnderSeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210701123120_Seed0701_2")]
+    partial class Seed0701_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

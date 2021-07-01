@@ -1,0 +1,119 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnderSea.Model.Models;
+
+namespace UnderSea.Dal.EntityConfigurations
+{
+    public class UserEntityConfiguration : IEntityTypeConfiguration<User>
+    {
+        public void Configure(EntityTypeBuilder<User> builder)
+        {
+            builder.HasData(
+                new User() { 
+                    Id = "af378505-14cb-4f49-bb01-ba2c8fdef77d",
+                    UserName = "sstrahan0",
+                    NormalizedUserName = "SSTRAHAN0",
+                    Points = 0,
+                    PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                    SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                    ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad"
+                },
+                new User()
+                {
+                    Id = "72ff37e8-5888-47c6-9ad7-15844a6449b1",
+                    UserName = "ltippin1",
+                    NormalizedUserName = "LTIPPIN1",
+                    Points = 0,
+                    PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                    SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                    ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad"
+                },
+                new User()
+                {
+                    Id = "a63a97aa-4ae8-4185-8621-be02286b1542",
+                    UserName = "blyptratt2",
+                    NormalizedUserName = "BLYPTRATT2",
+                    Points = 0,
+                    PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                    SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                    ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad"
+                },
+                new User()
+                {
+                    Id = "c4393fff-8d3a-4508-9245-794916e9e997",
+                    UserName = "jmelior3",
+                    NormalizedUserName = "JMELIOR3",
+                    Points = 0,
+                    PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                    SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                    ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad"
+                },
+                new User()
+                {
+                    Id = "cbbd70fb-06cd-4368-af10-93c237980d8c",
+                    UserName = "tmaxworthy4",
+                    NormalizedUserName = "TMAXWORTHY4",
+                    Points = 0,
+                    PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                    SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                    ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad"
+                },
+                new User()
+                {
+                    Id = "392a9574-11a7-4f01-add1-4980933cc7a6",
+                    UserName = "hcheverell5",
+                    NormalizedUserName = "HCHEVERELL5",
+                    Points = 0,
+                    PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                    SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                    ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad"
+                },
+                new User()
+                {
+                    Id = "bf37d8cc-0744-4054-9fe1-603e6829799a",
+                    UserName = "gboskell6",
+                    NormalizedUserName = "GBOSKELL6",
+                    Points = 0,
+                    PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                    SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                    ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad"
+                },
+                new User()
+                {
+                    Id = "488d40fe-e2c5-41e3-b2d9-dea16b7c2897",
+                    UserName = "erylett7",
+                    NormalizedUserName = "ERYLETT7",
+                    Points = 0,
+                    PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                    SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                    ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad"
+                },
+                new User()
+                {
+                    Id = "0b62f843-4357-423b-83d0-a2506ac91d5c",
+                    UserName = "kseely8",
+                    NormalizedUserName = "KSEELY8",
+                    Points = 0,
+                    PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                    SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                    ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad"
+                },
+                new User()
+                {
+                    Id = "c0b59d8d-58cc-4a54-a045-bf2a9341c658",
+                    UserName = "hfilinkov9",
+                    NormalizedUserName = "HFILINKOV9",
+                    Points = 0,
+                    PasswordHash = "AQAAAAEAACcQAAAAEEKLF5tLrJUpIeFkr0WDBFQ6qYyrHKP4JyYyJHUET8mJFsSSNPZiWHkvC4Fv2AcQmg==",
+                    SecurityStamp = "RD6YLKPIHDS7MMSLGQ3O7DF5ZNR73XJ2",
+                    ConcurrencyStamp = "cfc830af-302f-44b7-a973-805e6439b2ad"
+                }
+            );
+        }
+    }
+}
