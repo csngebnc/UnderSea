@@ -3,7 +3,7 @@ import { UserData } from 'src/app/models/userdata.model';
 import { Resources } from 'src/app/models/resources.model';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { ApiService } from 'src/app/services/api/api.service';
-import { WebsocketService } from 'src/app/services/websocket/websocket.service';
+import { SignalRService } from 'src/app/services/signalr/signalr.service';
 
 @Component({
   selector: 'main',
@@ -17,19 +17,15 @@ export class MainComponent implements OnInit {
   resources: Resources | null = null;
 
   userData: UserData | null = null;
-  constructor(
-    private apiService: ApiService,
-    private wsService: WebsocketService
-  ) {
-    this.wsService.connect();
-    this.wsMessages = this.wsService.messages;
+  constructor(private apiService: ApiService, private signalr: SignalRService) {
+    this.signalr.startConnection();
+    this.signalr.hubConnection.on('SendMessage', (round: number) => {
+      console.log(round);
+      this.loadResources();
+    });
   }
 
   ngOnInit(): void {
-    this.wsMessages.subscribe((r) => {
-      console.log(r);
-      this.loadResources();
-    });
     this.loadResources();
   }
 
