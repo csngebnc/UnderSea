@@ -1,4 +1,3 @@
 {
-  "apiUrl": "https://api-undersea.azurewebsites.net",
-  "wsUrl": "wss://api-undersea.azurewebsites.net/roundhub"
+  "apiUrl": "https://api-undersea.azurewebsites.net"
 }
