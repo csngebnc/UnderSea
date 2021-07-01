@@ -53,7 +53,8 @@ namespace UnderSea.Bll.Services
                     Effects = _mapper.Map<ICollection<EffectDto>>(building.BuildingEffects.Select(be => be.Effect)),
                     Price = building.Price,
                     Count = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).Count(),
-                    UnderConstruction = country.ActiveConstructions.Any(ac => ac.BuildingId == building.Id)
+                    UnderConstruction = country.ActiveConstructions.Any(ac => ac.BuildingId == building.Id),
+                    ImageUrl = building.ImageUrl
                 };
             });
         }
