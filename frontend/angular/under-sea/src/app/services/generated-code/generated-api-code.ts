@@ -12,7 +12,6 @@ import { Observable, throwError as _observableThrow, of as _observableOf } from 
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
 
-
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 @Injectable()
@@ -948,20 +947,20 @@ export interface PagedResultOfAttackableUserDto {
 }
 
 export interface AttackableUserDto {
-    id?: string | undefined;
-    userName?: string | undefined;
+    id: string;
+    userName: string;
     countryId: number;
 }
 
 export interface BattleUnitDto {
     id: number;
-    name?: string | undefined;
+    name: string;
     count: number;
 }
 
 export interface SendAttackDto {
     attackedCountryId: number;
-    units?: AttackUnitDto[] | undefined;
+    units: AttackUnitDto[];
 }
 
 export interface AttackUnitDto {
@@ -990,7 +989,7 @@ export enum FightOutcome {
 
 export interface UnitDto {
     id: number;
-    name?: string | undefined;
+    name: string;
     attackPoint: number;
     defensePoint: number;
     mercenaryPerRound: number;
@@ -1000,7 +999,7 @@ export interface UnitDto {
 }
 
 export interface BuyUnitDto {
-    units?: BuyUnitDetailsDto[] | undefined;
+    units: BuyUnitDetailsDto[];
 }
 
 export interface BuyUnitDetailsDto {
@@ -1010,7 +1009,7 @@ export interface BuyUnitDetailsDto {
 
 export interface BuildingDetailsDto {
     id: number;
-    name?: string | undefined;
+    name: string;
     count: number;
     price: number;
     underConstruction: boolean;
@@ -1019,7 +1018,7 @@ export interface BuildingDetailsDto {
 
 export interface EffectDto {
     id: number;
-    name?: string | undefined;
+    name: string;
 }
 
 export interface BuyBuildingDto {
@@ -1028,6 +1027,7 @@ export interface BuyBuildingDto {
 
 export interface CountryDetailsDto {
     maxUnitCount: number;
+    units?: BattleUnitDto[] | undefined;
     coral: number;
     pearl: number;
     currentCoralProduction: number;
@@ -1035,19 +1035,18 @@ export interface CountryDetailsDto {
     population: number;
     hasSonarCanon: boolean;
     buildings?: BuildingInfoDto[] | undefined;
-    units?: BattleUnitDto[] | undefined;
 }
 
 export interface BuildingInfoDto {
     id: number;
-    name?: string | undefined;
+    name: string;
     buildingsCount: number;
     activeConstructionCount: number;
 }
 
 export interface UpgradeDto {
     id: number;
-    name?: string | undefined;
+    name: string;
     doesExist: boolean;
     isUnderConstruction: boolean;
     remainingTime: number;
@@ -1059,10 +1058,10 @@ export interface BuyUpgradeDto {
 }
 
 export interface RegisterDto {
-    userName?: string | undefined;
-    password?: string | undefined;
-    confirmPassword?: string | undefined;
-    countryName?: string | undefined;
+    userName: string;
+    password: string;
+    confirmPassword: string;
+    countryName: string;
 }
 
 export interface PagedResultOfUserRankDto {
@@ -1073,7 +1072,7 @@ export interface PagedResultOfUserRankDto {
 }
 
 export interface UserRankDto {
-    name?: string | undefined;
+    name: string;
     points: number;
 }
 
@@ -1137,4 +1136,3 @@ function blobToText(blob: any): Observable<string> {
         }
     });
 }
-

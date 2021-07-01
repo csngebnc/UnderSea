@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserData } from 'src/app/models/userdata.model';
 import { Resources } from 'src/app/models/resources.model';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { ApiService } from 'src/app/services/api/api.service';
+import { SignalRService } from 'src/app/services/signalr/signalr.service';
 
 @Component({
   selector: 'main',
@@ -8,34 +11,50 @@ import { Resources } from 'src/app/models/resources.model';
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-  constructor() {}
+  isLoading = new BehaviorSubject(false);
+  wsMessages: Observable<any> = null;
 
-  ngOnInit(): void {}
+  resources: Resources | null = null;
 
-  userData: UserData = {
-    name: 'Pepsi Béla',
-    round: 12,
-    placement: 11,
-  };
+  userData: UserData | null = null;
+  constructor(private apiService: ApiService, private signalr: SignalRService) {
+    this.signalr.startConnection();
+    this.signalr.hubConnection.on('SendMessage', (round: number) => {
+      console.log(round);
+      this.loadResources();
+    });
+  }
 
-  resources: Resources = {
-    units: [
-      { id: 1, name: 'shark', count: 10 },
-      { id: 1, name: 'shark', count: 10 },
-      { id: 1, name: 'shark', count: 10 },
-    ],
-    buildings: [
-      { id: 1, name: 'sonar', count: 1 },
-      { id: 2, name: 'flow-control', count: 12 },
-      { id: 2, name: 'castle', count: 12 },
-    ],
-    buildingsUnderConstruction: [
-      { id: 1, name: 'shark', count: 1 },
-      { id: 1, name: 'shark', count: 0 },
-    ],
-    shells: 123,
-    shellsPerRound: 12,
-    corals: 126,
-    coralsPerRound: 32,
-  };
+  ngOnInit(): void {
+    this.loadResources();
+  }
+
+  private loadResources(): void {
+    this.isLoading.next(true);
+
+    let details = this.apiService.getDetails();
+    let user = this.apiService.getUser();
+
+    forkJoin([details, user]).subscribe(
+      (responses) => {
+        this.resources = responses[0];
+        this.userData = responses[1];
+        this.isLoading.next(false);
+      },
+      (e) => console.log(e)
+    );
+  }
+
+  onBuy(): void {
+    this.loadDetails();
+  }
+
+  private loadDetails(): void {
+    this.apiService.getDetails().subscribe(
+      (r) => {
+        this.resources = r;
+      },
+      (e) => console.log(e)
+    );
+  }
 }

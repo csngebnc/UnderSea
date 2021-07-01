@@ -20,7 +20,7 @@ export class UnitDetailsComponent implements OnInit {
   increment(): void {
     this.selected++;
     this.countModified.emit({
-      id: this.unit.id,
+      unitId: this.unit.id,
       count: this.selected,
       price: this.unit.price,
     });
@@ -29,7 +29,7 @@ export class UnitDetailsComponent implements OnInit {
   decrement(): void {
     this.selected--;
     this.countModified.emit({
-      id: this.unit.id,
+      unitId: this.unit.id,
       count: this.selected,
       price: this.unit.price,
     });

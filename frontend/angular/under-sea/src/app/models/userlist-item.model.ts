@@ -1,5 +1,5 @@
 export type UserListItem = {
-  id: string;
+  id?: string;
   countryId?: number;
   placement?: number;
   name: string;

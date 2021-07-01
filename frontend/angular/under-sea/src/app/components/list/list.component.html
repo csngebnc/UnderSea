@@ -16,7 +16,9 @@
         <div *ngIf="item.placement" class="w-2r">{{ item.placement }}.</div>
         <span>{{ item.name }}</span>
       </div>
-      <span *ngIf="item.score">{{ item.score | number: "1." }}</span>
+      <span *ngIf="item.score || item.score === 0">{{
+        item.score | number: "1."
+      }}</span>
       <span *ngIf="selectedTargetId === item.countryId" class="dot"
         >&#x2714;</span
       >

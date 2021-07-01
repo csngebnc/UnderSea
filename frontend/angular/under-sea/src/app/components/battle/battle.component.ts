@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Battle } from 'src/app/models/battle.model';
+import { BattleService } from 'src/app/services/battle/battle.service';
+import { PagedBattles } from 'src/app/models/paged-battles.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'battle',
@@ -7,52 +9,34 @@ import { Battle } from 'src/app/models/battle.model';
   styleUrls: ['./battle.component.scss'],
 })
 export class BattleComponent implements OnInit {
-  battles: Array<Battle> = [
-    {
-      target: 'kukutyim',
-      units: [
-        {
-          count: 32,
-          name: 'Kiskutya',
-        },
-        {
-          count: 22,
-          name: 'Csicskalángos',
-        },
-        {
-          count: 32,
-          name: 'Volkswagen',
-        },
-      ],
-    },
-    {
-      target: 'Románia',
-      result: 'győzelem',
-      units: [
-        {
-          count: 32,
-          name: 'asdasd',
-        },
-        {
-          count: 22,
-          name: 'V4',
-        },
-        {
-          count: 32,
-          name: 'lorem ipsum',
-        },
-      ],
-    },
-  ];
+  pagedBattles: PagedBattles = {
+    battles: [],
+    pageNumber: 1,
+    pageSize: 0,
+    allResultsCount: 0,
+  };
 
-  pageNumber: number = 1;
-  pageSize: number = 2;
-  allResultsCount: number = 5;
-  constructor() {}
+  isLoading = new BehaviorSubject(false);
 
-  ngOnInit(): void {}
+  constructor(private battleService: BattleService) {}
+
+  ngOnInit(): void {
+    this.initBattles();
+  }
+
+  initBattles() {
+    this.isLoading.next(true);
+    this.battleService.getBattles(this.pagedBattles.pageNumber).subscribe(
+      (r) => {
+        this.pagedBattles = r;
+        this.isLoading.next(false);
+      },
+      (e) => console.log(e)
+    );
+  }
 
   onSwitchPage(pageNumber: number): void {
-    this.pageNumber = pageNumber;
+    this.pagedBattles.pageNumber = pageNumber;
+    this.initBattles();
   }
 }

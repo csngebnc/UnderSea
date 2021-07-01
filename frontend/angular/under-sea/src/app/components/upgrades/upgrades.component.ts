@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Upgrade } from 'src/app/models/upgrade.model';
+import { BehaviorSubject } from 'rxjs';
+import { UpgradeService } from 'src/app/services/upgrade/upgrade.service';
 
 @Component({
   selector: 'upgrades',
@@ -7,69 +9,49 @@ import { Upgrade } from 'src/app/models/upgrade.model';
   styleUrls: ['./upgrades.component.scss'],
 })
 export class UpgradesComponent implements OnInit {
-  selectedUpgrade: string = '';
+  selectedUpgrade: number | null = null;
   isResearching: boolean = false;
 
-  upgrades: Array<Upgrade> = [
-    {
-      id: 1,
-      name: 'Korall fal',
-      doesExist: true,
-      isUnderConstruction: false,
-      effects: [{ id: 1, name: 'asd' }],
-    },
-    {
-      id: 2,
-      name: 'Korall fal',
-      doesExist: false,
-      isUnderConstruction: false,
-      effects: [{ id: 1, name: 'asd' }],
-    },
-    {
-      id: 3,
-      name: 'Korall fal',
-      doesExist: false,
-      isUnderConstruction: true,
-      remainingTime: 12,
-      effects: [{ id: 1, name: 'asd' }],
-    },
-    {
-      id: 4,
-      name: 'Korall fal',
-      doesExist: true,
-      isUnderConstruction: false,
-      effects: [{ id: 1, name: 'asd' }],
-    },
-    {
-      id: 5,
-      name: 'Korall fal',
-      doesExist: true,
-      isUnderConstruction: false,
-      effects: [{ id: 1, name: 'asd' }],
-    },
-    {
-      id: 6,
-      name: 'Korall fal',
-      doesExist: true,
-      isUnderConstruction: false,
-      effects: [{ id: 1, name: 'asd' }],
-    },
-  ];
+  isLoading = new BehaviorSubject(false);
 
-  constructor() {}
+  upgrades: Array<Upgrade> = [];
+
+  constructor(private upgradeService: UpgradeService) {}
 
   ngOnInit(): void {
+    this.initUpgrades();
+  }
+
+  private initUpgrades(): void {
+    this.isLoading.next(true);
+
+    this.upgradeService.getUpgrades().subscribe(
+      (r: Array<Upgrade>) => {
+        this.upgrades = r;
+        this.isLoading.next(false);
+      },
+      (e) => console.log(e)
+    );
+
     this.upgrades.forEach((u) => {
       if (u.isUnderConstruction) this.isResearching = true;
     });
   }
 
-  setUpgrade(id: string): void {
+  setUpgrade(id: number): void {
     this.selectedUpgrade = id;
   }
 
   onBuy(): void {
-    console.log(this.selectedUpgrade);
-    this.isResearching = true;
+    if (this.selectedUpgrade !== null) {
+      this.upgradeService.buyUpgrade(this.selectedUpgrade).subscribe(
+        (r) => {
+          console.log(r);
+          this.isResearching = true;
+          this.initUpgrades();
+        },
+        (e) => console.log(e)
+      );
+    }
   }
 }

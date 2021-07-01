@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserListItem } from 'src/app/models/userlist-item.model';
+import { UserService } from 'src/app/services/user/user.service';
+import { PagedList } from 'src/app/models/paged-list.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'scoreboard',
@@ -7,41 +9,43 @@ import { UserListItem } from 'src/app/models/userlist-item.model';
   styleUrls: ['./scoreboard.component.scss'],
 })
 export class ScoreboardComponent implements OnInit {
-  scoreboard: Array<UserListItem> = [
-    {
-      id: '1',
-      placement: 1,
-      name: 'Pista',
-      score: 1234,
-    },
-    {
-      id: '2',
-      placement: 1,
-      name: 'Pista',
-      score: 1234,
-    },
-    {
-      id: '3',
-      placement: 1,
-      name: 'Pista',
-      score: 1234,
-    },
-    {
-      id: '4',
-      placement: 1,
-      name: 'Pista',
-      score: 1234,
-    },
-  ];
+  scoreboard: PagedList = {
+    list: [],
+    pageNumber: 1,
+    pageSize: 0,
+    allResultsCount: 0,
+  };
 
-  pageNumber: number = 1;
-  pageSize: number = 2;
-  allResultsCount: number = 5;
-  constructor() {}
+  isLoading = new BehaviorSubject(false);
+  filter: string | undefined = undefined;
+  constructor(private userService: UserService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initScoreBoard();
+  }
+
+  private initScoreBoard(): void {
+    this.isLoading.next(true);
+    this.userService
+      .getScoreBoard(this.scoreboard.pageNumber, this.filter)
+      .subscribe(
+        (r: PagedList) => {
+          this.scoreboard = r;
+          this.isLoading.next(false);
+        },
+        (e) => console.log(e)
+      );
+  }
+
+  onFilter(s: string): void {
+    if (s) this.filter = s;
+    else this.filter = undefined;
+    this.scoreboard.pageNumber = 1;
+    this.initScoreBoard();
+  }
 
   onSwitchPage(pageNumber: number): void {
-    this.pageNumber = pageNumber;
+    this.scoreboard.pageNumber = pageNumber;
+    this.initScoreBoard();
   }
 }

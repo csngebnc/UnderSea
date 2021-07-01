@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
-import { AttackerUnitDto } from 'src/app/models/dto/attacker-unit-dto.model';
+import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-code';
 
 @Component({
   selector: 'unit-slider',
@@ -9,7 +9,7 @@ import { AttackerUnitDto } from 'src/app/models/dto/attacker-unit-dto.model';
 })
 export class UnitSliderComponent implements OnInit {
   @Input() unit: AttackerUnit;
-  @Output() setUnit = new EventEmitter<AttackerUnitDto>();
+  @Output() setUnit = new EventEmitter<AttackUnitDto>();
   selectedCount: number = 0;
 
   constructor() {}
@@ -17,6 +17,6 @@ export class UnitSliderComponent implements OnInit {
   ngOnInit(): void {}
 
   setUnitCount(id: number, count: string): void {
-    this.setUnit.emit({ id: id, count: parseInt(count) });
+    this.setUnit.emit({ unitId: id, count: parseInt(count) });
   }
 }

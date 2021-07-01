@@ -1,9 +1,9 @@
-<div class="stack h-100 to-center">
+<div *ngIf="!(isLoading | async); else loading" class="stack h-100 to-center">
   <router-outlet></router-outlet>
   <div class="p-1 w-100">
     <infobar
       [round]="userData.round"
-      [placement]="userData.placement"
+      [placement]="userData.placement + 1"
       [resources]="resources"
     ></infobar>
   </div>
@@ -14,6 +14,7 @@
     <a routerLink="/main" class="building-container-link">
       <div class="p-1 w-100 h-100 pos-rel">
         <building-container
+          [hasSonar]="resources.hasSonar"
           [buildings]="resources.buildings"
           class="w-100 h-100"
         ></building-container>
@@ -21,3 +22,7 @@
     </a>
   </div>
 </div>
+
+<ng-template #loading>
+  <loading class="w-100 h-100 d-flex to-center align-center"></loading>
+</ng-template>

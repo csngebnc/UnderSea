@@ -1,4 +1,4 @@
-export type Resource = {
+export type Unit = {
   id: number;
   name: string;
   count: number;

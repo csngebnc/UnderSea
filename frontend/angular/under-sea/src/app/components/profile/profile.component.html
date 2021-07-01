@@ -1,25 +1,35 @@
 <div class="modal-container">
-  <div class="modal">
+  <div class="modal modal-sm">
     <h2 class="modal-title">Profil</h2>
-    <p class="modal-description">
-      Országod jelenlegi neve: <strong>Kukutyim</strong>
-    </p>
+    <form
+      *ngIf="name; else loading"
+      [formGroup]="countryForm"
+      (ngSubmit)="setNewName()"
+    >
+      <p class="modal-description">
+        Országod jelenlegi neve: <strong>{{ name }}</strong>
+      </p>
 
-    <div class="stack align-center">
-      <input
-        type="text"
-        placeholder="Új név..."
-        class="text-input mt-1"
-        [(ngModel)]="newName"
-      />
-      <button
-        type="button"
-        class="gradient-button mt-1"
-        (click)="setNewName()"
-        [disabled]="!newName"
-      >
-        Átnevezés
-      </button>
-    </div>
+      <div class="stack align-center">
+        <input
+          type="text"
+          placeholder="Új név..."
+          class="text-input mt-1"
+          required
+          formControlName="newName"
+        />
+        <button
+          type="submit"
+          class="gradient-button mt-1"
+          [disabled]="!countryForm.valid"
+        >
+          Átnevezés
+        </button>
+      </div>
+    </form>
   </div>
 </div>
+
+<ng-template #loading>
+  <loading class="w-100 h-100 d-flex to-center align-center"></loading>
+</ng-template>

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Resource } from 'src/app/models/resource.model';
+import { Building } from 'src/app/models/building.model';
+import { RoundService } from 'src/app/services/round/round.service';
 
 @Component({
   selector: 'building-container',
@@ -7,20 +8,21 @@ import { Resource } from 'src/app/models/resource.model';
   styleUrls: ['./building-container.component.scss'],
 })
 export class BuildingContainerComponent implements OnInit {
-  @Input() buildings: Array<Resource>;
+  @Input() buildings: Array<Building>;
+  @Input() hasSonar: boolean;
 
-  constructor() {}
+  constructor(private roundService: RoundService) {}
 
   ngOnInit(): void {}
 
-  playerHasBuilding(name: string): boolean {
-    let result = this.buildings.find((c) => c.name === name);
+  playerHasBuilding(id: number): boolean {
+    let result = this.buildings.find((c) => c.id === id);
 
-    if (!result || result.count === 0) return false;
+    if (!result || result.buildingsCount === 0) return false;
     else return true;
   }
 
   nextRound(): void {
-    console.log('kövi kör');
+    this.roundService.nextRound().subscribe();
   }
 }
