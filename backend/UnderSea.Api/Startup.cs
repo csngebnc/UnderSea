@@ -119,7 +119,7 @@ namespace UnderSea.Api
             })
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "https://localhost:5001";
+                    options.Authority = "https://api-undersea.azurewebsites.net";
                     options.Audience = "undersea-api";
                     options.RequireHttpsMetadata = false;
                 }
