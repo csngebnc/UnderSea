@@ -1,0 +1,38 @@
+<div class="container bg">
+  <div>
+    <h1 class="title">UNDERSEA</h1>
+    <form
+      class="blurry-panel stack align-center"
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <h2 class="login-title">Belépés</h2>
+      <input
+        type="text"
+        placeholder="Felhasználónév"
+        class="text-input"
+        formControlName="userName"
+        required
+      />
+      <input
+        type="password"
+        placeholder="Jelszó"
+        class="text-input"
+        formControlName="password"
+        required
+      />
+      <span *ngIf="loginFailed.value" class="error-text"
+        >Hibás felhasználónév vagy jelszó!</span
+      >
+      <button
+        type="submit"
+        class="gradient-button mt-2"
+        [disabled]="!loginForm.valid"
+      >
+        Belépés
+      </button>
+      <a class="link mt-2" routerLink="/register">Regisztráció</a>
+      <div class="low-opacity-white"></div>
+    </form>
+  </div>
+</div>

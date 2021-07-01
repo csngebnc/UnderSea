@@ -1,0 +1,36 @@
+<div class="blurry-panel bar w-100">
+  <div class="low-opacity-white"></div>
+  <div class="plr-1 d-flex w-15 to-sides">
+    <span class="text">{{ round }}. kör</span>
+    <span class="text">{{ placement }}. hely</span>
+  </div>
+  <div class="d-flex align-center w-85 to-flex-end">
+    <resource-info
+      *ngFor="let unit of resources.units"
+      id="seal"
+      [count]="unit.count"
+      class="d-flex w-12 to-flex-end align-center"
+    ></resource-info>
+
+    <resource-info
+      id="shell"
+      [count]="resources.shells"
+      [perRound]="resources.shellsPerRound"
+      class="d-flex w-12 to-flex-end align-center"
+    ></resource-info>
+    <resource-info
+      id="coral"
+      [count]="resources.corals"
+      [perRound]="resources.coralsPerRound"
+      class="d-flex w-12 to-flex-end align-center"
+    ></resource-info>
+
+    <resource-info
+      *ngFor="let building of resources.buildings"
+      id="shark"
+      [count]="building.count"
+      [underConstruction]="countUnderConstrction(building.id)"
+      class="d-flex w-12 to-flex-end align-center"
+    ></resource-info>
+  </div>
+</div>

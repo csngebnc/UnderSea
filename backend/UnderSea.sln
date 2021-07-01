@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnderSea.Api", "UnderSea.Api\UnderSea.Api.csproj", "{F6F03AB7-F71B-4275-A579-AE3ACD13A1CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnderSea.Bll", "UnderSea.Bll\UnderSea.Bll.csproj", "{DA59C287-CD0E-43A2-88E0-C5FD025189C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnderSea.Bll", "UnderSea.Bll\UnderSea.Bll.csproj", "{DA59C287-CD0E-43A2-88E0-C5FD025189C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnderSea.Dal", "UnderSea.Dal\UnderSea.Dal.csproj", "{A20D8F88-2E22-4C97-9B29-1DFBDB5C9F7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnderSea.Dal", "UnderSea.Dal\UnderSea.Dal.csproj", "{A20D8F88-2E22-4C97-9B29-1DFBDB5C9F7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnderSea.Model", "UnderSea.Model\UnderSea.Model.csproj", "{7E37CBB3-8933-49C4-AB16-CE69F76D07EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnderSea.Model", "UnderSea.Model\UnderSea.Model.csproj", "{7E37CBB3-8933-49C4-AB16-CE69F76D07EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

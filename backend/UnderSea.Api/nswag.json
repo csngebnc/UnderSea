@@ -3,7 +3,9 @@
   "defaultVariables": null,
   "documentGenerator": {
     "aspNetCoreToOpenApi": {
-      "project": "UnderSea.Api.csproj",
+
+      "project": "../../../../UnderSea/backend/UnderSea.Api/UnderSea.Api.csproj",
+
       "msBuildProjectExtensionsPath": null,
       "configuration": null,
       "runtime": null,

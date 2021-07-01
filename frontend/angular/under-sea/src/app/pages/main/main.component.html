@@ -1,0 +1,23 @@
+<div class="stack h-100 to-center">
+  <router-outlet></router-outlet>
+  <div class="p-1 w-100">
+    <infobar
+      [round]="userData.round"
+      [placement]="userData.placement"
+      [resources]="resources"
+    ></infobar>
+  </div>
+  <div class="d-flex h-100 w-100">
+    <div class="w-300px p-1 h-100">
+      <sidebar [userName]="userData.name"></sidebar>
+    </div>
+    <a routerLink="/main" class="building-container-link">
+      <div class="p-1 w-100 h-100 pos-rel">
+        <building-container
+          [buildings]="resources.buildings"
+          class="w-100 h-100"
+        ></building-container>
+      </div>
+    </a>
+  </div>
+</div>
