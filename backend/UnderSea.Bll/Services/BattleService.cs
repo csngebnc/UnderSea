@@ -31,9 +31,16 @@ namespace UnderSea.Bll.Services
         public async Task<PagedResult<AttackableUserDto>> GetAttackableUsersAsync(PaginationData data, string name)
         {
             var userId = _identityService.GetCurrentUserId();
-            var user = await _context.Users.Where(u => u.Id == userId).Include(u => u.Country).ThenInclude(c => c.Attacks).ThenInclude(a => a.DefenderCountry).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(u => u.Id == userId)
+                .Include(u => u.Country)
+                    .ThenInclude(c => c.Attacks)
+                    .ThenInclude(a => a.DefenderCountry)
+                .FirstOrDefaultAsync();
 
-            var attackableusers = _context.Users.Where(c => c.Id != userId && !user.Country.Attacks.Select(a => a.DefenderCountry.OwnerId).Contains(c.Id)).ProjectTo<AttackableUserDto>(_mapper.ConfigurationProvider);
+            var attackableusers = _context.Users.Where(c => c.Id != userId && !user.Country.Attacks
+                                                .Select(a => a.DefenderCountry.OwnerId)
+                                                .Contains(c.Id))
+                                        .ProjectTo<AttackableUserDto>(_mapper.ConfigurationProvider);
 
             if (!string.IsNullOrEmpty(name) && !string.IsNullOrWhiteSpace(name))
             {
@@ -95,7 +102,9 @@ namespace UnderSea.Bll.Services
 
         public async Task<IEnumerable<UnitDto>> GetAllUnitsAsync()
         {
-            var country = await _context.Countries.Where(c => c.OwnerId == _identityService.GetCurrentUserId()).Include(c => c.CountryUnits).FirstOrDefaultAsync();
+            var country = await _context.Countries.Where(c => c.OwnerId == _identityService.GetCurrentUserId())
+                                                  .Include(c => c.CountryUnits)
+                                                  .FirstOrDefaultAsync();
             if (country == null)
                 throw new NotExistsException("A bejelentkezett felhasználóhoz nem tartozik ország.");
 
@@ -137,7 +146,8 @@ namespace UnderSea.Bll.Services
                     throw new InvalidParameterException("Nem lehetséges ez a művelet: a maximális egység számánál nem lehet több a felhasználó egységeinek száma.");
 
 
-                var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id).FirstOrDefaultAsync();
+                var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id)
+                                                        .FirstOrDefaultAsync();
 
                 if ((unit.Price * unitDto.Count) <= country.Pearl)
                 {
@@ -207,7 +217,8 @@ namespace UnderSea.Bll.Services
                         UnitId = unit.UnitId
                     };
 
-                    var cunit = attackerCountry.CountryUnits.Where(c => c.CountryId == attackerCountry.Id && c.UnitId == unit.UnitId).FirstOrDefault();
+                    var cunit = attackerCountry.CountryUnits.Where(c => c.CountryId == attackerCountry.Id && c.UnitId == unit.UnitId)
+                                                            .FirstOrDefault();
                     if (cunit == null)
                     {
                         throw new InvalidParameterException("Nincsen ilyen egysége az országnak.");
@@ -241,7 +252,11 @@ namespace UnderSea.Bll.Services
         {
             var userId = _identityService.GetCurrentUserId();
 
-            var country = await _context.Countries.Include(w => w.World).Include(c => c.CountryUnits).Where(c => c.OwnerId == userId).FirstOrDefaultAsync();
+            var country = await _context.Countries.Include(w => w.World)
+                                                  .Include(c => c.CountryUnits)
+                                                  .Where(c => c.OwnerId == userId)
+                                                  .FirstOrDefaultAsync();
+
             if (country == null) throw new NotExistsException("A bejelentkezett felhasználóhoz nem tartozik ország.");
 
             return country;
