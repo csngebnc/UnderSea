@@ -127,7 +127,8 @@ namespace UnderSea.Bll.Services
                         MercenaryPerRound = unit.MercenaryPerRound,
                         SupplyPerRound = unit.SupplyPerRound,
                         Price = unit.Price,
-                        CurrentCount = count
+                        CurrentCount = count,
+                        ImageUrl = unit.ImageUrl
                     };
                 });
         }

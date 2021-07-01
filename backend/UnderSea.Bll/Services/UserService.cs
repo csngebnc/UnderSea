@@ -35,10 +35,12 @@ namespace UnderSea.Bll.Services
             var user = new User { UserName = registerDto.UserName.Trim() };
             
             var result = await _userManager.CreateAsync(user, registerDto.Password);
-            
+
             var country = new Country {
                 Name = registerDto.CountryName,
                 OwnerId = user.Id,
+                Production = new Production(),
+                FightPoint = new FightPoint(),
                 WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id
             };
             _context.Countries.Add(country);

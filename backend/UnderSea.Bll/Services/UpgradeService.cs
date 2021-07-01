@@ -65,7 +65,8 @@ namespace UnderSea.Bll.Services
                     Effects = _mapper.Map<ICollection<EffectDto>>(upgrade.UpgradeEffects.Select(ue => ue.Effect)),
                     DoesExist = country.CountryUpgrades.Select(cu => cu.UpgradeId).Contains(upgrade.Id),
                     IsUnderConstruction = country.ActiveUpgradings.Select(au => au.UpgradeId).Contains(upgrade.Id),
-                    RemainingTime = remaining_time
+                    RemainingTime = remaining_time,
+                    ImageUrl = upgrade.ImageUrl
                 };
             });
         }

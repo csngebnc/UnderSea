@@ -16,8 +16,8 @@ namespace UnderSea.Model.Models
         public int Coral { get; set; }
         public int MaxUnitCount { get; set; }
 
-        public Production Production { get; set; } = new Production();
-        public FightPoint FightPoint { get; set; } = new FightPoint();
+        public Production Production { get; set; } //= new Production();
+        public FightPoint FightPoint { get; set; } //= new FightPoint();
 
         public string OwnerId { get; set; }
         public User Owner { get; set; }
