@@ -70,6 +70,7 @@ class UserDataController extends GetxController {
         //return response.body;
       }
     } catch (error) {
+      userInfoData.addError(error);
       log('$error');
     }
   }

@@ -20,13 +20,11 @@ class _HomePageState extends State<HomePage> {
       Get.find<BuildingsController>().buildingList;
   final Random rng = Random();
 
-  late Future<UserInfoDto?> userInfo;
-
   final userDataController = Get.find<UserDataController>();
 
   @override
   void initState() {
-    userInfo = userDataController.userInfo();
+    userDataController.userInfo();
     super.initState();
   }
 
@@ -53,19 +51,18 @@ class _HomePageState extends State<HomePage> {
         ),
         child: Column(children: [
           SizedBox(height: 10),
-          FutureBuilder<UserInfoDto?>(
-              future: userInfo,
-              builder: (context, snapshot) {
-                if (snapshot.hasData)
-                  return UnderseaStyles.leaderboardButton(
-                      roundNumber: snapshot.data!.round,
-                      placement: snapshot.data!.placement);
-                else if (snapshot.hasError)
-                  return Text('error');
-                else
-                  return UnderseaStyles.leaderboardButton(
-                      roundNumber: 4, placement: 23);
-              }),
+          GetBuilder<UserDataController>(builder: (controller) {
+            final userInfoData = controller.userInfoData.value;
+            if (userInfoData != null)
+              return UnderseaStyles.leaderboardButton(
+                  roundNumber: userInfoData.round,
+                  placement: userInfoData.placement);
+            /*else if (userInfoData)
+              return Text('error');*/
+            else
+              return UnderseaStyles.leaderboardButton(
+                  roundNumber: 4, placement: 23);
+          }),
           //UnderseaStyles.leaderboardButton(roundNumber: 4, placement: 23),
           Expanded(
               child: Stack(

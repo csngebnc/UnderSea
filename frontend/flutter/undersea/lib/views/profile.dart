@@ -22,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    userInfo = userDataController.userInfo();
+    //userInfo = userDataController.userInfo();
     super.initState();
   }
 
@@ -45,28 +45,27 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(
                 height: 25,
               ),
-              FutureBuilder<UserInfoDto?>(
-                  future: userInfo,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData)
-                      return Text(snapshot.data!.name!,
-                          style: UnderseaStyles.inputTextStyle.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 21));
-                    else if (snapshot.hasError)
+              GetBuilder<UserDataController>(builder: (controller) {
+                final userInfoData = controller.userInfoData.value;
+                if (userInfoData != null)
+                  return Text(userInfoData.name!,
+                      style: UnderseaStyles.inputTextStyle.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 21));
+                /*else if (snapshot.hasError)
                       return Text('error',
                           style: UnderseaStyles.inputTextStyle.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 21));
-                    else
-                      return Text('default',
-                          style: UnderseaStyles.inputTextStyle.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 21));
-                  }),
+                              fontSize: 21));*/
+                else
+                  return Text('default',
+                      style: UnderseaStyles.inputTextStyle.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 21));
+              }),
               SizedBox(
                 height: 10,
               ),

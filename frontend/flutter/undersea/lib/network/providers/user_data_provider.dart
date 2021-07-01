@@ -17,9 +17,9 @@ class UserDataProvider extends NetworkProvider {
       post("/api/User/register", body,
           contentType: 'application/json', decoder: (response) => {});
 
-  Future<Response<UserInfoDto>> getUserInfo() => get("/api/User",
-          contentType: 'application/json',
-          headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
+  Future<Response<UserInfoDto>> getUserInfo() =>
+      get("/api/User", contentType: 'application/json',
+          //headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           decoder: (response) {
         return UserInfoDto.fromJson(response);
       });
