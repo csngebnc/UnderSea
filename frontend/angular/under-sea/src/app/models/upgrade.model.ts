@@ -7,4 +7,5 @@ export type Upgrade = {
   isUnderConstruction: boolean;
   remainingTime?: number;
   effects: Array<Effect>;
+  imageUrl?: string;
 };

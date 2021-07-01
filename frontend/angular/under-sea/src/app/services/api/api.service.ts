@@ -33,7 +33,7 @@ export class ApiService {
     return this.apiService.country().pipe(
       map((cd: CountryDetailsDto) => {
         const units: Array<Unit> = cd.units.map((u) => {
-          return { id: u.id, name: u.name, count: u.count };
+          return { id: u.id, name: u.name, count: u.count, icon: u.imageUrl };
         });
 
         const buildings: Array<Building> = cd.buildings.map((b) => {
@@ -42,6 +42,7 @@ export class ApiService {
             name: b.name,
             buildingsCount: b.buildingsCount,
             activeConstructionCount: b.activeConstructionCount,
+            iconImageUrl: b.iconImageUrl,
           };
         });
 

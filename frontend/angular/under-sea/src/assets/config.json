@@ -1,3 +1,13 @@
 {
-  "apiUrl": "https://api-undersea.azurewebsites.net"
+  "apiUrl": "https://api-undersea.azurewebsites.net",
+  "imageUrl": "https://underseastorage.blob.core.windows.net",
+  "images": {
+    "profile": "/others/profile.svg",
+    "coral": "/currency/coral.svg",
+    "pearl": "/currency/shell.svg",
+    "sonar": "/buildings/sonar_hd.png",
+    "castle": "/buildings/castle_hd.png",
+    "flowcontrol": "/buildings/flowcontrol_hd.png",
+    "unknown": "/buildings/unknown_hd.png"
+  }
 }

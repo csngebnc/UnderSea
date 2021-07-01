@@ -35,6 +35,7 @@ export class BattleService {
             mercenary: u.mercenaryPerRound,
             supply: u.supplyPerRound,
             price: u.price,
+            icon: u.imageUrl,
           });
         });
         return result;

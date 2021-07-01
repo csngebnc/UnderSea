@@ -7,4 +7,5 @@ export type UnitDetails = {
   mercenary: number;
   supply: number;
   price: number;
+  icon?: string;
 };

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Building } from 'src/app/models/building.model';
 import { RoundService } from 'src/app/services/round/round.service';
+import * as config from 'src/assets/config.json';
 
 @Component({
   selector: 'building-container',
@@ -10,6 +11,10 @@ import { RoundService } from 'src/app/services/round/round.service';
 export class BuildingContainerComponent implements OnInit {
   @Input() buildings: Array<Building>;
   @Input() hasSonar: boolean;
+
+  sonar: string = config.imageUrl + config.images.sonar;
+  castle: string = config.imageUrl + config.images.castle;
+  flowcontrol: string = config.imageUrl + config.images.flowcontrol;
 
   constructor(private roundService: RoundService) {}
 
