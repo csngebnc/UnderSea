@@ -30,7 +30,7 @@
         <div class="stack align-center">
           <ng-container *ngFor="let unit of units">
             <unit-slider
-              *ngIf="!unit.count"
+              *ngIf="unit.count !== 0"
               [unit]="unit"
               class="d-flex w-100 p-1 to-center"
               (setUnit)="onSetUnit($event)"

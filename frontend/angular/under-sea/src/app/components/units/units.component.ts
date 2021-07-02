@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { UnitDetails } from 'src/app/models/unit-details.model';
 import { CartUnit } from 'src/app/models/cart-unit.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
-import { BehaviorSubject, forkJoin } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { ApiService } from 'src/app/services/api/api.service';
 import { BuyUnitDto } from 'src/app/services/generated-code/generated-api-code';
+import { Store, Select } from '@ngxs/store';
+import { ResourcesState } from 'src/app/states/resources/resources.state';
+import { GetResources } from 'src/app/states/resources/resources.actions';
 
 @Component({
   selector: 'units',
@@ -17,12 +20,20 @@ export class UnitsComponent implements OnInit {
   money: number;
   remainingMoney: number;
 
+  @Select(ResourcesState.remainingCapacity)
+  private remainingCapacityState: Observable<number>;
+
+  remainingCapacity: number;
+
   isLoading = new BehaviorSubject(false);
 
   constructor(
     private battleService: BattleService,
-    private apiService: ApiService
-  ) {}
+    private apiService: ApiService,
+    private store: Store
+  ) {
+    this.remainingCapacityState.subscribe((r) => (this.remainingCapacity = r));
+  }
 
   ngOnInit(): void {
     this.initUnits();
@@ -76,6 +87,7 @@ export class UnitsComponent implements OnInit {
     this.battleService.buyUnits(this.cart).subscribe(
       (r) => {
         console.log(r);
+        this.store.dispatch(GetResources);
       },
       (e) => console.log(e)
     );

@@ -35,6 +35,8 @@ import { LoadingComponent } from './components/loading/loading.component';
 import * as generated from './services/generated-code/generated-api-code';
 import * as config from 'src/assets/config.json';
 import { TokenInterceptor } from './http-interceptors/token/token.interceptor';
+import { ResourcesState } from './states/resources/resources.state';
+import { UserDataState } from './states/user-data/user-data.state';
 
 @NgModule({
   declarations: [
@@ -69,7 +71,7 @@ import { TokenInterceptor } from './http-interceptors/token/token.interceptor';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgxsModule.forRoot([]),
+    NgxsModule.forRoot([ResourcesState, UserDataState]),
   ],
   providers: [
     { provide: generated.API_BASE_URL, useValue: config.apiUrl },
