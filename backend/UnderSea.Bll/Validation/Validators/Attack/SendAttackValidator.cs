@@ -37,7 +37,7 @@ namespace UnderSea.Bll.Validation
                 this._context = context;
                 RuleFor(attackUnit => attackUnit.UnitId).NotNull().MustAsync(async (unitId, cancellation) => await UnitExist(unitId))
                     .WithMessage("Nem létezik ilyen egység!").WithName("unitId").OverridePropertyName("unitId"); ;
-                RuleFor(attackUnit => attackUnit.Count).NotNull().GreaterThanOrEqualTo(0).WithMessage("Legalább 0 egységet el kell küldened!")
+                RuleFor(attackUnit => attackUnit.Count).NotNull().GreaterThan(0).WithMessage("Legalább 1 egységet el kell küldened!")
                     .WithName("count").OverridePropertyName("count"); ;
             }
 
