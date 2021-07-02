@@ -103,7 +103,7 @@ namespace UnderSea.Bll.Services
 
             var attacks = await _context.Attacks
                                             .Where(c => c.DefenderCountryId == country.Id || c.AttackerCountryId == country.Id)
-                                            .OrderByDescending(a => a.Id)
+                                            .OrderByDescending(a => a.AttackRound)
                                             .Include(a => a.AttackUnits)
                                                 .ThenInclude(au => au.Unit)
                                             .Include(a => a.DefenderCountry)
@@ -141,7 +141,7 @@ namespace UnderSea.Bll.Services
 
             var spyreports = await _context.SpyReports.Where(sr => sr.SpySenderCountryId == country.Id)
                 .Include(sr => sr.SpiedCountry)
-                .OrderByDescending(sr => sr.Id)
+                .OrderByDescending(sr => sr.Round)
                 .ToPagedList(data.PageSize, data.PageNumber);
 
             return new PagedResult<SpyReportDto>
@@ -286,26 +286,18 @@ namespace UnderSea.Bll.Services
             var country = await _context.Countries
                 .Include(c => c.World)
                 .Include(c => c.CountryUnits)
-                .ThenInclude(cu => cu.Unit).FirstOrDefaultAsync(c => c.OwnerId == _identityService.GetCurrentUserId());
-
-            if(!(await _context.Countries.AnyAsync(c => c.Id == spies.SpiedCountryId)))
-            {
-                throw new NotExistsException("Nem létezik ilyen ország.");
-            }
+                    .ThenInclude(cu => cu.Unit)
+                .FirstOrDefaultAsync(c => c.OwnerId == _identityService.GetCurrentUserId());
 
             if (spies.SpiedCountryId == country.Id)
             {
                 throw new InvalidParameterException("Nem kémlelheti saját magát az ország.");
             }
 
-            if (country.CountryUnits.Where(cu => cu.Unit.Name == UnitConstants.Felfedezo).FirstOrDefault().Count < spies.SpyCount)
-            {
-                throw new ArgumentOutOfRangeException("Nincs elegendő kém az országban.");
-            }
-            else
-            {
-                country.CountryUnits.Where(cu => cu.Unit.Name == UnitConstants.Felfedezo).FirstOrDefault().Count -= spies.SpyCount;
-            }
+            var attackerSpyUnits = country.CountryUnits
+                .FirstOrDefault(cu => cu.Unit.Name == UnitConstants.Felfedezo);
+
+            attackerSpyUnits.Count -= spies.SpyCount;
 
             var spyreport = new SpyReport
             {
