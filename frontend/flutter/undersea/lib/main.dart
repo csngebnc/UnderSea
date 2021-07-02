@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:undersea/controllers/battle_data_controller.dart';
 import 'package:undersea/controllers/buildings_controller.dart';
 import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/controllers/login_controller.dart';
@@ -20,6 +21,7 @@ import 'controllers/upgrades_controller.dart';
 
 import 'controllers/user_data_controller.dart';
 import 'lang/strings.dart';
+import 'network/providers/battle_data_provider.dart';
 import 'network/providers/building_data_provider.dart';
 import 'network/providers/user_data_provider.dart';
 
@@ -46,6 +48,8 @@ Future<void> initServices() async {
   Get.put(RoundController(Get.find()));
   Get.put(UpgradeDataProvider());
   Get.put(UpgradesController(Get.find()));
+  Get.put(BattleDataProvider());
+  Get.put(BattleDataController(Get.find()));
 }
 
 class MyApp extends StatelessWidget {
