@@ -5,6 +5,7 @@ import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/building_details_dto.dart';
 import 'package:undersea/models/response/building_details_list.dart';
 import 'package:undersea/models/response/country_details_dto.dart';
+import 'package:undersea/models/response/paged_result_of_attackable_user_dto.dart';
 import 'package:undersea/models/response/paged_result_of_logged_attack_dto.dart';
 import 'package:undersea/models/response/paged_result_of_spy_report_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
@@ -56,12 +57,21 @@ class BattleDataProvider extends NetworkProvider {
           decoder: (response) =>
               PagedResultOfLoggedAttackDto.fromJson(response));
 
-  Future<Response<PagedResultOfSpyReportDto>> getSpyingHistory(
+  Future<Response<PagedResultOfAttackableUserDto>> getAttackableUsers(
           int pageSize, int pageNumber) =>
-      get("/api/Battle/spy-history",
+      get("/api/Battle/history",
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           contentType: 'application/json',
           query: {'PageNumber': pageNumber, 'PageSize': pageSize},
+          decoder: (response) =>
+              PagedResultOfAttackableUserDto.fromJson(response));
+
+  Future<Response<PagedResultOfSpyReportDto>> getSpyingHistory(
+          int pageSize, int pageNumber, String name) =>
+      get("/api/Battle/spy-history",
+          headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
+          contentType: 'application/json',
+          query: {'PageNumber': pageNumber, 'PageSize': pageSize, 'name': name},
           decoder: (response) => PagedResultOfSpyReportDto.fromJson(response));
 
   Future<Response<List<UnitDto>>> getUnitTypes() => get("/api/Battle/units",
