@@ -61,27 +61,6 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<CountryUpgrade>().HasKey(cu => new { cu.CountryId, cu.UpgradeId });
             modelBuilder.Entity<UpgradeEffect>().HasKey(ue => new { ue.EffectId, ue.UpgradeId });
 
-            List<object> productions = new List<object>();
-            List<object> fightpoints = new List<object>();
-            for (int i = 1; i <= 10; i++)
-            {
-                productions.Add(new
-                {
-                    CountryId = i,
-                    BaseCoralProduction = 10,
-                    BasePearlProduction = 200,
-                    CoralProductionMultiplier = 1.0,
-                    PearlProductionMultiplier = 1.0
-                });
-
-                fightpoints.Add(new
-                {
-                    CountryId = i,
-                    AttackPointMultiplier = 1.0,
-                    DefensePointMultiplier = 1.0
-                });
-            }
-
             modelBuilder.Entity<Country>().OwnsOne(p => p.Production);//.HasData(productions);
             modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint);//.HasData(fightpoints);
 
@@ -102,38 +81,26 @@ namespace UnderSea.Dal.Data
                 .Property(e => e.EffectType)
                 .HasMaxLength(200)
                 .HasColumnName("effect_type");
-            /*
-            List<Effect> effects = new List<Effect>();
-            effects.Add(new PopulationEffect { Id = 1, Name = "50 lakost ad a népességhez" });
-            effects.Add(new CoralEffect { Id = 2, Name = "200 korallt termel körönként" });
-            effects.Add(new MilitaryEffect { Id = 3, Name = "200 egység katonának nyújt szállást" });
-            effects.Add(new MudTractor { Id = 4, Name = "Növeli a korall termesztést 10%-kal" });
-            effects.Add(new MudCombine { Id = 5, Name = "Növeli a korall termesztést 15%-kal" });
-            effects.Add(new CoralWall { Id = 6, Name = "Növeli a védelmi pontokat 20%-kal" });
-            effects.Add(new SonarCanon { Id = 7, Name = "Növeli a támadó pontokat 20%-kal" });
-            effects.Add(new UnderwaterMartialArt { Id = 8, Name = "Növeli a védelmi és támadóerőt pontokat 10%-kal" });
-            effects.Add(new Alchemy { Id = 9, Name = "Növeli a beszedett adót 30%-kal" });
 
+            modelBuilder.Entity<PopulationEffect>().HasData(new PopulationEffect { Id = 1, Name = "50 lakost ad a népességhez" });
+            modelBuilder.Entity<CoralEffect>().HasData(new CoralEffect { Id = 2, Name = "200 korallt termel körönként" });
+            modelBuilder.Entity<MilitaryEffect>().HasData(new MilitaryEffect { Id = 3, Name = "200 egység katonának nyújt szállást" });
+            modelBuilder.Entity<MudTractor>().HasData(new MudTractor { Id = 4, Name = "Növeli a korall termesztést 10%-kal" });
+            modelBuilder.Entity<MudCombine>().HasData(new MudCombine { Id = 5, Name = "Növeli a korall termesztést 15%-kal" });
+            modelBuilder.Entity<CoralWall>().HasData(new CoralWall { Id = 6, Name = "Növeli a védelmi pontokat 20%-kal" });
+            modelBuilder.Entity<SonarCanon>().HasData(new SonarCanon { Id = 7, Name = "Növeli a támadó pontokat 20%-kal" });
+            modelBuilder.Entity<UnderwaterMartialArt>().HasData(new UnderwaterMartialArt { Id = 8, Name = "Növeli a védelmi és támadóerőt pontokat 10%-kal" });
+            modelBuilder.Entity<Alchemy>().HasData(new Alchemy { Id = 9, Name = "Növeli a beszedett adót 30%-kal" });
 
-
-            modelBuilder.Entity<User>().HasData(JsonDataLoader.LoadJson<User>("../UnderSea.Dal/Data/Seed/Users"));
-            modelBuilder.Entity<World>().HasData(JsonDataLoader.LoadJson<World>("../UnderSea.Dal/Data/Seed/World"));
-            modelBuilder.Entity<PopulationEffect>().HasData(effects[0]);
-            modelBuilder.Entity<CoralEffect>().HasData(effects[1]);
-            modelBuilder.Entity<MilitaryEffect>().HasData(effects[2]);
-            modelBuilder.Entity<MudTractor>().HasData(effects[3]);
-            modelBuilder.Entity<MudCombine>().HasData(effects[4]);
-            modelBuilder.Entity<CoralWall>().HasData(effects[5]);
-            modelBuilder.Entity<SonarCanon>().HasData(effects[6]);
-            modelBuilder.Entity<UnderwaterMartialArt>().HasData(effects[7]);
-            modelBuilder.Entity<Alchemy>().HasData(effects[8]);
-            modelBuilder.Entity<Country>().HasData(JsonDataLoader.LoadJson<Country>("../UnderSea.Dal/Data/Seed/Country"));
-            modelBuilder.Entity<Building>().HasData(JsonDataLoader.LoadJson<Building>("../UnderSea.Dal/Data/Seed/Building"));
-            modelBuilder.Entity<Unit>().HasData(JsonDataLoader.LoadJson<Unit>("../UnderSea.Dal/Data/Seed/Unit"));
-            modelBuilder.Entity<Upgrade>().HasData(JsonDataLoader.LoadJson<Upgrade>("../UnderSea.Dal/Data/Seed/Upgrade"));
-            modelBuilder.Entity<BuildingEffect>().HasData(JsonDataLoader.LoadJson<BuildingEffect>("../UnderSea.Dal/Data/Seed/BuildingEffect"));
-            modelBuilder.Entity<UpgradeEffect>().HasData(JsonDataLoader.LoadJson<UpgradeEffect>("../UnderSea.Dal/Data/Seed/UpgradeEffect"));
-            */
+            modelBuilder.ApplyConfiguration(new WorldEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new CountryEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new BuildingEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitEntityConfiguration());
+            //modelBuilder.ApplyConfiguration(new EffectEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UpgradeEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new BuildingEffectEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UpgradeEffectEntityConfiguration());
         }
 
 

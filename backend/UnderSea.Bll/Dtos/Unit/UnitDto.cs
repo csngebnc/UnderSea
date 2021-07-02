@@ -17,5 +17,6 @@ namespace UnderSea.Bll.Dtos
         public int SupplyPerRound { get; set; }
         public int Price { get; set; }
         public int CurrentCount { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

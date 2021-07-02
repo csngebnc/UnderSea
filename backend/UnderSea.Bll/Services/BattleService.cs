@@ -65,6 +65,36 @@ namespace UnderSea.Bll.Services
             return userunits;
         }
 
+        public async Task<IEnumerable<BattleUnitDto>> GetUserAllUnitsAsync()
+        {
+            var country = await GetCountry();
+            var userunits = await _context.CountryUnits
+                .Include(c => c.Unit)
+                .Where(c => c.CountryId == country.Id)
+                .ToListAsync();
+
+            var attackUnits = await _context.AttackUnits
+                .Include(a => a.Attack)
+                .Where(a => a.Attack.AttackRound == country.World.Round && a.Attack.AttackerCountryId == country.Id)
+                .ToListAsync();
+
+            foreach (var unit in attackUnits)
+            {
+                userunits.Where(u => u.UnitId == unit.Id).FirstOrDefault().Count += unit.Count;
+            }
+
+            return userunits.Select(uu => 
+            {
+                return new BattleUnitDto
+                {
+                    Id = uu.UnitId,
+                    Name = uu.Unit.Name,
+                    Count = uu.Count,
+                    ImageUrl = uu.Unit.ImageUrl
+                };
+            });
+        }
+
         public async Task<PagedResult<LoggedAttackDto>> GetLoggedAttacksAsync(PaginationData data)
         {
             var country = await GetCountry();
@@ -127,7 +157,8 @@ namespace UnderSea.Bll.Services
                         MercenaryPerRound = unit.MercenaryPerRound,
                         SupplyPerRound = unit.SupplyPerRound,
                         Price = unit.Price,
-                        CurrentCount = count
+                        CurrentCount = count,
+                        ImageUrl = unit.ImageUrl
                     };
                 });
         }

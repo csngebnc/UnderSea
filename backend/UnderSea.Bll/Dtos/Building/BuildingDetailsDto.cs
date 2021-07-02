@@ -14,6 +14,7 @@ namespace UnderSea.Bll.Dtos
         public int Count { get; set; }
         public int Price { get; set; }
         public bool UnderConstruction { get; set; }
+        public string ImageUrl { get; set; }
         public ICollection<EffectDto> Effects { get; set; }
     }
 }

@@ -78,7 +78,8 @@ namespace UnderSea.Bll.Services
                         Id = building.Id,
                         Name = building.Name,
                         BuildingsCount = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).Count(),
-                        ActiveConstructionCount = country.ActiveConstructions.Where(ac => ac.BuildingId == building.Id).Count()
+                        ActiveConstructionCount = country.ActiveConstructions.Where(ac => ac.BuildingId == building.Id).Count(),
+                        IconImageUrl = building.IconImageUrl
                     };
                 })
             };

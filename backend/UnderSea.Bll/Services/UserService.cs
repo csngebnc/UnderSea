@@ -35,10 +35,12 @@ namespace UnderSea.Bll.Services
             var user = new User { UserName = registerDto.UserName.Trim() };
             
             var result = await _userManager.CreateAsync(user, registerDto.Password);
-            
+
             var country = new Country {
                 Name = registerDto.CountryName,
                 OwnerId = user.Id,
+                Production = new Production(),
+                FightPoint = new FightPoint(),
                 WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id
             };
             _context.Countries.Add(country);
@@ -49,7 +51,7 @@ namespace UnderSea.Bll.Services
         public async Task<PagedResult<UserRankDto>> GetRanklist(PaginationData pagination, string nameFilter)
         {
             var users = _context.Users
-                .OrderByDescending(u => u.Points)
+                .OrderByDescending(u => u.Points).AsQueryable()
                 .ProjectTo<UserRankDto>(_mapper.ConfigurationProvider);
 
             if (!string.IsNullOrEmpty(nameFilter) && !string.IsNullOrWhiteSpace(nameFilter))
@@ -57,7 +59,14 @@ namespace UnderSea.Bll.Services
                 users = users.Where(u => u.Name.Contains(nameFilter));
             }
 
-            return await users.ToPagedList(pagination.PageSize, pagination.PageNumber);
+            var pagedList = await users.ToPagedList(pagination.PageSize, pagination.PageNumber);
+
+            foreach (var user in pagedList.Results)
+            {
+                user.Placement = (await _context.Users.OrderByDescending(u => u.Points).Where(u => u.Points > user.Points).CountAsync()) +1;
+            }
+
+            return pagedList;
         }
 
         public async Task<UserInfoDto> GetUserInfo()
@@ -73,8 +82,8 @@ namespace UnderSea.Bll.Services
                 Id = user.Id,
                 Name = user.UserName,
                 Round = user.Country.World.Round,
-                Placement = (await _context.Users.OrderByDescending(u => u.Points).ToListAsync()).FindIndex(0, u => u.Id == user.Id)
-            };
+                Placement = (await _context.Users.OrderByDescending(u => u.Points).Where(u => u.Points > user.Points).CountAsync()) + 1
+        };
             
         }         
     }
