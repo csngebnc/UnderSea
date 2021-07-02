@@ -46,7 +46,6 @@ export class UnitsComponent implements OnInit {
     forkJoin([units, pearls]).subscribe(
       (responses) => {
         this.units = responses[0];
-        this.initCart();
 
         this.money = responses[1];
         this.remainingMoney = this.money;
@@ -57,18 +56,15 @@ export class UnitsComponent implements OnInit {
     );
   }
 
-  private initCart(): void {
-    this.units.forEach((unit: UnitDetails) => {
-      this.cart.units.push({ unitId: unit.id, count: 0 });
-    });
-  }
-
   addToCart(unit: CartUnit): void {
     let index = this.cart.units.findIndex((u) => u.unitId === unit.unitId);
     if (index !== -1) {
       this.remainingMoney += this.cart.units[index].count * unit.price;
       this.cart.units[index].count = unit.count;
       this.remainingMoney -= unit.count * unit.price;
+    } else {
+      this.remainingMoney -= unit.count * unit.price;
+      this.cart.units.push({ unitId: unit.unitId, count: unit.count });
     }
   }
 
@@ -83,6 +79,7 @@ export class UnitsComponent implements OnInit {
 
   onBuy(): void {
     this.justBoughtUnits$.next(true);
+    console.log(this.cart);
     this.battleService.buyUnits(this.cart).subscribe(
       (r) => {
         this.store.dispatch(GetResources);
