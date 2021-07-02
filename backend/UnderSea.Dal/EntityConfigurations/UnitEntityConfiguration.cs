@@ -57,7 +57,7 @@ namespace UnderSea.Dal.EntityConfigurations
                     SupplyPerRound = 1,
                     AttackPoint = 0,
                     DefensePoint = 0,
-                    ImageUrl = @"https://underseastorage.blob.core.windows.net/units/shark.svg"
+                    ImageUrl = @"https://underseastorage.blob.core.windows.net/units/spy.png"
                 }
             );
         }
