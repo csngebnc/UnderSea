@@ -33,14 +33,16 @@ namespace UnderSea.Bll.Services
             var userId = _identityService.GetCurrentUserId();
             var user = await _context.Users.Where(u => u.Id == userId)
                 .Include(u => u.Country)
-                    .ThenInclude(c => c.Attacks)
-                    .ThenInclude(a => a.DefenderCountry)
+                    .ThenInclude(e => e.World)
                 .FirstOrDefaultAsync();
 
-            var attackableusers = _context.Users.Where(c => c.Id != userId && !user.Country.Attacks
-                                                .Select(a => a.DefenderCountry.OwnerId)
-                                                .Contains(c.Id))
-                                        .ProjectTo<AttackableUserDto>(_mapper.ConfigurationProvider);
+            var attackableusers = _context.Users
+                                    .Include(u => u.Country)
+                                        .ThenInclude(c => c.Defenses)
+                                    .Where(u => u.Id != userId
+                                          && !u.Country.Defenses.Any(d => d.AttackerCountryId == user.Country.Id 
+                                                && d.AttackRound == user.Country.World.Round))
+                                    .ProjectTo<AttackableUserDto>(_mapper.ConfigurationProvider);
 
             if (!string.IsNullOrEmpty(name) && !string.IsNullOrWhiteSpace(name))
             {
