@@ -264,7 +264,10 @@ class UnderseaStyles {
   }
 
   static Widget elevatedButton(
-      {required String text, required Function onPressed}) {
+      {required String text,
+      required Function onPressed,
+      double width = 250,
+      double height = 70}) {
     return ElevatedButton(
       onPressed: () {
         onPressed();
@@ -279,8 +282,8 @@ class UnderseaStyles {
         decoration: BoxDecoration(
             gradient: buttonGradient, borderRadius: BorderRadius.circular(200)),
         child: Container(
-          width: 250,
-          height: 70,
+          width: width,
+          height: height,
           alignment: Alignment.center,
           child: Text(
             text,

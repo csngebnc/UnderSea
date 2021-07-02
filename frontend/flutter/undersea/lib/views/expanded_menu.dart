@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/buildings_controller.dart';
+import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/models/building.dart';
+import 'package:undersea/models/response/battle_unit_dto.dart';
+import 'package:undersea/models/response/building_info_dto.dart';
+import 'package:undersea/models/response/country_details_dto.dart';
+import 'package:undersea/models/response/unit_dto.dart';
 import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
 
@@ -14,41 +19,47 @@ class ExpandedMenu extends StatelessWidget {
   final List<Building> buildingList =
       Get.find<BuildingsController>().buildingList;
 
-  Widget _enumerateSoldiers() {
+  Widget _enumerateSoldiers(List<BattleUnitDto> units) {
     List<Widget> list = <Widget>[];
-    militaryList.forEach((element) {
+    units.forEach((element) {
       list.add(UnderseaStyles.militaryIcon(
-          element.iconName, element.available, element.totalAmount));
+          'seahorse', element.count, element.count));
     });
     return new Row(mainAxisAlignment: MainAxisAlignment.center, children: list);
   }
 
-  List<Widget> _enumerateBuildings() {
+  List<Widget> _enumerateBuildings(List<BuildingInfoDto> buildingDtos) {
     List<Widget> buildings = <Widget>[];
-    buildingList.forEach((element) {
-      buildings.add(UnderseaStyles.buildingIcon(
-          element.imageName, element.currentAmount));
+    buildingDtos.forEach((element) {
+      buildings.add(
+          UnderseaStyles.buildingIcon('zatonyvar', element.buildingsCount));
     });
     return buildings;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      _enumerateSoldiers(),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          UnderseaStyles.resourceIcon(
-              "pearl", resourceData.pearlAmount, resourceData.pearlPerRound),
-          UnderseaStyles.resourceIcon(
-              "coral", resourceData.coralAmount, resourceData.coralPerRound),
-          ..._enumerateBuildings()
-          /*UnderseaStyles.buildingIcon("zatonyvar@3x", 1),
+    return GetBuilder<CountryDataController>(builder: (controller) {
+      final countryData = controller.countryDetailsData.value;
+      if (countryData != null) {
+        return Column(children: [
+          _enumerateSoldiers(countryData.units!),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              UnderseaStyles.resourceIcon("pearl", countryData.pearl,
+                  countryData.currentPearlProduction),
+              UnderseaStyles.resourceIcon("coral", countryData.coral,
+                  countryData.currentCoralProduction),
+              ..._enumerateBuildings(countryData.buildings!)
+              /*UnderseaStyles.buildingIcon("zatonyvar@3x", 1),
           UnderseaStyles.buildingIcon("aramlasiranyito@3x", 0),*/
-        ],
-      )
-    ]);
+            ],
+          )
+        ]);
+      } else
+        return Expanded(child: Container());
+    });
   }
 }

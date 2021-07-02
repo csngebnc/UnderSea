@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
@@ -8,6 +9,8 @@ import 'package:undersea/models/response/user_info_dto.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/editable_text.dart';
 import 'package:undersea/views/login.dart';
+
+import '../constants.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage();
@@ -89,8 +92,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: TextButton(
                         onPressed: () {
+                          var storage = GetStorage();
+                          storage.read(Constants.TOKEN);
                           Get.off(LoginPage());
-                          //logout
                         },
                         child: Text(Strings.logout.tr,
                             style: UnderseaStyles.buttonTextStyle.copyWith(

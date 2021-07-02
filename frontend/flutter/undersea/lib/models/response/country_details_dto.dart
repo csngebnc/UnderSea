@@ -6,7 +6,6 @@ part 'country_details_dto.g.dart';
 
 @JsonSerializable()
 class CountryDetailsDto {
-  int unitId;
   int maxUnitCount;
   List<BattleUnitDto>? units;
   int coral;
@@ -18,8 +17,7 @@ class CountryDetailsDto {
   List<BuildingInfoDto>? buildings;
 
   CountryDetailsDto(
-      {required this.unitId,
-      required this.maxUnitCount,
+      {required this.maxUnitCount,
       required this.coral,
       required this.currentCoralProduction,
       required this.currentPearlProduction,

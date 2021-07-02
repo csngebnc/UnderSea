@@ -3,10 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/buildings_controller.dart';
+import 'package:undersea/controllers/country_data_controller.dart';
+import 'package:undersea/controllers/next_round_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
 
 import 'package:undersea/models/building.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
+import 'package:undersea/network/providers/next_round_provider.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/expandable_menu.dart';
 
@@ -21,10 +24,12 @@ class _HomePageState extends State<HomePage> {
   final Random rng = Random();
 
   final userDataController = Get.find<UserDataController>();
+  final countryDataController = Get.find<CountryDataController>();
 
   @override
   void initState() {
     userDataController.userInfo();
+    countryDataController.getCountryDetails();
     super.initState();
   }
 
@@ -63,7 +68,16 @@ class _HomePageState extends State<HomePage> {
               return UnderseaStyles.leaderboardButton(
                   roundNumber: 4, placement: 23);
           }),
-          //UnderseaStyles.leaderboardButton(roundNumber: 4, placement: 23),
+          SizedBox(
+            height: 20,
+          ),
+          UnderseaStyles.elevatedButton(
+              text: 'Kör++',
+              width: 100,
+              height: 50,
+              onPressed: () {
+                Get.find<RoundController>().nextRound();
+              }),
           Expanded(
               child: Stack(
             fit: StackFit.expand,

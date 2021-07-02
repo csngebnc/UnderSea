@@ -8,7 +8,6 @@ part of 'country_details_dto.dart';
 
 CountryDetailsDto _$CountryDetailsDtoFromJson(Map<String, dynamic> json) {
   return CountryDetailsDto(
-    unitId: json['unitId'] as int,
     maxUnitCount: json['maxUnitCount'] as int,
     coral: json['coral'] as int,
     currentCoralProduction: json['currentCoralProduction'] as int,
@@ -27,7 +26,6 @@ CountryDetailsDto _$CountryDetailsDtoFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$CountryDetailsDtoToJson(CountryDetailsDto instance) =>
     <String, dynamic>{
-      'unitId': instance.unitId,
       'maxUnitCount': instance.maxUnitCount,
       'units': instance.units,
       'coral': instance.coral,
