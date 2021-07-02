@@ -47,9 +47,6 @@ export class AttackComponent implements OnInit {
         }
       });
       this.attackerUnits = [];
-      this.units.forEach((unit) => {
-        this.attackerUnits.push({ unitId: unit.id, count: 0 });
-      });
     });
   }
 
@@ -75,8 +72,12 @@ export class AttackComponent implements OnInit {
   }
 
   onSetUnit(unit: AttackUnitDto): void {
-    let index = this.attackerUnits.findIndex((u) => u.unitId === unit.unitId);
-    this.attackerUnits[index].count = unit.count;
+    const index = this.attackerUnits.findIndex((u) => u.unitId === unit.unitId);
+    if (index !== -1) {
+      this.attackerUnits[index].count = unit.count;
+    } else {
+      this.attackerUnits.push({ unitId: unit.unitId, count: unit.count });
+    }
   }
 
   isButtonDisabled(): boolean {
