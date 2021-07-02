@@ -6,11 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.Spy;
 using UnderSea.Bll.Dtos.Unit;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
+using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Services
@@ -101,6 +103,7 @@ namespace UnderSea.Bll.Services
 
             var attacks = await _context.Attacks
                                             .Where(c => c.DefenderCountryId == country.Id || c.AttackerCountryId == country.Id)
+                                            .OrderByDescending(a => a.Id)
                                             .Include(a => a.AttackUnits)
                                                 .ThenInclude(au => au.Unit)
                                             .Include(a => a.DefenderCountry)
@@ -128,6 +131,38 @@ namespace UnderSea.Bll.Services
                 PageSize = attacks.PageSize,
                 Results = result
             };
+        }
+
+        public async Task<PagedResult<SpyReportDto>> GetLoggedSpyReportsAsync(PaginationData data)
+        {
+            var country = await _context.Countries
+                .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
+                .FirstOrDefaultAsync();
+
+            var spyreports = await _context.SpyReports.Where(sr => sr.SpySenderCountryId == country.Id)
+                .Include(sr => sr.SpiedCountry)
+                .OrderByDescending(sr => sr.Id)
+                .ToPagedList(data.PageSize, data.PageNumber);
+
+            return new PagedResult<SpyReportDto>
+            {
+                AllResultsCount = spyreports.AllResultsCount,
+                PageNumber = spyreports.PageNumber,
+                PageSize = spyreports.PageSize,
+                Results = spyreports.Results.Select(sr =>
+                {
+                    return new SpyReportDto
+                    {
+                        SpyReportId = sr.Id,
+                        SpiedCountryName = sr.SpiedCountry.Name,
+                        DefensePoints = sr.DefensePoints,
+                        OutCome = sr.WinnerId == null ? Model.Enums.FightOutcome.NotPlayedYet :
+                                    sr.WinnerId == _identityService.GetCurrentUserId() ?
+                                                Model.Enums.FightOutcome.CurrentUser : Model.Enums.FightOutcome.OtherUser
+                    };
+                })
+            };
+
         }
 
         public async Task<IEnumerable<UnitDto>> GetAllUnitsAsync()
@@ -244,6 +279,44 @@ namespace UnderSea.Bll.Services
             }
 
             await AttackLogic(attackerCountry, attackedCountry, attackDto);
+        }
+
+        public async Task SpyAsync(SendSpyDto spies)
+        {
+            var country = await _context.Countries
+                .Include(c => c.World)
+                .Include(c => c.CountryUnits)
+                .ThenInclude(cu => cu.Unit).FirstOrDefaultAsync(c => c.OwnerId == _identityService.GetCurrentUserId());
+
+            if(!(await _context.Countries.AnyAsync(c => c.Id == spies.SpiedCountryId)))
+            {
+                throw new NotExistsException("Nem létezik ilyen ország.");
+            }
+
+            if (spies.SpiedCountryId == country.Id)
+            {
+                throw new InvalidParameterException("Nem kémlelheti saját magát az ország.");
+            }
+
+            if (country.CountryUnits.Where(cu => cu.Unit.Name == UnitConstants.Felfedezo).FirstOrDefault().Count < spies.SpyCount)
+            {
+                throw new ArgumentOutOfRangeException("Nincs elegendő kém az országban.");
+            }
+            else
+            {
+                country.CountryUnits.Where(cu => cu.Unit.Name == UnitConstants.Felfedezo).FirstOrDefault().Count -= spies.SpyCount;
+            }
+
+            var spyreport = new SpyReport
+            {
+                SpySenderCountryId = country.Id,
+                SpiedCountryId = spies.SpiedCountryId,
+                NumberOfSpies = spies.SpyCount,
+                Round = country.World.Round
+            };
+
+            _context.SpyReports.Add(spyreport);
+            await _context.SaveChangesAsync();
         }
 
         public async Task AttackLogic(Country attackerCountry, Country attackedCountry, SendAttackDto attackDto)
