@@ -48,6 +48,12 @@ namespace UnderSea.Api.Controllers
             return Ok(userunits);
         }
 
+        [HttpGet("spies")]
+        public async Task<ActionResult<BattleUnitDto>> GetSpies()
+        {
+            return Ok(await service.GetSpies());
+        }
+
         [HttpPost("attack")]
         public async Task<ActionResult> Attack([FromBody] SendAttackDto sendAttack)
         {
