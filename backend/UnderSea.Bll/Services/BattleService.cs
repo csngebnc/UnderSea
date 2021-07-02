@@ -59,7 +59,7 @@ namespace UnderSea.Bll.Services
 
             var userunits = await _context.CountryUnits
                 .Include(c => c.Unit)
-                .Where(c => c.CountryId == country.Id)
+                .Where(c => c.CountryId == country.Id && c.Unit.Name != UnitConstants.Felfedezo)
                 .Select(c => c.Unit)
                 .ProjectTo<BattleUnitDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -72,7 +72,7 @@ namespace UnderSea.Bll.Services
             var country = await GetCountry();
             var userunits = await _context.CountryUnits
                 .Include(c => c.Unit)
-                .Where(c => c.CountryId == country.Id)
+                .Where(c => c.CountryId == country.Id && c.Unit.Name != UnitConstants.Felfedezo)
                 .ToListAsync();
 
             var attackUnits = await _context.AttackUnits
@@ -198,6 +198,25 @@ namespace UnderSea.Bll.Services
                 });
         }
 
+        public async Task<BattleUnitDto> GetSpies()
+        {
+            var country = await _context.Countries
+                .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
+                .Include(c => c.CountryUnits)
+                .FirstOrDefaultAsync();
+
+            var spyUnit = await _context.Units.FirstOrDefaultAsync(c => c.Name == UnitConstants.Felfedezo);
+            var spies = country.CountryUnits.Where(cu => cu.UnitId == spyUnit.Id).FirstOrDefault();
+
+            return new BattleUnitDto
+            {
+                Id = spyUnit.Id,
+                Name = spyUnit.Name,
+                ImageUrl = spyUnit.ImageUrl,
+                Count = spies == null ? 0 : spies.Count
+            };
+        }
+
         public async Task BuyUnitAsync(BuyUnitDto unitsDto)
         {
             var country = await GetCountry();
@@ -261,6 +280,15 @@ namespace UnderSea.Bll.Services
             if (world == null)
             {
                 throw new NotExistsException("Nem létezik ilyen világ, ahol támadni lehet.");
+            }
+
+            var spyId = (await _context.Units
+                .FirstOrDefaultAsync(u => u.Name == UnitConstants.Felfedezo))
+                .Id;
+
+            if(attackDto.Units.Any(au => au.UnitId == spyId))
+            {
+                throw new InvalidParameterException("Kémet nem küldhetsz támadni.");
             }
 
             var secondAttack = await _context.Attacks
