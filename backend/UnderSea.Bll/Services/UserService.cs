@@ -82,8 +82,8 @@ namespace UnderSea.Bll.Services
                 Id = user.Id,
                 Name = user.UserName,
                 Round = user.Country.World.Round,
-                Placement = (await _context.Users.OrderByDescending(u => u.Points).ToListAsync()).FindIndex(0, u => u.Id == user.Id)
-            };
+                Placement = (await _context.Users.OrderByDescending(u => u.Points).Where(u => u.Points > user.Points).CountAsync()) + 1
+        };
             
         }         
     }
