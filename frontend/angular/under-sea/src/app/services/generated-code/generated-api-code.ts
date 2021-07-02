@@ -947,21 +947,21 @@ export interface PagedResultOfAttackableUserDto {
 }
 
 export interface AttackableUserDto {
-    id: string;
-    userName: string;
+    id?: string | undefined;
+    userName?: string | undefined;
     countryId: number;
 }
 
 export interface BattleUnitDto {
     id: number;
-    name: string;
+    name?: string | undefined;
     count: number;
     imageUrl?: string | undefined;
 }
 
 export interface SendAttackDto {
     attackedCountryId: number;
-    units: AttackUnitDto[];
+    units?: AttackUnitDto[] | undefined;
 }
 
 export interface AttackUnitDto {
@@ -990,7 +990,7 @@ export enum FightOutcome {
 
 export interface UnitDto {
     id: number;
-    name: string;
+    name?: string | undefined;
     attackPoint: number;
     defensePoint: number;
     mercenaryPerRound: number;
@@ -1001,7 +1001,7 @@ export interface UnitDto {
 }
 
 export interface BuyUnitDto {
-    units: BuyUnitDetailsDto[];
+    units?: BuyUnitDetailsDto[] | undefined;
 }
 
 export interface BuyUnitDetailsDto {
@@ -1011,7 +1011,7 @@ export interface BuyUnitDetailsDto {
 
 export interface BuildingDetailsDto {
     id: number;
-    name: string;
+    name?: string | undefined;
     count: number;
     price: number;
     underConstruction: boolean;
@@ -1021,7 +1021,7 @@ export interface BuildingDetailsDto {
 
 export interface EffectDto {
     id: number;
-    name: string;
+    name?: string | undefined;
 }
 
 export interface BuyBuildingDto {
@@ -1030,7 +1030,6 @@ export interface BuyBuildingDto {
 
 export interface CountryDetailsDto {
     maxUnitCount: number;
-    units?: BattleUnitDto[] | undefined;
     coral: number;
     pearl: number;
     currentCoralProduction: number;
@@ -1038,11 +1037,12 @@ export interface CountryDetailsDto {
     population: number;
     hasSonarCanon: boolean;
     buildings?: BuildingInfoDto[] | undefined;
+    units?: BattleUnitDto[] | undefined;
 }
 
 export interface BuildingInfoDto {
     id: number;
-    name: string;
+    name?: string | undefined;
     buildingsCount: number;
     activeConstructionCount: number;
     iconImageUrl?: string | undefined;
@@ -1050,7 +1050,7 @@ export interface BuildingInfoDto {
 
 export interface UpgradeDto {
     id: number;
-    name: string;
+    name?: string | undefined;
     doesExist: boolean;
     isUnderConstruction: boolean;
     remainingTime: number;
@@ -1063,10 +1063,10 @@ export interface BuyUpgradeDto {
 }
 
 export interface RegisterDto {
-    userName: string;
-    password: string;
-    confirmPassword: string;
-    countryName: string;
+    userName?: string | undefined;
+    password?: string | undefined;
+    confirmPassword?: string | undefined;
+    countryName?: string | undefined;
 }
 
 export interface PagedResultOfUserRankDto {
@@ -1077,8 +1077,9 @@ export interface PagedResultOfUserRankDto {
 }
 
 export interface UserRankDto {
-    name: string;
+    name?: string | undefined;
     points: number;
+    placement: number;
 }
 
 export interface UserInfoDto {

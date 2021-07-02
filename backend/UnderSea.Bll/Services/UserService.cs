@@ -51,7 +51,7 @@ namespace UnderSea.Bll.Services
         public async Task<PagedResult<UserRankDto>> GetRanklist(PaginationData pagination, string nameFilter)
         {
             var users = _context.Users
-                .OrderByDescending(u => u.Points)
+                .OrderByDescending(u => u.Points).AsQueryable()
                 .ProjectTo<UserRankDto>(_mapper.ConfigurationProvider);
 
             if (!string.IsNullOrEmpty(nameFilter) && !string.IsNullOrWhiteSpace(nameFilter))
@@ -59,7 +59,14 @@ namespace UnderSea.Bll.Services
                 users = users.Where(u => u.Name.Contains(nameFilter));
             }
 
-            return await users.ToPagedList(pagination.PageSize, pagination.PageNumber);
+            var pagedList = await users.ToPagedList(pagination.PageSize, pagination.PageNumber);
+
+            foreach (var user in pagedList.Results)
+            {
+                user.Placement = (await _context.Users.OrderByDescending(u => u.Points).Where(u => u.Points > user.Points).CountAsync()) +1;
+            }
+
+            return pagedList;
         }
 
         public async Task<UserInfoDto> GetUserInfo()

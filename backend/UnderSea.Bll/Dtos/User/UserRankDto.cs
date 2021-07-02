@@ -11,5 +11,6 @@ namespace UnderSea.Bll.Dtos
     {
         public string Name { get; set; }
         public int Points { get; set; }
+        public int Placement { get; set; }
     }
 }
