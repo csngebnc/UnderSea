@@ -40,6 +40,13 @@ namespace UnderSea.Api.Controllers
             return Ok(userunits);
         }
 
+        [HttpGet("all-units")]
+        public async Task<ActionResult<IEnumerable<BattleUnitDto>>> GetAllUserUnits()
+        {
+            var userunits = await service.GetUserAllUnitsAsync();
+            return Ok(userunits);
+        }
+
         [HttpPost("attack")]
         public async Task<ActionResult> Attack([FromBody] SendAttackDto sendAttack)
         {
