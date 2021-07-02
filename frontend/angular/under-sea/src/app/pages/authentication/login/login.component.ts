@@ -48,7 +48,5 @@ export class LoginComponent implements OnInit {
 
   private setFormInvalid(): void {
     this.loginFailed.next(true);
-    this.loginForm.controls['userName'].setErrors({ incorrect: true });
-    this.loginForm.controls['password'].setErrors({ incorrect: true });
   }
 }

@@ -1,1 +1,6 @@
-@import '../authentication.scss';
+@import "../authentication.scss";
+@import "src/styles.scss";
+
+.ng-touched.invalid {
+  border-color: $invalid;
+}

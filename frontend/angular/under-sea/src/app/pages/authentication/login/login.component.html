@@ -11,6 +11,7 @@
         type="text"
         placeholder="Felhasználónév"
         class="text-input"
+        [ngClass]="{ invalid: loginFailed.value }"
         formControlName="userName"
         required
       />
@@ -18,6 +19,7 @@
         type="password"
         placeholder="Jelszó"
         class="text-input"
+        [ngClass]="{ invalid: loginFailed.value }"
         formControlName="password"
         required
       />

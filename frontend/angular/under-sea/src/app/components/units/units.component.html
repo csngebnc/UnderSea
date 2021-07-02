@@ -4,12 +4,17 @@
     <p class="modal-description mt-1">
       <strong>Válaszd ki melyik katonából mennyit szeretnél venni!</strong>
     </p>
+    <p class="modal-description">
+      Ennyi egységet tudsz még elszállásolni: {{ remainingCapacity }}
+    </p>
     <ng-container *ngIf="!(isLoading | async); else loading">
       <div class="d-flex mt-1 to-sides">
         <unit-details
           *ngFor="let unit of units"
           [unit]="unit"
           [remainingMoney]="remainingMoney"
+          [remainingCapacity]="remainingCapacity"
+          [justBoughtUnits]="justBoughtUnits"
           (countModified)="addToCart($event)"
           class="m-1 stack align-center modal-description w-350px"
         ></unit-details>

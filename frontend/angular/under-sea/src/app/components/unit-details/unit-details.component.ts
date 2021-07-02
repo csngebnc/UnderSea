@@ -1,6 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UnitDetails } from 'src/app/models/unit-details.model';
 import { CartUnit } from 'src/app/models/cart-unit.model';
+import { Store } from '@ngxs/store';
+import {
+  IncrementCapacity,
+  DecrementCapacity,
+} from 'src/app/states/resources/resources.actions';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'unit-details',
@@ -10,14 +16,21 @@ import { CartUnit } from 'src/app/models/cart-unit.model';
 export class UnitDetailsComponent implements OnInit {
   @Input() unit: UnitDetails;
   @Input() remainingMoney: number;
+  @Input() remainingCapacity: number;
+  @Input() justBoughtUnits: BehaviorSubject<boolean>;
   @Output() countModified: EventEmitter<CartUnit> = new EventEmitter();
   selected: number = 0;
 
-  constructor() {}
+  constructor(private store: Store) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.justBoughtUnits.subscribe(() => {
+      this.selected = 0;
+    });
+  }
 
   increment(): void {
+    this.store.dispatch(DecrementCapacity);
     this.selected++;
     this.countModified.emit({
       unitId: this.unit.id,
@@ -27,6 +40,7 @@ export class UnitDetailsComponent implements OnInit {
   }
 
   decrement(): void {
+    this.store.dispatch(IncrementCapacity);
     this.selected--;
     this.countModified.emit({
       unitId: this.unit.id,
@@ -36,7 +50,7 @@ export class UnitDetailsComponent implements OnInit {
   }
 
   canIncrement(): boolean {
-    return this.remainingMoney >= this.unit.price;
+    return this.remainingMoney >= this.unit.price && this.remainingCapacity > 0;
   }
 
   canDecrement(): boolean {

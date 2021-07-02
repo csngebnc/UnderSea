@@ -65,7 +65,7 @@ export class BattleService {
           });
           result.battles.push({
             target: b.attackedCountryName,
-            result: outcome[b.outcome],
+            result: b.outcome,
             units: units,
           });
         });

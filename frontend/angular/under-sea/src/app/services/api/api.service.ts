@@ -54,6 +54,7 @@ export class ApiService {
           pearls: cd.pearl,
           pearlsPerRound: cd.currentPearlProduction,
           hasSonar: cd.hasSonarCanon,
+          maxUnitCount: cd.maxUnitCount,
         };
       })
     );
