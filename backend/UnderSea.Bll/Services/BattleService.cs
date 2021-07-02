@@ -205,8 +205,8 @@ namespace UnderSea.Bll.Services
                 .Include(c => c.CountryUnits)
                 .FirstOrDefaultAsync();
 
-            var spyUnit = await _context.Units.FirstOrDefaultAsync(c => c.Name == UnitConstants.Felfedezo);
-            var spies = country.CountryUnits.Where(cu => cu.UnitId == spyUnit.Id).FirstOrDefault();
+            var spyUnit = await _context.Units.SingleOrDefaultAsync(c => c.Name == UnitConstants.Felfedezo);
+            var spies = country.CountryUnits.SingleOrDefault(cu => cu.UnitId == spyUnit.Id);
 
             return new BattleUnitDto
             {
