@@ -7,7 +7,7 @@
       </p>
       <p class="modal-description">Egyszerre csak egy épület épülhet!</p>
       <div
-        *ngIf="!(isLoading | async); else loading"
+        *ngIf="!(isLoading$ | async); else loading"
         class="stack align-center"
       >
         <ul class="item-container">

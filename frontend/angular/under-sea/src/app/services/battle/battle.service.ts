@@ -44,7 +44,7 @@ export class BattleService {
   }
 
   getBattles(pageNumber: number): Observable<PagedBattles> {
-    return this.battleService.history(13, pageNumber).pipe(
+    return this.battleService.history(10, pageNumber).pipe(
       map((r: PagedResultOfLoggedAttackDto) => {
         let result: PagedBattles = {
           battles: [],

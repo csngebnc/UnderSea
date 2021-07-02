@@ -3,7 +3,7 @@
     <h2 class="modal-title">Harc</h2>
     <div class="divider"></div>
     <div
-      *ngIf="!(isLoading | async); else loading"
+      *ngIf="!(isLoading$ | async); else loading"
       class="stack h-list to-sides"
     >
       <ul class="p-0 m-0">
@@ -14,15 +14,21 @@
           <div class="list-item">
             <div class="d-flex">
               <div>{{ battle.target }}</div>
-              <!--<div
+              <div
                 class="dot ml-1"
                 [ngClass]="{
-                  'lose-bg': battle.result === 2,
-                  'not-yet-bg': battle.result === 0
+                  'lose-bg': battle.result === lose,
+                  'not-yet-bg': battle.result === notYet
                 }"
               >
-                &#x2714;
-              </div>-->
+                {{
+                  battle.result === lose
+                    ? "&#x2718;"
+                    : battle.result === notYet
+                    ? "&#8210;"
+                    : "&#x2714;"
+                }}
+              </div>
             </div>
             <div class="d-flex to-flex-end">
               <div *ngFor="let unit of battle.units" class="pl-1">

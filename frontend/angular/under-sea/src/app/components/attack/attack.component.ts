@@ -16,7 +16,7 @@ import { GetResources } from 'src/app/states/resources/resources.actions';
 })
 export class AttackComponent implements OnInit {
   @Select(ResourcesState.units)
-  private unitState: Observable<Array<Unit>>;
+  private unitState$: Observable<Array<Unit>>;
 
   units: Array<AttackerUnit> = [];
 
@@ -27,24 +27,26 @@ export class AttackComponent implements OnInit {
     allResultsCount: 0,
   };
 
-  isLoading = new BehaviorSubject(false);
+  isLoading$ = new BehaviorSubject(false);
   filter: string | undefined = undefined;
   targetId: number;
   attackerUnits: Array<AttackUnitDto> = [];
 
   constructor(private battleService: BattleService, private store: Store) {
-    this.unitState.subscribe((arr: Array<Unit>) => {
+    this.unitState$.subscribe((arr: Array<Unit>) => {
       this.units = [];
-      console.log(arr);
       arr.forEach((u) => {
-        this.units.push({
-          id: u.id,
-          name: u.name,
-          count: u.count,
-          imageUrl: u.icon,
-        });
+        if (u.id != 4) {
+          //az if átmeneti megoldás, amíg megoldják a backenden hogy ne crasheljen a felfedezeőre
+          this.units.push({
+            id: u.id,
+            name: u.name,
+            count: u.count,
+            imageUrl: u.icon,
+          });
+        }
       });
-
+      this.attackerUnits = [];
       this.units.forEach((unit) => {
         this.attackerUnits.push({ unitId: unit.id, count: 0 });
       });
@@ -56,15 +58,15 @@ export class AttackComponent implements OnInit {
   }
 
   private initPlayers(): void {
-    this.isLoading.next(true);
+    this.isLoading$.next(true);
 
     this.battleService.getUsers(this.players.pageNumber, this.filter).subscribe(
       (r) => {
         this.players = r;
 
-        this.isLoading.next(false);
+        this.isLoading$.next(false);
       },
-      (e) => console.log(e)
+      (e) => console.error(e)
     );
   }
 
@@ -94,17 +96,15 @@ export class AttackComponent implements OnInit {
     this.filter = filter;
     this.players.pageNumber = 1;
     this.initPlayers();
-    console.log(filter);
   }
 
   attack(): void {
     this.battleService.attack(this.targetId, this.attackerUnits).subscribe(
       (r) => {
-        console.log(r);
         this.store.dispatch(GetResources);
         this.initPlayers();
       },
-      (e) => console.log(e)
+      (e) => console.error(e)
     );
   }
 }

@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
       (response) => {
         this.name = response;
       },
-      (e) => console.log(e)
+      (e) => console.error(e)
     );
   }
 
@@ -38,7 +38,7 @@ export class ProfileComponent implements OnInit {
       .setCountryName(this.countryForm.get('newName').value)
       .subscribe(
         () => this.getName(),
-        (e) => console.log(e)
+        (e) => console.error(e)
       );
   }
 }

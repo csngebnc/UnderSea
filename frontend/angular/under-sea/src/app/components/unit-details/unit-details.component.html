@@ -28,7 +28,7 @@
   <button
     type="button"
     class="count-button"
-    [disabled]="!canDecrement()"
+    [disabled]="selected <= 0"
     (click)="decrement()"
   >
     &#45;
@@ -39,7 +39,9 @@
   <button
     type="button"
     class="count-button"
-    [disabled]="!canIncrement()"
+    [disabled]="
+      this.remainingMoney < this.unit.price && this.remainingCapacity <= 0
+    "
     (click)="increment()"
   >
     &#43;

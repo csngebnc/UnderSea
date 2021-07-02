@@ -12,7 +12,7 @@ export class UpgradesComponent implements OnInit {
   selectedUpgrade: number | null = null;
   isResearching: boolean = false;
 
-  isLoading = new BehaviorSubject(false);
+  isLoading$ = new BehaviorSubject(false);
 
   upgrades: Array<Upgrade> = [];
 
@@ -23,14 +23,14 @@ export class UpgradesComponent implements OnInit {
   }
 
   private initUpgrades(): void {
-    this.isLoading.next(true);
+    this.isLoading$.next(true);
 
     this.upgradeService.getUpgrades().subscribe(
       (r: Array<Upgrade>) => {
         this.upgrades = r;
-        this.isLoading.next(false);
+        this.isLoading$.next(false);
       },
-      (e) => console.log(e)
+      (e) => console.error(e)
     );
 
     this.upgrades.forEach((u) => {
@@ -46,11 +46,10 @@ export class UpgradesComponent implements OnInit {
     if (this.selectedUpgrade !== null) {
       this.upgradeService.buyUpgrade(this.selectedUpgrade).subscribe(
         (r) => {
-          console.log(r);
           this.isResearching = true;
           this.initUpgrades();
         },
-        (e) => console.log(e)
+        (e) => console.error(e)
       );
     }
   }
