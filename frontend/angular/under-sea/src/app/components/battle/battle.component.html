@@ -14,7 +14,7 @@
           <div class="list-item">
             <div class="d-flex">
               <div>{{ battle.target }}</div>
-              <div
+              <!--<div
                 class="dot ml-1"
                 [ngClass]="{
                   'lose-bg': battle.result === 2,
@@ -22,7 +22,7 @@
                 }"
               >
                 &#x2714;
-              </div>
+              </div>-->
             </div>
             <div class="d-flex to-flex-end">
               <div *ngFor="let unit of battle.units" class="pl-1">

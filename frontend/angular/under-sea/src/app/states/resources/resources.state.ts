@@ -9,6 +9,7 @@ import {
 import { ApiService } from 'src/app/services/api/api.service';
 import { tap } from 'rxjs/operators';
 import { ResourcesStateModel } from 'src/app/models/states/resources-state.model';
+import { Unit } from 'src/app/models/unit.model';
 
 @State<ResourcesStateModel>({
   name: 'resourcesState',
@@ -46,6 +47,11 @@ export class ResourcesState {
   @Selector()
   static allResources(state: ResourcesStateModel): Resources {
     return state.resources;
+  }
+
+  @Selector()
+  static units(state: ResourcesStateModel): Array<Unit> {
+    return state.resources.units;
   }
 
   constructor(private apiService: ApiService) {}

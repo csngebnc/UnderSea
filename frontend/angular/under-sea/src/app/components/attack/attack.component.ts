@@ -2,8 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
 import { PagedList } from 'src/app/models/paged-list.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
-import { BehaviorSubject, forkJoin } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
 import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-code';
+import { Select, Store } from '@ngxs/store';
+import { ResourcesState } from 'src/app/states/resources/resources.state';
+import { Unit } from 'src/app/models/unit.model';
+import { GetResources } from 'src/app/states/resources/resources.actions';
 
 @Component({
   selector: 'attack',
@@ -11,6 +15,9 @@ import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-cod
   styleUrls: ['./attack.component.scss'],
 })
 export class AttackComponent implements OnInit {
+  @Select(ResourcesState.units)
+  private unitState: Observable<Array<Unit>>;
+
   units: Array<AttackerUnit> = [];
 
   players: PagedList = {
@@ -25,35 +32,29 @@ export class AttackComponent implements OnInit {
   targetId: number;
   attackerUnits: Array<AttackUnitDto> = [];
 
-  constructor(private battleService: BattleService) {}
+  constructor(private battleService: BattleService, private store: Store) {
+    this.unitState.subscribe((arr: Array<Unit>) => {
+      this.units = [];
+      console.log(arr);
+      arr.forEach((u) => {
+        this.units.push({
+          id: u.id,
+          name: u.name,
+          count: u.count,
+          imageUrl: u.icon,
+        });
+      });
+
+      this.units.forEach((unit) => {
+        this.attackerUnits.push({ unitId: unit.id, count: 0 });
+      });
+    });
+  }
 
   ngOnInit(): void {
-    this.initAttack();
+    this.initPlayers();
   }
 
-  private initAttack(): void {
-    this.isLoading.next(true);
-
-    let units = this.battleService.getAttackerUnits();
-    let players = this.battleService.getUsers(
-      this.players.pageNumber,
-      this.filter
-    );
-
-    forkJoin([units, players]).subscribe(
-      (responses) => {
-        this.units = responses[0];
-        this.players = responses[1];
-
-        this.units.forEach((unit) => {
-          this.attackerUnits.push({ unitId: unit.id, count: 0 });
-        });
-
-        this.isLoading.next(false);
-      },
-      (e) => console.log(e)
-    );
-  }
   private initPlayers(): void {
     this.isLoading.next(true);
 
@@ -100,7 +101,8 @@ export class AttackComponent implements OnInit {
     this.battleService.attack(this.targetId, this.attackerUnits).subscribe(
       (r) => {
         console.log(r);
-        this.initAttack();
+        this.store.dispatch(GetResources);
+        this.initPlayers();
       },
       (e) => console.log(e)
     );
