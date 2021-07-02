@@ -226,6 +226,56 @@ export class BattleService {
         return _observableOf<FileResponse | null>(<any>null);
     }
 
+    spy(spies: SendSpyDto): Observable<FileResponse | null> {
+        let url_ = this.baseUrl + "/api/Battle/spy";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(spies);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSpy(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSpy(<any>response_);
+                } catch (e) {
+                    return <Observable<FileResponse | null>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<FileResponse | null>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processSpy(response: HttpResponseBase): Observable<FileResponse | null> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse | null>(<any>null);
+    }
+
     history(pageSize: number | undefined, pageNumber: number | undefined): Observable<PagedResultOfLoggedAttackDto> {
         let url_ = this.baseUrl + "/api/Battle/history?";
         if (pageSize === null)
@@ -279,6 +329,61 @@ export class BattleService {
             }));
         }
         return _observableOf<PagedResultOfLoggedAttackDto>(<any>null);
+    }
+
+    spyHistory(pageSize: number | undefined, pageNumber: number | undefined): Observable<PagedResultOfSpyReportDto> {
+        let url_ = this.baseUrl + "/api/Battle/spy-history?";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageNumber === null)
+            throw new Error("The parameter 'pageNumber' cannot be null.");
+        else if (pageNumber !== undefined)
+            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSpyHistory(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSpyHistory(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultOfSpyReportDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultOfSpyReportDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processSpyHistory(response: HttpResponseBase): Observable<PagedResultOfSpyReportDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <PagedResultOfSpyReportDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultOfSpyReportDto>(<any>null);
     }
 
     units(): Observable<UnitDto[]> {
@@ -1016,6 +1121,11 @@ export interface AttackUnitDto {
     count: number;
 }
 
+export interface SendSpyDto {
+    spiedCountryId: number;
+    spyCount: number;
+}
+
 export interface PagedResultOfLoggedAttackDto {
     results?: LoggedAttackDto[] | undefined;
     allResultsCount: number;
@@ -1033,6 +1143,20 @@ export enum FightOutcome {
     NotPlayedYet = 0,
     CurrentUser = 1,
     OtherUser = 2,
+}
+
+export interface PagedResultOfSpyReportDto {
+    results?: SpyReportDto[] | undefined;
+    allResultsCount: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
+export interface SpyReportDto {
+    spyReportId: number;
+    spiedCountryName?: string | undefined;
+    outCome: FightOutcome;
+    defensePoints?: number | undefined;
 }
 
 export interface UnitDto {

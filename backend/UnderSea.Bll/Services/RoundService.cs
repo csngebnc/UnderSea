@@ -159,12 +159,12 @@ namespace UnderSea.Bll.Services
 
                     foreach (var unit in attackUnits)
                     {
-                        attackPoints += unit.Unit.AttackPoint;
+                        attackPoints += unit.Unit.AttackPoint * unit.Count;
                     }
 
                     foreach (var unit in defenseUnits)
                     {
-                        defensePoints += unit.Unit.DefensePoint;
+                        defensePoints += unit.Unit.DefensePoint * unit.Count;
                     }
 
                     attackPoints *= attackerCountry.FightPoint.AttackPointMultiplier * (1 - new Random().Next(-5, 5) / 100);
@@ -197,6 +197,45 @@ namespace UnderSea.Bll.Services
                 }
             }
 
+        }
+
+        public void Spies(ICollection<SpyReport> spyReports)
+        {
+            foreach (var spyreport in spyReports)
+            {
+                var attackerCountry = spyreport.SpySenderCountry;
+                var defenderCountry = spyreport.SpiedCountry;
+
+                var attackPercentage = 60 + (spyreport.NumberOfSpies - 1) * 5;
+                var defenderSpies = defenderCountry.CountryUnits.Where(cu => cu.Unit.Name == UnitConstants.Felfedezo).FirstOrDefault();
+                var defensePercentage = defenderSpies == null ? 0 : defenderSpies.Count * 5;
+
+                var diff = attackPercentage - defensePercentage;
+                if(diff <= 0)
+                {
+                    spyreport.WinnerId = defenderCountry.OwnerId;
+                }
+                else
+                {
+                    var resultNum = new Random().Next(0, 100);
+                    if(resultNum <= diff)
+                    {
+                        spyreport.WinnerId = attackerCountry.OwnerId;
+                        var defenseUnits = defenderCountry.CountryUnits;
+                        spyreport.DefensePoints = 0;
+                        foreach (var unit in defenseUnits)
+                        {
+                            spyreport.DefensePoints += unit.Unit.DefensePoint * unit.Count;
+                        }
+                        spyreport.DefensePoints = (int)(spyreport.DefensePoints* defenderCountry.FightPoint.DefensePointMultiplier);
+                        attackerCountry.CountryUnits.Where(cu => cu.Unit.Name == UnitConstants.Felfedezo).FirstOrDefault().Count += spyreport.NumberOfSpies;
+                    }
+                    else
+                    {
+                        spyreport.WinnerId = defenderCountry.OwnerId;
+                    }
+                }
+            }
         }
 
         public async Task ReturnAttackUnits(ICollection<Country> countries, World world)
@@ -249,6 +288,9 @@ namespace UnderSea.Bll.Services
                         case UnitConstants.Lezercapa:
                             militaryPoints += unit.Count * PointConstants.MilitaryShark;
                             break;
+                        case UnitConstants.Felfedezo:
+                            militaryPoints += unit.Count * PointConstants.Spy;
+                            break;
                         default:
                             militaryPoints += unit.Count * PointConstants.Military;
                             break;
@@ -291,6 +333,15 @@ namespace UnderSea.Bll.Services
                                                     .Include(e => e.Owner)
                                                     .ToListAsync();
 
+            var spyreports = await _context.SpyReports.Where(sr => sr.Round == world.Round)
+                .Include(sr => sr.SpySenderCountry)
+                    .ThenInclude(sc => sc.CountryUnits)
+                        .ThenInclude(cu => cu.Unit)
+                .Include(sr => sr.SpiedCountry)
+                    .ThenInclude(sc => sc.CountryUnits)
+                        .ThenInclude(cu => cu.Unit)
+                .ToListAsync();
+
             using (var transaction = _context.Database.BeginTransaction())
             {
                 PayTax(countries);
@@ -304,6 +355,8 @@ namespace UnderSea.Bll.Services
                 MakeBuildings(countries,world);
 
                 Fights(countries,world);
+
+                Spies(spyreports);
 
                 await ReturnAttackUnits(countries, world);
 

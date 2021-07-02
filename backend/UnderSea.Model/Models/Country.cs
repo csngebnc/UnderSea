@@ -27,6 +27,7 @@ namespace UnderSea.Model.Models
 
         public ICollection<Attack> Attacks { get; set; }
         public ICollection<Attack> Defenses { get; set; }
+        public ICollection<SpyReport> SentSpies { get; set; }
         public ICollection<CountryUnit> CountryUnits { get; set; }
         public ICollection<CountryBuilding> CountryBuildings { get; set; }
         public ICollection<CountryUpgrade> CountryUpgrades { get; set; }
