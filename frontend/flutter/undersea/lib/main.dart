@@ -12,6 +12,7 @@ import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/lang/app_translations.dart';
 import 'package:undersea/network/providers/country_data_provider.dart';
 import 'package:undersea/network/providers/next_round_provider.dart';
+import 'package:undersea/network/providers/upgrade_data_provider.dart';
 
 import 'package:undersea/views/login.dart';
 import 'controllers/building_data_controller.dart';
@@ -33,7 +34,7 @@ Future<void> initServices() async {
   Get.put(PlayerController());
   Get.put(BottomNavBarController());
   Get.put(SoldiersController());
-  Get.put(UpgradesController());
+
   Get.put(BuildingsController());
   Get.put(UserDataProvider());
   Get.put(UserDataController(Get.find()));
@@ -43,6 +44,8 @@ Future<void> initServices() async {
   Get.put(BuildingDataController(Get.find()));
   Get.put(NextRoundProvider());
   Get.put(RoundController(Get.find()));
+  Get.put(UpgradeDataProvider());
+  Get.put(UpgradesController(Get.find()));
 }
 
 class MyApp extends StatelessWidget {

@@ -7,8 +7,13 @@ class BattleUnitDto {
   int id;
   String name;
   int count;
+  String? iconImageUrl;
 
-  BattleUnitDto({required this.id, required this.name, required this.count});
+  BattleUnitDto(
+      {this.iconImageUrl,
+      required this.id,
+      required this.name,
+      required this.count});
 
   factory BattleUnitDto.fromJson(Map<String, dynamic> json) =>
       _$BattleUnitDtoFromJson(json);

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:undersea/controllers/building_data_controller.dart';
+import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/city_tabs/buildings.dart';
@@ -7,7 +9,10 @@ import 'package:undersea/views/city_tabs/upgrades.dart';
 import 'package:get/get.dart';
 
 class CityTabBar extends StatelessWidget {
-  CityTabBar();
+  CityTabBar() {
+    Get.find<UpgradesController>().getUpgradeDetails();
+    Get.find<BuildingDataController>().getBuildingDetails();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

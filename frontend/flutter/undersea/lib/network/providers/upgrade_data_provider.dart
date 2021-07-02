@@ -1,27 +1,23 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:undersea/models/response/building_details_dto.dart';
-import 'package:undersea/models/response/building_details_list.dart';
 import 'package:undersea/models/response/country_details_dto.dart';
+import 'package:undersea/models/response/upgrade_dto.dart';
 
 import '../../constants.dart';
 import 'network_provider.dart';
 
-class BuildingDataProvider extends NetworkProvider {
-  Future<Response<List<BuildingDetailsDto>>> getBuildingDetails() =>
-      get("/api/Building/user-buildings",
+class UpgradeDataProvider extends NetworkProvider {
+  Future<Response<List<UpgradeDto>>> getUpgradeDetails() =>
+      get("/api/Upgrade/list",
           contentType: 'application/json',
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           decoder: (response) {
-        log(response.toString());
-        return (response as List)
-            .map((e) => BuildingDetailsDto.fromJson(e))
-            .toList();
+        return (response as List).map((e) => UpgradeDto.fromJson(e)).toList();
+        //return UpgradeDto.fromJson(response);
       });
 
-  Future<Response<void>> buyBuilding(Map<String, dynamic> body) =>
-      post("/api/Building/buy", body,
+  Future<Response<void>> buyUpgrade(Map<String, dynamic> body) =>
+      post("/api/Upgrade/buy", body,
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           contentType: 'application/json',
           decoder: (response) => {});

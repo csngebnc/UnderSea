@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/building_data_controller.dart';
 import 'package:undersea/controllers/buildings_controller.dart';
 import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/controllers/player_controller.dart';
@@ -16,14 +17,16 @@ class ExpandedMenu extends StatelessWidget {
   ExpandedMenu();
   final resourceData = Get.find<PlayerController>().playerData.value;
   final List<Soldier> militaryList = Get.find<SoldiersController>().soldierList;
-  final List<Building> buildingList =
-      Get.find<BuildingsController>().buildingList;
+  /*final List<Building> buildingList =
+      Get.find<BuildingsController>().buildingList;*/
 
   Widget _enumerateSoldiers(List<BattleUnitDto> units) {
     List<Widget> list = <Widget>[];
     units.forEach((element) {
       list.add(UnderseaStyles.militaryIcon(
-          'seahorse', element.count, element.count));
+          SoldiersController.imageNameMap[element.name] ?? 'shark',
+          element.count,
+          element.count));
     });
     return new Row(mainAxisAlignment: MainAxisAlignment.center, children: list);
   }
@@ -31,8 +34,9 @@ class ExpandedMenu extends StatelessWidget {
   List<Widget> _enumerateBuildings(List<BuildingInfoDto> buildingDtos) {
     List<Widget> buildings = <Widget>[];
     buildingDtos.forEach((element) {
-      buildings.add(
-          UnderseaStyles.buildingIcon('zatonyvar', element.buildingsCount));
+      buildings.add(UnderseaStyles.buildingIcon(
+          BuildingDataController.imageNameMap[element.name] ?? 'zatonyvar',
+          element.buildingsCount));
     });
     return buildings;
   }
