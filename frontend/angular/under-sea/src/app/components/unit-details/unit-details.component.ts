@@ -6,6 +6,7 @@ import {
   IncrementCapacity,
   DecrementCapacity,
 } from 'src/app/states/resources/resources.actions';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'unit-details',
@@ -16,12 +17,17 @@ export class UnitDetailsComponent implements OnInit {
   @Input() unit: UnitDetails;
   @Input() remainingMoney: number;
   @Input() remainingCapacity: number;
+  @Input() justBoughtUnits: BehaviorSubject<boolean>;
   @Output() countModified: EventEmitter<CartUnit> = new EventEmitter();
   selected: number = 0;
 
   constructor(private store: Store) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.justBoughtUnits.subscribe(() => {
+      this.selected = 0;
+    });
+  }
 
   increment(): void {
     this.store.dispatch(DecrementCapacity);

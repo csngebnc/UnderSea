@@ -65,13 +65,11 @@ export class ResourcesState {
   incrementCapacity(store: StateContext<ResourcesStateModel>) {
     const value = store.getState().capacity;
     store.patchState({ capacity: value + 1 });
-    console.log(store.getState().capacity);
   }
 
   @Action(DecrementCapacity)
   decrementCapacity(store: StateContext<ResourcesStateModel>) {
     const value = store.getState().capacity;
     store.patchState({ capacity: value - 1 });
-    console.log(store.getState().capacity);
   }
 }

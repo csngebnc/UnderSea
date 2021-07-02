@@ -19,6 +19,7 @@ export class UnitsComponent implements OnInit {
   cart: BuyUnitDto = { units: [] };
   money: number;
   remainingMoney: number;
+  justBoughtUnits = new BehaviorSubject(false);
 
   @Select(ResourcesState.remainingCapacity)
   private remainingCapacityState: Observable<number>;
@@ -84,6 +85,7 @@ export class UnitsComponent implements OnInit {
   }
 
   onBuy(): void {
+    this.justBoughtUnits.next(true);
     this.battleService.buyUnits(this.cart).subscribe(
       (r) => {
         console.log(r);
