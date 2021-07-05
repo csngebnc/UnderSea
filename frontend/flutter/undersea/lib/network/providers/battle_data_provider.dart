@@ -36,6 +36,14 @@ class BattleDataProvider extends NetworkProvider {
             .toList();
       });
 
+  Future<Response<BattleUnitDto>> getSpies() => get("/api/Battle/spies",
+          contentType: 'application/json',
+          headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
+          decoder: (response) {
+        log(response.toString());
+        return BattleUnitDto.fromJson(response);
+      });
+
   Future<Response<void>> attack(Map<String, dynamic> body) =>
       post("/api/Battle/attack", body,
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
@@ -58,11 +66,11 @@ class BattleDataProvider extends NetworkProvider {
               PagedResultOfLoggedAttackDto.fromJson(response));
 
   Future<Response<PagedResultOfAttackableUserDto>> getAttackableUsers(
-          int pageSize, int pageNumber) =>
-      get("/api/Battle/history",
+          int pageSize, int pageNumber, String name) =>
+      get("/api/Battle/attackable-users",
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           contentType: 'application/json',
-          query: {'PageNumber': pageNumber, 'PageSize': pageSize},
+          query: {'PageNumber': pageNumber, 'PageSize': pageSize, 'name': name},
           decoder: (response) =>
               PagedResultOfAttackableUserDto.fromJson(response));
 

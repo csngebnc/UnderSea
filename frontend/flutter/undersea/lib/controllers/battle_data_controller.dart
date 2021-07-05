@@ -1,42 +1,151 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:undersea/models/response/buy_upgrade_dto.dart';
-import 'package:undersea/models/response/upgrade_dto.dart';
-import 'package:undersea/models/upgrade.dart';
+import 'package:undersea/models/response/battle_unit_dto.dart';
+
+import 'package:undersea/models/response/paged_result_of_attackable_user_dto.dart';
+import 'package:undersea/models/response/paged_result_of_logged_attack_dto.dart';
+import 'package:undersea/models/response/paged_result_of_spy_report_dto.dart';
+import 'package:undersea/models/response/send_attack_dto.dart';
+import 'package:undersea/models/response/send_spy_dto.dart';
+import 'package:undersea/models/response/unit_dto.dart';
+
 import 'package:undersea/network/providers/battle_data_provider.dart';
-import 'package:undersea/network/providers/upgrade_data_provider.dart';
+
+import 'package:undersea/styles/style_constants.dart';
 
 class BattleDataController extends GetxController {
   final BattleDataProvider _battleDataProvider;
   BattleDataController(this._battleDataProvider);
 
-  /* Rx<List<UpgradeDto>> battle = Rx([]);
+  Rx<List<BattleUnitDto>> availableUnitsInfo = Rx([]);
+  Rx<List<BattleUnitDto>> allUnitsInfo = Rx([]);
+  Rx<BattleUnitDto?> spiesInfo = Rx(null);
+  Rx<PagedResultOfLoggedAttackDto?> loggedAttacks = Rx(null);
+  Rx<PagedResultOfAttackableUserDto?> attackableUsers = Rx(null);
+  Rx<PagedResultOfSpyReportDto?> spyingHistory = Rx(null);
+  Rx<List<UnitDto>> unitTypesInfo = Rx([]);
 
-  buyUpgrade(int id) async {
+  getAvailableUnits() async {
     try {
-      final response = await _battleDataProvider
-          .buyUpgrade(BuyUpgradeDto(upgradeId: id).toJson());
-
+      final response = await _battleDataProvider.getAvailableUnits();
       if (response.statusCode == 200) {
-        Get.snackbar('Sikeres vásárlás!', '');
-        getUpgradeDetails();
+        availableUnitsInfo = Rx(response.body!);
+        update();
       }
     } catch (error) {
       log('$error');
     }
   }
 
-  getUpgradeDetails() async {
+  getAllUnits() async {
     try {
-      final response = await _upgradeDataProvider.getUpgradeDetails();
+      final response = await _battleDataProvider.getAllUnits();
       if (response.statusCode == 200) {
-        upgradeInfoData = Rx(response.body!);
+        allUnitsInfo = Rx(response.body!);
         update();
       }
     } catch (error) {
       log('$error');
     }
-  }*/
+  }
 
+  getSpies() async {
+    try {
+      final response = await _battleDataProvider.getSpies();
+      if (response.statusCode == 200) {
+        spiesInfo = Rx(response.body!);
+        update();
+      }
+    } catch (error) {
+      log('$error');
+    }
+  }
+
+  attack(SendAttackDto attackData) async {
+    try {
+      final response = await _battleDataProvider.attack(attackData.toJson());
+      if (response.statusCode == 200) {
+        UnderseaStyles.snackbar(
+            'Sikeres támadás!', 'Az egységeidet elküldted támadni');
+      }
+    } catch (error) {
+      log('$error');
+    }
+  }
+
+  sendSpies(SendSpyDto spyData) async {
+    try {
+      final response = await _battleDataProvider.sendSpies(spyData.toJson());
+      if (response.statusCode == 200) {
+        UnderseaStyles.snackbar('Sikeresen elküldted a felfedezőid!',
+            'Az egységeidet elküldted felfedezésre');
+      }
+    } catch (error) {
+      log('$error');
+    }
+  }
+
+  getHistory(int pageSize, int pageNumber) async {
+    try {
+      final response =
+          await _battleDataProvider.getHistory(pageSize, pageNumber);
+      if (response.statusCode == 200) {
+        loggedAttacks = Rx(response.body!);
+        update();
+      }
+    } catch (error) {
+      log('$error');
+    }
+  }
+
+  getAttackableUsers(int pageSize, int pageNumber, String name) async {
+    try {
+      final response = await _battleDataProvider.getAttackableUsers(
+          pageSize, pageNumber, name);
+      if (response.statusCode == 200) {
+        attackableUsers = Rx(response.body!);
+        update();
+      }
+    } catch (error) {
+      log('$error');
+    }
+  }
+
+  getSpyingHistory(int pageSize, int pageNumber, String name) async {
+    try {
+      final response = await _battleDataProvider.getSpyingHistory(
+          pageSize, pageNumber, name);
+      if (response.statusCode == 200) {
+        spyingHistory = Rx(response.body!);
+        update();
+      }
+    } catch (error) {
+      log('$error');
+    }
+  }
+
+  getUnitTypes() async {
+    try {
+      final response = await _battleDataProvider.getUnitTypes();
+      if (response.statusCode == 200) {
+        unitTypesInfo = Rx(response.body!);
+        update();
+      }
+    } catch (error) {
+      log('$error');
+    }
+  }
+
+  buyUnits(UnitDto unit) async {
+    try {
+      final response = await _battleDataProvider.buyUnits(unit.toJson());
+      if (response.statusCode == 200) {
+        UnderseaStyles.snackbar(
+            'Sikeres vásárlás', 'Új egységeid besorolásra kerültek');
+      }
+    } catch (error) {
+      log('$error');
+    }
+  }
 }
