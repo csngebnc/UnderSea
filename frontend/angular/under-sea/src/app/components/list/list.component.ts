@@ -10,6 +10,7 @@ import { debounce } from 'lodash';
 export class ListComponent implements OnInit {
   @Input() list: Array<UserListItem>;
   @Input() clickable?: boolean;
+  @Input() defaultValue: string = '';
   @Output() selectTarget = new EventEmitter<number>();
   @Output() filter = new EventEmitter<string>();
   selectedTargetId: number | null = null;

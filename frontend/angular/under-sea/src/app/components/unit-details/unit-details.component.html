@@ -40,7 +40,7 @@
     type="button"
     class="count-button"
     [disabled]="
-      this.remainingMoney < this.unit.price && this.remainingCapacity <= 0
+      this.remainingMoney < this.unit.price || this.remainingCapacity <= 0
     "
     (click)="increment()"
   >

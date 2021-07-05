@@ -7,6 +7,7 @@
           <strong>1. Jelöld ki, ki után szeretnél kémkedni:</strong>
         </h3>
         <list
+          [defaultValue]="filter"
           [list]="players.list"
           [clickable]="true"
           (filter)="onFilter($event)"

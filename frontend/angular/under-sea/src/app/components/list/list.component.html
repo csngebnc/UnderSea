@@ -1,6 +1,7 @@
 <input
   type="text"
   placeholder="Felhasználónév"
+  [value]="defaultValue"
   class="text-input m-0 mt-1 w-100"
   (keyup)="search($event.target.value)"
 />

@@ -25,7 +25,7 @@ export class ExploreComponent implements OnInit {
     allResultsCount: 0,
   };
 
-  filter: string | undefined = undefined;
+  filter: string | undefined = '';
   targetId: number;
   selectedCount: number;
 
@@ -73,6 +73,7 @@ export class ExploreComponent implements OnInit {
   }
 
   onFilter(filter: string): void {
+    this.players.list = [];
     this.filter = filter;
     this.players.pageNumber = 1;
     this.initPlayers();
