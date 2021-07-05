@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:undersea/models/response/buy_upgrade_dto.dart';
 import 'package:undersea/models/response/upgrade_dto.dart';
-import 'package:undersea/models/upgrade.dart';
 import 'package:undersea/network/providers/upgrade_data_provider.dart';
 import 'package:undersea/styles/style_constants.dart';
 
