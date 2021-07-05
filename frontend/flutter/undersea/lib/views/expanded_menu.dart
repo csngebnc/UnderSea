@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/building_data_controller.dart';
-import 'package:undersea/controllers/buildings_controller.dart';
+
 import 'package:undersea/controllers/country_data_controller.dart';
-import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/controllers/soldiers_controller.dart';
-import 'package:undersea/models/building.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/building_info_dto.dart';
-import 'package:undersea/models/response/country_details_dto.dart';
-import 'package:undersea/models/response/unit_dto.dart';
 import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class ExpandedMenu extends StatelessWidget {
   ExpandedMenu();
-  final resourceData = Get.find<PlayerController>().playerData.value;
+
   final List<Soldier> militaryList = Get.find<SoldiersController>().soldierList;
-  /*final List<Building> buildingList =
-      Get.find<BuildingsController>().buildingList;*/
 
   Widget _enumerateSoldiers(List<BattleUnitDto> units) {
     List<Widget> list = <Widget>[];
@@ -57,8 +51,6 @@ class ExpandedMenu extends StatelessWidget {
               UnderseaStyles.resourceIcon("coral", countryData.coral,
                   countryData.currentCoralProduction),
               ..._enumerateBuildings(countryData.buildings!)
-              /*UnderseaStyles.buildingIcon("zatonyvar@3x", 1),
-          UnderseaStyles.buildingIcon("aramlasiranyito@3x", 0),*/
             ],
           )
         ]);

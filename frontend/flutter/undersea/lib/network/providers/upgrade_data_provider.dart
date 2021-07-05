@@ -13,7 +13,6 @@ class UpgradeDataProvider extends NetworkProvider {
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           decoder: (response) {
         return (response as List).map((e) => UpgradeDto.fromJson(e)).toList();
-        //return UpgradeDto.fromJson(response);
       });
 
   Future<Response<void>> buyUpgrade(Map<String, dynamic> body) =>

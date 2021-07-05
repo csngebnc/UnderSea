@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
@@ -20,6 +22,8 @@ class RoundController extends GetxController {
         Get.find<BuildingDataController>().getBuildingDetails();
         Get.find<UpgradesController>().getUpgradeDetails();
       }
-    } catch (error) {}
+    } catch (error) {
+      log('$error');
+    }
   }
 }

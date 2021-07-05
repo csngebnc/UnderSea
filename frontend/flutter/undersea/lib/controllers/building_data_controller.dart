@@ -11,6 +11,7 @@ import 'package:undersea/models/response/user_info_dto.dart';
 import 'package:undersea/network/providers/building_data_provider.dart';
 
 import 'package:undersea/network/providers/user_data_provider.dart';
+import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/bottom_nav_bar.dart';
 
 import '../constants.dart';
@@ -28,7 +29,7 @@ class BuildingDataController extends GetxController {
           .buyBuilding(BuyBuildingDto(buildingId: id).toJson());
 
       if (response.statusCode == 200) {
-        Get.snackbar('Sikeres vásárlás!', '');
+        UnderseaStyles.snackbar('Sikeres vásárlás!', '');
         getBuildingDetails();
       }
     } catch (error) {

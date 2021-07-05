@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/login_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/views/registration.dart';

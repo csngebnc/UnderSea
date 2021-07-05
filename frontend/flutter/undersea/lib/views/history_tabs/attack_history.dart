@@ -46,6 +46,7 @@ class AttackHistoryPage extends StatelessWidget {
             child: ListView.builder(
                 itemCount: attackList.length * 2 + 1,
                 itemBuilder: (BuildContext context, int i) {
+                  if (i == 0) return SizedBox(height: 20);
                   if (i.isEven)
                     return UnderseaStyles.divider();
                   else

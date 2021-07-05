@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:undersea/controllers/battle_data_controller.dart';
-import 'package:undersea/controllers/buildings_controller.dart';
 import 'package:undersea/controllers/country_data_controller.dart';
-import 'package:undersea/controllers/login_controller.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
 import 'package:undersea/controllers/next_round_controller.dart';
 import 'package:undersea/controllers/player_controller.dart';
-import 'package:undersea/controllers/registration_controller.dart';
+
 import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/lang/app_translations.dart';
 import 'package:undersea/network/providers/country_data_provider.dart';
@@ -33,11 +31,9 @@ void main() async {
 
 Future<void> initServices() async {
   await GetStorage.init();
-  Get.put(PlayerController());
+  //Get.put(PlayerController());
   Get.put(BottomNavBarController());
   Get.put(SoldiersController());
-
-  Get.put(BuildingsController());
   Get.put(UserDataProvider());
   Get.put(UserDataController(Get.find()));
   Get.put(CountryDataProvider());

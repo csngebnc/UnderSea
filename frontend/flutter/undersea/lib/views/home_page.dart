@@ -2,7 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/buildings_controller.dart';
+import 'package:undersea/controllers/building_data_controller.dart';
+
 import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/controllers/next_round_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
@@ -19,9 +20,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Building> buildingList =
-      Get.find<BuildingsController>().buildingList;
-  final Random rng = Random();
+  //final List<String> imageList; =
+  /*Get.find<BuildingDataController>().*/
+
+  //final Random rng = Random();
 
   final userDataController = Get.find<UserDataController>();
   final countryDataController = Get.find<CountryDataController>();
@@ -37,10 +39,16 @@ class _HomePageState extends State<HomePage> {
     var buildings = <Widget>[];
     var tops = <double>[100, 160];
     var lefts = <double>[100, 180];
-    for (int i = 0; i < buildingList.length; i++) {
-      if (buildingList[i].currentAmount >= 1)
-        buildings.add(UnderseaStyles.building(buildingList[i].imageName,
-            top: tops[i], left: lefts[i]));
+    var buildingList =
+        countryDataController.countryDetailsData.value?.buildings;
+    if (buildingList != null) {
+      for (int i = 0; i < buildingList.length; i++) {
+        if (buildingList[i].buildingsCount >= 1)
+          buildings.add(UnderseaStyles.building(
+              BuildingDataController.imageNameMap[buildingList[i].name]!,
+              top: tops[i],
+              left: lefts[i]));
+      }
     }
 
     return buildings;
@@ -62,8 +70,6 @@ class _HomePageState extends State<HomePage> {
               return UnderseaStyles.leaderboardButton(
                   roundNumber: userInfoData.round,
                   placement: userInfoData.placement);
-            /*else if (userInfoData)
-              return Text('error');*/
             else
               return UnderseaStyles.leaderboardButton(
                   roundNumber: 4, placement: 23);

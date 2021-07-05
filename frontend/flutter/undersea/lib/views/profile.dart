@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:undersea/controllers/country_data_controller.dart';
-import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
@@ -26,7 +24,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    //userInfo = userDataController.userInfo();
     super.initState();
   }
 

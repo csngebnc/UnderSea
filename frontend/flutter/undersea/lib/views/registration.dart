@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/registration_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class RegistrationPage extends StatefulWidget {
   RegistrationPage({Key? key}) : super(key: key);
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
@@ -59,11 +51,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
               countryName: citynameController.text,
               onSuccess: () {
                 Get.back();
-                Get.snackbar(Strings.registr_snackbar_title.tr,
+                /*Get.snackbar(Strings.registr_snackbar_title.tr,
                     Strings.registr_snackbar_body.tr,
-                    icon: Icon(Icons.app_registration),
                     snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: Colors.blueAccent);
+                    backgroundColor: Colors.blueAccent);*/
+                UnderseaStyles.snackbar(
+                  Strings.registr_snackbar_title.tr,
+                  Strings.registr_snackbar_body.tr,
+                );
               });
         });
 

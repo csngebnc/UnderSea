@@ -1,22 +1,18 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
-import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/attack_page.dart';
 import 'package:undersea/views/city_tabs/city_tab_bar.dart';
 import 'package:undersea/views/history_tabs/history_tab_bar.dart';
-import 'package:undersea/views/my_army.dart';
 import 'package:undersea/views/profile.dart';
 import 'home_page.dart';
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({Key? key}) : super(key: key);
   final BottomNavBarController controller = Get.find<BottomNavBarController>();
-  final playerController = Get.find<PlayerController>();
+  //final playerController = Get.find<PlayerController>();
   static List<Widget> _appbarTitleOptions = <Widget>[
     SizedBox(
       height: 35,

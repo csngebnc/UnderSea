@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/country_details_dto.dart';
 import 'package:undersea/network/providers/country_data_provider.dart';
+import 'package:undersea/styles/style_constants.dart';
 
 class CountryDataController extends GetxController {
   final CountryDataProvider _countryDataProvider;
@@ -37,11 +38,10 @@ class CountryDataController extends GetxController {
       if (response.statusCode == 200) {
         countryName = Rx(newName);
         update();
-        Get.snackbar(Strings.city_modified_snack_title.tr,
-            Strings.city_modified_snack_body.tr + ': $newName',
-            icon: Icon(Icons.save_sharp),
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.blueAccent);
+        UnderseaStyles.snackbar(
+          Strings.city_modified_snack_title.tr,
+          Strings.city_modified_snack_body.tr + ': $newName',
+        );
         /*userInfoData.update((val) {
           val = response.body;
         });*/

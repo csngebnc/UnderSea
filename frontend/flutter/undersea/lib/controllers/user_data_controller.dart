@@ -6,6 +6,7 @@ import 'package:undersea/models/response/register_dto.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
 
 import 'package:undersea/network/providers/user_data_provider.dart';
+import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/bottom_nav_bar.dart';
 
 import '../constants.dart';
@@ -34,13 +35,11 @@ class UserDataController extends GetxController {
           await _userDataProvider.register(registrationData.toJson());
       if (response.statusCode == 200) onSuccess != null ? onSuccess() : {};
     } catch (error) {
-      Get.snackbar('Error', 'Regisztrációs hiba');
-      //change(RxList(), status: RxStatus.error("Hiba"));
+      UnderseaStyles.snackbar('Error', 'Regisztrációs hiba');
     }
   }
 
   login(String username, String password) async {
-    //change(LoginResponse(), status: RxStatus.loading());
     try {
       final body =
           'username=$username&password=$password&grant_type=password&client_id=undersea-angular&scope=openid+api-openid';
@@ -50,8 +49,7 @@ class UserDataController extends GetxController {
         Get.off(BottomNavBar());
       }
     } catch (error) {
-      Get.snackbar('Error', 'Bejelentkezési hiba');
-      //change(RxList(), status: RxStatus.error("Hiba"));
+      UnderseaStyles.snackbar('Error', 'Bejelentkezési hiba');
     }
   }
 
@@ -61,10 +59,6 @@ class UserDataController extends GetxController {
       if (response.statusCode == 200) {
         userInfoData = Rx(response.body);
         update();
-        /*userInfoData.update((val) {
-          val = response.body;
-        });*/
-        //return response.body;
       }
     } catch (error) {
       userInfoData.addError(error);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:undersea/controllers/player_controller.dart';
+import 'package:undersea/controllers/country_data_controller.dart';
+
 import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:get/get.dart';
@@ -12,10 +13,12 @@ class Military extends StatefulWidget {
 }
 
 class _MilitaryTabState extends State<Military> {
+  final countryData =
+      Get.find<CountryDataController>().countryDetailsData.value;
   List<Soldier> soldierList = Get.find<SoldiersController>().soldierList;
   late List<int> buyList = List.generate(soldierList.length, (index) => 0);
   late int count = 2 + soldierList.length * 2 - 1;
-  PlayerController playerController = Get.find<PlayerController>();
+  //PlayerController playerController = Get.find<PlayerController>();
   @override
   Widget build(BuildContext context) {
     return UnderseaStyles.tabSkeleton(
@@ -49,8 +52,7 @@ class _MilitaryTabState extends State<Military> {
 
   bool _canHireSoldiers() {
     if (buyList.every((element) => element == 0)) return false;
-    if (playerController.playerData.value.pearlAmount <
-        _calculateSoldierPrice()) return false;
+    if (countryData!.pearl < _calculateSoldierPrice()) return false;
     return true;
   }
 
