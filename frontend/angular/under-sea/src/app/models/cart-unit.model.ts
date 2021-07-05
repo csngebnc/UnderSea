@@ -1,5 +1,5 @@
 export type CartUnit = {
-  id: number;
+  unitId: number;
   count: number;
   price: number;
 };

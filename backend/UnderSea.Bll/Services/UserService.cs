@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services.Interfaces;
-using UnderSea.Bll.Validation;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
@@ -33,14 +32,15 @@ namespace UnderSea.Bll.Services
 
         public async Task<bool> Register(RegisterDto registerDto)
         {
-            var validator = new RegisterValidation(_context);
-            await validator.ValidateAsync(registerDto);
-
             var user = new User { UserName = registerDto.UserName.Trim() };
             
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             
-            var country = new Country { Name = registerDto.CountryName, OwnerId = user.Id, WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id };
+            var country = new Country {
+                Name = registerDto.CountryName,
+                OwnerId = user.Id,
+                WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id
+            };
             _context.Countries.Add(country);
             await _context.SaveChangesAsync();
             return result.Succeeded;
@@ -48,9 +48,6 @@ namespace UnderSea.Bll.Services
 
         public async Task<PagedResult<UserRankDto>> GetRanklist(PaginationData pagination, string nameFilter)
         {
-            var validator = new PaginationDataValidator();
-            validator.Validate(pagination);
-
             var users = _context.Users
                 .OrderByDescending(u => u.Points)
                 .ProjectTo<UserRankDto>(_mapper.ConfigurationProvider);
@@ -71,9 +68,6 @@ namespace UnderSea.Bll.Services
                 .Where(u => u.Id == _identityService.GetCurrentUserId())
                 .FirstOrDefaultAsync();
 
-            if (user == null)
-                throw new NotExistsException("Nem létezik ilyen felhasználó.");
-
             return new UserInfoDto
             {
                 Id = user.Id,
@@ -82,75 +76,6 @@ namespace UnderSea.Bll.Services
                 Placement = (await _context.Users.OrderByDescending(u => u.Points).ToListAsync()).FindIndex(0, u => u.Id == user.Id)
             };
             
-        }
-
-        public async Task<CountryDetailsDto> GetUserDetails()
-        {
-            var userid = _identityService.GetCurrentUserId();
-
-            if (userid == null)
-                throw new NotExistsException("Nem létezik ilyen felhasználó.");
-
-            var country = await _context.Countries
-                .Where(u => u.OwnerId == userid)
-                .Include(c => c.ActiveConstructions)
-                .Include(c => c.CountryBuildings)
-                    .ThenInclude(cb => cb.Building)
-                .Include(c => c.CountryUnits)
-                    .ThenInclude(cu => cu.Unit)
-                .FirstOrDefaultAsync();
-
-            if (country == null)
-                throw new NotExistsException("Nem létezik ilyen ország.");
-
-            var buildings = await _context.Buildings
-                                .Include(b => b.ActiveConstructions).ToListAsync();
-
-            var units = await _context.Units.ToListAsync();
-
-            return new CountryDetailsDto
-            {
-                MaxUnitCount = country.MaxUnitCount,
-                Units = _mapper.Map<ICollection<BattleUnitDto>>(units),
-                Coral = country.Coral,
-                Pearl = country.Pearl,
-                Population = country.Population,
-                CurrentCoralProduction = (int)(country.Production.BaseCoralProduction * country.Production.CoralProductionMultiplier),
-                CurrentPearlProduction = (int)(country.Production.BasePearlProduction * country.Production.PearlProductionMultiplier),
-                Buildings = buildings.Select(building =>
-                {
-                    return new BuildingInfoDto
-                    {
-                        Id = building.Id,
-                        Name = building.Name,
-                        BuildingsCount = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).Count(),
-                        ActiveConstructionCount = country.ActiveConstructions.Where(ac => ac.BuildingId == building.Id).Count()
-                    };
-                })
-            };
-        }
-
-        public async Task<string> GetUserCountryName()
-        {
-            return (await _context.Countries
-                            .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
-                            .FirstOrDefaultAsync()
-                    )?.Name;
-        }
-
-        public async Task ChangeCountryName(string name)
-        {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
-                throw new InvalidParameterException("Az ország nevének megadása kötelező.");
-
-            var country = await _context.Countries
-                                    .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
-                                    .FirstOrDefaultAsync();
-            if (country == null)
-                throw new NotExistsException("Nem létezik ilyen ország.");
-
-            country.Name = name.Trim();
-            await _context.SaveChangesAsync();
-        }
+        }         
     }
 }

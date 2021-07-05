@@ -11,6 +11,7 @@ export class ListComponent implements OnInit {
   @Input() list: Array<UserListItem>;
   @Input() clickable?: boolean;
   @Output() selectTarget = new EventEmitter<number>();
+  @Output() filter = new EventEmitter<string>();
   selectedTargetId: number | null = null;
 
   constructor() {
@@ -25,6 +26,6 @@ export class ListComponent implements OnInit {
   }
 
   search(text: string): void {
-    console.log(text);
+    this.filter.emit(text);
   }
 }

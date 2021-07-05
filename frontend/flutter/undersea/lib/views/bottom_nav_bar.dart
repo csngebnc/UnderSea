@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
-import 'package:undersea/controllers/player_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/attack_page.dart';
-import 'package:undersea/views/city_tabs/city_tab_controller.dart';
-import 'package:undersea/views/my_army.dart';
+import 'package:undersea/views/city_tabs/city_tab_bar.dart';
+import 'package:undersea/views/history_tabs/history_tab_bar.dart';
 import 'package:undersea/views/profile.dart';
 import 'home_page.dart';
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({Key? key}) : super(key: key);
   final BottomNavBarController controller = Get.find<BottomNavBarController>();
-  final playerController = Get.find<PlayerController>();
+  //final playerController = Get.find<PlayerController>();
   static List<Widget> _appbarTitleOptions = <Widget>[
     SizedBox(
       height: 35,
@@ -29,7 +28,8 @@ class BottomNavBar extends StatelessWidget {
     HomePage(),
     CityTabBar(),
     AttackPage(),
-    MyArmyPage(),
+    //MyArmyPage(),
+    HistoryTabBar(() {})
   ];
 
   void _onItemTapped(int index) {
@@ -40,7 +40,7 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
         appBar: AppBar(
-          toolbarHeight: 85,
+          toolbarHeight: controller.selectedTab.value == 0 ? 85 : 60,
           backgroundColor: UnderseaStyles.hintColor,
           actions: [
             if (controller.selectedTab.value == 0)
@@ -48,11 +48,7 @@ class BottomNavBar extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: GestureDetector(
                       onTap: () {
-                        Get.to(ProfilePage(
-                            cityName:
-                                playerController.playerData.value.cityName,
-                            playerName:
-                                playerController.playerData.value.playerName));
+                        Get.to(ProfilePage());
                       },
                       child: SizedBox(
                           height: 40,

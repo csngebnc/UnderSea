@@ -13,9 +13,6 @@ namespace UnderSea.Bll.Services.Interfaces
         Task<bool> Register(RegisterDto registerDto);
         Task<PagedResult<UserRankDto>> GetRanklist(PaginationData pagination, string nameFilter);
         Task<UserInfoDto> GetUserInfo();
-        Task<CountryDetailsDto> GetUserDetails();
-        Task<string> GetUserCountryName();
-        Task ChangeCountryName(string name);
 
     }
 }

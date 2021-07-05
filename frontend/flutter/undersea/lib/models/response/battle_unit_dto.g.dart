@@ -8,6 +8,7 @@ part of 'battle_unit_dto.dart';
 
 BattleUnitDto _$BattleUnitDtoFromJson(Map<String, dynamic> json) {
   return BattleUnitDto(
+    iconImageUrl: json['iconImageUrl'] as String?,
     id: json['id'] as int,
     name: json['name'] as String,
     count: json['count'] as int,
@@ -19,4 +20,5 @@ Map<String, dynamic> _$BattleUnitDtoToJson(BattleUnitDto instance) =>
       'id': instance.id,
       'name': instance.name,
       'count': instance.count,
+      'iconImageUrl': instance.iconImageUrl,
     };

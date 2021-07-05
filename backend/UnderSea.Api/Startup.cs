@@ -1,7 +1,7 @@
+using Autofac;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
-using Hangfire.Common;
 using Hangfire.SqlServer;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,15 +16,13 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
 using UnderSea.Api.AuthFilter;
-using UnderSea.Bll.Dtos;
+using UnderSea.Api.Services;
+using UnderSea.Api.SignalR;
 using UnderSea.Bll.Mapper;
-using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
-using UnderSea.Bll.SignalR;
-using UnderSea.Bll.Validation;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
@@ -43,30 +41,33 @@ namespace UnderSea.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy", builder => builder
-                .WithOrigins(new string[] { "http://localhost:4200", "https://localhost:4200", "https://api-undersea.azurewebsites.net" })
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.WithOrigins(Configuration.GetSection("AllowedOrigins").Get<string[]>())
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                });
             });
 
             // Add Hangfire services.
             services.AddHangfire(configuration =>
             {
                 configuration
-                            .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                            .UseSimpleAssemblyNameTypeSerializer()
-                            .UseRecommendedSerializerSettings()
-                            .UseSqlServerStorage(Configuration.GetConnectionString("AzureHangfireDbConnection"), new SqlServerStorageOptions
-                            {
-                                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-                                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-                                QueuePollInterval = TimeSpan.Zero,
-                                UseRecommendedIsolationLevel = true,
-                                DisableGlobalLocks = true
-                            });
+                    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                    .UseSimpleAssemblyNameTypeSerializer()
+                    .UseRecommendedSerializerSettings()
+                    .UseSqlServerStorage(Configuration.GetConnectionString("DefaultHangfireConnection"), new SqlServerStorageOptions
+                    {
+                        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                        QueuePollInterval = TimeSpan.Zero,
+                        UseRecommendedIsolationLevel = true,
+                        DisableGlobalLocks = true
+                    });
             });
 
             // Add the processing server as IHostedService
@@ -74,8 +75,7 @@ namespace UnderSea.Api
 
             services.AddDbContext<UnderSeaDbContext>(options =>
                 options.UseSqlServer(
-                    //Configuration.GetConnectionString("DefaultConnection")));
-                    Configuration.GetConnectionString("AzureSqlDbConnection")));
+                    Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSwaggerDocument();
 
@@ -88,20 +88,10 @@ namespace UnderSea.Api
             services.AddAutoMapper(typeof(AutoMapperProfiles));
 
             services.AddHttpContextAccessor();
+
             services.AddScoped<IIdentityService, IdentityService>();
-
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IUpgradeService, UpgradeService>();
-            services.AddTransient<IBattleService, BattleService>();
-            services.AddTransient<IBuildingService, BuildingService>();
+            services.AddTransient<IHubService, RoundHubService>();
             services.AddTransient<IRoundService, RoundService>();
-
-            services.AddTransient<IValidator<BuyBuildingDto>, BuyBuildingValidator>();
-            services.AddTransient<IValidator<BuyUnitDto>, BuyUnitValidator>();
-            services.AddTransient<IValidator<BuyUpgradeDto>, BuyUpgradeValidator>();
-            services.AddTransient<IValidator<PaginationData>, PaginationDataValidator>();
-            services.AddTransient<IValidator<RegisterDto>, RegisterValidation>();
-            services.AddTransient<IValidator<SendAttackDto>, SendAttackValidator>();
 
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
@@ -119,19 +109,33 @@ namespace UnderSea.Api
             })
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "https://api-undersea.azurewebsites.net";
-                    options.Audience = "undersea-api";
+                    options.Authority = Configuration.GetValue<string>("Authentication:Authority");
+                    options.Audience = Configuration.GetValue<string>("Authentication:Audience");
                     options.RequireHttpsMetadata = false;
                 }
                 );
 
             services.AddProblemDetails(ConfigureProblemDetails);
 
-            services.AddControllersWithViews().AddFluentValidation(fv => {
+            services.AddControllersWithViews().AddFluentValidation(fv =>
+            {
                 fv.DisableDataAnnotationsValidation = true;
             });
-            services.AddRazorPages(); 
+            services.AddRazorPages();
             services.AddSignalR();
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterAssemblyTypes(Assembly.Load("UnderSea.Bll"))
+                .Where(x => x.Name.EndsWith("Service"))
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(Assembly.Load("UnderSea.Bll"))
+                .Where(x => x.Name.EndsWith("Validator"))
+                .AsImplementedInterfaces()
+                .InstancePerDependency();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -189,8 +193,10 @@ namespace UnderSea.Api
             options.MapToStatusCode<NotExistsException>(StatusCodes.Status404NotFound);
 
             options.MapToStatusCode<InvalidParameterException>(StatusCodes.Status400BadRequest);
+            options.MapToStatusCode<ArgumentOutOfRangeException>(StatusCodes.Status400BadRequest);
 
             options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
         }
+
     }
 }

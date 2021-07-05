@@ -9,7 +9,7 @@ part of 'effect_dto.dart';
 EffectDto _$EffectDtoFromJson(Map<String, dynamic> json) {
   return EffectDto(
     id: json['id'] as int,
-    name: json['name'] as String,
+    name: json['name'] as String?,
   );
 }
 

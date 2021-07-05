@@ -7,7 +7,7 @@ class UserInfoDto {
   String? name;
   int round;
   int placement;
-  int? id;
+  String? id;
 
   UserInfoDto(
       {this.name,

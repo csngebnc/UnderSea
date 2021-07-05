@@ -10,7 +10,7 @@ UserInfoDto _$UserInfoDtoFromJson(Map<String, dynamic> json) {
   return UserInfoDto(
     name: json['name'] as String?,
     placement: json['placement'] as int,
-    id: json['id'] as int?,
+    id: json['id'] as String?,
     round: json['round'] as int,
   );
 }

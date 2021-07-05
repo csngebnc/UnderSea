@@ -1,45 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class RegistrationPage extends StatefulWidget {
   RegistrationPage({Key? key}) : super(key: key);
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  final controller = Get.find<UserDataController>();
+
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final citynameController = TextEditingController();
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    citynameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userField = UnderseaStyles.inputField(hint: Strings.username.tr);
-    final passwordField =
-        UnderseaStyles.inputField(hint: Strings.password.tr, isPassword: true);
+    final userField = UnderseaStyles.inputField(
+        hint: Strings.username.tr, controller: usernameController);
+    final passwordField = UnderseaStyles.inputField(
+        hint: Strings.password.tr,
+        isPassword: true,
+        controller: passwordController);
     final passwordValidationField = UnderseaStyles.inputField(
-        hint: Strings.password_again.tr, isPassword: true);
-    final cityNameField =
-        UnderseaStyles.inputField(hint: Strings.city_name_hint.tr);
+        hint: Strings.password_again.tr,
+        isPassword: true,
+        controller: confirmPasswordController);
+    final cityNameField = UnderseaStyles.inputField(
+        hint: Strings.city_name_hint.tr, controller: citynameController);
 
     final registrationButton = UnderseaStyles.elevatedButton(
         text: Strings.registration.tr,
         onPressed: () {
-          //regisztráció felküldése a szerverre
-
-          //siker esetén:
-
-          Get.back();
-          Get.snackbar(Strings.registr_snackbar_title.tr,
-              Strings.registr_snackbar_body.tr,
-              icon: Icon(Icons.app_registration),
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.blueAccent);
+          controller.register(
+              username: usernameController.text,
+              password: passwordController.text,
+              confirmPassword: confirmPasswordController.text,
+              countryName: citynameController.text,
+              onSuccess: () {
+                Get.back();
+                /*Get.snackbar(Strings.registr_snackbar_title.tr,
+                    Strings.registr_snackbar_body.tr,
+                    snackPosition: SnackPosition.BOTTOM,
+                    backgroundColor: Colors.blueAccent);*/
+                UnderseaStyles.snackbar(
+                  Strings.registr_snackbar_title.tr,
+                  Strings.registr_snackbar_body.tr,
+                );
+              });
         });
 
     return Scaffold(

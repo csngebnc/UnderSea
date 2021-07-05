@@ -11,8 +11,6 @@ namespace UnderSea.Model.Models
     public class ActiveConstruction
     {
         public int Id { get; set; }
-        [Range(0,int.MaxValue, ErrorMessage = "A befejezés nem lehet negatív szám!")]
-        [Required(ErrorMessage = "A befejezés idejét kötelező megadni!")]
         public int EstimatedFinish { get; set; }
 
         public int CountryId { get; set; }

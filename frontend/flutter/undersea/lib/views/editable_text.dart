@@ -1,22 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/player_controller.dart';
+import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class CityNameEditableText extends StatefulWidget {
-  final String initialCityName;
-  CityNameEditableText(this.initialCityName);
+  CityNameEditableText();
+
   @override
-  _CityNameEditableTextState createState() =>
-      new _CityNameEditableTextState(initialCityName);
+  _CityNameEditableTextState createState() => new _CityNameEditableTextState();
 }
 
 class _CityNameEditableTextState extends State<CityNameEditableText> {
-  _CityNameEditableTextState(this._cityName);
-  String _cityName;
+  _CityNameEditableTextState();
+
+  @override
+  void initState() {
+    controller.getCountryName();
+    _editingController =
+        TextEditingController(text: controller.countryName.value);
+    super.initState();
+  }
+
   bool _isEditingText = false;
+  final controller = Get.find<CountryDataController>();
   late TextEditingController _editingController;
   @override
   Widget build(BuildContext context) {
@@ -39,15 +47,40 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
       Expanded(
         child: Container(),
       ),
-      InkWell(
+      GetBuilder<CountryDataController>(builder: (controller) {
+        final countryName = controller.countryName.value;
+        if (countryName != null)
+          return InkWell(
+            onTap: () {
+              setState(() {
+                _editingController.text = countryName;
+                _isEditingText = true;
+              });
+            },
+            child:
+                UnderseaStyles.imageIcon("edit", color: Colors.white, size: 32),
+          );
+        else
+          return InkWell(
+            onTap: () {
+              setState(() {
+                _editingController.text = 'default';
+                _isEditingText = true;
+              });
+            },
+            child:
+                UnderseaStyles.imageIcon("edit", color: Colors.white, size: 32),
+          );
+      }),
+      /*InkWell(
         onTap: () {
           setState(() {
-            _editingController.text = _cityName;
+            _editingController.text = controller.countryName.value ?? 'default';
             _isEditingText = true;
           });
         },
         child: UnderseaStyles.imageIcon("edit", color: Colors.white, size: 32),
-      )
+      )*/
     ]);
   }
 
@@ -67,17 +100,9 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
                     .copyWith(fontWeight: FontWeight.normal, fontSize: 21),
                 onSubmitted: (newValue) {
                   setState(() {
-                    _cityName = newValue;
                     _isEditingText = false;
-                    Get.find<PlayerController>().playerData.value.cityName =
-                        _cityName;
                   });
-
-                  Get.snackbar(Strings.city_modified_snack_title.tr,
-                      Strings.city_modified_snack_body.tr + ': $_cityName',
-                      icon: Icon(Icons.save_sharp),
-                      snackPosition: SnackPosition.BOTTOM,
-                      backgroundColor: Colors.blueAccent);
+                  controller.setCountryName(newValue);
                 },
                 autofocus: true,
                 controller: _editingController,
@@ -88,16 +113,30 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
           height: 40,
           child: Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                _cityName,
+              child:
+                  /*Text(
+                controller.countryName.value ?? 'default',
                 style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 21),
-              )));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _editingController = TextEditingController(text: _cityName);
+              ))*/
+                  GetBuilder<CountryDataController>(builder: (controller) {
+                final countryName = controller.countryName.value;
+                if (countryName != null)
+                  return Text(
+                    countryName,
+                    style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 21),
+                  );
+                /*else if (snapshot.hasError)
+                      return Text('error',
+                          style: UnderseaStyles.inputTextStyle.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 21));*/
+                else
+                  return Text(
+                    'default',
+                    style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 21),
+                  );
+              })));
   }
 
   @override
