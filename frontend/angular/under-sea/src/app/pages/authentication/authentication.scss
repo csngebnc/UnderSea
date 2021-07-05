@@ -1,22 +1,35 @@
-@import 'src/styles.scss';
+@import "src/styles.scss";
 
-.bg{
-    background-image: $login;
-    background-position: center top;
-    background-size: cover;
+.bg {
+  background-image: $login;
+  background-position: center top;
+  background-size: cover;
 }
 
-.title{
-    font-size: 5rem;
-    color: $teal;
-    margin: 0;
+.title {
+  font-size: 5rem;
+  color: $teal;
+  margin: 0;
 }
 
+.login-title {
+  color: $navy;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
 
-.login-title{
-    color: $navy;
-    font-size: 2rem;
-    display: flex;
-    justify-content: center;
-    margin: 0;
+.error-container {
+  width: 100%;
+  min-height: 2rem;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 0;
+}
+
+.w-461px {
+  width: 461px;
 }

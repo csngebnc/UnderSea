@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Resources } from 'src/app/models/resources.model';
 
 @Component({
   selector: 'sidebar',

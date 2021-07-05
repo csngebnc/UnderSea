@@ -1,8 +1,8 @@
 <div class="container bg">
-  <div>
+  <div class="stack align-center">
     <h1 class="title">UNDERSEA</h1>
     <form
-      class="blurry-panel stack align-center"
+      class="blurry-panel stack align-center w-461px"
       [formGroup]="registerForm"
       (ngSubmit)="onSubmit()"
     >
@@ -38,9 +38,15 @@
       <span *ngIf="loginFailed.value" class="error-text"
         >Sikertelen regisztráció!</span
       >
+      <div class="error-container">
+        <p *ngIf="!registerForm.controls['password'].valid" class="error-text">
+          A jelszónak tartalmaznia kell 1 nagybetűt, 1 kisbetűt, 1 számot és 1
+          speciális karaktert!
+        </p>
+      </div>
       <button
         type="submit"
-        class="gradient-button mt-2"
+        class="gradient-button"
         [disabled]="!registerForm.valid"
       >
         Regisztráció

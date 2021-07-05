@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UnitDetails } from 'src/app/models/unit-details.model';
 import { CartUnit } from 'src/app/models/cart-unit.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable, Subject } from 'rxjs';
 import { ApiService } from 'src/app/services/api/api.service';
 import { BuyUnitDto } from 'src/app/services/generated-code/generated-api-code';
 import { Store, Select } from '@ngxs/store';
 import { ResourcesState } from 'src/app/states/resources/resources.state';
 import { GetResources } from 'src/app/states/resources/resources.actions';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'units',
@@ -19,29 +20,25 @@ export class UnitsComponent implements OnInit {
   cart: BuyUnitDto = { units: [] };
   money: number;
   remainingMoney: number;
-  justBoughtUnits = new BehaviorSubject(false);
+  justBoughtUnits$ = new BehaviorSubject(false);
 
   @Select(ResourcesState.remainingCapacity)
-  private remainingCapacityState: Observable<number>;
+  remainingCapacity$: Observable<number>;
 
-  remainingCapacity: number;
-
-  isLoading = new BehaviorSubject(false);
+  isLoading$ = new BehaviorSubject(false);
 
   constructor(
     private battleService: BattleService,
     private apiService: ApiService,
     private store: Store
-  ) {
-    this.remainingCapacityState.subscribe((r) => (this.remainingCapacity = r));
-  }
+  ) {}
 
   ngOnInit(): void {
     this.initUnits();
   }
 
   private initUnits(): void {
-    this.isLoading.next(true);
+    this.isLoading$.next(true);
 
     let units = this.battleService.getUnits();
     let pearls = this.apiService.getPearlCount();
@@ -49,21 +46,14 @@ export class UnitsComponent implements OnInit {
     forkJoin([units, pearls]).subscribe(
       (responses) => {
         this.units = responses[0];
-        this.initCart();
 
         this.money = responses[1];
         this.remainingMoney = this.money;
 
-        this.isLoading.next(false);
+        this.isLoading$.next(false);
       },
-      (e) => console.log(e)
+      (e) => console.error(e)
     );
-  }
-
-  private initCart(): void {
-    this.units.forEach((unit: UnitDetails) => {
-      this.cart.units.push({ unitId: unit.id, count: 0 });
-    });
   }
 
   addToCart(unit: CartUnit): void {
@@ -72,6 +62,9 @@ export class UnitsComponent implements OnInit {
       this.remainingMoney += this.cart.units[index].count * unit.price;
       this.cart.units[index].count = unit.count;
       this.remainingMoney -= unit.count * unit.price;
+    } else {
+      this.remainingMoney -= unit.count * unit.price;
+      this.cart.units.push({ unitId: unit.unitId, count: unit.count });
     }
   }
 
@@ -85,13 +78,13 @@ export class UnitsComponent implements OnInit {
   }
 
   onBuy(): void {
-    this.justBoughtUnits.next(true);
+    this.justBoughtUnits$.next(true);
+    console.log(this.cart);
     this.battleService.buyUnits(this.cart).subscribe(
       (r) => {
-        console.log(r);
         this.store.dispatch(GetResources);
       },
-      (e) => console.log(e)
+      (e) => console.error(e)
     );
   }
 }

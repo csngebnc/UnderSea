@@ -5,16 +5,17 @@
       <strong>Válaszd ki melyik katonából mennyit szeretnél venni!</strong>
     </p>
     <p class="modal-description">
-      Ennyi egységet tudsz még elszállásolni: {{ remainingCapacity }}
+      Ennyi egységet tudsz még elszállásolni:
+      {{ remainingCapacity$ | async }}
     </p>
-    <ng-container *ngIf="!(isLoading | async); else loading">
+    <ng-container *ngIf="!(isLoading$ | async); else loading">
       <div class="d-flex mt-1 to-sides">
         <unit-details
           *ngFor="let unit of units"
           [unit]="unit"
           [remainingMoney]="remainingMoney"
-          [remainingCapacity]="remainingCapacity"
-          [justBoughtUnits]="justBoughtUnits"
+          [remainingCapacity]="remainingCapacity$ | async"
+          [justBoughtUnits$]="justBoughtUnits$"
           (countModified)="addToCart($event)"
           class="m-1 stack align-center modal-description w-350px"
         ></unit-details>

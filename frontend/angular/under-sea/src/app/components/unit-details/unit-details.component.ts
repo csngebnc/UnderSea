@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from '@angular/core';
 import { UnitDetails } from 'src/app/models/unit-details.model';
 import { CartUnit } from 'src/app/models/cart-unit.model';
 import { Store } from '@ngxs/store';
@@ -6,27 +13,33 @@ import {
   IncrementCapacity,
   DecrementCapacity,
 } from 'src/app/states/resources/resources.actions';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'unit-details',
   templateUrl: './unit-details.component.html',
   styleUrls: ['./unit-details.component.scss'],
 })
-export class UnitDetailsComponent implements OnInit {
+export class UnitDetailsComponent implements OnInit, OnDestroy {
   @Input() unit: UnitDetails;
   @Input() remainingMoney: number;
   @Input() remainingCapacity: number;
-  @Input() justBoughtUnits: BehaviorSubject<boolean>;
+  @Input() justBoughtUnits$: BehaviorSubject<boolean>;
   @Output() countModified: EventEmitter<CartUnit> = new EventEmitter();
   selected: number = 0;
+  private destroy$ = new Subject<void>();
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.justBoughtUnits.subscribe(() => {
+    this.justBoughtUnits$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.selected = 0;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
   }
 
   increment(): void {
@@ -47,13 +60,5 @@ export class UnitDetailsComponent implements OnInit {
       count: this.selected,
       price: this.unit.price,
     });
-  }
-
-  canIncrement(): boolean {
-    return this.remainingMoney >= this.unit.price && this.remainingCapacity > 0;
-  }
-
-  canDecrement(): boolean {
-    return this.selected > 0;
   }
 }

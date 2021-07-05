@@ -155,6 +155,27 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   box-sizing: border-box;
 }
 
+.text {
+  font-size: 1.3rem;
+  color: $white;
+  background: none;
+  border: none;
+  font-family: "Baloo";
+  text-decoration: none;
+}
+
+.clickable-text {
+  cursor: pointer;
+}
+
+.clickable-text:hover {
+  color: $blue;
+}
+
+.link-active {
+  color: $blue;
+}
+
 .list-modal {
   height: 584px;
 }
@@ -343,7 +364,7 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .w-12 {
-  width: 12%;
+  width: 12rem;
   box-sizing: border-box;
 }
 
@@ -437,7 +458,7 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .ml-1 {
-  margin-left: 1;
+  margin-left: 1rem;
 }
 
 .mt-2 {

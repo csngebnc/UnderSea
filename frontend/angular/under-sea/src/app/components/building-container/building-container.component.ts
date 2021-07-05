@@ -28,6 +28,9 @@ export class BuildingContainerComponent implements OnInit {
   }
 
   nextRound(): void {
-    this.roundService.nextRound().subscribe();
+    this.roundService.nextRound().subscribe(
+      (r) => r,
+      (e) => console.error(e)
+    );
   }
 }

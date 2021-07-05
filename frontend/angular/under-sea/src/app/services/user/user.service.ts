@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import {
   UserService as uService,
-  CountryDetailsDto,
-  PagedResultOfUserRankDto,
   UserRankDto,
 } from '../generated-code/generated-api-code';
 import { map } from 'rxjs/operators';
-import { Resources } from '../../models/resources.model';
 import { Observable } from 'rxjs';
 import { PagedList } from 'src/app/models/paged-list.model';
 

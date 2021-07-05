@@ -37,6 +37,9 @@ import * as config from 'src/assets/config.json';
 import { TokenInterceptor } from './http-interceptors/token/token.interceptor';
 import { ResourcesState } from './states/resources/resources.state';
 import { UserDataState } from './states/user-data/user-data.state';
+import { ExploreComponent } from './components/explore/explore.component';
+import { ExploreListComponent } from './components/explore-list/explore-list.component';
+import { ReportsComponent } from './components/reports/reports.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +67,9 @@ import { UserDataState } from './states/user-data/user-data.state';
     UnitSliderComponent,
     PagerButtonsComponent,
     LoadingComponent,
+    ExploreComponent,
+    ExploreListComponent,
+    ReportsComponent,
   ],
   imports: [
     BrowserModule,
