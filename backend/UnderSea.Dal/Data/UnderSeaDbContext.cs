@@ -98,13 +98,6 @@ namespace UnderSea.Dal.Data
                 .HasValue<UnderwaterMartialArt>(EffectTypeConstants.UnderwaterMartialArt);
 
             modelBuilder.Entity<Material>()
-                .HasDiscriminator(e => e.MaterialType)
-                .HasValue<Material>(MaterialTypeConstants.Base)
-                .HasValue<PearlMaterial>(MaterialTypeConstants.Pearl)
-                .HasValue<CoralMaterial>(MaterialTypeConstants.Coral)
-                .HasValue<StoneMaterial>(MaterialTypeConstants.Stone);
-
-            modelBuilder.Entity<Material>()
                 .Property(m => m.MaterialType)
                 .HasMaxLength(200)
                 .HasColumnName("material_type");

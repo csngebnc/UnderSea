@@ -1,4 +1,6 @@
-﻿namespace UnderSea.Model.Models.Materials
+﻿using System.Linq;
+
+namespace UnderSea.Model.Models.Materials
 {
     public class Material
     {
