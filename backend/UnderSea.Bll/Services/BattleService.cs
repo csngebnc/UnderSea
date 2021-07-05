@@ -308,6 +308,13 @@ namespace UnderSea.Bll.Services
                 throw new InvalidParameterException("Nem támadhatja meg saját magát az ország.");
             }
 
+            attackDto.Units = attackDto.Units.GroupBy(u => u.UnitId)
+                .Select(u => new AttackUnitDto
+                {
+                    UnitId = u.Key,
+                    Count = u.Sum(uu => uu.Count)
+                }).ToList();
+
             await AttackLogic(attackerCountry, attackedCountry, attackDto);
         }
 
