@@ -13,8 +13,8 @@ import 'package:undersea/styles/style_constants.dart';
 class ExpandedMenu extends StatelessWidget {
   ExpandedMenu();
 
-  final List<Soldier> militaryList =
-      Get.find<BattleDataController>().soldierList;
+  /*final List<Soldier> militaryList =
+      Get.find<BattleDataController>().soldierList;*/
 
   Widget _enumerateSoldiers(List<BattleUnitDto> units) {
     List<Widget> list = <Widget>[];

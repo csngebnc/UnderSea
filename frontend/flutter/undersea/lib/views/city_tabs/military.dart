@@ -4,6 +4,10 @@ import 'package:undersea/controllers/country_data_controller.dart';
 
 import 'package:undersea/lang/strings.dart';
 import 'package:get/get.dart';
+import 'package:undersea/models/response/battle_unit_dto.dart';
+import 'package:undersea/models/response/buy_unit_details_dto.dart';
+import 'package:undersea/models/response/buy_unit_dto.dart';
+import 'package:undersea/models/response/unit_dto.dart';
 import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
 
@@ -13,16 +17,34 @@ class Military extends StatefulWidget {
 }
 
 class _MilitaryTabState extends State<Military> {
+  late Rx<List<UnitDto>> soldierList;
+  var controller = Get.find<BattleDataController>();
+
+  @override
+  void initState() {
+    soldierList = controller.unitTypesInfo;
+    super.initState();
+  }
+
   final countryData =
       Get.find<CountryDataController>().countryDetailsData.value;
-  List<Soldier> soldierList = Get.find<BattleDataController>().soldierList;
-  late List<int> buyList = List.generate(soldierList.length, (index) => 0);
-  late int count = 2 + soldierList.length * 2 - 1;
-  //PlayerController playerController = Get.find<PlayerController>();
+  late List<int> buyList =
+      List.generate(soldierList.value.length, (index) => 0);
+  late int count = 2 + soldierList.value.length * 2 - 1;
   @override
   Widget build(BuildContext context) {
     return UnderseaStyles.tabSkeleton(
         isDisabled: !_canHireSoldiers(),
+        onButtonPressed: () {
+          var list = <BuyUnitDetailsDto>[];
+
+          for (int i = 0; i < soldierList.value.length; i++) {
+            if (buyList[i] != 0)
+              list.add(BuyUnitDetailsDto(
+                  unitId: soldierList.value[i].id, count: buyList[i]));
+          }
+          controller.buyUnits(BuyUnitDto(units: list));
+        },
         list: ListView.builder(
             itemCount: count,
             itemBuilder: (BuildContext context, int i) {
@@ -34,18 +56,23 @@ class _MilitaryTabState extends State<Military> {
                           Strings.military_manual_hint.tr),
                       SizedBox(height: 25)
                     ]);
-              if (i > soldierList.length * 2 - 1) return SizedBox(height: 100);
-              if (i.isEven && i < soldierList.length * 2)
+              if (i > soldierList.value.length * 2 - 1)
+                return SizedBox(height: 100);
+              if (i.isEven && i < soldierList.value.length * 2)
                 return UnderseaStyles.divider();
 
-              return _buildRow(i, soldierList);
+              return GetBuilder<BattleDataController>(builder: (controller) {
+                final allUnits = controller.allUnitsInfo.value;
+                final spiesCount = controller.spiesInfo.value?.count;
+                return _buildRow(i, soldierList, allUnits, spiesCount);
+              });
             }));
   }
 
   int _calculateSoldierPrice() {
     int totalPrice = 0;
-    for (int i = 0; i < soldierList.length; i++) {
-      totalPrice += soldierList[i].price * buyList[i];
+    for (int i = 0; i < soldierList.value.length; i++) {
+      totalPrice += soldierList.value[i].price * buyList[i];
     }
     return totalPrice;
   }
@@ -56,9 +83,16 @@ class _MilitaryTabState extends State<Military> {
     return true;
   }
 
-  Widget _buildRow(int index, List<Soldier> list) {
+  Widget _buildRow(int index, Rx<List<UnitDto>> list,
+      List<BattleUnitDto> totalUnits, int? spiesCount) {
     var idx = (index - 1) ~/ 2;
-    var actualSoldier = list.elementAt(idx);
+    var actualSoldier = list.value.elementAt(idx);
+    var actualSoldierMax = totalUnits
+        .firstWhere((element) => element.id == actualSoldier.id,
+            orElse: () => BattleUnitDto(id: 0, name: 'name', count: 0))
+        .count;
+
+    var isSpy = actualSoldier.name == 'Felfedező';
     return ListTile(
         title: Padding(
       padding: EdgeInsets.all(10),
@@ -72,7 +106,9 @@ class _MilitaryTabState extends State<Military> {
               SizedBox(
                 height: 110,
                 width: 110,
-                child: UnderseaStyles.assetIcon(actualSoldier.iconName),
+                child: UnderseaStyles.assetIcon(
+                    BattleDataController.imageNameMap[actualSoldier.name] ??
+                        'shark'),
               ),
               SizedBox(height: 8),
               Text(actualSoldier.name,
@@ -83,15 +119,18 @@ class _MilitaryTabState extends State<Military> {
                 children: [
                   UnderseaStyles.text(Strings.you_possess.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text(
-                      actualSoldier.totalAmount.toString() + Strings.amount.tr),
+                  UnderseaStyles.text((isSpy
+                          ? spiesCount.toString()
+                          : actualSoldierMax.toString()) +
+                      Strings.amount.tr),
                 ],
               ),
               Row(
                 children: [
                   UnderseaStyles.text(Strings.attack_defence.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text(actualSoldier.attackDefence()),
+                  UnderseaStyles.text(
+                      '${actualSoldier.attackPoint}/${actualSoldier.defensePoint}'),
                 ],
               ),
               Row(
@@ -99,15 +138,16 @@ class _MilitaryTabState extends State<Military> {
                   UnderseaStyles.text(Strings.mercenary_payment.tr),
                   Expanded(child: Container()),
                   UnderseaStyles.text(
-                      actualSoldier.payment.toString() + Strings.pearl_cost.tr),
+                      actualSoldier.mercenaryPerRound.toString() +
+                          Strings.pearl_cost.tr),
                 ],
               ),
               Row(
                 children: [
                   UnderseaStyles.text(Strings.supply_needs.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text(
-                      actualSoldier.supplyNeeds.toString() + Strings.coral.tr),
+                  UnderseaStyles.text(actualSoldier.supplyPerRound.toString() +
+                      Strings.coral.tr),
                 ],
               ),
               Row(

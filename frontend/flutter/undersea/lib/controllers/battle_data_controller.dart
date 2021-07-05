@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
+import 'package:undersea/models/response/buy_unit_dto.dart';
 
 import 'package:undersea/models/response/paged_result_of_attackable_user_dto.dart';
 import 'package:undersea/models/response/paged_result_of_logged_attack_dto.dart';
@@ -188,10 +189,13 @@ class BattleDataController extends GetxController {
     }
   }
 
-  buyUnits(UnitDto unit) async {
+  buyUnits(BuyUnitDto purchase) async {
     try {
-      final response = await _battleDataProvider.buyUnits(unit.toJson());
+      final response = await _battleDataProvider.buyUnits(purchase.toJson());
       if (response.statusCode == 200) {
+        getAllUnits();
+        getUnitTypes();
+        getSpies();
         UnderseaStyles.snackbar(
             'Sikeres vásárlás', 'Új egységeid besorolásra kerültek');
       }

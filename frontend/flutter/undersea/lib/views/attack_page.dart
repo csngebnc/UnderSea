@@ -18,7 +18,7 @@ class _AttackPageState extends State<AttackPage> {
   int? _selectedIndex;
   var sliderValues = List<int>.generate(3, (index) => 0);
   var mercenaryPrice = 0;
-  List<Soldier> soldierList = Get.find<BattleDataController>().soldierList;
+  //List<Soldier> soldierList = Get.find<BattleDataController>().soldierList;
   bool firstPage = true;
   late final Timer? _debounce;
   void _onSearchChanged(String query) {
