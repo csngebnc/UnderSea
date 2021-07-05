@@ -14,6 +14,7 @@ import { map } from 'rxjs/operators';
 import { PagedBattles } from 'src/app/models/paged-battles.model';
 import { PagedList } from 'src/app/models/paged-list.model';
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
+import { PagedSpyReport } from 'src/app/models/paged-spy-report.model';
 
 @Injectable({
   providedIn: 'root',
@@ -129,5 +130,28 @@ export class BattleService {
 
   spy(id: number, count: number): Observable<any> {
     return this.battleService.spy({ spiedCountryId: id, spyCount: count });
+  }
+
+  getExplorations(pageNumber: number): Observable<PagedSpyReport> {
+    return this.battleService.spyHistory(10, pageNumber).pipe(
+      map((r) => {
+        const result: PagedSpyReport = {
+          reports: [],
+          pageNumber: r.pageNumber,
+          pageSize: r.pageSize,
+          allResultsCount: r.allResultsCount,
+        };
+
+        r.results.forEach((i) => {
+          result.reports.push({
+            country: i.spiedCountryName,
+            outcome: i.outCome,
+            defense: i.defensePoints,
+          });
+        });
+
+        return result;
+      })
+    );
   }
 }

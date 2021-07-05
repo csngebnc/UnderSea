@@ -6,13 +6,15 @@ import { MainComponent } from './pages/main/main.component';
 import { BuildingsComponent } from './components/buildings/buildings.component';
 import { AttackComponent } from './components/attack/attack.component';
 import { UpgradesComponent } from './components/upgrades/upgrades.component';
-import { BattleComponent } from './components/battle/battle.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { UnitsComponent } from './components/units/units.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
 import { AuthGuard } from './guards/auth/auth.guard';
 import { ExploreComponent } from './components/explore/explore.component';
+import { ReportsComponent } from './components/reports/reports.component';
+import { BattleComponent } from './components/battle/battle.component';
+import { ExploreListComponent } from './components/explore-list/explore-list.component';
 
 const routes: Routes = [
   {
@@ -42,8 +44,18 @@ const routes: Routes = [
         component: UpgradesComponent,
       },
       {
-        path: 'battle',
-        component: BattleComponent,
+        path: 'reports',
+        component: ReportsComponent,
+        children: [
+          {
+            path: 'battle',
+            component: BattleComponent,
+          },
+          {
+            path: 'explore',
+            component: ExploreListComponent,
+          },
+        ],
       },
       {
         path: 'scoreboard',

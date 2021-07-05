@@ -6,7 +6,7 @@ import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-cod
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
 
 @Component({
-  selector: 'app-explore',
+  selector: 'explore',
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss'],
 })
