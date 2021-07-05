@@ -118,4 +118,16 @@ export class BattleService {
   buyUnits(units: BuyUnitDto): Observable<any> {
     return this.battleService.buyUnit(units);
   }
+
+  getSpies(): Observable<AttackerUnit> {
+    return this.battleService.spies().pipe(
+      map((r) => {
+        return r as AttackerUnit;
+      })
+    );
+  }
+
+  spy(id: number, count: number): Observable<any> {
+    return this.battleService.spy({ spiedCountryId: id, spyCount: count });
+  }
 }

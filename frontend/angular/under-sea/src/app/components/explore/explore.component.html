@@ -1,0 +1,57 @@
+<div class="modal-container">
+  <div class="modal">
+    <h2 class="modal-title">Felfedezés</h2>
+    <div
+      *ngIf="!(isLoading$ | async); else loading"
+      class="d-flex to-sides mt-1"
+    >
+      <div class="pr-2 b-r-1 w-50">
+        <h3 class="modal-description mb-1">
+          <strong>1. Jelöld ki, ki után szeretnél kémkedni:</strong>
+        </h3>
+        <list
+          [list]="players.list"
+          [clickable]="true"
+          (filter)="onFilter($event)"
+          (selectTarget)="onSelectTarget($event)"
+        ></list>
+        <pager-buttons
+          [pageSize]="players.pageSize"
+          [pageNumber]="players.pageNumber"
+          [allResultsCount]="players.allResultsCount"
+          (switchPage)="onSwitchPage($event)"
+          class="w-100 d-flex align-center to-center mt-1"
+        ></pager-buttons>
+      </div>
+      <div class="pl-2 w-50">
+        <h3 class="modal-description mb-1">
+          <strong>2. Állítsd be, hány felfedezőt küldesz:</strong>
+        </h3>
+        <div class="stack align-center">
+          <unit-slider
+            *ngIf="spies.count !== 0"
+            [unit]="spies"
+            class="d-flex w-100 p-1 to-center"
+            (setUnit)="onSetUnit($event)"
+          >
+          </unit-slider>
+        </div>
+      </div>
+    </div>
+    <div class="stack align-center">
+      <div class="divider mt-1"></div>
+      <button
+        type="button"
+        class="gradient-button mt-2"
+        [disabled]="!selectedCount || !targetId"
+        (click)="sendSpy()"
+      >
+        Felfedezem!
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <loading class="w-100 h-100 d-flex to-center align-center"></loading>
+</ng-template>

@@ -12,6 +12,7 @@ import { UnitsComponent } from './components/units/units.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
 import { AuthGuard } from './guards/auth/auth.guard';
+import { ExploreComponent } from './components/explore/explore.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,10 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent,
+      },
+      {
+        path: 'explore',
+        component: ExploreComponent,
       },
     ],
   },

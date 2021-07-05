@@ -1,21 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { AttackerUnit } from 'src/app/models/attacker-unit.model';
-import { PagedList } from 'src/app/models/paged-list.model';
+import { BehaviorSubject, forkJoin } from 'rxjs';
 import { BattleService } from 'src/app/services/battle/battle.service';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { PagedList } from 'src/app/models/paged-list.model';
 import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-code';
-import { Select, Store } from '@ngxs/store';
-import { ResourcesState } from 'src/app/states/resources/resources.state';
-import { Unit } from 'src/app/models/unit.model';
-import { GetResources } from 'src/app/states/resources/resources.actions';
+import { AttackerUnit } from 'src/app/models/attacker-unit.model';
 
 @Component({
-  selector: 'attack',
-  templateUrl: './attack.component.html',
-  styleUrls: ['./attack.component.scss'],
+  selector: 'app-explore',
+  templateUrl: './explore.component.html',
+  styleUrls: ['./explore.component.scss'],
 })
-export class AttackComponent implements OnInit {
-  units: Array<AttackerUnit> = [];
+export class ExploreComponent implements OnInit {
+  isLoading$ = new BehaviorSubject(false);
+  spies: AttackerUnit;
 
   players: PagedList = {
     list: [],
@@ -24,15 +21,14 @@ export class AttackComponent implements OnInit {
     allResultsCount: 0,
   };
 
-  isLoading$ = new BehaviorSubject(false);
   filter: string | undefined = undefined;
   targetId: number;
-  attackerUnits: Array<AttackUnitDto> = [];
+  selectedCount: number;
 
   constructor(private battleService: BattleService) {}
 
   ngOnInit(): void {
-    this.initAttack();
+    this.initExplore();
   }
 
   private initPlayers(): void {
@@ -47,17 +43,17 @@ export class AttackComponent implements OnInit {
     );
   }
 
-  private initAttack(): void {
+  private initExplore(): void {
     this.players.pageNumber = 1;
     this.isLoading$.next(true);
 
     let users = this.battleService.getUsers(this.players.pageNumber, undefined);
-    let units = this.battleService.getAttackerUnits();
+    let units = this.battleService.getSpies();
 
     forkJoin([users, units]).subscribe(
       (responses) => {
         this.players = responses[0];
-        this.units = responses[1];
+        this.spies = responses[1];
         this.isLoading$.next(false);
       },
       (e) => console.error(e)
@@ -69,21 +65,7 @@ export class AttackComponent implements OnInit {
   }
 
   onSetUnit(unit: AttackUnitDto): void {
-    const index = this.attackerUnits.findIndex((u) => u.unitId === unit.unitId);
-    if (index !== -1) {
-      this.attackerUnits[index].count = unit.count;
-    } else {
-      this.attackerUnits.push({ unitId: unit.unitId, count: unit.count });
-    }
-  }
-
-  isButtonDisabled(): boolean {
-    let sum: number = 0;
-    this.attackerUnits.forEach((unit) => {
-      sum += unit.count;
-    });
-
-    return !(this.targetId && sum);
+    this.selectedCount = unit.count;
   }
 
   onSwitchPage(pageNumber: number): void {
@@ -97,10 +79,10 @@ export class AttackComponent implements OnInit {
     this.initPlayers();
   }
 
-  attack(): void {
-    this.battleService.attack(this.targetId, this.attackerUnits).subscribe(
+  sendSpy(): void {
+    this.battleService.spy(this.targetId, this.selectedCount).subscribe(
       (r) => {
-        this.initAttack();
+        this.initExplore();
       },
       (e) => console.error(e)
     );

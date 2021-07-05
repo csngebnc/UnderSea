@@ -37,6 +37,7 @@ import * as config from 'src/assets/config.json';
 import { TokenInterceptor } from './http-interceptors/token/token.interceptor';
 import { ResourcesState } from './states/resources/resources.state';
 import { UserDataState } from './states/user-data/user-data.state';
+import { ExploreComponent } from './components/explore/explore.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { UserDataState } from './states/user-data/user-data.state';
     UnitSliderComponent,
     PagerButtonsComponent,
     LoadingComponent,
+    ExploreComponent,
   ],
   imports: [
     BrowserModule,
