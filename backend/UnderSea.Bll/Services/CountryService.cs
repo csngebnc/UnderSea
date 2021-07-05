@@ -73,12 +73,15 @@ namespace UnderSea.Bll.Services
                 CurrentPearlProduction = (int)(country.Production.BasePearlProduction * country.Production.PearlProductionMultiplier),
                 Buildings = buildings.Select(building =>
                 {
+                    var countryBuilding = country.CountryBuildings.SingleOrDefault(cb => cb.BuildingId == building.Id);
+                    var activeBuildingCount = country.ActiveConstructions.Count(ac => ac.BuildingId == building.Id);
+
                     return new BuildingInfoDto
                     {
                         Id = building.Id,
                         Name = building.Name,
-                        BuildingsCount = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).Count(),
-                        ActiveConstructionCount = country.ActiveConstructions.Where(ac => ac.BuildingId == building.Id).Count(),
+                        BuildingsCount = countryBuilding == null ? 0 : countryBuilding.Count,
+                        ActiveConstructionCount = activeBuildingCount,
                         IconImageUrl = building.IconImageUrl
                     };
                 })

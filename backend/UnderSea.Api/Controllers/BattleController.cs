@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.Spy;
 using UnderSea.Bll.Dtos.Unit;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
@@ -47,10 +48,23 @@ namespace UnderSea.Api.Controllers
             return Ok(userunits);
         }
 
+        [HttpGet("spies")]
+        public async Task<ActionResult<BattleUnitDto>> GetSpies()
+        {
+            return Ok(await service.GetSpies());
+        }
+
         [HttpPost("attack")]
         public async Task<ActionResult> Attack([FromBody] SendAttackDto sendAttack)
         {
             await service.AttackAsync(sendAttack);
+            return Ok();
+        }
+
+        [HttpPost("spy")]
+        public async Task<ActionResult> Spy([FromBody] SendSpyDto spies)
+        {
+            await service.SpyAsync(spies);
             return Ok();
         }
 
@@ -59,6 +73,12 @@ namespace UnderSea.Api.Controllers
         {
             var loggedattacks = await service.GetLoggedAttacksAsync(pagination);
             return Ok(loggedattacks);
+        }
+
+        [HttpGet("spy-history")]
+        public async Task<ActionResult<PagedResult<SpyReportDto>>> SpyHistory([FromQuery] PaginationData pagination)
+        {
+            return Ok(await service.GetLoggedSpyReportsAsync(pagination));
         }
 
         [HttpGet("units")]

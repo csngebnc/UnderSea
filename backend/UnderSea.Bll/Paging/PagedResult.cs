@@ -8,7 +8,7 @@ namespace UnderSea.Bll.Paging
 {
     public class PagedResult<T>
     {
-        public ICollection<T> Results { get; set; }
+        public IEnumerable<T> Results { get; set; }
         public int AllResultsCount { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

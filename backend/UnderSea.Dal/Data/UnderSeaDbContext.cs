@@ -19,6 +19,7 @@ namespace UnderSea.Dal.Data
         public DbSet<ActiveConstruction> ActiveConstructions { get; set; }
         public DbSet<Attack> Attacks { get; set; }
         public DbSet<AttackUnit> AttackUnits { get; set; }
+        public DbSet<SpyReport> SpyReports { get; set; }
         public DbSet<Building> Buildings { get; set; }
         public DbSet<BuildingEffect> BuildingEffects { get; set; }
         public DbSet<Country> Countries { get; set; }
@@ -44,6 +45,10 @@ namespace UnderSea.Dal.Data
                 .HasOne(c => c.Owner)
                 .WithOne(u => u.Country);
 
+            modelBuilder.Entity<Country>()
+                .HasMany(c => c.SentSpies)
+                .WithOne(sr => sr.SpySenderCountry)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Attack>()
                 .HasOne(a => a.AttackerCountry)
@@ -54,7 +59,6 @@ namespace UnderSea.Dal.Data
                 .HasOne(a => a.DefenderCountry)
                 .WithMany(c => c.Defenses)
                 .OnDelete(DeleteBehavior.NoAction);
-
 
             modelBuilder.Entity<BuildingEffect>().HasKey(be => new { be.BuildingId, be.EffectId });
             modelBuilder.Entity<CountryUnit>().HasKey(cu => new { cu.CountryId, cu.UnitId });

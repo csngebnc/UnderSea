@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
 
 namespace UnderSea.Dal.EntityConfigurations
@@ -17,7 +18,7 @@ namespace UnderSea.Dal.EntityConfigurations
                 new Unit()
                 {
                     Id = 1,
-                    Name = "Rohamfóka",
+                    Name = UnitConstants.RohamFoka,
                     Price = 50,
                     MercenaryPerRound = 1,
                     SupplyPerRound = 1,
@@ -28,7 +29,7 @@ namespace UnderSea.Dal.EntityConfigurations
                 new Unit()
                 {
                     Id = 2,
-                    Name = "Csatacsikó",
+                    Name = UnitConstants.Csatacsiko,
                     Price = 50,
                     MercenaryPerRound = 1,
                     SupplyPerRound = 1,
@@ -39,13 +40,24 @@ namespace UnderSea.Dal.EntityConfigurations
                 new Unit()
                 {
                     Id = 3,
-                    Name = "Lézercápa",
+                    Name = UnitConstants.Lezercapa,
                     Price = 100,
                     MercenaryPerRound = 3,
                     SupplyPerRound = 2,
                     AttackPoint = 5,
                     DefensePoint = 5,
                     ImageUrl = @"https://underseastorage.blob.core.windows.net/units/shark.svg"
+                },
+                new Unit()
+                {
+                    Id = 4,
+                    Name = UnitConstants.Felfedezo,
+                    Price = 50,
+                    MercenaryPerRound = 1,
+                    SupplyPerRound = 1,
+                    AttackPoint = 0,
+                    DefensePoint = 0,
+                    ImageUrl = @"https://underseastorage.blob.core.windows.net/units/spy.png"
                 }
             );
         }
