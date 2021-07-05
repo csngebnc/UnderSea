@@ -1213,9 +1213,15 @@ export interface UnitDto {
     defensePoint: number;
     mercenaryPerRound: number;
     supplyPerRound: number;
-    price: number;
+    requiredMaterials?: MaterialDto[] | undefined;
     currentCount: number;
     imageUrl?: string | undefined;
+}
+
+export interface MaterialDto {
+    id: number;
+    name?: string | undefined;
+    amount: number;
 }
 
 export interface BuyUnitDto {
@@ -1231,7 +1237,7 @@ export interface BuildingDetailsDto {
     id: number;
     name?: string | undefined;
     count: number;
-    price: number;
+    requiredMaterials?: MaterialDto[] | undefined;
     underConstruction: boolean;
     imageUrl?: string | undefined;
     effects?: EffectDto[] | undefined;
@@ -1248,14 +1254,18 @@ export interface BuyBuildingDto {
 
 export interface CountryDetailsDto {
     maxUnitCount: number;
-    coral: number;
-    pearl: number;
-    currentCoralProduction: number;
-    currentPearlProduction: number;
+    materials?: MaterialDetailsDto[] | undefined;
     population: number;
     hasSonarCanon: boolean;
     buildings?: BuildingInfoDto[] | undefined;
     units?: BattleUnitDto[] | undefined;
+}
+
+export interface MaterialDetailsDto {
+    id: number;
+    name?: string | undefined;
+    production: number;
+    amount: number;
 }
 
 export interface BuildingInfoDto {

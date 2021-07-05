@@ -11,5 +11,6 @@ namespace UnderSea.Bll.Dtos.Material
         public int Id { get; set; }
         public string Name { get; set; }
         public int Production { get; set; }
+        public int Amount { get; set; }
     }
 }

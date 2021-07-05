@@ -47,10 +47,13 @@ namespace UnderSea.Bll.Services
                     int requiredFood = unit.Unit.SupplyPerRound * unit.Count;
                     int requiredMercenary = unit.Unit.MercenaryPerRound * unit.Count;
 
-                    if(requiredFood <= country.Coral && requiredMercenary <= country.Pearl)
+                    var coralMaterial = country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Coral).Amount;
+                    var pearlMaterial = country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Pearl).Amount;
+
+                    if (requiredFood <= coralMaterial && requiredMercenary <= pearlMaterial)
                     {
-                        country.Coral -= requiredFood;
-                        country.Pearl -= requiredMercenary;
+                        coralMaterial -= requiredFood;
+                        pearlMaterial -= requiredMercenary;
                     }
                     else
                     {
@@ -61,7 +64,7 @@ namespace UnderSea.Bll.Services
                             int food = unit.Unit.SupplyPerRound * i;
                             int mercenary = unit.Unit.MercenaryPerRound * i;
 
-                            if (food <= country.Coral && mercenary <= country.Pearl)
+                            if (food <= coralMaterial && mercenary <= pearlMaterial)
                             {
                                 numberOfAlive = i;
                             }
@@ -73,8 +76,8 @@ namespace UnderSea.Bll.Services
 
                         unit.Count = numberOfAlive;
 
-                        country.Coral -= numberOfAlive * unit.Unit.SupplyPerRound;
-                        country.Pearl -= numberOfAlive * unit.Unit.MercenaryPerRound;
+                        coralMaterial -= numberOfAlive * unit.Unit.SupplyPerRound;
+                        pearlMaterial -= numberOfAlive * unit.Unit.MercenaryPerRound;
                     }
                 }
             }
@@ -175,11 +178,11 @@ namespace UnderSea.Bll.Services
                             unit.Count = (int)Math.Round(unit.Count * 0.9);
                         }
 
-                        attackerCountry.Pearl += attack.DefenderCountry.Pearl / 2;
-                        attackerCountry.Coral += attack.DefenderCountry.Coral / 2;
-
-                        attack.DefenderCountry.Pearl /= 2;
-                        attack.DefenderCountry.Coral /= 2;
+                        foreach (var material in attack.DefenderCountry.CountryMaterials)
+                        {
+                            attackerCountry.CountryMaterials.SingleOrDefault(cm => cm.MaterialId == material.MaterialId).Amount += material.Amount;
+                            material.Amount /= 2;
+                        }
                     } 
                     else
                     {

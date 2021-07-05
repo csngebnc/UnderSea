@@ -11,12 +11,12 @@ namespace UnderSea.Model.Models.Effects
     {
         public override void ApplyEffect(Country country)
         {
-            country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Stone).Amount += EffectConstants.StoneNumber;
+            country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Stone).BaseProduction += EffectConstants.StoneNumber;
         }
 
         public override void RemoveEffect(Country country)
         {
-            country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Stone).Amount -= EffectConstants.StoneNumber;
+            country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Stone).BaseProduction -= EffectConstants.StoneNumber;
         }
     }
 }

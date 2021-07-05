@@ -40,7 +40,7 @@ namespace UnderSea.Dal.EntityConfigurations
                 },
                  new BuildingMaterial()
                  {
-                     BuildingId = 2,
+                     BuildingId = 3,
                      MaterialId = 1,
                      Amount = 1000
                  }

@@ -43,7 +43,7 @@ namespace UnderSea.Bll.Services
                                     .Include(u => u.Country)
                                         .ThenInclude(c => c.Defenses)
                                     .Where(u => u.Id != userId
-                                          && !u.Country.Defenses.Any(d => d.AttackerCountryId == user.Country.Id 
+                                          && !u.Country.Defenses.Any(d => d.AttackerCountryId == user.Country.Id
                                                 && d.AttackRound == user.Country.World.Round))
                                     .ProjectTo<AttackableUserDto>(_mapper.ConfigurationProvider);
 
@@ -88,7 +88,7 @@ namespace UnderSea.Bll.Services
                 userunits.Where(u => u.UnitId == unit.Id).FirstOrDefault().Count += unit.Count;
             }
 
-            return userunits.Select(uu => 
+            return userunits.Select(uu =>
             {
                 return new BattleUnitDto
                 {
@@ -197,7 +197,7 @@ namespace UnderSea.Bll.Services
                         DefensePoint = unit.DefensePoint,
                         MercenaryPerRound = unit.MercenaryPerRound,
                         SupplyPerRound = unit.SupplyPerRound,
-                        RequiredMaterials = unit.UnitMaterials.Select(c => 
+                        RequiredMaterials = unit.UnitMaterials.Select(c =>
                                     new MaterialDto
                                     {
                                         Id = c.MaterialId,
@@ -235,6 +235,7 @@ namespace UnderSea.Bll.Services
             var userId = _identityService.GetCurrentUserId();
 
             var country = await _context.Countries.Include(w => w.World)
+                                                  .Include(c => c.CountryMaterials)
                                                   .Include(c => c.CountryUnits)
                                                   .Where(c => c.OwnerId == userId)
                                                   .FirstOrDefaultAsync();
@@ -261,31 +262,24 @@ namespace UnderSea.Bll.Services
                 var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id)
                                                         .FirstOrDefaultAsync();
 
-                if (!country.CountryMaterials.Any(cm => cm.Amount < unit.UnitMaterials.Where(bm => bm.MaterialId == cm.MaterialId).SingleOrDefault().Amount))
+                if (counit == null)
                 {
-                    if (counit == null)
+                    CountryUnit countryUnit = new CountryUnit()
                     {
-                        CountryUnit countryUnit = new CountryUnit()
-                        {
-                            UnitId = unit.Id,
-                            CountryId = country.Id,
-                            Count = unitDto.Count
-                        };
-                        _context.CountryUnits.Add(countryUnit);
-                    }
-                    else
-                    {
-                        counit.Count += unitDto.Count;
-                    }
-
-                    foreach (var materialRequirement in unit.UnitMaterials)
-                    {
-                        country.CountryMaterials.Where(cm => cm.MaterialId == materialRequirement.MaterialId).SingleOrDefault().Amount -= materialRequirement.Amount * unitDto.Count;
-                    }
+                        UnitId = unit.Id,
+                        CountryId = country.Id,
+                        Count = unitDto.Count
+                    };
+                    _context.CountryUnits.Add(countryUnit);
                 }
                 else
                 {
-                    throw new InvalidParameterException("Nincs elég nyersanyag az egységek megvásárlásához.");
+                    counit.Count += unitDto.Count;
+                }
+
+                foreach (var materialRequirement in unit.UnitMaterials)
+                {
+                    country.CountryMaterials.SingleOrDefault(cm => cm.MaterialId == materialRequirement.MaterialId).Amount -= materialRequirement.Amount * unitDto.Count;
                 }
             }
 
@@ -312,7 +306,7 @@ namespace UnderSea.Bll.Services
                 .FirstOrDefaultAsync(u => u.Name == UnitConstants.Felfedezo))
                 .Id;
 
-            if(attackDto.Units.Any(au => au.UnitId == spyId))
+            if (attackDto.Units.Any(au => au.UnitId == spyId))
             {
                 throw new InvalidParameterException("Kémet nem küldhetsz támadni.");
             }

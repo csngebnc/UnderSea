@@ -48,6 +48,7 @@ namespace UnderSea.Bll.Services
 
             return buildings.Select(building =>
             {
+                var countryBuilding = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).SingleOrDefault();
                 return new BuildingDetailsDto
                 {
                     Id = building.Id,
@@ -62,7 +63,7 @@ namespace UnderSea.Bll.Services
                             Amount = bm.Amount
                         };
                     }).ToList(),
-                    Count = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).SingleOrDefault().Count,
+                    Count = countryBuilding != null ? countryBuilding.Count : 0,
                     UnderConstruction = country.ActiveConstructions.Any(ac => ac.BuildingId == building.Id),
                     ImageUrl = building.ImageUrl
                 };
@@ -93,16 +94,13 @@ namespace UnderSea.Bll.Services
                 throw new NotExistsException("Nem létezik ilyen épület.");
             }
 
-            var activebuilding = await _context.ActiveConstructions.Where(ac => ac.CountryId == country.Id).FirstOrDefaultAsync();
+            var activebuilding = await _context.ActiveConstructions.FirstOrDefaultAsync(ac => ac.CountryId == country.Id);
             if (activebuilding != null)
             {
                 throw new InvalidParameterException("Már folyamatban van egy építés.");
             }
 
-            
 
-            if (!country.CountryMaterials.Any(cm => cm.Amount < building.BuildingMaterials.Where(bm => bm.MaterialId == cm.MaterialId).SingleOrDefault().Amount))
-            {
                 var activeConstruction = new ActiveConstruction()
                 {
                     BuildingId = building.Id,
@@ -113,13 +111,8 @@ namespace UnderSea.Bll.Services
 
                 foreach (var materialRequirement in building.BuildingMaterials)
                 {
-                    country.CountryMaterials.Where(cm => cm.MaterialId == materialRequirement.MaterialId).SingleOrDefault().Amount -= materialRequirement.Amount;
+                    country.CountryMaterials.SingleOrDefault(cm => cm.MaterialId == materialRequirement.MaterialId).Amount -= materialRequirement.Amount;
                 }
-            }
-            else
-            {
-                throw new InvalidParameterException("Nincs elég nyersanyagod az épület megvásárlásához.");
-            }
 
             await _context.SaveChangesAsync();
         }

@@ -32,6 +32,8 @@ namespace UnderSea.Bll.Services
 
             var country = await _context.Countries
                 .Where(u => u.OwnerId == userid)
+                .Include(c => c.CountryMaterials)
+                    .ThenInclude(cm => cm.Material)
                 .Include(c => c.ActiveConstructions)
                 .Include(c => c.CountryBuildings)
                     .ThenInclude(cb => cb.Building)
@@ -73,7 +75,8 @@ namespace UnderSea.Bll.Services
                     {
                         Id = cm.MaterialId,
                         Name = cm.Material.Name,
-                        Production = (int)(cm.BaseProduction * cm.Multiplier)
+                        Production = (int)(cm.BaseProduction * cm.Multiplier),
+                        Amount = cm.Amount
                     };
                 }).ToList(),
                 Buildings = buildings.Select(building =>

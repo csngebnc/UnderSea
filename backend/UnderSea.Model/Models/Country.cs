@@ -14,7 +14,6 @@ namespace UnderSea.Model.Models
         public string Name { get; set; }
         public int Population { get; set; } = 100;
         public int MaxUnitCount { get; set; }
-
         public FightPoint FightPoint { get; set; } //= new FightPoint();
 
         public string OwnerId { get; set; }
