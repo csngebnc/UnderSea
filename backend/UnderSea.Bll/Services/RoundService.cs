@@ -311,6 +311,7 @@ namespace UnderSea.Bll.Services
 
             var countries = await _context.Countries.Include(e => e.CountryUnits)
                                                         .ThenInclude(e => e.Unit)
+                                                            .ThenInclude(e => e.UnitMaterials)
                                                     .Include(e => e.CountryMaterials)
                                                         .ThenInclude(e => e.Material)
                                                     .Include(e => e.Attacks)
