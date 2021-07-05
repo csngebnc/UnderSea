@@ -352,6 +352,9 @@ namespace UnderSea.Bll.Services
             var attackerSpyUnits = country.CountryUnits
                 .FirstOrDefault(cu => cu.Unit.Name == UnitConstants.Felfedezo);
 
+            if (attackerSpyUnits == null)
+                throw new NotExistsException("Nincsenek kém egységek, amiket el lehetne küldeni!");
+
             attackerSpyUnits.Count -= spies.SpyCount;
 
             var spyreport = new SpyReport
