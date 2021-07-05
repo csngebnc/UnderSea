@@ -70,7 +70,11 @@ class BattleDataProvider extends NetworkProvider {
       get("/api/Battle/attackable-users",
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           contentType: 'application/json',
-          query: {'PageNumber': pageNumber, 'PageSize': pageSize, 'name': name},
+          query: {
+            'PageNumber': pageNumber.toString(),
+            'PageSize': pageSize.toString(),
+            'name': name
+          },
           decoder: (response) =>
               PagedResultOfAttackableUserDto.fromJson(response));
 

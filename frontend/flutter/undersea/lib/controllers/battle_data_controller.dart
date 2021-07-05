@@ -19,7 +19,10 @@ import 'package:undersea/styles/style_constants.dart';
 class BattleDataController extends GetxController {
   final BattleDataProvider _battleDataProvider;
   BattleDataController(this._battleDataProvider);
-
+  var searchText = ''.obs;
+  var pageNumber = 1.obs;
+  var pageSize = 20.obs;
+  var actualPageSize = 20.obs;
   Rx<List<BattleUnitDto>> availableUnitsInfo = Rx([]);
   Rx<List<BattleUnitDto>> allUnitsInfo = Rx([]);
   Rx<BattleUnitDto?> spiesInfo = Rx(null);
@@ -34,6 +37,18 @@ class BattleDataController extends GetxController {
     'Csatacsikó': 'seahorse',
     'Felfedező': 'dora'
   };
+
+  @override
+  void onInit() {
+    debounce(searchText, (String value) {
+      getAttackableUsers();
+    }, time: Duration(milliseconds: 500));
+    super.onInit();
+  }
+
+  void onSearchChanged(String value) {
+    searchText.value = value;
+  }
 
   var soldierList = <Soldier>[
     Soldier(
@@ -151,12 +166,13 @@ class BattleDataController extends GetxController {
     }
   }
 
-  getAttackableUsers(int pageSize, int pageNumber, String name) async {
+  getAttackableUsers() async {
     try {
       final response = await _battleDataProvider.getAttackableUsers(
-          pageSize, pageNumber, name);
+          pageSize.value, pageNumber.value, searchText.value);
       if (response.statusCode == 200) {
         attackableUsers = Rx(response.body!);
+        actualPageSize.value = attackableUsers.value!.allResultsCount;
         update();
       }
     } catch (error) {

@@ -4,12 +4,11 @@ part 'attackable_user_dto.g.dart';
 
 @JsonSerializable()
 class AttackableUserDto {
-  int number;
-  String username;
+  String? id;
+  String? userName;
   int countryId;
 
-  AttackableUserDto(
-      {required this.number, required this.countryId, required this.username});
+  AttackableUserDto({this.id, required this.countryId, this.userName});
 
   factory AttackableUserDto.fromJson(Map<String, dynamic> json) =>
       _$AttackableUserDtoFromJson(json);
