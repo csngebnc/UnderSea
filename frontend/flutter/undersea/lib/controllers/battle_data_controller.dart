@@ -18,6 +18,7 @@ import 'package:undersea/styles/style_constants.dart';
 
 class BattleDataController extends GetxController {
   final BattleDataProvider _battleDataProvider;
+  int? countryToBeAttacked;
   BattleDataController(this._battleDataProvider);
   var searchText = ''.obs;
   var pageNumber = 1.obs;
@@ -135,7 +136,11 @@ class BattleDataController extends GetxController {
       if (response.statusCode == 200) {
         UnderseaStyles.snackbar(
             'Sikeres támadás!', 'Az egységeidet elküldted támadni');
-      }
+        getAllUnits();
+        getAttackableUsers();
+        getUnitTypes();
+      } else
+        log('$response');
     } catch (error) {
       log('$error');
     }

@@ -33,7 +33,7 @@ class _SpyingTabState extends State<SpyingTab> {
     return UnderseaStyles.tabSkeleton(
         buttonText: 'Küldés!',
         isDisabled: !_canAttack(),
-        onButtonPressed: widget.onButtonPressed,
+        onButtonPressed: () {},
         list: Column(
           //crossAxisAlignment: CrossAxisAlignment.start,
           children: [

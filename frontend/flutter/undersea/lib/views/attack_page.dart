@@ -70,8 +70,8 @@ class _AttackPageState extends State<AttackPage> {
                               hint: Strings.username.tr,
                               color: Color(0xFF657A9D),
                               hintColor: UnderseaStyles.alternativeHintColor,
-                              controller: TextEditingController(
-                                  text: controller.searchText.value),
+                              /* controller: TextEditingController(
+                                  text: controller.searchText.value),*/
                               onChanged: controller.onSearchChanged),
                         ]),
                   );
@@ -87,6 +87,10 @@ class _AttackPageState extends State<AttackPage> {
                             ? _selectedIndex = i
                             : _selectedIndex = null;
                       });
+                      controller.countryToBeAttacked = _selectedIndex != null
+                          ? controller.attackableUsers.value!
+                              .results![_selectedIndex! ~/ 2 - 1].countryId
+                          : null;
                     },
                     title: Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 15, 0),
