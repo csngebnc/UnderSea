@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as signalR from '@microsoft/signalr'; // or from "@microsoft/signalr" if you are using a new library
+import * as signalR from '@microsoft/signalr';
 import { apiUrl } from 'src/assets/config.json';
 
 @Injectable({

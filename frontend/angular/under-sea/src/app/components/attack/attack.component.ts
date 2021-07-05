@@ -15,9 +15,6 @@ import { GetResources } from 'src/app/states/resources/resources.actions';
   styleUrls: ['./attack.component.scss'],
 })
 export class AttackComponent implements OnInit {
-  @Select(ResourcesState.units)
-  private unitState$: Observable<Array<Unit>>;
-
   units: Array<AttackerUnit> = [];
 
   players: PagedList = {
@@ -32,22 +29,8 @@ export class AttackComponent implements OnInit {
   targetId: number;
   attackerUnits: Array<AttackUnitDto> = [];
 
-  constructor(private battleService: BattleService, private store: Store) {
-    this.unitState$.subscribe((arr: Array<Unit>) => {
-      this.units = [];
-      arr.forEach((u) => {
-        if (u.id != 4) {
-          //az if átmeneti megoldás, amíg megoldják a backenden hogy ne crasheljen a felfedezeőre
-          this.units.push({
-            id: u.id,
-            name: u.name,
-            count: u.count,
-            imageUrl: u.icon,
-          });
-        }
-      });
-      this.attackerUnits = [];
-    });
+  constructor(private battleService: BattleService) {
+    this.initAttack();
   }
 
   ngOnInit(): void {
@@ -61,6 +44,23 @@ export class AttackComponent implements OnInit {
       (r) => {
         this.players = r;
 
+        this.isLoading$.next(false);
+      },
+      (e) => console.error(e)
+    );
+  }
+
+  private initAttack(): void {
+    this.players.pageNumber = 1;
+    this.isLoading$.next(true);
+
+    let users = this.battleService.getUsers(this.players.pageNumber, undefined);
+    let units = this.battleService.getAttackerUnits();
+
+    forkJoin([users, units]).subscribe(
+      (responses) => {
+        this.players = responses[0];
+        this.units = responses[1];
         this.isLoading$.next(false);
       },
       (e) => console.error(e)
@@ -91,6 +91,7 @@ export class AttackComponent implements OnInit {
 
   onSwitchPage(pageNumber: number): void {
     this.players.pageNumber = pageNumber;
+    this.initPlayers();
   }
 
   onFilter(filter: string) {
@@ -102,8 +103,7 @@ export class AttackComponent implements OnInit {
   attack(): void {
     this.battleService.attack(this.targetId, this.attackerUnits).subscribe(
       (r) => {
-        this.store.dispatch(GetResources);
-        this.initPlayers();
+        this.initAttack();
       },
       (e) => console.error(e)
     );

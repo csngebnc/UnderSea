@@ -52,8 +52,6 @@ export class BattleService {
           pageSize: 0,
           allResultsCount: 0,
         };
-
-        const outcome = ['Folyamatban', 'Győzelem', 'Vereség'];
         result.pageNumber = r.pageNumber;
         result.pageSize = r.pageSize;
         result.allResultsCount = r.allResultsCount;
@@ -83,9 +81,9 @@ export class BattleService {
       map((arr: PagedResultOfAttackableUserDto) => {
         const result: PagedList = {
           list: [],
-          pageNumber: 1,
-          pageSize: 0,
-          allResultsCount: 0,
+          pageNumber: arr.pageNumber,
+          pageSize: arr.pageSize,
+          allResultsCount: arr.allResultsCount,
         };
 
         arr.results.forEach((u) =>
