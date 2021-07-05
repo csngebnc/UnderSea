@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/battle_data_controller.dart';
 import 'package:undersea/controllers/building_data_controller.dart';
 
 import 'package:undersea/controllers/country_data_controller.dart';
-import 'package:undersea/controllers/soldiers_controller.dart';
+
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/building_info_dto.dart';
 import 'package:undersea/models/soldier.dart';
@@ -12,13 +13,14 @@ import 'package:undersea/styles/style_constants.dart';
 class ExpandedMenu extends StatelessWidget {
   ExpandedMenu();
 
-  final List<Soldier> militaryList = Get.find<SoldiersController>().soldierList;
+  final List<Soldier> militaryList =
+      Get.find<BattleDataController>().soldierList;
 
   Widget _enumerateSoldiers(List<BattleUnitDto> units) {
     List<Widget> list = <Widget>[];
     units.forEach((element) {
       list.add(UnderseaStyles.militaryIcon(
-          SoldiersController.imageNameMap[element.name] ?? 'shark',
+          BattleDataController.imageNameMap[element.name] ?? 'shark',
           element.count,
           element.count));
     });

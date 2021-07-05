@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/soldiers_controller.dart';
+import 'package:undersea/controllers/battle_data_controller.dart';
+
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
@@ -17,7 +18,7 @@ class _AttackPageState extends State<AttackPage> {
   int? _selectedIndex;
   var sliderValues = List<int>.generate(3, (index) => 0);
   var mercenaryPrice = 0;
-  List<Soldier> soldierList = Get.find<SoldiersController>().soldierList;
+  List<Soldier> soldierList = Get.find<BattleDataController>().soldierList;
   bool firstPage = true;
   late final Timer? _debounce;
   void _onSearchChanged(String query) {

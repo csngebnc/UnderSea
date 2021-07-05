@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/soldiers_controller.dart';
+import 'package:undersea/controllers/battle_data_controller.dart';
+
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
@@ -24,7 +25,7 @@ class _AttackingTabState extends State<AttackingTab> {
 
   var sliderValues = List<int>.generate(3, (index) => 0);
   var mercenaryPrice = 0;
-  List<Soldier> soldierList = Get.find<SoldiersController>().soldierList;
+  List<Soldier> soldierList = Get.find<BattleDataController>().soldierList;
   @override
   Widget build(BuildContext context) {
     return UnderseaStyles.tabSkeleton(

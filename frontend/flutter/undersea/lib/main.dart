@@ -6,7 +6,6 @@ import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
 import 'package:undersea/controllers/next_round_controller.dart';
 
-import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/lang/app_translations.dart';
 import 'package:undersea/network/providers/country_data_provider.dart';
 import 'package:undersea/network/providers/next_round_provider.dart';
@@ -32,7 +31,6 @@ Future<void> initServices() async {
   await GetStorage.init();
 
   Get.put(BottomNavBarController());
-  Get.put(SoldiersController());
   Get.put(UserDataProvider());
   Get.put(UserDataController(Get.find()));
   Get.put(CountryDataProvider());
