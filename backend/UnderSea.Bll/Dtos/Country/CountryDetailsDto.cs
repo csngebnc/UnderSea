@@ -13,7 +13,7 @@ namespace UnderSea.Bll.Dtos
         public int MaxUnitCount { get; set; }
         public int Coral { get; set; }
         public int Pearl { get; set; }
-        public ICollection<MaterialDto> Materials { get; set; }
+        public ICollection<MaterialDetailsDto> Materials { get; set; }
         public int Population { get; set; }
         public bool HasSonarCanon { get; set; }
 

@@ -41,7 +41,9 @@ namespace UnderSea.Bll.Services
 
             var buildings = await _context.Buildings
                                         .Include(b => b.BuildingEffects)
-                                        .ThenInclude(be => be.Effect)
+                                            .ThenInclude(be => be.Effect)
+                                        .Include(b => b.BuildingMaterials)
+                                            .ThenInclude(bm => bm.Material)
                                         .ToListAsync();
 
             return buildings.Select(building =>
@@ -51,7 +53,15 @@ namespace UnderSea.Bll.Services
                     Id = building.Id,
                     Name = building.Name,
                     Effects = _mapper.Map<ICollection<EffectDto>>(building.BuildingEffects.Select(be => be.Effect)),
-                    Price = building.Price,
+                    RequiredMaterials = building.BuildingMaterials.Select(bm =>
+                    {
+                        return new Dtos.Material.MaterialDto
+                        {
+                            Id = bm.MaterialId,
+                            Name = bm.Material.Name,
+                            Amount = bm.Amount
+                        };
+                    }).ToList(),
                     Count = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).SingleOrDefault().Count,
                     UnderConstruction = country.ActiveConstructions.Any(ac => ac.BuildingId == building.Id),
                     ImageUrl = building.ImageUrl
@@ -64,6 +74,7 @@ namespace UnderSea.Bll.Services
             var country = await _context.Countries
                                     .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
                                     .Include(c => c.World)
+                                    .Include(c => c.CountryMaterials)
                                     .FirstOrDefaultAsync();
 
             if (country == null)
@@ -71,7 +82,12 @@ namespace UnderSea.Bll.Services
                 throw new NotExistsException("Nem létezik ilyen ország.");
             }
 
-            var building = await _context.Buildings.Where(c => c.Id == buildingDto.BuildingId).FirstOrDefaultAsync();
+            var building = await _context.Buildings
+                .Where(b => b.Id == buildingDto.BuildingId)
+                .Include(b => b.BuildingMaterials)
+                    .ThenInclude(bm => bm.Material)
+                .FirstOrDefaultAsync();
+
             if (building == null)
             {
                 throw new NotExistsException("Nem létezik ilyen épület.");
@@ -83,7 +99,9 @@ namespace UnderSea.Bll.Services
                 throw new InvalidParameterException("Már folyamatban van egy építés.");
             }
 
-            if (building.Price <= country.Pearl)
+            
+
+            if (!country.CountryMaterials.Any(cm => cm.Amount < building.BuildingMaterials.Where(bm => bm.MaterialId == cm.MaterialId).SingleOrDefault().Amount))
             {
                 var activeConstruction = new ActiveConstruction()
                 {
@@ -93,7 +111,10 @@ namespace UnderSea.Bll.Services
                 };
                 _context.ActiveConstructions.Add(activeConstruction);
 
-                country.Pearl -= building.Price;
+                foreach (var materialRequirement in building.BuildingMaterials)
+                {
+                    country.CountryMaterials.Where(cm => cm.MaterialId == materialRequirement.MaterialId).SingleOrDefault().Amount -= materialRequirement.Amount;
+                }
             }
             else
             {

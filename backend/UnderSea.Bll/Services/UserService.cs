@@ -11,7 +11,9 @@ using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
+using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
+using UnderSea.Model.Models.Joins;
 
 namespace UnderSea.Bll.Services
 {
@@ -47,6 +49,20 @@ namespace UnderSea.Bll.Services
                 FightPoint = new FightPoint(),
                 WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id
             };
+
+            var materials = await _context.Materials.ToListAsync();
+            foreach (var material in materials)
+            {
+                country.CountryMaterials.Add(new CountryMaterial
+                {
+                    MaterialId = material.Id,
+                    CountryId = country.Id,
+                    Multiplier = 1,
+                    BaseProduction = 0,
+                    Amount = material.MaterialType == MaterialTypeConstants.Pearl ? 1000 : 0,
+                });
+            }
+
             _context.Countries.Add(country);
             await _context.SaveChangesAsync();
             return result.Succeeded;

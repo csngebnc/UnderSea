@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Dal.Data.Seed;
 using UnderSea.Dal.EntityConfigurations;
+using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
 using UnderSea.Model.Models.Joins;
 using UnderSea.Model.Models.Materials;
@@ -81,27 +82,32 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<CountryUpgrade>().HasKey(cu => new { cu.CountryId, cu.UpgradeId });
             modelBuilder.Entity<UpgradeEffect>().HasKey(ue => new { ue.EffectId, ue.UpgradeId });
 
-            modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint);//.HasData(fightpoints);
+            modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint);
 
             modelBuilder.Entity<Effect>()
                 .HasDiscriminator(e => e.EffectType)
-                .HasValue<Effect>("effect_base")
-                .HasValue<CoralEffect>("effect_coral")
-                .HasValue<MilitaryEffect>("effect_military")
-                .HasValue<PopulationEffect>("effect_population")
-                .HasValue<Alchemy>("upgrade_effect_alchemy")
-                .HasValue<CoralWall>("upgrade_effect_coralwall")
-                .HasValue<MudCombine>("upgrade_effect_mudcombine")
-                .HasValue<MudTractor>("upgrade_effect_mudtractor")
-                .HasValue<SonarCanon>("upgrade_effect_sonarcannon")
-                .HasValue<UnderwaterMartialArt>("upgrade_effect_martialart");
+                .HasValue<Effect>(EffectTypeConstants.Base)
+                .HasValue<CoralEffect>(EffectTypeConstants.CoralEffect)
+                .HasValue<MilitaryEffect>(EffectTypeConstants.MilitaryEffect)
+                .HasValue<PopulationEffect>(EffectTypeConstants.PopulationEffect)
+                .HasValue<Alchemy>(EffectTypeConstants.Alchemy)
+                .HasValue<CoralWall>(EffectTypeConstants.CoralWall)
+                .HasValue<MudCombine>(EffectTypeConstants.MudCombine)
+                .HasValue<MudTractor>(EffectTypeConstants.MudTractor)
+                .HasValue<SonarCanon>(EffectTypeConstants.SonarCanon)
+                .HasValue<UnderwaterMartialArt>(EffectTypeConstants.UnderwaterMartialArt);
 
             modelBuilder.Entity<Material>()
                 .HasDiscriminator(e => e.MaterialType)
-                .HasValue<Material>("material_base")
-                .HasValue<PearlMaterial>("material_pearl")
-                .HasValue<CoralMaterial>("material_coral")
-                .HasValue<StoneMaterial>("material_stone");
+                .HasValue<Material>(MaterialTypeConstants.Base)
+                .HasValue<PearlMaterial>(MaterialTypeConstants.Pearl)
+                .HasValue<CoralMaterial>(MaterialTypeConstants.Coral)
+                .HasValue<StoneMaterial>(MaterialTypeConstants.Stone);
+
+            modelBuilder.Entity<Material>()
+                .Property(m => m.MaterialType)
+                .HasMaxLength(200)
+                .HasColumnName("material_type");
 
             modelBuilder.Entity<Effect>()
                 .Property(e => e.EffectType)
