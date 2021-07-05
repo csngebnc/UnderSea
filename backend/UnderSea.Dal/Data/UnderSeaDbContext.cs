@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using UnderSea.Dal.Data.Seed;
 using UnderSea.Dal.EntityConfigurations;
 using UnderSea.Model.Models;
+using UnderSea.Model.Models.Joins;
+using UnderSea.Model.Models.Materials;
 
 namespace UnderSea.Dal.Data
 {
@@ -32,6 +34,11 @@ namespace UnderSea.Dal.Data
         public DbSet<UpgradeEffect> UpgradeEffects { get; set; }
         public DbSet<ActiveUpgrading> ActiveUpgradings { get; set; }
         public DbSet<World> Worlds { get; set; }
+
+        public DbSet<Material> Materials { get; set; }
+        public DbSet<BuildingMaterial> BuildingMaterials { get; set; }
+        public DbSet<UnitMaterial> UnitMaterials { get; set; }
+        public DbSet<CountryMaterial> CountryMaterials { get; set; }
 
         public UnderSeaDbContext(DbContextOptions options) : base(options)
         {
@@ -60,12 +67,20 @@ namespace UnderSea.Dal.Data
                 .WithMany(c => c.Defenses)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<BuildingMaterial>()
+                .HasKey(c => new { c.BuildingId, c.MaterialId });
+                                    
+            modelBuilder.Entity<UnitMaterial>()
+                .HasKey(c => new { c.UnitId, c.MaterialId });
+
+            modelBuilder.Entity<CountryMaterial>()
+                .HasKey(c => new { c.CountryId, c.MaterialId });
+
             modelBuilder.Entity<BuildingEffect>().HasKey(be => new { be.BuildingId, be.EffectId });
             modelBuilder.Entity<CountryUnit>().HasKey(cu => new { cu.CountryId, cu.UnitId });
             modelBuilder.Entity<CountryUpgrade>().HasKey(cu => new { cu.CountryId, cu.UpgradeId });
             modelBuilder.Entity<UpgradeEffect>().HasKey(ue => new { ue.EffectId, ue.UpgradeId });
 
-            modelBuilder.Entity<Country>().OwnsOne(p => p.Production);//.HasData(productions);
             modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint);//.HasData(fightpoints);
 
             modelBuilder.Entity<Effect>()
@@ -80,6 +95,13 @@ namespace UnderSea.Dal.Data
                 .HasValue<MudTractor>("upgrade_effect_mudtractor")
                 .HasValue<SonarCanon>("upgrade_effect_sonarcannon")
                 .HasValue<UnderwaterMartialArt>("upgrade_effect_martialart");
+
+            modelBuilder.Entity<Material>()
+                .HasDiscriminator(e => e.MaterialType)
+                .HasValue<Material>("material_base")
+                .HasValue<PearlMaterial>("material_pearl")
+                .HasValue<CoralMaterial>("material_coral")
+                .HasValue<StoneMaterial>("material_stone");
 
             modelBuilder.Entity<Effect>()
                 .Property(e => e.EffectType)

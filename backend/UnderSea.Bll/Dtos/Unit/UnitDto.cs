@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnderSea.Bll.Dtos.Material;
 
 namespace UnderSea.Bll.Dtos
 {
@@ -15,7 +16,7 @@ namespace UnderSea.Bll.Dtos
         public int DefensePoint { get; set; }
         public int MercenaryPerRound { get; set; }
         public int SupplyPerRound { get; set; }
-        public int Price { get; set; }
+        public ICollection<MaterialDto> RequiredMaterials { get; set; }
         public int CurrentCount { get; set; }
         public string ImageUrl { get; set; }
     }

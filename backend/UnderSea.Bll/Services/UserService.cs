@@ -44,7 +44,6 @@ namespace UnderSea.Bll.Services
             var country = new Country {
                 Name = registerDto.CountryName,
                 OwnerId = user.Id,
-                Production = new Production(),
                 FightPoint = new FightPoint(),
                 WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id
             };
