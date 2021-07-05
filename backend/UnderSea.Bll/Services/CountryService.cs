@@ -65,8 +65,6 @@ namespace UnderSea.Bll.Services
             {
                 MaxUnitCount = country.MaxUnitCount,
                 Units = _mapper.Map<ICollection<BattleUnitDto>>(units),
-                Coral = country.Coral,
-                Pearl = country.Pearl,
                 Population = country.Population,
                 HasSonarCanon = hasSonarCanon,
                 Materials = country.CountryMaterials.Select(cm =>

@@ -13,8 +13,6 @@ namespace UnderSea.Model.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Population { get; set; } = 100;
-        public int Pearl { get; set; } = 1000;
-        public int Coral { get; set; }
         public int MaxUnitCount { get; set; }
 
         public FightPoint FightPoint { get; set; } //= new FightPoint();

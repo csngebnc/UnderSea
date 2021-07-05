@@ -122,9 +122,13 @@ namespace UnderSea.Dal.Data
 
             modelBuilder.ApplyConfiguration(new WorldEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new MaterialEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CountryEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new CountryMaterialEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuildingEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new BuildingMaterialEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UnitEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitMaterialEntityConfiguration());
             //modelBuilder.ApplyConfiguration(new EffectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UpgradeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuildingEffectEntityConfiguration());

@@ -19,7 +19,6 @@ namespace UnderSea.Dal.EntityConfigurations
                 {
                     Id = 1,
                     Name = UnitConstants.RohamFoka,
-                    Price = 50,
                     MercenaryPerRound = 1,
                     SupplyPerRound = 1,
                     AttackPoint = 6,
@@ -30,7 +29,6 @@ namespace UnderSea.Dal.EntityConfigurations
                 {
                     Id = 2,
                     Name = UnitConstants.Csatacsiko,
-                    Price = 50,
                     MercenaryPerRound = 1,
                     SupplyPerRound = 1,
                     AttackPoint = 2,
@@ -41,7 +39,6 @@ namespace UnderSea.Dal.EntityConfigurations
                 {
                     Id = 3,
                     Name = UnitConstants.Lezercapa,
-                    Price = 100,
                     MercenaryPerRound = 3,
                     SupplyPerRound = 2,
                     AttackPoint = 5,
@@ -52,7 +49,6 @@ namespace UnderSea.Dal.EntityConfigurations
                 {
                     Id = 4,
                     Name = UnitConstants.Felfedezo,
-                    Price = 50,
                     MercenaryPerRound = 1,
                     SupplyPerRound = 1,
                     AttackPoint = 0,
