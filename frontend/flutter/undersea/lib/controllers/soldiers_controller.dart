@@ -2,6 +2,13 @@ import 'package:get/get.dart';
 import 'package:undersea/models/soldier.dart';
 
 class SoldiersController extends GetxController {
+  static const imageNameMap = {
+    'Lézercápa': 'shark',
+    'Rohamfóka': 'seal',
+    'Csatacsikó': 'seahorse',
+    'Felfedező': 'dora'
+  };
+
   var soldierList = <Soldier>[
     Soldier(
         totalAmount: 20,
@@ -32,6 +39,16 @@ class SoldiersController extends GetxController {
         name: 'Csatacsikó',
         price: 50,
         available: 41,
-        iconName: 'seahorse')
+        iconName: 'seahorse'),
+    Soldier(
+        totalAmount: 20,
+        attack: 0,
+        defence: 0,
+        payment: 50,
+        supplyNeeds: 5,
+        name: 'Felfedező',
+        price: 50,
+        iconName: 'dora',
+        available: 2),
   ].obs;
 }

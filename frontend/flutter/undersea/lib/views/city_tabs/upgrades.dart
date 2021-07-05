@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/lang/strings.dart';
+import 'package:undersea/models/response/upgrade_dto.dart';
 import 'package:undersea/models/upgrade.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:get/get.dart';
@@ -12,19 +13,38 @@ class Upgrades extends StatefulWidget {
 }
 
 class _UpgradesTabState extends State<Upgrades> {
+  UpgradesController controller = Get.find();
   int? _selectedIndex;
-  List<Upgrade> upgradeList = Get.find<UpgradesController>().upgradeList;
+  late Rx<List<UpgradeDto>> upgradeList;
+
+  @override
+  void initState() {
+    upgradeList = controller.upgradeInfoData;
+    super.initState();
+  }
 
   bool _canStartUpgrade() {
     if (_selectedIndex == null) return false;
-    if (upgradeList.any((element) => element.isInProgress)) return false;
-    if (upgradeList[_selectedIndex!].isAvailable) return false;
+    if (upgradeList.value.any((element) => element.isUnderConstruction))
+      return false;
+    if (upgradeList.value[_selectedIndex!].doesExist) return false;
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return UnderseaStyles.tabSkeleton(
+        onButtonPressed: () {
+          controller.upgradeInfoData.value[_selectedIndex!].remainingTime = 15;
+          controller.upgradeInfoData.value[_selectedIndex!]
+              .isUnderConstruction = true;
+          controller.buyUpgrade(upgradeList.value[_selectedIndex!].id);
+          controller.update();
+
+          setState(() {
+            _selectedIndex = null;
+          });
+        },
         isDisabled: !_canStartUpgrade(),
         list: ListView.builder(
             itemCount: 8,
@@ -33,13 +53,16 @@ class _UpgradesTabState extends State<Upgrades> {
                 return UnderseaStyles.infoPanel(
                     Strings.upgrades_manual_title.tr,
                     Strings.upgrades_manual_hint.tr);
-              if (i > upgradeList.length) return SizedBox(height: 100);
+              if (i > upgradeList.value.length) return SizedBox(height: 100);
 
-              return _buildRow(i, upgradeList);
+              return GetBuilder<UpgradesController>(builder: (controller) {
+                final upgradeListValue = controller.upgradeInfoData.value;
+                return _buildRow(i, upgradeListValue);
+              });
             }));
   }
 
-  Widget _buildRow(int index, List<Upgrade> list) {
+  Widget _buildRow(int index, List<UpgradeDto> list) {
     var actualUpgrade = list[index - 1];
     return ListTile(
         onTap: () {
@@ -67,20 +90,22 @@ class _UpgradesTabState extends State<Upgrades> {
                               height: 150,
                               width: 150,
                               child: UnderseaStyles.buildingImage(
-                                  actualUpgrade.imageName + '@3x'),
+                                  controller.imageNameMap[actualUpgrade.name]! +
+                                      '@3x'),
                             ),
                             Text(actualUpgrade.name,
                                 style: UnderseaStyles.listBold,
                                 textAlign: TextAlign.center),
                             Text(
-                              actualUpgrade.effect,
+                              actualUpgrade.effects?.elementAt(0).name ??
+                                  'effect',
                               style: UnderseaStyles.listRegular,
                               textAlign: TextAlign.center,
                             ),
                           ],
                         ),
                       ),
-                      actualUpgrade.isAvailable
+                      actualUpgrade.doesExist
                           ? Padding(
                               padding: EdgeInsets.all(10),
                               child: Icon(
@@ -88,11 +113,11 @@ class _UpgradesTabState extends State<Upgrades> {
                                 color: UnderseaStyles.underseaLogoColor,
                               ))
                           : Container(),
-                      actualUpgrade.isInProgress
+                      actualUpgrade.isUnderConstruction
                           ? Padding(
                               padding: EdgeInsets.all(10),
                               child: Text(
-                                'még ${actualUpgrade.availableIn} kör',
+                                'még ${actualUpgrade.remainingTime} kör',
                                 style: TextStyle(
                                     color: UnderseaStyles.underseaLogoColor,
                                     fontSize: 16),

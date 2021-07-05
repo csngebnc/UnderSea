@@ -3,22 +3,23 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:undersea/models/response/buy_upgrade_dto.dart';
 import 'package:undersea/models/response/upgrade_dto.dart';
+import 'package:undersea/models/upgrade.dart';
+import 'package:undersea/network/providers/battle_data_provider.dart';
 import 'package:undersea/network/providers/upgrade_data_provider.dart';
-import 'package:undersea/styles/style_constants.dart';
 
-class UpgradesController extends GetxController {
-  final UpgradeDataProvider _upgradeDataProvider;
-  UpgradesController(this._upgradeDataProvider);
+class BattleDataController extends GetxController {
+  final BattleDataProvider _battleDataProvider;
+  BattleDataController(this._battleDataProvider);
 
-  Rx<List<UpgradeDto>> upgradeInfoData = Rx([]);
+  /* Rx<List<UpgradeDto>> battle = Rx([]);
 
   buyUpgrade(int id) async {
     try {
-      final response = await _upgradeDataProvider
+      final response = await _battleDataProvider
           .buyUpgrade(BuyUpgradeDto(upgradeId: id).toJson());
 
       if (response.statusCode == 200) {
-        UnderseaStyles.snackbar('Sikeres vásárlás!', '');
+        Get.snackbar('Sikeres vásárlás!', '');
         getUpgradeDetails();
       }
     } catch (error) {
@@ -36,14 +37,6 @@ class UpgradesController extends GetxController {
     } catch (error) {
       log('$error');
     }
-  }
+  }*/
 
-  var imageNameMap = {
-    'Iszaptraktor': 'iszaptraktor',
-    'Iszapkombájn': 'iszapkombajn',
-    'Korallfal': 'korallfal',
-    'Szonárágyú': 'szonaragyu',
-    'Vízalatti harcművészetek': 'vizicsillag',
-    'Alkímia': 'alkimia',
-  };
 }

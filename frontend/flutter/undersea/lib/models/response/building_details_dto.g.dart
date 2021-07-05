@@ -16,6 +16,7 @@ BuildingDetailsDto _$BuildingDetailsDtoFromJson(Map<String, dynamic> json) {
     count: json['count'] as int,
     name: json['name'] as String?,
     underConstruction: json['underConstruction'] as bool,
+    imageUrl: json['imageUrl'] as String,
   );
 }
 
@@ -26,5 +27,6 @@ Map<String, dynamic> _$BuildingDetailsDtoToJson(BuildingDetailsDto instance) =>
       'price': instance.price,
       'underConstruction': instance.underConstruction,
       'effects': instance.effects,
+      'imageUrl': instance.imageUrl,
       'name': instance.name,
     };

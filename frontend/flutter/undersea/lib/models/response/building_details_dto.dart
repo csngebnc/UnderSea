@@ -10,6 +10,7 @@ class BuildingDetailsDto {
   int price;
   bool underConstruction;
   List<EffectDto>? effects;
+  String imageUrl;
   String? name;
 
   BuildingDetailsDto(
@@ -18,7 +19,8 @@ class BuildingDetailsDto {
       required this.id,
       required this.count,
       required this.name,
-      required this.underConstruction});
+      required this.underConstruction,
+      required this.imageUrl});
 
   factory BuildingDetailsDto.fromJson(Map<String, dynamic> json) =>
       _$BuildingDetailsDtoFromJson(json);

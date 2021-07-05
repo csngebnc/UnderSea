@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/styles/style_constants.dart';
-import 'package:undersea/views/city_tabs/buildings.dart';
-import 'package:undersea/views/city_tabs/military.dart';
-import 'package:undersea/views/city_tabs/upgrades.dart';
-import 'package:get/get.dart';
+import 'package:undersea/views/attack_tabs/attacking_tab.dart';
+import 'package:undersea/views/attack_tabs/spying_tab.dart';
+import 'package:undersea/views/history_tabs/attack_history.dart';
+import 'package:undersea/views/history_tabs/spy_history.dart';
 
-class CityTabBar extends StatelessWidget {
-  CityTabBar();
+class HistoryTabBar extends StatelessWidget {
+  HistoryTabBar(this.onButtonPressed);
+  final Function onButtonPressed;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
-        length: 3,
+        length: 2,
         child: Scaffold(
           appBar: PreferredSize(
-            preferredSize: Size(100.0, 100.0),
+            preferredSize: Size(60.0, 60.0),
             child: Container(
               height: 50,
               child: Material(
@@ -26,20 +28,15 @@ class CityTabBar extends StatelessWidget {
                   indicatorSize: TabBarIndicatorSize.label,
                   indicatorWeight: 3,
                   tabs: [
-                    UnderseaStyles.tab(Strings.my_city.tr),
-                    UnderseaStyles.tab(Strings.upgrades.tr),
-                    UnderseaStyles.tab(Strings.my_forces.tr),
+                    UnderseaStyles.tab('Csata'),
+                    UnderseaStyles.tab('Felfedezés'),
                   ],
                 ),
               ),
             ),
           ),
           body: TabBarView(
-            children: [
-              Buildings(),
-              Upgrades(),
-              Military(),
-            ],
+            children: [AttackHistoryPage(), SpyingHistoryPage()],
           ),
         ),
       ),

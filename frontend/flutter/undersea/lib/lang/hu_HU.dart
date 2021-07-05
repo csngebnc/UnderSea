@@ -52,4 +52,5 @@ const Map<String, String> hu_HU = {
   Strings.second_step: '2. LÉPÉS',
   Strings.back: 'vissza',
   Strings.leaderboard: 'Ranglista',
+  Strings.under_construction: 'épül',
 };

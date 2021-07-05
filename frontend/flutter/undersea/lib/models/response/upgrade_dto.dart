@@ -9,17 +9,19 @@ class UpgradeDto {
   int id;
   String name;
   bool doesExist;
-  bool isUnderContruction;
+  bool isUnderConstruction;
   int remainingTime;
+  String? imageUrl;
   List<EffectDto>? effects;
 
   UpgradeDto(
       {this.effects,
       required this.id,
       required this.doesExist,
-      required this.isUnderContruction,
+      required this.isUnderConstruction,
       required this.name,
-      required this.remainingTime});
+      required this.remainingTime,
+      this.imageUrl});
 
   factory UpgradeDto.fromJson(Map<String, dynamic> json) =>
       _$UpgradeDtoFromJson(json);
