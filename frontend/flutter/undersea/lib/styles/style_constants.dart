@@ -46,6 +46,12 @@ class UnderseaStyles {
 
   static void _defaultOnChanged(String s) {}
 
+  static const resourceNamesMap = {
+    'korall': 'coral',
+    'gyöngy': 'pearl',
+    'kő': 'stone'
+  };
+
   static Widget inputField({
     required String hint,
     TextEditingController? controller,
