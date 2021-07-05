@@ -17,12 +17,19 @@ class ExpandedMenu extends StatelessWidget {
       Get.find<BattleDataController>().soldierList;*/
 
   Widget _enumerateSoldiers(List<BattleUnitDto> units) {
+    final allUnits = Get.find<BattleDataController>().allUnitsInfo.value;
+    final spiesCount = Get.find<BattleDataController>().spiesInfo.value?.count;
     List<Widget> list = <Widget>[];
     units.forEach((element) {
+      var isSpy = element.name == 'Felfedező';
+      var actualSoldierMax = allUnits
+          .firstWhere((a) => a.id == element.id,
+              orElse: () => BattleUnitDto(id: 0, name: 'name', count: 0))
+          .count;
       list.add(UnderseaStyles.militaryIcon(
           BattleDataController.imageNameMap[element.name] ?? 'shark',
           element.count,
-          element.count));
+          isSpy ? spiesCount! : actualSoldierMax));
     });
     return new Row(mainAxisAlignment: MainAxisAlignment.center, children: list);
   }
