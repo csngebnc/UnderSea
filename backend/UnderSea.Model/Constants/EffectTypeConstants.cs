@@ -10,6 +10,7 @@ namespace UnderSea.Model.Constants
     {
         public const string Base = "effect_base";
         public const string CoralEffect = "effect_coral";
+        public const string StoneEffect = "effect_stone";
         public const string MilitaryEffect = "effect_military";
         public const string PopulationEffect = "effect_population";
         public const string Alchemy = "upgrade_effect_alchemy";

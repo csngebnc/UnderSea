@@ -59,7 +59,7 @@ namespace UnderSea.Bll.Services
                     CountryId = country.Id,
                     Multiplier = 1,
                     BaseProduction = 0,
-                    Amount = material.MaterialType == MaterialTypeConstants.Pearl ? 1000 : 0,
+                    Amount = material.MaterialType == MaterialTypeConstants.Pearl ? 5000 : 0,
                 });
             }
 

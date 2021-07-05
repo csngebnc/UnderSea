@@ -12,6 +12,7 @@ using UnderSea.Dal.Data.Seed;
 using UnderSea.Dal.EntityConfigurations;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
+using UnderSea.Model.Models.Effects;
 using UnderSea.Model.Models.Joins;
 using UnderSea.Model.Models.Materials;
 
@@ -87,6 +88,7 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<Effect>()
                 .HasDiscriminator(e => e.EffectType)
                 .HasValue<Effect>(EffectTypeConstants.Base)
+                .HasValue<StoneEffect>(EffectTypeConstants.StoneEffect)
                 .HasValue<CoralEffect>(EffectTypeConstants.CoralEffect)
                 .HasValue<MilitaryEffect>(EffectTypeConstants.MilitaryEffect)
                 .HasValue<PopulationEffect>(EffectTypeConstants.PopulationEffect)
@@ -116,6 +118,7 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<SonarCanon>().HasData(new SonarCanon { Id = 7, Name = "Növeli a támadó pontokat 20%-kal" });
             modelBuilder.Entity<UnderwaterMartialArt>().HasData(new UnderwaterMartialArt { Id = 8, Name = "Növeli a védelmi és támadóerőt pontokat 10%-kal" });
             modelBuilder.Entity<Alchemy>().HasData(new Alchemy { Id = 9, Name = "Növeli a beszedett adót 30%-kal" });
+            modelBuilder.Entity<StoneEffect>().HasData(new StoneEffect { Id = 10, Name = "25 követ termel körönként" });
 
             modelBuilder.ApplyConfiguration(new WorldEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
