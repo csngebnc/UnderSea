@@ -2,55 +2,53 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UnitDetails } from 'src/app/models/unit-details.model';
 import { CartUnit } from 'src/app/models/cart-unit.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
-import { BehaviorSubject, forkJoin, Observable, Subject } from 'rxjs';
-import { ApiService } from 'src/app/services/api/api.service';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { BuyUnitDto } from 'src/app/services/generated-code/generated-api-code';
 import { Store, Select } from '@ngxs/store';
 import { ResourcesState } from 'src/app/states/resources/resources.state';
 import { GetResources } from 'src/app/states/resources/resources.actions';
 import { takeUntil } from 'rxjs/operators';
+import { LoadingState } from 'src/app/states/loading/loading.state';
 
 @Component({
   selector: 'units',
   templateUrl: './units.component.html',
   styleUrls: ['./units.component.scss'],
 })
-export class UnitsComponent implements OnInit {
+export class UnitsComponent implements OnInit, OnDestroy {
   units: Array<UnitDetails> = [];
   cart: BuyUnitDto = { units: [] };
-  money: number;
   remainingMoney: number;
   justBoughtUnits$ = new BehaviorSubject(false);
+
+  @Select(LoadingState.isLoading)
+  loading$: Observable<boolean>;
 
   @Select(ResourcesState.remainingCapacity)
   remainingCapacity$: Observable<number>;
 
-  isLoading$ = new BehaviorSubject(false);
+  @Select(ResourcesState.pearls)
+  money$: Observable<number>;
 
-  constructor(
-    private battleService: BattleService,
-    private apiService: ApiService,
-    private store: Store
-  ) {}
+  destroy$ = new Subject<void>();
+
+  constructor(private battleService: BattleService, private store: Store) {}
 
   ngOnInit(): void {
     this.initUnits();
+    this.money$.pipe(takeUntil(this.destroy$)).subscribe((m) => {
+      this.remainingMoney = m;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
   }
 
   private initUnits(): void {
-    this.isLoading$.next(true);
-
-    let units = this.battleService.getUnits();
-    let pearls = this.apiService.getPearlCount();
-
-    forkJoin([units, pearls]).subscribe(
-      (responses) => {
-        this.units = responses[0];
-
-        this.money = responses[1];
-        this.remainingMoney = this.money;
-
-        this.isLoading$.next(false);
+    this.battleService.getUnits().subscribe(
+      (response) => {
+        this.units = response;
       },
       (e) => console.error(e)
     );

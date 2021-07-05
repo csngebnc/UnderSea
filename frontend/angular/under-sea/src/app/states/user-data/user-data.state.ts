@@ -1,4 +1,4 @@
-import { Action, NgxsOnInit, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { GetUserData } from './user-data.actions';
 import { ApiService } from 'src/app/services/api/api.service';
@@ -10,15 +10,13 @@ import { UserData } from 'src/app/models/userdata.model';
   defaults: { name: '', placement: 0, round: 0 },
 })
 @Injectable()
-export class UserDataState implements NgxsOnInit {
+export class UserDataState {
   @Selector()
   static userData(state: UserData): UserData {
     return state;
   }
 
   constructor(private apiService: ApiService) {}
-
-  ngxsOnInit({ dispatch }: StateContext<UserData>) {}
 
   @Action(GetUserData)
   getResources({ setState }: StateContext<UserData>) {

@@ -23,8 +23,7 @@ export class MainComponent implements OnInit {
 
   constructor(private signalr: SignalRService, private store: Store) {
     this.signalr.startConnection();
-    this.signalr.hubConnection.on('SendMessage', (round: number) => {
-      console.log(round);
+    this.signalr.hubConnection.on('SendMessage', () => {
       this.loadResources();
     });
   }

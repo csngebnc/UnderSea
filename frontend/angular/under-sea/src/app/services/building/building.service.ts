@@ -16,10 +16,8 @@ export class BuildingService {
   getBuildings(): Observable<Array<BuildingDetails>> {
     return this.buildingService.userBuildings().pipe(
       map((arr: Array<BuildingDetailsDto>) => {
-        console.log(arr);
         const result: Array<BuildingDetails> = [];
         arr.forEach((b) => result.push(b as BuildingDetails));
-        console.log(result);
         return result;
       })
     );

@@ -59,12 +59,4 @@ export class ApiService {
       })
     );
   }
-
-  getPearlCount(): Observable<number> {
-    return this.apiService.country().pipe(
-      map((cd: CountryDetailsDto) => {
-        return cd.pearl;
-      })
-    );
-  }
 }

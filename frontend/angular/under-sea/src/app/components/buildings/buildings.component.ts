@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BuildingDetails } from 'src/app/models/building-details.model';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { BuildingService } from 'src/app/services/building/building.service';
 import { Store, Select } from '@ngxs/store';
 import { ResourcesState } from 'src/app/states/resources/resources.state';
 import { GetResources } from 'src/app/states/resources/resources.actions';
 import { takeUntil } from 'rxjs/operators';
+import { LoadingState } from 'src/app/states/loading/loading.state';
 
 @Component({
   selector: 'buildings',
@@ -17,13 +18,15 @@ export class BuildingsComponent implements OnInit, OnDestroy {
   isUnderConstruction: boolean = false;
   buildings: Array<BuildingDetails> = [];
 
+  @Select(LoadingState.isLoading)
+  loading$: Observable<boolean>;
+
   @Select(ResourcesState.pearls)
   private pearlCount$: Observable<number>;
 
   private destroy$ = new Subject<void>();
 
   money: number = 0;
-  isLoading$ = new BehaviorSubject(false);
 
   constructor(private buildingService: BuildingService, private store: Store) {
     this.pearlCount$
@@ -40,14 +43,11 @@ export class BuildingsComponent implements OnInit, OnDestroy {
   }
 
   private initBuildings(): void {
-    this.isLoading$.next(true);
-
     this.buildingService.getBuildings().subscribe(
       (r) => {
         this.buildings = r;
 
         this.checkUnderConstruction();
-        this.isLoading$.next(false);
       },
       (e) => console.error(e)
     );

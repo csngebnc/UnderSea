@@ -1,9 +1,6 @@
 <h2 class="modal-title">Felfedezés</h2>
 <div class="divider"></div>
-<div
-  *ngIf="!(isLoading$ | async); else loading"
-  class="stack paged-list to-sides"
->
+<div *ngIf="!(loading$ | async)" class="stack paged-list to-sides">
   <ul class="p-0 m-0">
     <li *ngFor="let report of list.reports" class="non-styled-list-item">
       <div class="list-item">
@@ -40,7 +37,3 @@
     class="w-100 d-flex align-center to-center mt-1"
   ></pager-buttons>
 </div>
-
-<ng-template #loading>
-  <loading class="w-100 h-100 d-flex to-center align-center"></loading>
-</ng-template>

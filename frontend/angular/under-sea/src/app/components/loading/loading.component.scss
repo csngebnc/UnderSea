@@ -9,6 +9,16 @@
   animation: spin 2s linear infinite;
 }
 
+.loading-modal-container {
+  background-color: $dark-navy;
+  opacity: 0.2;
+  z-index: 10;
+}
+
+.loading-modal {
+  opacity: initial;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

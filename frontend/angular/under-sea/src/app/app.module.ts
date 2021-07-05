@@ -40,6 +40,8 @@ import { UserDataState } from './states/user-data/user-data.state';
 import { ExploreComponent } from './components/explore/explore.component';
 import { ExploreListComponent } from './components/explore-list/explore-list.component';
 import { ReportsComponent } from './components/reports/reports.component';
+import { LoadingState } from './states/loading/loading.state';
+import { LoadingInterceptor } from './http-interceptors/loading/loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -77,7 +79,7 @@ import { ReportsComponent } from './components/reports/reports.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgxsModule.forRoot([ResourcesState, UserDataState]),
+    NgxsModule.forRoot([ResourcesState, UserDataState, LoadingState]),
   ],
   providers: [
     { provide: generated.API_BASE_URL, useValue: config.apiUrl },
@@ -89,6 +91,7 @@ import { ReportsComponent } from './components/reports/reports.component';
     generated.CountryService,
     generated.RoundService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })
