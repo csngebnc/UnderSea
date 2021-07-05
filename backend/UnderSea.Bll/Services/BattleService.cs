@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.Material;
 using UnderSea.Bll.Dtos.Spy;
 using UnderSea.Bll.Dtos.Unit;
 using UnderSea.Bll.Paging;
@@ -177,7 +178,10 @@ namespace UnderSea.Bll.Services
                 throw new NotExistsException("A bejelentkezett felhasználóhoz nem tartozik ország.");
             }
 
-            return (await _context.Units.ToListAsync())
+            return (await _context.Units
+                .Include(um => um.UnitMaterials)
+                .ThenInclude(m => m.Material)
+                .ToListAsync())
                 .Select(unit =>
                 {
                     var unitCount = country.CountryUnits.Where(cu => cu.UnitId == unit.Id).FirstOrDefault();
@@ -193,7 +197,14 @@ namespace UnderSea.Bll.Services
                         DefensePoint = unit.DefensePoint,
                         MercenaryPerRound = unit.MercenaryPerRound,
                         SupplyPerRound = unit.SupplyPerRound,
-                        Price = unit.Price,
+                        RequiredMaterials = unit.UnitMaterials.Select(c => 
+                                    new MaterialDto
+                                    {
+                                        Id = c.MaterialId,
+                                        Name = c.Material.Name,
+                                        Amount = c.Amount
+                                    })
+                                    .ToList(),
                         CurrentCount = count,
                         ImageUrl = unit.ImageUrl
                     };
@@ -221,11 +232,21 @@ namespace UnderSea.Bll.Services
 
         public async Task BuyUnitAsync(BuyUnitDto unitsDto)
         {
-            var country = await GetCountry();
+            var userId = _identityService.GetCurrentUserId();
+
+            var country = await _context.Countries.Include(w => w.World)
+                                                  .Include(c => c.CountryUnits)
+                                                  .Where(c => c.OwnerId == userId)
+                                                  .FirstOrDefaultAsync();
 
             foreach (var unitDto in unitsDto.Units)
             {
-                var unit = await _context.Units.Where(c => c.Id == unitDto.UnitId).FirstOrDefaultAsync();
+                var unit = await _context.Units
+                    .Include(um => um.UnitMaterials)
+                    .ThenInclude(m => m.Material)
+                    .Where(c => c.Id == unitDto.UnitId)
+                    .FirstOrDefaultAsync();
+
                 if (unit == null)
                 {
                     throw new NotExistsException("Nem létezik ilyen egység, amit meg lehetne vásárolni.");
@@ -240,7 +261,7 @@ namespace UnderSea.Bll.Services
                 var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id)
                                                         .FirstOrDefaultAsync();
 
-                if ((unit.Price * unitDto.Count) <= country.Pearl)
+                if (!country.CountryMaterials.Any(cm => cm.Amount < unit.UnitMaterials.Where(bm => bm.MaterialId == cm.MaterialId).SingleOrDefault().Amount))
                 {
                     if (counit == null)
                     {
@@ -257,11 +278,14 @@ namespace UnderSea.Bll.Services
                         counit.Count += unitDto.Count;
                     }
 
-                    country.Pearl -= unit.Price * unitDto.Count;
+                    foreach (var materialRequirement in unit.UnitMaterials)
+                    {
+                        country.CountryMaterials.Where(cm => cm.MaterialId == materialRequirement.MaterialId).SingleOrDefault().Amount -= materialRequirement.Amount * unitDto.Count;
+                    }
                 }
                 else
                 {
-                    throw new InvalidParameterException("Nincs elég gyöngy az egységek megvásárlásához.");
+                    throw new InvalidParameterException("Nincs elég nyersanyag az egységek megvásárlásához.");
                 }
             }
 

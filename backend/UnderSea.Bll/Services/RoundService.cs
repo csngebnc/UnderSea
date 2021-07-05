@@ -12,6 +12,7 @@ using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
+using UnderSea.Model.Models.Materials;
 
 namespace UnderSea.Bll.Services
 {
@@ -26,19 +27,14 @@ namespace UnderSea.Bll.Services
             _hubService = hubService;
         }
 
-        public void PayTax(ICollection<Country> countries)
+        public void PayMaterial(ICollection<Country> countries)
         {
             foreach(var country in countries)
             {
-                country.Pearl += (int)Math.Round(country.Production.BasePearlProduction * country.Production.PearlProductionMultiplier);
-            }
-        }
-
-        public void PayCoral(ICollection<Country> countries)
-        {
-            foreach (var country in countries)
-            {
-                country.Coral += (int)Math.Round(country.Production.BaseCoralProduction * country.Production.CoralProductionMultiplier);
+                foreach(var material in country.CountryMaterials)
+                {
+                    material.Amount += (int)Math.Round(material.BaseProduction * material.Multiplier); 
+                }
             }
         }
 
@@ -46,7 +42,7 @@ namespace UnderSea.Bll.Services
         {
             foreach (var country in countries)
             {
-                foreach(var unit in country.CountryUnits.OrderByDescending(c => c.Unit.Price))
+                foreach(var unit in country.CountryUnits.OrderByDescending(c => c.Unit.UnitMaterials.Sum(c => c.Amount)))
                 {
                     int requiredFood = unit.Unit.SupplyPerRound * unit.Count;
                     int requiredMercenary = unit.Unit.MercenaryPerRound * unit.Count;
@@ -312,6 +308,8 @@ namespace UnderSea.Bll.Services
 
             var countries = await _context.Countries.Include(e => e.CountryUnits)
                                                         .ThenInclude(e => e.Unit)
+                                                    .Include(e => e.CountryMaterials)
+                                                        .ThenInclude(e => e.Material)
                                                     .Include(e => e.Attacks)
                                                         .ThenInclude(e => e.AttackUnits)
                                                             .ThenInclude(e => e.Unit)
@@ -344,9 +342,7 @@ namespace UnderSea.Bll.Services
 
             using (var transaction = _context.Database.BeginTransaction())
             {
-                PayTax(countries);
-
-                PayCoral(countries);
+                PayMaterial(countries);
 
                 PayMercenaryAndFeedSoldiers(countries);
 
