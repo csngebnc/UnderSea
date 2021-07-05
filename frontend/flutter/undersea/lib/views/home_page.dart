@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/controllers/battle_data_controller.dart';
 import 'package:undersea/controllers/building_data_controller.dart';
 
 import 'package:undersea/controllers/country_data_controller.dart';
@@ -32,6 +33,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     userDataController.userInfo();
     countryDataController.getCountryDetails();
+    Get.find<BattleDataController>().getAllUnits();
+    Get.find<BattleDataController>().getAttackableUsers();
     super.initState();
   }
 

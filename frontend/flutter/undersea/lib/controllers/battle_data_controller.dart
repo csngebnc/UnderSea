@@ -152,6 +152,8 @@ class BattleDataController extends GetxController {
       if (response.statusCode == 200) {
         UnderseaStyles.snackbar('Sikeresen elküldted a felfedezőid!',
             'Az egységeidet elküldted felfedezésre');
+        getAllUnits();
+        getSpies();
       }
     } catch (error) {
       log('$error');

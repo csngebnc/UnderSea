@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/battle_data_controller.dart';
+import 'package:undersea/controllers/navbar_controller.dart';
 
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/attack_unit_dto.dart';
@@ -60,6 +61,7 @@ class _AttackingTabState extends State<AttackingTab> {
             controller.attack(SendAttackDto(
                 attackedCountryId: controller.countryToBeAttacked!,
                 units: units));
+            Get.find<BottomNavBarController>().selectedTab.value = 0;
           },
           list: ListView.builder(
               itemCount: itemCount,
