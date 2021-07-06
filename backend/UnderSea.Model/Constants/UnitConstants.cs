@@ -13,5 +13,6 @@ namespace UnderSea.Model.Constants
         public const string Csatacsiko  = "Csatacsikó";
         public const string Lezercapa = "Lézercápa";
         public const string Felfedezo = "Felfedező";
+        public const string Hadvezer = "Hadvezér";
     }
 }
