@@ -76,7 +76,8 @@ namespace UnderSea.Bll.Services
                         Id = cm.MaterialId,
                         Name = cm.Material.Name,
                         Production = (int)(cm.BaseProduction * cm.Multiplier),
-                        Amount = cm.Amount
+                        Amount = cm.Amount,
+                        ImageUrl = cm.Material.ImageUrl
                     };
                 }).ToList(),
                 Buildings = buildings.Select(building =>

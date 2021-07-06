@@ -60,7 +60,8 @@ namespace UnderSea.Bll.Services
                         {
                             Id = bm.MaterialId,
                             Name = bm.Material.Name,
-                            Amount = bm.Amount
+                            Amount = bm.Amount,
+                            ImageUrl = bm.Material.ImageUrl
                         };
                     }).ToList(),
                     Count = countryBuilding != null ? countryBuilding.Count : 0,

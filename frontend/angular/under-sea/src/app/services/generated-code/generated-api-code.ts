@@ -1222,6 +1222,7 @@ export interface MaterialDto {
     id: number;
     name?: string | undefined;
     amount: number;
+    imageUrl?: string | undefined;
 }
 
 export interface BuyUnitDto {
@@ -1266,6 +1267,7 @@ export interface MaterialDetailsDto {
     name?: string | undefined;
     production: number;
     amount: number;
+    imageUrl?: string | undefined;
 }
 
 export interface BuildingInfoDto {

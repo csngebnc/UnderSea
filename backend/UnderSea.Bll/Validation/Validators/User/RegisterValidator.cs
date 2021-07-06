@@ -24,7 +24,7 @@ namespace UnderSea.Bll.Validation
             this._userManager = userManager;
             RuleFor(user => user.UserName).NotNull().NotEmpty()
                 .MustAsync(async (userName, cancellation) => await UsernameNotExist(userName)).WithMessage("A megadott felhasználónévvel már létezik felhasználó.")
-                .Must( (user, cancellation) => UserNameMatchRegex(user.UserName)).WithMessage("A felhasználónév nem tartalmazhat szóközt.")
+                .Must( (user, cancellation) => UserNameMatchRegex(user.UserName)).WithMessage("A felhasználónévnek legalább 3 karakter hosszúnak kell lenni, és nem tartalmazhat szóközt vagy speciális karaktert.")
                 .WithName("userName").OverridePropertyName("userName");
             RuleFor(user => user.Password).NotNull().NotEmpty()
                 .Must((user, cancellation) => PasswordMatchRegex(user.Password))
@@ -42,9 +42,9 @@ namespace UnderSea.Bll.Validation
 
         private bool UserNameMatchRegex(string userName)
         {
-            var userNameRegex = new Regex("^[a-zA-Z0-9].{3,}$");
+            var userNameRegex = new Regex(@"^[-0-9A-Za-z_]{2,}$");
 
-            return userNameRegex.IsMatch(userName);
+            return userNameRegex.IsMatch(userName) && !userName.Contains(" ") && !userName.Contains(" ");
         }
 
         private bool PasswordMatchRegex(string password)

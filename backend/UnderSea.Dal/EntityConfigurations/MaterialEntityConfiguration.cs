@@ -19,19 +19,22 @@ namespace UnderSea.Dal.EntityConfigurations
                 {
                     Id = 1,
                     Name = "gyöngy",
-                    MaterialType = MaterialTypeConstants.Pearl
+                    MaterialType = MaterialTypeConstants.Pearl,
+                    ImageUrl = "https://underseastorage.blob.core.windows.net/currency/shell.svg"
                 },
                 new Material()
                 {
                     Id = 2,
                     Name = "korall",
-                    MaterialType = MaterialTypeConstants.Coral
+                    MaterialType = MaterialTypeConstants.Coral,
+                    ImageUrl = "https://underseastorage.blob.core.windows.net/currency/coral.svg"
                 },
                 new Material()
                 {
                     Id = 3,
                     Name = "kő",
-                    MaterialType = MaterialTypeConstants.Stone
+                    MaterialType = MaterialTypeConstants.Stone,
+                    ImageUrl = "https://underseastorage.blob.core.windows.net/currency/stone.png"
                 }
             );
         }

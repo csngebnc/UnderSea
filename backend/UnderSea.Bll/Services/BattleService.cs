@@ -217,7 +217,8 @@ namespace UnderSea.Bll.Services
                                     {
                                         Id = c.MaterialId,
                                         Name = c.Material.Name,
-                                        Amount = c.Amount
+                                        Amount = c.Amount,
+                                        ImageUrl = c.Material.ImageUrl
                                     })
                                     .ToList(),
                         CurrentCount = count,

@@ -7,5 +7,6 @@ namespace UnderSea.Model.Models.Materials
         public int Id { get; set; }
         public string Name { get; set; }
         public string MaterialType { get; set; }
+        public string ImageUrl { get; set; }
     }
 }
