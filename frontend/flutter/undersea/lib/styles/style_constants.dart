@@ -375,28 +375,30 @@ class UnderseaStyles {
         decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
       ),
       list,
-      Column(
-        children: [
-          Expanded(
-            flex: 8,
-            child: IgnorePointer(
-                child: Container(
-              decoration: BoxDecoration(color: Colors.transparent),
-            )),
-          ),
-          Expanded(
-              flex: 2,
-              child: Container(
-                  decoration: BoxDecoration(color: Colors.white54),
-                  child: Align(
-                      alignment: Alignment.center,
-                      child: ToggleableElevatedButton(
-                        text: buttonText.tr,
-                        onPressed: onButtonPressed,
-                        isDisabled: isDisabled,
-                      ))))
-        ],
-      ),
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: Column(
+          children: [
+            Expanded(
+              child: IgnorePointer(
+                  child: Container(
+                decoration: BoxDecoration(color: Colors.transparent),
+              )),
+            ),
+            Container(
+                decoration: BoxDecoration(color: Colors.white54),
+                child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: ToggleableElevatedButton(
+                          text: buttonText.tr,
+                          onPressed: onButtonPressed,
+                          isDisabled: isDisabled,
+                        ))))
+          ],
+        ),
+      )
     ]));
   }
 }
