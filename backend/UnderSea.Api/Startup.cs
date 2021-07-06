@@ -115,7 +115,29 @@ namespace UnderSea.Api
                 }
                 );
 
-            services.AddProblemDetails(ConfigureProblemDetails);
+            services.AddProblemDetails(options =>
+            {
+                options.IncludeExceptionDetails = (ctx, ex) => false;
+
+                options.Map<InvalidParameterException>(
+                  (ctx, ex) =>
+                  {
+                      var pd = StatusCodeProblemDetails.Create(StatusCodes.Status400BadRequest);
+                      pd.Title = ex.Message;
+                      return pd;
+                  }
+                  );
+
+                options.Map<NotExistsException>(
+                  (ctx, ex) =>
+                  {
+                      var pd = StatusCodeProblemDetails.Create(StatusCodes.Status401Unauthorized);
+                      pd.Title = ex.Message;
+                      return pd;
+                  }
+                  );
+
+            });
 
             services.AddControllersWithViews().AddFluentValidation(fv =>
             {
@@ -190,12 +212,14 @@ namespace UnderSea.Api
 
         private void ConfigureProblemDetails(ProblemDetailsOptions options)
         {
+            /*
             options.MapToStatusCode<NotExistsException>(StatusCodes.Status404NotFound);
 
             options.MapToStatusCode<InvalidParameterException>(StatusCodes.Status400BadRequest);
             options.MapToStatusCode<ArgumentOutOfRangeException>(StatusCodes.Status400BadRequest);
 
             options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
+            */
         }
 
     }
