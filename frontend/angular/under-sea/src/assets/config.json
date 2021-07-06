@@ -10,5 +10,10 @@
     "flowcontrol": "/buildings/flowcontrol_hd.png",
     "unknown": "/buildings/unknown_hd.png"
   },
-  "whitelist": ["/api/User", "/api/Country", "/api/Round/call-next-round"]
+  "loadingWhitelist": [
+    "/api/User",
+    "/api/Country",
+    "/api/Round/call-next-round"
+  ],
+  "tokenWhitelist": ["/connect/token", "/register"]
 }

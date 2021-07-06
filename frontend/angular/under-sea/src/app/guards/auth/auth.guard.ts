@@ -6,13 +6,16 @@ import {
   CanActivateChild,
 } from '@angular/router';
 import { TokenService } from '../../services/token/token.service';
-import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate, CanActivateChild {
-  constructor(private tokenService: TokenService, private router: Router) {}
+  constructor(
+    private tokenService: TokenService,
+    private autService: AuthenticationService
+  ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -30,7 +33,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
   private validate(): boolean {
     if (!this.tokenService.isTokenValid()) {
-      this.router.navigate(['login']);
+      this.autService.logout();
       return false;
     } else return true;
   }

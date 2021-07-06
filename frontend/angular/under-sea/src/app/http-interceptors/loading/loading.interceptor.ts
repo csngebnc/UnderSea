@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { whitelist } from 'src/assets/config.json';
+import { loadingWhitelist as whitelist } from 'src/assets/config.json';
 import {
   SetLoading,
   SetNotLoading,
