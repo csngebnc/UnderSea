@@ -28,6 +28,7 @@ dependencies:
   get_storage: ^2.0.2
   flutter_svg: ^0.22.0
   expandable: ^5.0.1
+  signalr_flutter: ^0.1.2
   flutter:
     sdk: flutter
 

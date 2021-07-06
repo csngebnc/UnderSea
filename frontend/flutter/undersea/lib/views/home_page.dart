@@ -36,8 +36,8 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _drawBuildings() {
     var buildings = <Widget>[];
-    var tops = <double>[100, 160, 50];
-    var lefts = <double>[80, 160, 220];
+    var tops = <double>[120, 160, 60, 80];
+    var lefts = <double>[0, 160, 100, 280];
     var buildingList =
         countryDataController.countryDetailsData.value?.buildings;
     bool hasCannon = false;
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    return buildings;
+    return buildings.reversed.toList();
   }
 
   @override

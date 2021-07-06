@@ -71,16 +71,29 @@ class _MilitaryTabState extends State<Military> {
 
   int _calculateSoldierPrice() {
     int totalPrice = 0;
-    for (int i = 0; i < soldierList.value.length; i++) {
-      totalPrice += soldierList.value[i].price * buyList[i];
-    }
+    /*for (int i = 0; i < soldierList.value.length; i++) {
+      totalPrice +=
+          soldierList.value[i].requriedMaterials![0].amount * buyList[i];
+    }*/
     return totalPrice;
   }
 
   bool _canHireSoldiers() {
     if (buyList.every((element) => element == 0)) return false;
-    if (countryData!.pearl < _calculateSoldierPrice()) return false;
+    //if (countryData!.pearl < _calculateSoldierPrice()) return false;
     return true;
+  }
+
+  List<Widget> _listResourceCost(UnitDto unit) {
+    var costs = <Widget>[];
+    bool isFirst = true;
+    unit.requiredMaterials?.forEach((element) {
+      costs.add(UnderseaStyles.text(
+        (isFirst ? '' : ', ') + '${element.amount} ${element.name}',
+      ));
+      isFirst = false;
+    });
+    return costs;
   }
 
   Widget _buildRow(int index, Rx<List<UnitDto>> list,
@@ -154,8 +167,12 @@ class _MilitaryTabState extends State<Military> {
                 children: [
                   UnderseaStyles.text(Strings.price.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text(
-                      actualSoldier.price.toString() + Strings.pearl_cost.tr),
+                  Row(
+                    children: [..._listResourceCost(actualSoldier)],
+                  )
+                  /*UnderseaStyles.text(
+                      actualSoldier.requriedMaterials?[0].toString() ??
+                          '' + Strings.pearl_cost.tr),*/
                 ],
               ),
               SizedBox(height: 20),

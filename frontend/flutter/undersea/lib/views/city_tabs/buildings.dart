@@ -40,7 +40,7 @@ class _BuildingsTabState extends State<Buildings> {
         },
         isDisabled: !_canStartBuilding(),
         list: ListView.builder(
-            itemCount: 4,
+            itemCount: buildingList.value.length + 2,
             itemBuilder: (BuildContext context, int i) {
               if (i == 0)
                 return UnderseaStyles.infoPanel(
@@ -59,8 +59,8 @@ class _BuildingsTabState extends State<Buildings> {
     if (_selectedIndex == null) return false;
     if (buildingList.value.any((element) => element.underConstruction))
       return false;
-    if (buildingList.value[_selectedIndex!].price >
-        playerController.countryDetailsData.value!.pearl) return false;
+    /*if (buildingList.value[_selectedIndex!].price >
+        playerController.countryDetailsData.value!.pearl) return false;*/
     return true;
   }
 
@@ -71,6 +71,25 @@ class _BuildingsTabState extends State<Buildings> {
           .add(Text(element.name ?? 'effect', style: UnderseaStyles.listBold));
     });
     return effects;
+  }
+
+  List<Widget> _listResourceCost(BuildingDetailsDto building) {
+    var costs = <Widget>[];
+    bool isFirst = true;
+    building.requiredMaterials?.forEach((element) {
+      costs.add(Text(
+          (isFirst ? '' : ', ') + '${element.amount} ${element.name}',
+          style: UnderseaStyles.listRegular));
+      isFirst = false;
+    });
+
+    /* Text(
+                                building.requiredMaterials?[0].name
+                                        .toString() ??
+                                    '' + Strings.pearl_cost_per_unit.tr,
+                               )*/
+
+    return costs;
   }
 
   Widget _buildRow(int index, List<BuildingDetailsDto> list) {
@@ -100,26 +119,26 @@ class _BuildingsTabState extends State<Buildings> {
                               width: 150,
                               child: UnderseaStyles.buildingImage(
                                   BuildingDataController
-                                          .imageNameMap[actualBuilding.name]! +
-                                      '@3x'),
+                                          .imageNameMap[actualBuilding.name] ??
+                                      '' + '@3x'),
                             ),
-                            Text(actualBuilding.name!,
+                            Text(actualBuilding.name ?? '',
                                 style: UnderseaStyles.listBold),
                             ..._listEffects(actualBuilding),
                             Text(
                                 actualBuilding.count.toString() +
                                     Strings.amount.tr,
                                 style: UnderseaStyles.listRegular),
-                            Text(
-                                actualBuilding.price.toString() +
-                                    Strings.pearl_cost_per_unit.tr,
-                                style: UnderseaStyles.listRegular)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [..._listResourceCost(actualBuilding)],
+                            )
                           ],
                         ),
                       ),
                       actualBuilding.underConstruction
                           ? Padding(
-                              //////////////////////////////////////////////////////////////////////////////////////////
                               padding: EdgeInsets.all(10),
                               child: Text(
                                 'épül',

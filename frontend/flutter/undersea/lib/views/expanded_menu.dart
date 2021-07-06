@@ -8,7 +8,6 @@ import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/building_info_dto.dart';
 import 'package:undersea/models/response/country_details_dto.dart';
-import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class ExpandedMenu extends StatelessWidget {
@@ -52,10 +51,12 @@ class ExpandedMenu extends StatelessWidget {
 
   List<Widget> _enumerateResources(CountryDetailsDto? countryDetails) {
     List<Widget> resources = <Widget>[];
-    /*countryDetails.materials.forEach((element) {
+    countryDetails!.materials!.forEach((element) {
       resources.add(UnderseaStyles.resourceIcon(
-          UnderseaStyles.resourceNameMap[element.name] ?? 'stone',
-          element.amount, element.production));*/
+          UnderseaStyles.resourceNamesMap[element.name] ?? 'stone',
+          element.amount,
+          element.production));
+    });
     return resources;
   }
 
@@ -70,13 +71,13 @@ class ExpandedMenu extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //..._enumerateResources(countryData);
-              UnderseaStyles.resourceIcon("pearl", countryData.pearl,
-                  countryData.currentPearlProduction),
-              UnderseaStyles.resourceIcon("coral", countryData.coral,
-                  countryData.currentCoralProduction),
-              ..._enumerateBuildings(countryData.buildings!)
+              ..._enumerateResources(countryData),
             ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [..._enumerateBuildings(countryData.buildings!)],
           )
         ]);
       } else

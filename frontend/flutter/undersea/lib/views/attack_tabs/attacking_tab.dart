@@ -6,10 +6,9 @@ import 'package:undersea/controllers/navbar_controller.dart';
 
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/attack_unit_dto.dart';
-import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/send_attack_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
-import 'package:undersea/models/soldier.dart';
+
 import 'package:undersea/styles/style_constants.dart';
 
 class AttackingTab extends StatefulWidget {
@@ -43,7 +42,7 @@ class _AttackingTabState extends State<AttackingTab> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<BattleDataController>(builder: (controller) {
-      var itemCount = controller.unitTypesInfo.value.length + 1;
+      var itemCount = controller.unitTypesInfo.value.length + 2;
       /*sliderValues = List<int>.generate(
           controller.unitTypesInfo.value.length - 1, (index) => 0);*/
 
@@ -143,7 +142,7 @@ class _AttackingTabState extends State<AttackingTab> {
                                       mercenaryPrice = (mercenaryPrice +
                                               newValue -
                                               amountBeforeChange *
-                                                  actualSoldier.price)
+                                                  1) //actualSoldier.price)
                                           .toInt();
                                     });
                                   },

@@ -36,7 +36,8 @@ class BattleDataController extends GetxController {
     'Lézercápa': 'shark',
     'Rohamfóka': 'seal',
     'Csatacsikó': 'seahorse',
-    'Felfedező': 'dora'
+    'Felfedező': 'dora',
+    'Hadvezér': 'obiwan'
   };
 
   @override

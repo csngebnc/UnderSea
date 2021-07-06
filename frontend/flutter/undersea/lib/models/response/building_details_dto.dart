@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'effect_dto.dart';
+import 'material_dto.dart';
 
 part 'building_details_dto.g.dart';
 
@@ -7,7 +8,7 @@ part 'building_details_dto.g.dart';
 class BuildingDetailsDto {
   int id;
   int count;
-  int price;
+  List<MaterialDto>? requiredMaterials;
   bool underConstruction;
   List<EffectDto>? effects;
   String imageUrl;
@@ -15,7 +16,7 @@ class BuildingDetailsDto {
 
   BuildingDetailsDto(
       {this.effects,
-      required this.price,
+      this.requiredMaterials,
       required this.id,
       required this.count,
       required this.name,

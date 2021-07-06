@@ -11,7 +11,9 @@ BuildingDetailsDto _$BuildingDetailsDtoFromJson(Map<String, dynamic> json) {
     effects: (json['effects'] as List<dynamic>?)
         ?.map((e) => EffectDto.fromJson(e as Map<String, dynamic>))
         .toList(),
-    price: json['price'] as int,
+    requiredMaterials: (json['requiredMaterials'] as List<dynamic>?)
+        ?.map((e) => MaterialDto.fromJson(e as Map<String, dynamic>))
+        .toList(),
     id: json['id'] as int,
     count: json['count'] as int,
     name: json['name'] as String?,
@@ -24,7 +26,7 @@ Map<String, dynamic> _$BuildingDetailsDtoToJson(BuildingDetailsDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'count': instance.count,
-      'price': instance.price,
+      'requiredMaterials': instance.requiredMaterials,
       'underConstruction': instance.underConstruction,
       'effects': instance.effects,
       'imageUrl': instance.imageUrl,

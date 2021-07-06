@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -29,7 +31,10 @@ void main() async {
 
 Future<void> initServices() async {
   await GetStorage.init();
+  Get.put(NextRoundProvider());
 
+  Get.put(RoundController(Get.find()));
+  var roundController = Get.find<RoundController>();
   Get.put(BottomNavBarController());
   Get.put(UserDataProvider());
   Get.put(UserDataController(Get.find()));
@@ -37,12 +42,13 @@ Future<void> initServices() async {
   Get.put(CountryDataController(Get.find()));
   Get.put(BuildingDataProvider());
   Get.put(BuildingDataController(Get.find()));
-  Get.put(NextRoundProvider());
-  Get.put(RoundController(Get.find()));
+
   Get.put(UpgradeDataProvider());
   Get.put(UpgradesController(Get.find()));
   Get.put(BattleDataProvider());
   Get.put(BattleDataController(Get.find()));
+  await roundController.initPlatformState();
+  log((await roundController.signalR.isConnected).toString());
 }
 
 class MyApp extends StatelessWidget {

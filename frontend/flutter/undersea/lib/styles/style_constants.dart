@@ -104,7 +104,8 @@ class UnderseaStyles {
         height: 180,
         top: top ?? 0,
         left: left ?? 0,
-        child: UnderseaStyles.buildingImage(name, additional: "@3x"));
+        child: UnderseaStyles.buildingImage(name,
+            additional: name == 'stone_mine' ? '' : "@3x"));
   }
 
   static Widget buildingImage(String name, {String additional = ''}) {
@@ -146,7 +147,7 @@ class UnderseaStyles {
 
   static Widget militaryIcon(String assetName, int current, int max) {
     return Container(
-        margin: EdgeInsets.all(12),
+        margin: EdgeInsets.all(6),
         child: Column(
           children: [
             UnderseaStyles.assetIcon(assetName),
