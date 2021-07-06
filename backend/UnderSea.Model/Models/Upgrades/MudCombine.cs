@@ -11,12 +11,14 @@ namespace UnderSea.Model.Models
     {
         public override void ApplyEffect(Country country)
         {
-            country.Production.CoralProductionMultiplier *= (1+UpgradeConstants.MudCombine);
+            country.CountryMaterials
+                .SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Coral).Multiplier *= (1+UpgradeConstants.MudCombine);
         }
 
         public override void RemoveEffect(Country country)
         {
-            country.Production.CoralProductionMultiplier /= (1+UpgradeConstants.MudCombine);
+            country.CountryMaterials
+                .SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Coral).Multiplier /= (1+UpgradeConstants.MudCombine);
         }
     }
 }

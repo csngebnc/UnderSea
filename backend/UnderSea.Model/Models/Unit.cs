@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnderSea.Model.Models.Joins;
 
 namespace UnderSea.Model.Models
 {
@@ -15,7 +16,7 @@ namespace UnderSea.Model.Models
         public int DefensePoint { get; set; }
         public int MercenaryPerRound { get; set; }
         public int SupplyPerRound { get; set; }
-        public int Price { get; set; }
+        public ICollection<UnitMaterial> UnitMaterials { get; set; }
         public string ImageUrl { get; set; }
 
         public ICollection<CountryUnit> CountryUnits { get; set; }

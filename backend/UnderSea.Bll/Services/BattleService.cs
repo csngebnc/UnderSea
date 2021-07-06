@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.Material;
 using UnderSea.Bll.Dtos.Spy;
 using UnderSea.Bll.Dtos.Unit;
 using UnderSea.Bll.Paging;
@@ -42,7 +43,7 @@ namespace UnderSea.Bll.Services
                                     .Include(u => u.Country)
                                         .ThenInclude(c => c.Defenses)
                                     .Where(u => u.Id != userId
-                                          && !u.Country.Defenses.Any(d => d.AttackerCountryId == user.Country.Id 
+                                          && !u.Country.Defenses.Any(d => d.AttackerCountryId == user.Country.Id
                                                 && d.AttackRound == user.Country.World.Round))
                                     .ProjectTo<AttackableUserDto>(_mapper.ConfigurationProvider);
 
@@ -71,32 +72,47 @@ namespace UnderSea.Bll.Services
 
         public async Task<IEnumerable<BattleUnitDto>> GetUserAllUnitsAsync()
         {
-            var country = await GetCountry();
-            var userunits = await _context.CountryUnits
-                .Include(c => c.Unit)
-                .Where(c => c.CountryId == country.Id && c.Unit.Name != UnitConstants.Felfedezo)
-                .ToListAsync();
+            var country = await _context.Countries
+                .Include(c => c.CountryUnits)
+                .Include(c => c.SentSpies)
+                .Include(c => c.World)
+                .SingleOrDefaultAsync(c => c.OwnerId == _identityService.GetCurrentUserId());
+
+            var units = (await _context.Units.ToListAsync()).Select(u =>
+            {
+                return new BattleUnitDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    ImageUrl = u.ImageUrl,
+                    Count = 0
+                };
+            }).ToList();
+
+            foreach (var unit in country.CountryUnits)
+            {
+                units.Where(u => u.Id == unit.UnitId).SingleOrDefault().Count += unit.Count;
+            }
 
             var attackUnits = await _context.AttackUnits
                 .Include(a => a.Attack)
-                .Where(a => a.Attack.AttackRound == country.World.Round && a.Attack.AttackerCountryId == country.Id)
+                .Where(a => a.Attack.AttackRound == country.World.Round && 
+                    a.Attack.AttackerCountryId == country.Id)
                 .ToListAsync();
 
             foreach (var unit in attackUnits)
             {
-                userunits.Where(u => u.UnitId == unit.Id).FirstOrDefault().Count += unit.Count;
+                units.Where(u => u.Id == unit.UnitId).SingleOrDefault().Count += unit.Count;
             }
 
-            return userunits.Select(uu => 
-            {
-                return new BattleUnitDto
-                {
-                    Id = uu.UnitId,
-                    Name = uu.Unit.Name,
-                    Count = uu.Count,
-                    ImageUrl = uu.Unit.ImageUrl
-                };
-            });
+            var spyCount = country.SentSpies
+                .Where(sr => sr.Round == country.World.Round && sr.WinnerId == null)
+                .Select(sr => sr.NumberOfSpies)
+                .Sum();
+
+            units.Where(u => u.Name == UnitConstants.Felfedezo).SingleOrDefault().Count += spyCount;
+
+            return units;
         }
 
         public async Task<PagedResult<LoggedAttackDto>> GetLoggedAttacksAsync(PaginationData data)
@@ -104,7 +120,7 @@ namespace UnderSea.Bll.Services
             var country = await GetCountry();
 
             var attacks = await _context.Attacks
-                                            .Where(c => c.DefenderCountryId == country.Id || c.AttackerCountryId == country.Id)
+                                            .Where(c => (c.DefenderCountryId == country.Id && c.AttackRound != country.World.Round) || c.AttackerCountryId == country.Id)
                                             .OrderByDescending(a => a.AttackRound)
                                             .Include(a => a.AttackUnits)
                                                 .ThenInclude(au => au.Unit)
@@ -177,7 +193,10 @@ namespace UnderSea.Bll.Services
                 throw new NotExistsException("A bejelentkezett felhasználóhoz nem tartozik ország.");
             }
 
-            return (await _context.Units.ToListAsync())
+            return (await _context.Units
+                .Include(um => um.UnitMaterials)
+                .ThenInclude(m => m.Material)
+                .ToListAsync())
                 .Select(unit =>
                 {
                     var unitCount = country.CountryUnits.Where(cu => cu.UnitId == unit.Id).FirstOrDefault();
@@ -193,7 +212,15 @@ namespace UnderSea.Bll.Services
                         DefensePoint = unit.DefensePoint,
                         MercenaryPerRound = unit.MercenaryPerRound,
                         SupplyPerRound = unit.SupplyPerRound,
-                        Price = unit.Price,
+                        RequiredMaterials = unit.UnitMaterials.Select(c =>
+                                    new MaterialDto
+                                    {
+                                        Id = c.MaterialId,
+                                        Name = c.Material.Name,
+                                        Amount = c.Amount,
+                                        ImageUrl = c.Material.ImageUrl
+                                    })
+                                    .ToList(),
                         CurrentCount = count,
                         ImageUrl = unit.ImageUrl
                     };
@@ -221,11 +248,22 @@ namespace UnderSea.Bll.Services
 
         public async Task BuyUnitAsync(BuyUnitDto unitsDto)
         {
-            var country = await GetCountry();
+            var userId = _identityService.GetCurrentUserId();
+
+            var country = await _context.Countries.Include(w => w.World)
+                                                  .Include(c => c.CountryMaterials)
+                                                  .Include(c => c.CountryUnits)
+                                                  .Where(c => c.OwnerId == userId)
+                                                  .FirstOrDefaultAsync();
 
             foreach (var unitDto in unitsDto.Units)
             {
-                var unit = await _context.Units.Where(c => c.Id == unitDto.UnitId).FirstOrDefaultAsync();
+                var unit = await _context.Units
+                    .Include(um => um.UnitMaterials)
+                    .ThenInclude(m => m.Material)
+                    .Where(c => c.Id == unitDto.UnitId)
+                    .FirstOrDefaultAsync();
+
                 if (unit == null)
                 {
                     throw new NotExistsException("Nem létezik ilyen egység, amit meg lehetne vásárolni.");
@@ -240,28 +278,24 @@ namespace UnderSea.Bll.Services
                 var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id)
                                                         .FirstOrDefaultAsync();
 
-                if ((unit.Price * unitDto.Count) <= country.Pearl)
+                if (counit == null)
                 {
-                    if (counit == null)
+                    CountryUnit countryUnit = new CountryUnit()
                     {
-                        CountryUnit countryUnit = new CountryUnit()
-                        {
-                            UnitId = unit.Id,
-                            CountryId = country.Id,
-                            Count = unitDto.Count
-                        };
-                        _context.CountryUnits.Add(countryUnit);
-                    }
-                    else
-                    {
-                        counit.Count += unitDto.Count;
-                    }
-
-                    country.Pearl -= unit.Price * unitDto.Count;
+                        UnitId = unit.Id,
+                        CountryId = country.Id,
+                        Count = unitDto.Count
+                    };
+                    _context.CountryUnits.Add(countryUnit);
                 }
                 else
                 {
-                    throw new InvalidParameterException("Nincs elég gyöngy az egységek megvásárlásához.");
+                    counit.Count += unitDto.Count;
+                }
+
+                foreach (var materialRequirement in unit.UnitMaterials)
+                {
+                    country.CountryMaterials.SingleOrDefault(cm => cm.MaterialId == materialRequirement.MaterialId).Amount -= materialRequirement.Amount * unitDto.Count;
                 }
             }
 
@@ -288,7 +322,7 @@ namespace UnderSea.Bll.Services
                 .FirstOrDefaultAsync(u => u.Name == UnitConstants.Felfedezo))
                 .Id;
 
-            if(attackDto.Units.Any(au => au.UnitId == spyId))
+            if (attackDto.Units.Any(au => au.UnitId == spyId))
             {
                 throw new InvalidParameterException("Kémet nem küldhetsz támadni.");
             }
@@ -333,6 +367,9 @@ namespace UnderSea.Bll.Services
 
             var attackerSpyUnits = country.CountryUnits
                 .FirstOrDefault(cu => cu.Unit.Name == UnitConstants.Felfedezo);
+
+            if (attackerSpyUnits == null)
+                throw new NotExistsException("Nincsenek kém egységek, amiket el lehetne küldeni!");
 
             attackerSpyUnits.Count -= spies.SpyCount;
 

@@ -11,12 +11,12 @@ namespace UnderSea.Model.Models
     {
         public override void ApplyEffect(Country country)
         {
-            country.Production.BaseCoralProduction += EffectConstants.CoralNumber;
+            country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Coral).BaseProduction += EffectConstants.CoralNumber;
         }
 
         public override void RemoveEffect(Country country)
         {
-            country.Production.BaseCoralProduction -= EffectConstants.CoralNumber;
+            country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Coral).BaseProduction -= EffectConstants.CoralNumber;
         }
     }
 }

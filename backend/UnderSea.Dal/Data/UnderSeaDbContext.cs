@@ -10,7 +10,11 @@ using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Dal.Data.Seed;
 using UnderSea.Dal.EntityConfigurations;
+using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
+using UnderSea.Model.Models.Effects;
+using UnderSea.Model.Models.Joins;
+using UnderSea.Model.Models.Materials;
 
 namespace UnderSea.Dal.Data
 {
@@ -32,6 +36,11 @@ namespace UnderSea.Dal.Data
         public DbSet<UpgradeEffect> UpgradeEffects { get; set; }
         public DbSet<ActiveUpgrading> ActiveUpgradings { get; set; }
         public DbSet<World> Worlds { get; set; }
+
+        public DbSet<Material> Materials { get; set; }
+        public DbSet<BuildingMaterial> BuildingMaterials { get; set; }
+        public DbSet<UnitMaterial> UnitMaterials { get; set; }
+        public DbSet<CountryMaterial> CountryMaterials { get; set; }
 
         public UnderSeaDbContext(DbContextOptions options) : base(options)
         {
@@ -60,26 +69,40 @@ namespace UnderSea.Dal.Data
                 .WithMany(c => c.Defenses)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<BuildingMaterial>()
+                .HasKey(c => new { c.BuildingId, c.MaterialId });
+                                    
+            modelBuilder.Entity<UnitMaterial>()
+                .HasKey(c => new { c.UnitId, c.MaterialId });
+
+            modelBuilder.Entity<CountryMaterial>()
+                .HasKey(c => new { c.CountryId, c.MaterialId });
+
             modelBuilder.Entity<BuildingEffect>().HasKey(be => new { be.BuildingId, be.EffectId });
             modelBuilder.Entity<CountryUnit>().HasKey(cu => new { cu.CountryId, cu.UnitId });
             modelBuilder.Entity<CountryUpgrade>().HasKey(cu => new { cu.CountryId, cu.UpgradeId });
             modelBuilder.Entity<UpgradeEffect>().HasKey(ue => new { ue.EffectId, ue.UpgradeId });
 
-            modelBuilder.Entity<Country>().OwnsOne(p => p.Production);//.HasData(productions);
-            modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint);//.HasData(fightpoints);
+            modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint);
 
             modelBuilder.Entity<Effect>()
                 .HasDiscriminator(e => e.EffectType)
-                .HasValue<Effect>("effect_base")
-                .HasValue<CoralEffect>("effect_coral")
-                .HasValue<MilitaryEffect>("effect_military")
-                .HasValue<PopulationEffect>("effect_population")
-                .HasValue<Alchemy>("upgrade_effect_alchemy")
-                .HasValue<CoralWall>("upgrade_effect_coralwall")
-                .HasValue<MudCombine>("upgrade_effect_mudcombine")
-                .HasValue<MudTractor>("upgrade_effect_mudtractor")
-                .HasValue<SonarCanon>("upgrade_effect_sonarcannon")
-                .HasValue<UnderwaterMartialArt>("upgrade_effect_martialart");
+                .HasValue<Effect>(EffectTypeConstants.Base)
+                .HasValue<StoneEffect>(EffectTypeConstants.StoneEffect)
+                .HasValue<CoralEffect>(EffectTypeConstants.CoralEffect)
+                .HasValue<MilitaryEffect>(EffectTypeConstants.MilitaryEffect)
+                .HasValue<PopulationEffect>(EffectTypeConstants.PopulationEffect)
+                .HasValue<Alchemy>(EffectTypeConstants.Alchemy)
+                .HasValue<CoralWall>(EffectTypeConstants.CoralWall)
+                .HasValue<MudCombine>(EffectTypeConstants.MudCombine)
+                .HasValue<MudTractor>(EffectTypeConstants.MudTractor)
+                .HasValue<SonarCanon>(EffectTypeConstants.SonarCanon)
+                .HasValue<UnderwaterMartialArt>(EffectTypeConstants.UnderwaterMartialArt);
+
+            modelBuilder.Entity<Material>()
+                .Property(m => m.MaterialType)
+                .HasMaxLength(200)
+                .HasColumnName("material_type");
 
             modelBuilder.Entity<Effect>()
                 .Property(e => e.EffectType)
@@ -95,12 +118,17 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<SonarCanon>().HasData(new SonarCanon { Id = 7, Name = "Növeli a támadó pontokat 20%-kal" });
             modelBuilder.Entity<UnderwaterMartialArt>().HasData(new UnderwaterMartialArt { Id = 8, Name = "Növeli a védelmi és támadóerőt pontokat 10%-kal" });
             modelBuilder.Entity<Alchemy>().HasData(new Alchemy { Id = 9, Name = "Növeli a beszedett adót 30%-kal" });
+            modelBuilder.Entity<StoneEffect>().HasData(new StoneEffect { Id = 10, Name = "25 követ termel körönként" });
 
             modelBuilder.ApplyConfiguration(new WorldEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new MaterialEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CountryEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new CountryMaterialEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuildingEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new BuildingMaterialEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UnitEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitMaterialEntityConfiguration());
             //modelBuilder.ApplyConfiguration(new EffectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UpgradeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuildingEffectEntityConfiguration());
