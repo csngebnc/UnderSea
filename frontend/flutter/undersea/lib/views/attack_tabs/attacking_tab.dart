@@ -28,16 +28,21 @@ class _AttackingTabState extends State<AttackingTab> {
   @override
   void initState() {
     soldierList = controller.unitTypesInfo;
+    for (int i = 0; i < soldierList.value.length; i++) {
+      if (soldierList.value[i].name == 'Hadvezér') generalIndex = i;
+    }
     sliderValues = List<int>.generate(soldierList.value.length, (index) => 0);
     super.initState();
   }
 
   bool _canAttack() {
     if (sliderValues.every((element) => element == 0)) return false;
+    if (sliderValues[generalIndex] == 0) return false;
     return true;
   }
 
   var sliderValues = List<int>.generate(3, (index) => 0);
+  late int generalIndex;
   var mercenaryPrice = 0;
   @override
   Widget build(BuildContext context) {

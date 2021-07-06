@@ -69,15 +69,6 @@ class _MilitaryTabState extends State<Military> {
             }));
   }
 
-  /*int _calculateSoldierPrice() {
-    int totalPrice = 0;
-    /*for (int i = 0; i < soldierList.value.length; i++) {
-      totalPrice +=
-          soldierList.value[i].requriedMaterials![0].amount * buyList[i];
-    }*/
-    return totalPrice;
-  }*/
-
   bool _canHireSoldiers() {
     if (buyList.every((element) => element == 0)) return false;
 
@@ -86,8 +77,10 @@ class _MilitaryTabState extends State<Military> {
       materialIdToAmount.addIf(true, element.id, element.amount);
     });
     bool areResourcesEnough = true;
+    var unitsToBeBought = 0;
 
     for (int i = 0; i < soldierList.value.length; i++) {
+      unitsToBeBought += buyList[i];
       soldierList.value[i].requiredMaterials?.forEach((mat) {
         late int newValue;
         var original = materialIdToAmount[mat.id];
@@ -99,6 +92,12 @@ class _MilitaryTabState extends State<Military> {
         materialIdToAmount[mat.id] = newValue;
       });
     }
+    var allUnitsCount = 0;
+    controller.allUnitsInfo.value.forEach((element) {
+      allUnitsCount += element.count;
+    });
+    if (countryData!.maxUnitCount < allUnitsCount + unitsToBeBought)
+      return false;
 
     return areResourcesEnough;
   }
