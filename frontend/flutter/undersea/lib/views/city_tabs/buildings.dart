@@ -5,6 +5,7 @@ import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 
 import 'package:undersea/models/response/building_details_dto.dart';
+import 'package:undersea/models/response/material_dto.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:get/get.dart';
 
@@ -59,8 +60,15 @@ class _BuildingsTabState extends State<Buildings> {
     if (_selectedIndex == null) return false;
     if (buildingList.value.any((element) => element.underConstruction))
       return false;
-    /*if (buildingList.value[_selectedIndex!].price >
-        playerController.countryDetailsData.value!.pearl) return false;*/
+    var materials = buildingList.value[_selectedIndex!].requiredMaterials ??
+        <MaterialDto>[];
+    for (int i = 0; i < materials.length; i++) {
+      var cost = materials[i];
+      var available = playerController.countryDetailsData.value!.materials
+          ?.firstWhere((element) => element.id == cost.id);
+      if (cost.amount > available!.amount) return false;
+    }
+
     return true;
   }
 
@@ -82,12 +90,6 @@ class _BuildingsTabState extends State<Buildings> {
           style: UnderseaStyles.listRegular));
       isFirst = false;
     });
-
-    /* Text(
-                                building.requiredMaterials?[0].name
-                                        .toString() ??
-                                    '' + Strings.pearl_cost_per_unit.tr,
-                               )*/
 
     return costs;
   }
