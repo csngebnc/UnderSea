@@ -24,6 +24,7 @@ using UnderSea.Bll.Mapper;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
+using UnderSea.Bll.Validation.ProblemDetails;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -115,29 +116,7 @@ namespace UnderSea.Api
                 }
                 );
 
-            services.AddProblemDetails(options =>
-            {
-                options.IncludeExceptionDetails = (ctx, ex) => false;
-
-                options.Map<InvalidParameterException>(
-                  (ctx, ex) =>
-                  {
-                      var pd = StatusCodeProblemDetails.Create(StatusCodes.Status400BadRequest);
-                      pd.Title = ex.Message;
-                      return pd;
-                  }
-                  );
-
-                options.Map<NotExistsException>(
-                  (ctx, ex) =>
-                  {
-                      var pd = StatusCodeProblemDetails.Create(StatusCodes.Status401Unauthorized);
-                      pd.Title = ex.Message;
-                      return pd;
-                  }
-                  );
-
-            });
+            services.AddProblemDetails(ConfigureProblemDetails);
 
             services.AddControllersWithViews().AddFluentValidation(fv =>
             {
@@ -212,14 +191,27 @@ namespace UnderSea.Api
 
         private void ConfigureProblemDetails(ProblemDetailsOptions options)
         {
-            /*
-            options.MapToStatusCode<NotExistsException>(StatusCodes.Status404NotFound);
+            options.IncludeExceptionDetails = (ctx, ex) => false;
 
-            options.MapToStatusCode<InvalidParameterException>(StatusCodes.Status400BadRequest);
-            options.MapToStatusCode<ArgumentOutOfRangeException>(StatusCodes.Status400BadRequest);
+            options.Map<InvalidParameterException>(
+              (ctx, ex) =>
+              {
+                  var pd = new ErrorBodyProblemDetails();
+                  pd.Status = 400;
+                  pd.Title = "Bad request (400)";
+                  pd.Errors = ex.Errors;
+                  return pd;
+              }
+              );
 
-            options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
-            */
+            options.Map<NotExistsException>(
+              (ctx, ex) =>
+              {
+                  var pd = StatusCodeProblemDetails.Create(StatusCodes.Status401Unauthorized);
+                  pd.Title = ex.Message;
+                  return pd;
+              }
+              );
         }
 
     }
