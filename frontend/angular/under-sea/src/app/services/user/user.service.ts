@@ -34,7 +34,7 @@ export class UserService {
         if (r.results)
           r.results.forEach((u: UserRankDto, index) =>
             result.list.push({
-              placement: (result.pageNumber - 1) * result.pageSize + index + 1,
+              placement: u.placement,
               name: u.name,
               score: u.points,
             })

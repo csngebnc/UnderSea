@@ -23,18 +23,19 @@
         formControlName="password"
         required
       />
-      <span *ngIf="loginFailed.value" class="error-text"
-        >Hibás felhasználónév vagy jelszó!</span
-      >
+      <div class="error-container">
+        <p *ngIf="loginFailed.value" class="error-text">
+          Hibás felhasználónév vagy jelszó!
+        </p>
+      </div>
       <button
         type="submit"
-        class="gradient-button mt-2"
+        class="gradient-button"
         [disabled]="!loginForm.valid"
       >
         Belépés
       </button>
       <a class="link mt-2" routerLink="/register">Regisztráció</a>
-      <div class="low-opacity-white"></div>
     </form>
   </div>
 </div>

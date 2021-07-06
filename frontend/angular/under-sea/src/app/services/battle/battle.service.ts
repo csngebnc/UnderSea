@@ -1,3 +1,4 @@
+import { Material } from './../../models/material.model';
 import { Injectable } from '@angular/core';
 import {
   BattleService as bService,
@@ -15,6 +16,7 @@ import { PagedBattles } from 'src/app/models/paged-battles.model';
 import { PagedList } from 'src/app/models/paged-list.model';
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
 import { PagedSpyReport } from 'src/app/models/paged-spy-report.model';
+import { count } from 'console';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +29,14 @@ export class BattleService {
       map((arr: Array<UnitDto>) => {
         const result: Array<UnitDetails> = [];
         arr.forEach((u: UnitDto) => {
+          const materials: Array<Material> = u.requiredMaterials.map((m) => {
+            return {
+              id: m.id,
+              count: m.amount,
+              imageUrl: m.imageUrl,
+              name: m.name,
+            };
+          });
           result.push({
             id: u.id,
             name: u.name,
@@ -35,7 +45,7 @@ export class BattleService {
             attack: u.attackPoint,
             mercenary: u.mercenaryPerRound,
             supply: u.supplyPerRound,
-            price: u.price,
+            price: materials,
             icon: u.imageUrl,
           });
         });

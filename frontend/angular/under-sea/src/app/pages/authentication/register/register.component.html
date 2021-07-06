@@ -30,29 +30,64 @@
       />
       <input
         type="text"
-        placeholder="A városod neve, amit építesz"
+        placeholder="Az országod neve, amit építesz"
         class="text-input"
         required
         formControlName="countryName"
       />
-      <span *ngIf="loginFailed.value" class="error-text"
-        >Sikertelen regisztráció!</span
-      >
-      <div class="error-container">
-        <p *ngIf="!registerForm.controls['password'].valid" class="error-text">
-          A jelszónak tartalmaznia kell 1 nagybetűt, 1 kisbetűt, 1 számot és 1
+
+      <div class="error-container w-85">
+        <p *ngIf="regFailed.value" class="error-text">
+          A felhasználónév már foglalt!
+        </p>
+        <p
+          *ngIf="
+            !registerForm.controls['userName'].valid &&
+            registerForm.controls['userName'].touched &&
+            !regFailed.value
+          "
+          class="error-text"
+        >
+          A felhasználónevet kötelező megadni és nem tartalmazhat szóközt vagy
           speciális karaktert!
+        </p>
+        <p
+          *ngIf="
+            !registerForm.controls['password'].valid &&
+            registerForm.controls['password'].touched
+          "
+          class="error-text"
+        >
+          A jelszónak tartalmaznia kell 1 nagybetűt, 1 kisbetűt, 1 számot és 1
+          speciális karaktert és hossza legalább 6 karakter legyen!
+        </p>
+        <p
+          *ngIf="
+            !registerForm.controls['confirmPassword'].valid &&
+            registerForm.controls['confirmPassword'].touched
+          "
+          class="error-text"
+        >
+          A két jelszó nem egyezik meg!
+        </p>
+        <p
+          *ngIf="
+            !registerForm.controls['countryName'].valid &&
+            registerForm.controls['countryName'].touched
+          "
+          class="error-text"
+        >
+          Kötelező ország nevet megadni!
         </p>
       </div>
       <button
         type="submit"
-        class="gradient-button"
+        class="gradient-button mt-05"
         [disabled]="!registerForm.valid"
       >
         Regisztráció
       </button>
       <a class="link mt-2" routerLink="/login">Bejelentkezés</a>
-      <div class="low-opacity-white"></div>
     </form>
   </div>
 </div>

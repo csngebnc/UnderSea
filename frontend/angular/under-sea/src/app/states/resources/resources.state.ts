@@ -10,6 +10,7 @@ import { ApiService } from 'src/app/services/api/api.service';
 import { tap } from 'rxjs/operators';
 import { ResourcesStateModel } from 'src/app/models/states/resources-state.model';
 import { Unit } from 'src/app/models/unit.model';
+import { Material } from 'src/app/models/material.model';
 
 @State<ResourcesStateModel>({
   name: 'resourcesState',
@@ -17,10 +18,7 @@ import { Unit } from 'src/app/models/unit.model';
     resources: {
       units: [],
       buildings: [],
-      pearls: 0,
-      corals: 0,
-      pearlsPerRound: 0,
-      coralsPerRound: 0,
+      materials: [],
       hasSonar: false,
       maxUnitCount: 0,
     },
@@ -31,7 +29,12 @@ import { Unit } from 'src/app/models/unit.model';
 export class ResourcesState {
   @Selector()
   static pearls(state: ResourcesStateModel): number {
-    return state.resources.pearls;
+    return state.resources.materials.find((m) => m.id === 1).count;
+  }
+
+  @Selector()
+  static materials(state: ResourcesStateModel): Array<Material> {
+    return state.resources.materials;
   }
 
   @Selector()

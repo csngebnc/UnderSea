@@ -3,11 +3,16 @@
   "imageUrl": "https://underseastorage.blob.core.windows.net",
   "images": {
     "profile": "/others/profile.svg",
-    "coral": "/currency/coral.svg",
-    "pearl": "/currency/shell.svg",
     "sonar": "/buildings/sonar_hd.png",
     "castle": "/buildings/castle_hd.png",
     "flowcontrol": "/buildings/flowcontrol_hd.png",
-    "unknown": "/buildings/unknown_hd.png"
-  }
+    "unknown": "/buildings/unknown_hd.png",
+    "stonemine": "/buildings/stone_mine.png"
+  },
+  "loadingWhitelist": [
+    "/api/User",
+    "/api/Country",
+    "/api/Round/call-next-round"
+  ],
+  "tokenWhitelist": ["/connect/token", "/register"]
 }

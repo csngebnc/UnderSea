@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Upgrade } from 'src/app/models/upgrade.model';
-import { BehaviorSubject } from 'rxjs';
 import { UpgradeService } from 'src/app/services/upgrade/upgrade.service';
+import { Select } from '@ngxs/store';
+import { LoadingState } from 'src/app/states/loading/loading.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'upgrades',
@@ -12,9 +14,10 @@ export class UpgradesComponent implements OnInit {
   selectedUpgrade: number | null = null;
   isResearching: boolean = false;
 
-  isLoading$ = new BehaviorSubject(false);
-
   upgrades: Array<Upgrade> = [];
+
+  @Select(LoadingState.isLoading)
+  loading$: Observable<boolean>;
 
   constructor(private upgradeService: UpgradeService) {}
 
@@ -23,12 +26,9 @@ export class UpgradesComponent implements OnInit {
   }
 
   private initUpgrades(): void {
-    this.isLoading$.next(true);
-
     this.upgradeService.getUpgrades().subscribe(
       (r: Array<Upgrade>) => {
         this.upgrades = r;
-        this.isLoading$.next(false);
       },
       (e) => console.error(e)
     );

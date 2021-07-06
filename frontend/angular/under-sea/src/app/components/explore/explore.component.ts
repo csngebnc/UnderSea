@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { BattleService } from 'src/app/services/battle/battle.service';
 import { PagedList } from 'src/app/models/paged-list.model';
 import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-code';
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
+import { Select } from '@ngxs/store';
+import { LoadingState } from 'src/app/states/loading/loading.state';
 
 @Component({
   selector: 'explore',
@@ -11,8 +13,10 @@ import { AttackerUnit } from 'src/app/models/attacker-unit.model';
   styleUrls: ['./explore.component.scss'],
 })
 export class ExploreComponent implements OnInit {
-  isLoading$ = new BehaviorSubject(false);
   spies: AttackerUnit;
+
+  @Select(LoadingState.isLoading)
+  loading$: Observable<boolean>;
 
   players: PagedList = {
     list: [],
@@ -21,23 +25,20 @@ export class ExploreComponent implements OnInit {
     allResultsCount: 0,
   };
 
-  filter: string | undefined = undefined;
+  filter: string | undefined = '';
   targetId: number;
   selectedCount: number;
 
-  constructor(private battleService: BattleService) {}
-
-  ngOnInit(): void {
+  constructor(private battleService: BattleService) {
     this.initExplore();
   }
 
-  private initPlayers(): void {
-    this.isLoading$.next(true);
+  ngOnInit(): void {}
 
+  private initPlayers(): void {
     this.battleService.getUsers(this.players.pageNumber, this.filter).subscribe(
       (r) => {
         this.players = r;
-        this.isLoading$.next(false);
       },
       (e) => console.error(e)
     );
@@ -45,16 +46,14 @@ export class ExploreComponent implements OnInit {
 
   private initExplore(): void {
     this.players.pageNumber = 1;
-    this.isLoading$.next(true);
 
     let users = this.battleService.getUsers(this.players.pageNumber, undefined);
     let units = this.battleService.getSpies();
 
     forkJoin([users, units]).subscribe(
-      (responses) => {
-        this.players = responses[0];
-        this.spies = responses[1];
-        this.isLoading$.next(false);
+      ([users, units]) => {
+        this.players = users;
+        this.spies = units;
       },
       (e) => console.error(e)
     );
@@ -74,6 +73,7 @@ export class ExploreComponent implements OnInit {
   }
 
   onFilter(filter: string): void {
+    this.players.list = [];
     this.filter = filter;
     this.players.pageNumber = 1;
     this.initPlayers();

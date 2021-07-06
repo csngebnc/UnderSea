@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Resources } from 'src/app/models/resources.model';
-import * as config from 'src/assets/config.json';
 
 @Component({
   selector: 'infobar',
@@ -11,9 +10,6 @@ export class InfobarComponent implements OnInit {
   @Input() round: number;
   @Input() placement: number;
   @Input() resources: Resources;
-
-  coralImg = config.imageUrl + config.images.coral;
-  pearlImg = config.imageUrl + config.images.pearl;
 
   constructor() {}
 

@@ -15,6 +15,7 @@ export class BuildingContainerComponent implements OnInit {
   sonar: string = config.imageUrl + config.images.sonar;
   castle: string = config.imageUrl + config.images.castle;
   flowcontrol: string = config.imageUrl + config.images.flowcontrol;
+  stonemine: string = config.imageUrl + config.images.stonemine;
 
   constructor(private roundService: RoundService) {}
 

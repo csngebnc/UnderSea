@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BattleService } from 'src/app/services/battle/battle.service';
 import { PagedBattles } from 'src/app/models/paged-battles.model';
-import { BehaviorSubject } from 'rxjs';
 import { FightOutcome } from 'src/app/services/generated-code/generated-api-code';
+import { Select } from '@ngxs/store';
+import { LoadingState } from 'src/app/states/loading/loading.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'battle',
@@ -17,9 +19,11 @@ export class BattleComponent implements OnInit {
     allResultsCount: 0,
   };
 
+  @Select(LoadingState.isLoading)
+  loading$: Observable<boolean>;
+
   notYet = FightOutcome.NotPlayedYet;
   lose = FightOutcome.OtherUser;
-  isLoading$ = new BehaviorSubject(false);
 
   constructor(private battleService: BattleService) {}
 
@@ -28,11 +32,9 @@ export class BattleComponent implements OnInit {
   }
 
   initBattles() {
-    this.isLoading$.next(true);
     this.battleService.getBattles(this.pagedBattles.pageNumber).subscribe(
       (r) => {
         this.pagedBattles = r;
-        this.isLoading$.next(false);
       },
       (e) => console.error(e)
     );

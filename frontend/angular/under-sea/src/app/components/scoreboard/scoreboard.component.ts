@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user/user.service';
 import { PagedList } from 'src/app/models/paged-list.model';
-import { BehaviorSubject } from 'rxjs';
+import { LoadingState } from 'src/app/states/loading/loading.state';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'scoreboard',
@@ -15,9 +17,11 @@ export class ScoreboardComponent implements OnInit {
     pageSize: 0,
     allResultsCount: 0,
   };
-
-  isLoading = new BehaviorSubject(false);
   filter: string | undefined = undefined;
+
+  @Select(LoadingState.isLoading)
+  loading$: Observable<boolean>;
+
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
@@ -25,13 +29,11 @@ export class ScoreboardComponent implements OnInit {
   }
 
   private initScoreBoard(): void {
-    this.isLoading.next(true);
     this.userService
       .getScoreBoard(this.scoreboard.pageNumber, this.filter)
       .subscribe(
         (r: PagedList) => {
           this.scoreboard = r;
-          this.isLoading.next(false);
         },
         (e) => console.log(e)
       );

@@ -65,11 +65,17 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .error-text {
-  color: $invalid;
+  color: $light-grey;
   font-family: "OpenSans";
-  font-weight: bolder;
-  margin: 0;
-  padding: 0;
+  font-size: 0.9rem;
+  margin-top: 0;
+  margin-bottom: 0.3rem;
+  padding: 0.3rem;
+  text-align: center;
+  border: 1px solid $invalid;
+  border-radius: 10px;
+  backdrop-filter: $blur;
+  background-color: rgba($color: #ad0f0f, $alpha: 0.2);
 }
 
 .container {
@@ -80,18 +86,8 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   align-items: center;
 }
 
-.low-opacity-white {
-  background-color: $white;
-  opacity: 0.2;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: -1;
-  border-radius: inherit;
-  margin: -1rem;
-}
-
 .blurry-panel {
+  background-color: rgba(255, 255, 255, 0.2);
   position: relative;
   border-radius: 16px;
   padding: 1rem;
@@ -181,7 +177,7 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .modal-lg {
-  width: 1267px;
+  width: 1400px;
 }
 
 .modal-sm {
@@ -286,7 +282,7 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  padding: 1rem;
+  padding: 0.4rem;
 }
 
 .non-styled-list-item {
@@ -325,8 +321,8 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .item-lg {
-  width: 18.5rem;
-  height: 19.7rem;
+  width: 16rem;
+  height: 22rem;
 }
 
 .item-sm {
@@ -363,8 +359,8 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   width: 4.5rem;
 }
 
-.w-12 {
-  width: 12rem;
+.w-10 {
+  width: 10%;
   box-sizing: border-box;
 }
 

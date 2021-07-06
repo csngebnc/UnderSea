@@ -2,12 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
 import { PagedList } from 'src/app/models/paged-list.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
-import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-code';
-import { Select, Store } from '@ngxs/store';
-import { ResourcesState } from 'src/app/states/resources/resources.state';
-import { Unit } from 'src/app/models/unit.model';
-import { GetResources } from 'src/app/states/resources/resources.actions';
 
 @Component({
   selector: 'attack',
@@ -24,10 +20,11 @@ export class AttackComponent implements OnInit {
     allResultsCount: 0,
   };
 
-  isLoading$ = new BehaviorSubject(false);
   filter: string | undefined = undefined;
   targetId: number;
   attackerUnits: Array<AttackUnitDto> = [];
+  generalSelected: boolean = false;
+  selectedUnitcount = 0;
 
   constructor(private battleService: BattleService) {}
 
@@ -36,12 +33,9 @@ export class AttackComponent implements OnInit {
   }
 
   private initPlayers(): void {
-    this.isLoading$.next(true);
-
     this.battleService.getUsers(this.players.pageNumber, this.filter).subscribe(
       (r) => {
         this.players = r;
-        this.isLoading$.next(false);
       },
       (e) => console.error(e)
     );
@@ -49,7 +43,6 @@ export class AttackComponent implements OnInit {
 
   private initAttack(): void {
     this.players.pageNumber = 1;
-    this.isLoading$.next(true);
 
     let users = this.battleService.getUsers(this.players.pageNumber, undefined);
     let units = this.battleService.getAttackerUnits();
@@ -58,7 +51,6 @@ export class AttackComponent implements OnInit {
       (responses) => {
         this.players = responses[0];
         this.units = responses[1];
-        this.isLoading$.next(false);
       },
       (e) => console.error(e)
     );
@@ -69,21 +61,9 @@ export class AttackComponent implements OnInit {
   }
 
   onSetUnit(unit: AttackUnitDto): void {
-    const index = this.attackerUnits.findIndex((u) => u.unitId === unit.unitId);
-    if (index !== -1) {
-      this.attackerUnits[index].count = unit.count;
-    } else {
-      this.attackerUnits.push({ unitId: unit.unitId, count: unit.count });
-    }
-  }
-
-  isButtonDisabled(): boolean {
-    let sum: number = 0;
-    this.attackerUnits.forEach((unit) => {
-      sum += unit.count;
-    });
-
-    return !(this.targetId && sum);
+    if (unit.unitId === 5) this.setGeneral(unit);
+    this.setUnits(unit);
+    this.sumUnits();
   }
 
   onSwitchPage(pageNumber: number): void {
@@ -104,5 +84,32 @@ export class AttackComponent implements OnInit {
       },
       (e) => console.error(e)
     );
+  }
+
+  private sumUnits(): void {
+    let sum: number = 0;
+    this.attackerUnits.forEach((unit) => {
+      sum += unit.count;
+    });
+
+    this.selectedUnitcount = sum;
+  }
+
+  private setGeneral(general: AttackUnitDto): void {
+    if (general.count === 0) this.generalSelected = false;
+    else this.generalSelected = true;
+  }
+
+  private setUnits(unit: AttackUnitDto): void {
+    const index = this.attackerUnits.findIndex((u) => u.unitId === unit.unitId);
+    if (index !== -1) {
+      this.attackerUnits[index].count = unit.count;
+    } else {
+      if (unit.count !== 0) {
+        this.attackerUnits.push({ unitId: unit.unitId, count: unit.count });
+      } else {
+        this.attackerUnits.splice(index, 1);
+      }
+    }
   }
 }
