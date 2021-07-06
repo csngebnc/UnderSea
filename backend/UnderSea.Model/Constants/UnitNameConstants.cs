@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UnderSea.Model.Constants
 {
-    public static class UnitConstants
+    public static class UnitNameConstants
     {
         public const string RohamFoka = "Rohamfóka";
         public const string Csatacsiko  = "Csatacsikó";

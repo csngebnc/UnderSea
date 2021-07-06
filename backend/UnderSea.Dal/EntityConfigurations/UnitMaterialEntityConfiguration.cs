@@ -38,6 +38,12 @@ namespace UnderSea.Dal.EntityConfigurations
                     UnitId = 4,
                     MaterialId = 1,
                     Amount = 50
+                },
+                new UnitMaterial()
+                {
+                    UnitId = 5,
+                    MaterialId = 1,
+                    Amount = 200
                 }
                 );
         }
