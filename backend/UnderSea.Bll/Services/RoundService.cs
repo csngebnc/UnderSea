@@ -87,7 +87,7 @@ namespace UnderSea.Bll.Services
         {
             foreach (var country in countries)
             {
-                foreach(var upgrade in country.ActiveUpgradings.Where(c => c.EstimatedFinish == world.Round))
+                foreach(var upgrade in country.ActiveUpgradings.Where(c => c.EstimatedFinish == world.Round+1))
                 {
                     var newCountryUpgrade = new CountryUpgrade()
                     {
