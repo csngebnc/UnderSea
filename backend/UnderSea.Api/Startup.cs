@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
@@ -200,6 +201,21 @@ namespace UnderSea.Api
                   pd.Status = 400;
                   pd.Title = "Bad request (400)";
                   pd.Errors = ex.Errors;
+                  return pd;
+              }
+              );
+
+            options.Map<ArgumentOutOfRangeException>(
+              (ctx, ex) =>
+              {
+                  var errors = new List<string>();
+                  errors.Add(ex.Message);
+                  var dict = new Dictionary<string, ICollection<string>>();
+                  dict.Add(ex.ParamName, errors);
+                  var pd = new ErrorBodyProblemDetails();
+                  pd.Status = 400;
+                  pd.Title = "Bad request (400)";
+                  pd.Errors = dict;
                   return pd;
               }
               );
