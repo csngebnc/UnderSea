@@ -47,13 +47,13 @@ namespace UnderSea.Bll.Services
                     int requiredFood = unit.Unit.SupplyPerRound * unit.Count;
                     int requiredMercenary = unit.Unit.MercenaryPerRound * unit.Count;
 
-                    var coralMaterial = country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Coral).Amount;
-                    var pearlMaterial = country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Pearl).Amount;
+                    var coralCountryMaterial = country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Coral);
+                    var pearlCountryMaterial = country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Pearl);
 
-                    if (requiredFood <= coralMaterial && requiredMercenary <= pearlMaterial)
+                    if (requiredFood <= coralCountryMaterial.Amount && requiredMercenary <= pearlCountryMaterial.Amount)
                     {
-                        coralMaterial -= requiredFood;
-                        pearlMaterial -= requiredMercenary;
+                        coralCountryMaterial.Amount -= requiredFood;
+                        pearlCountryMaterial.Amount -= requiredMercenary;
                     }
                     else
                     {
@@ -64,7 +64,7 @@ namespace UnderSea.Bll.Services
                             int food = unit.Unit.SupplyPerRound * i;
                             int mercenary = unit.Unit.MercenaryPerRound * i;
 
-                            if (food <= coralMaterial && mercenary <= pearlMaterial)
+                            if (food <= coralCountryMaterial.Amount && mercenary <= pearlCountryMaterial.Amount)
                             {
                                 numberOfAlive = i;
                             }
@@ -76,8 +76,8 @@ namespace UnderSea.Bll.Services
 
                         unit.Count = numberOfAlive;
 
-                        coralMaterial -= numberOfAlive * unit.Unit.SupplyPerRound;
-                        pearlMaterial -= numberOfAlive * unit.Unit.MercenaryPerRound;
+                        coralCountryMaterial.Amount -= numberOfAlive * unit.Unit.SupplyPerRound;
+                        pearlCountryMaterial.Amount -= numberOfAlive * unit.Unit.MercenaryPerRound;
                     }
                 }
             }
