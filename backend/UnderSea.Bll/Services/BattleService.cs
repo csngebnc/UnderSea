@@ -272,7 +272,7 @@ namespace UnderSea.Bll.Services
                 var unitSum = country.CountryUnits.Select(cu => cu.Count).Sum();
                 if (country.MaxUnitCount - unitSum - unitDto.Count < 0)
                 {
-                    throw new InvalidParameterException("Nem lehetséges ez a művelet: a maximális egység számánál nem lehet több a felhasználó egységeinek száma.");
+                    throw new InvalidParameterException(nameof(country.MaxUnitCount),"Nem lehetséges ez a művelet: a maximális egység számánál nem lehet több a felhasználó egységeinek száma.");
                 }
 
                 var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id)
@@ -324,7 +324,7 @@ namespace UnderSea.Bll.Services
 
             if (attackDto.Units.Any(au => au.UnitId == spyId))
             {
-                throw new InvalidParameterException("Kémet nem küldhetsz támadni.");
+                throw new InvalidParameterException("unit","Kémet nem küldhetsz támadni.");
             }
 
             var secondAttack = await _context.Attacks
@@ -334,12 +334,12 @@ namespace UnderSea.Bll.Services
 
             if (secondAttack)
             {
-                throw new InvalidParameterException("Nem támadható ugyanaz az ország egy körben!");
+                throw new InvalidParameterException("country","Nem támadható ugyanaz az ország egy körben!");
             }
 
             if (attackerCountry.Id == attackDto.AttackedCountryId)
             {
-                throw new InvalidParameterException("Nem támadhatja meg saját magát az ország.");
+                throw new InvalidParameterException("country","Nem támadhatja meg saját magát az ország.");
             }
 
             attackDto.Units = attackDto.Units.GroupBy(u => u.UnitId)
@@ -362,7 +362,7 @@ namespace UnderSea.Bll.Services
 
             if (spies.SpiedCountryId == country.Id)
             {
-                throw new InvalidParameterException("Nem kémlelheti saját magát az ország.");
+                throw new InvalidParameterException("country", "Nem kémlelheti saját magát az ország.");
             }
 
             var attackerSpyUnits = country.CountryUnits
@@ -390,7 +390,7 @@ namespace UnderSea.Bll.Services
             var generalId = (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
             if(!attackDto.Units.Any(u => u.UnitId == generalId))
             {
-                throw new InvalidParameterException("A támadáshoz legalább egy hadvezért is küldeni kell.");
+                throw new InvalidParameterException("unit","A támadáshoz legalább egy hadvezért is küldeni kell.");
             }
 
             var attack = new Attack()
@@ -409,7 +409,7 @@ namespace UnderSea.Bll.Services
                     var cunit = attackerCountry.CountryUnits.FirstOrDefault(c => c.UnitId == unit.UnitId);
                     if (cunit == null)
                     {
-                        throw new InvalidParameterException("Nincsen ilyen egysége az országnak.");
+                        throw new InvalidParameterException("unit","Nincsen ilyen egysége az országnak.");
                     }
 
                     cunit.Count -= unit.Count;

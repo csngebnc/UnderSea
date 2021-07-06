@@ -109,7 +109,7 @@ namespace UnderSea.Bll.Services
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
             {
-                throw new InvalidParameterException("Az ország nevének megadása kötelező.");
+                throw new InvalidParameterException("country", "Az ország nevének megadása kötelező.");
             }
 
             var country = await _context.Countries

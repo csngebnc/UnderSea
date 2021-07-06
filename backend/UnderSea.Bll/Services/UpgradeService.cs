@@ -86,13 +86,13 @@ namespace UnderSea.Bll.Services
             var activeupgrade = await _context.ActiveUpgradings.Where(c => c.CountryId == country.Id).FirstOrDefaultAsync();
             if (activeupgrade != null)
             {
-                throw new InvalidParameterException("Már folyamatban van egy fejlesztés.");
+                throw new InvalidParameterException("upgrade", "Már folyamatban van egy fejlesztés.");
             }
 
             if (await _context.CountryUpgrades.AnyAsync(c => c.CountryId == country.Id && c.UpgradeId == buyUpgradeDto.UpgradeId)  ||
                 await _context.ActiveUpgradings.AnyAsync(au => au.CountryId == country.Id && au.UpgradeId == buyUpgradeDto.UpgradeId))
             {
-                throw new InvalidParameterException("Már folyamatban van / megépítetted az adott fejlesztés.");
+                throw new InvalidParameterException("upgrade", "Már folyamatban van / megépítetted az adott fejlesztés.");
             }
 
             var upgrade = await _context.Upgrades.FindAsync(buyUpgradeDto.UpgradeId);
