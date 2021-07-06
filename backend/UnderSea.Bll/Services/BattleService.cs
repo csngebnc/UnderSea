@@ -62,7 +62,7 @@ namespace UnderSea.Bll.Services
 
             var userunits = await _context.CountryUnits
                 .Include(c => c.Unit)
-                .Where(c => c.CountryId == country.Id && c.Unit.Name != UnitConstants.Felfedezo)
+                .Where(c => c.CountryId == country.Id && c.Unit.Name != UnitNameConstants.Felfedezo)
                 .Select(c => c.Unit)
                 .ProjectTo<BattleUnitDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -110,7 +110,7 @@ namespace UnderSea.Bll.Services
                 .Select(sr => sr.NumberOfSpies)
                 .Sum();
 
-            units.Where(u => u.Name == UnitConstants.Felfedezo).SingleOrDefault().Count += spyCount;
+            units.Where(u => u.Name == UnitNameConstants.Felfedezo).SingleOrDefault().Count += spyCount;
 
             return units;
         }
@@ -234,7 +234,7 @@ namespace UnderSea.Bll.Services
                 .Include(c => c.CountryUnits)
                 .FirstOrDefaultAsync();
 
-            var spyUnit = await _context.Units.SingleOrDefaultAsync(c => c.Name == UnitConstants.Felfedezo);
+            var spyUnit = await _context.Units.SingleOrDefaultAsync(c => c.Name == UnitNameConstants.Felfedezo);
             var spies = country.CountryUnits.SingleOrDefault(cu => cu.UnitId == spyUnit.Id);
 
             return new BattleUnitDto
@@ -319,7 +319,7 @@ namespace UnderSea.Bll.Services
             }
 
             var spyId = (await _context.Units
-                .FirstOrDefaultAsync(u => u.Name == UnitConstants.Felfedezo))
+                .FirstOrDefaultAsync(u => u.Name == UnitNameConstants.Felfedezo))
                 .Id;
 
             if (attackDto.Units.Any(au => au.UnitId == spyId))
@@ -366,7 +366,7 @@ namespace UnderSea.Bll.Services
             }
 
             var attackerSpyUnits = country.CountryUnits
-                .FirstOrDefault(cu => cu.Unit.Name == UnitConstants.Felfedezo);
+                .FirstOrDefault(cu => cu.Unit.Name == UnitNameConstants.Felfedezo);
 
             if (attackerSpyUnits == null)
                 throw new NotExistsException("Nincsenek kém egységek, amiket el lehetne küldeni!");
@@ -387,6 +387,12 @@ namespace UnderSea.Bll.Services
 
         public async Task AttackLogic(Country attackerCountry, Country attackedCountry, SendAttackDto attackDto)
         {
+            var generalId = (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
+            if(!attackDto.Units.Any(u => u.UnitId == generalId))
+            {
+                throw new InvalidParameterException("A támadáshoz legalább egy hadvezért is küldeni kell.");
+            }
+
             var attack = new Attack()
             {
                 AttackerCountryId = attackerCountry.Id,

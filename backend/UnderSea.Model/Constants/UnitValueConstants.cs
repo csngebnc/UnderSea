@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnderSea.Model.Models;
 
-namespace UnderSea.Bll.Services.Interfaces
+namespace UnderSea.Model.Constants
 {
-    public interface IRoundService
+    public static class UnitValueConstants
     {
-        Task NextRound();
+        public static double GeneralBonus = 0.1;
     }
 }
