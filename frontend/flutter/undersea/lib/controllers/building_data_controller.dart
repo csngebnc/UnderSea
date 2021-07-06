@@ -44,6 +44,7 @@ class BuildingDataController extends GetxController {
   }
 
   static const imageNameMap = {
+    'Szonárágyú': 'szonaragyu',
     'Zátonyvár': 'zatonyvar',
     'Áramlásirányító': 'aramlasiranyito'
   };

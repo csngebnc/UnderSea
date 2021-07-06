@@ -8,10 +8,6 @@ import 'package:undersea/controllers/building_data_controller.dart';
 import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/controllers/next_round_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
-
-import 'package:undersea/models/building.dart';
-import 'package:undersea/models/response/user_info_dto.dart';
-import 'package:undersea/network/providers/next_round_provider.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/expandable_menu.dart';
 
@@ -40,17 +36,28 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _drawBuildings() {
     var buildings = <Widget>[];
-    var tops = <double>[100, 160];
-    var lefts = <double>[100, 180];
+    var tops = <double>[100, 160, 50];
+    var lefts = <double>[80, 160, 220];
     var buildingList =
         countryDataController.countryDetailsData.value?.buildings;
+    bool hasCannon = false;
+    if (countryDataController.countryDetailsData.value?.hasSonarCanon != null)
+      hasCannon = countryDataController.countryDetailsData.value!.hasSonarCanon;
+
+    if (hasCannon)
+      buildings.add(UnderseaStyles.building(
+          BuildingDataController.imageNameMap['Szonárágyú']!,
+          top: tops.last,
+          left: lefts.last));
+
     if (buildingList != null) {
       for (int i = 0; i < buildingList.length; i++) {
-        if (buildingList[i].buildingsCount >= 1)
+        if (buildingList[i].buildingsCount >= 1) {
           buildings.add(UnderseaStyles.building(
               BuildingDataController.imageNameMap[buildingList[i].name]!,
               top: tops[i],
               left: lefts[i]));
+        }
       }
     }
 
