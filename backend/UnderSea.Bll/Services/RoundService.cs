@@ -112,7 +112,7 @@ namespace UnderSea.Bll.Services
             foreach (var country in countries)
             {
                 foreach (var building in country.ActiveConstructions
-                    .Where(c => c.EstimatedFinish == world.Round))
+                    .Where(c => c.EstimatedFinish == world.Round+1))
                 {
                     var cbuilding = country.CountryBuildings
                         .Where(c => c.BuildingId == building.BuildingId)
