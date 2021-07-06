@@ -42,15 +42,18 @@ namespace UnderSea.Bll.Services
             }
             
             var result = await _userManager.CreateAsync(user, registerDto.Password);
+            var materials = await _context.Materials.ToListAsync();
 
             var country = new Country {
                 Name = registerDto.CountryName,
                 OwnerId = user.Id,
                 FightPoint = new FightPoint(),
-                WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id
-            };
+                WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id,
+                CountryMaterials = new List<CountryMaterial>()
 
-            var materials = await _context.Materials.ToListAsync();
+            };
+            _context.Countries.Add(country);
+
             foreach (var material in materials)
             {
                 country.CountryMaterials.Add(new CountryMaterial
@@ -63,7 +66,6 @@ namespace UnderSea.Bll.Services
                 });
             }
 
-            _context.Countries.Add(country);
             await _context.SaveChangesAsync();
             return result.Succeeded;
         }

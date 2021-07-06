@@ -105,7 +105,7 @@ namespace UnderSea.Bll.Services
             var country = await GetCountry();
 
             var attacks = await _context.Attacks
-                                            .Where(c => c.DefenderCountryId == country.Id || c.AttackerCountryId == country.Id)
+                                            .Where(c => (c.DefenderCountryId == country.Id && c.AttackRound != country.World.Round+1) || c.AttackerCountryId == country.Id)
                                             .OrderByDescending(a => a.AttackRound)
                                             .Include(a => a.AttackUnits)
                                                 .ThenInclude(au => au.Unit)
