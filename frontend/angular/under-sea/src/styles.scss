@@ -65,11 +65,17 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .error-text {
-  color: $invalid;
+  color: $light-grey;
   font-family: "OpenSans";
-  font-weight: bolder;
-  margin: 0;
-  padding: 0;
+  font-size: 0.9rem;
+  margin-top: 0;
+  margin-bottom: 0.3rem;
+  padding: 0.3rem;
+  text-align: center;
+  border: 1px solid $invalid;
+  border-radius: 10px;
+  backdrop-filter: $blur;
+  background-color: rgba($color: #ad0f0f, $alpha: 0.2);
 }
 
 .container {

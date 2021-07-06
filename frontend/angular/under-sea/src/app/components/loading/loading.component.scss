@@ -13,10 +13,8 @@
   background-color: $dark-navy;
   opacity: 0.4;
   z-index: 10;
-}
-
-.loading-modal {
-  opacity: initial;
+  flex-direction: column;
+  color: $white;
 }
 
 @keyframes spin {
