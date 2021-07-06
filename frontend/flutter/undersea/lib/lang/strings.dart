@@ -18,7 +18,7 @@ class Strings {
   static const password = 'password';
   static const password_again = 'password_again';
   static const city_name_hint = 'city_name_hint';
-
+  static const under_construction = 'under_construction';
   static const registr_snackbar_title = 'registr_snackbar_title';
   static const registr_snackbar_body = 'registr_snackbar_body';
   static const round_resources = 'round_resources';

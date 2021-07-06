@@ -33,6 +33,11 @@ namespace UnderSea.Bll.Services
         public async Task<bool> Register(RegisterDto registerDto)
         {
             var user = new User { UserName = registerDto.UserName.Trim() };
+
+            if(await _context.Users.AnyAsync(u => u.UserName == registerDto.UserName))
+            {
+                throw new InvalidParameterException("A megadott felhasználónévvel már van regisztrált felhasználó.");
+            }
             
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 

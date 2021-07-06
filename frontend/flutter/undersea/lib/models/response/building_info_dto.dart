@@ -8,12 +8,14 @@ class BuildingInfoDto {
   int buildingsCount;
   int activeConstructionCount;
   int id;
+  String iconImageUrl;
 
   BuildingInfoDto(
       {required this.name,
       required this.buildingsCount,
       required this.id,
-      required this.activeConstructionCount});
+      required this.activeConstructionCount,
+      required this.iconImageUrl});
 
   factory BuildingInfoDto.fromJson(Map<String, dynamic> json) =>
       _$BuildingInfoDtoFromJson(json);

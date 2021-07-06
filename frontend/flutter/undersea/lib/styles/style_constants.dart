@@ -264,7 +264,10 @@ class UnderseaStyles {
   }
 
   static Widget elevatedButton(
-      {required String text, required Function onPressed}) {
+      {required String text,
+      required Function onPressed,
+      double width = 250,
+      double height = 70}) {
     return ElevatedButton(
       onPressed: () {
         onPressed();
@@ -279,8 +282,8 @@ class UnderseaStyles {
         decoration: BoxDecoration(
             gradient: buttonGradient, borderRadius: BorderRadius.circular(200)),
         child: Container(
-          width: 250,
-          height: 70,
+          width: width,
+          height: height,
           alignment: Alignment.center,
           child: Text(
             text,
@@ -325,6 +328,8 @@ class UnderseaStyles {
     );
   }
 
+  static const outcomes = {0: 'Még nem ismert', 1: 'Sikeres', 2: 'Sikertelen'};
+
   static Widget imageIcon(String name,
       {String additional = '@3x', Color? color, double? size}) {
     return ImageIcon(
@@ -334,6 +339,12 @@ class UnderseaStyles {
       color: color,
       size: size,
     );
+  }
+
+  static void snackbar(String title, String body) {
+    return Get.snackbar(title, body,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.blueAccent);
   }
 
   static Widget iconsFromImages(String name, {double size = 35}) {

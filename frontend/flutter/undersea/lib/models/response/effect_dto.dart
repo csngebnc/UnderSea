@@ -5,10 +5,10 @@ part 'effect_dto.g.dart';
 @JsonSerializable()
 class EffectDto {
   int id;
-  String name;
+  String? name;
   EffectDto({
     required this.id,
-    required this.name,
+    this.name,
   });
 
   factory EffectDto.fromJson(Map<String, dynamic> json) =>
