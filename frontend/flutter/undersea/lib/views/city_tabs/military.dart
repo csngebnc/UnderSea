@@ -69,19 +69,38 @@ class _MilitaryTabState extends State<Military> {
             }));
   }
 
-  int _calculateSoldierPrice() {
+  /*int _calculateSoldierPrice() {
     int totalPrice = 0;
     /*for (int i = 0; i < soldierList.value.length; i++) {
       totalPrice +=
           soldierList.value[i].requriedMaterials![0].amount * buyList[i];
     }*/
     return totalPrice;
-  }
+  }*/
 
   bool _canHireSoldiers() {
     if (buyList.every((element) => element == 0)) return false;
-    //if (countryData!.pearl < _calculateSoldierPrice()) return false;
-    return true;
+
+    Map<int, int> materialIdToAmount = {};
+    countryData!.materials!.forEach((element) {
+      materialIdToAmount.addIf(true, element.id, element.amount);
+    });
+    bool areResourcesEnough = true;
+
+    for (int i = 0; i < soldierList.value.length; i++) {
+      soldierList.value[i].requiredMaterials?.forEach((mat) {
+        late int newValue;
+        var original = materialIdToAmount[mat.id];
+        if (original != null) newValue = original - mat.amount * buyList[i];
+        if (newValue < 0) {
+          areResourcesEnough = false;
+          return;
+        }
+        materialIdToAmount[mat.id] = newValue;
+      });
+    }
+
+    return areResourcesEnough;
   }
 
   List<Widget> _listResourceCost(UnitDto unit) {
@@ -100,6 +119,7 @@ class _MilitaryTabState extends State<Military> {
       List<BattleUnitDto> totalUnits, int? spiesCount) {
     var idx = (index - 1) ~/ 2;
     var actualSoldier = list.value.elementAt(idx);
+
     var actualSoldierMax = totalUnits
         .firstWhere((element) => element.id == actualSoldier.id,
             orElse: () => BattleUnitDto(id: 0, name: 'name', count: 0))
@@ -170,9 +190,6 @@ class _MilitaryTabState extends State<Military> {
                   Row(
                     children: [..._listResourceCost(actualSoldier)],
                   )
-                  /*UnderseaStyles.text(
-                      actualSoldier.requriedMaterials?[0].toString() ??
-                          '' + Strings.pearl_cost.tr),*/
                 ],
               ),
               SizedBox(height: 20),
