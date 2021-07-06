@@ -72,32 +72,47 @@ namespace UnderSea.Bll.Services
 
         public async Task<IEnumerable<BattleUnitDto>> GetUserAllUnitsAsync()
         {
-            var country = await GetCountry();
-            var userunits = await _context.CountryUnits
-                .Include(c => c.Unit)
-                .Where(c => c.CountryId == country.Id && c.Unit.Name != UnitConstants.Felfedezo)
-                .ToListAsync();
+            var country = await _context.Countries
+                .Include(c => c.CountryUnits)
+                .Include(c => c.SentSpies)
+                .Include(c => c.World)
+                .SingleOrDefaultAsync(c => c.OwnerId == _identityService.GetCurrentUserId());
+
+            var units = (await _context.Units.ToListAsync()).Select(u =>
+            {
+                return new BattleUnitDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    ImageUrl = u.ImageUrl,
+                    Count = 0
+                };
+            }).ToList();
+
+            foreach (var unit in country.CountryUnits)
+            {
+                units.Where(u => u.Id == unit.UnitId).SingleOrDefault().Count += unit.Count;
+            }
 
             var attackUnits = await _context.AttackUnits
                 .Include(a => a.Attack)
-                .Where(a => a.Attack.AttackRound == country.World.Round && a.Attack.AttackerCountryId == country.Id)
+                .Where(a => a.Attack.AttackRound == country.World.Round && 
+                    a.Attack.AttackerCountryId == country.Id)
                 .ToListAsync();
 
             foreach (var unit in attackUnits)
             {
-                userunits.Where(u => u.UnitId == unit.Id).FirstOrDefault().Count += unit.Count;
+                units.Where(u => u.Id == unit.UnitId).SingleOrDefault().Count += unit.Count;
             }
 
-            return userunits.Select(uu =>
-            {
-                return new BattleUnitDto
-                {
-                    Id = uu.UnitId,
-                    Name = uu.Unit.Name,
-                    Count = uu.Count,
-                    ImageUrl = uu.Unit.ImageUrl
-                };
-            });
+            var spyCount = country.SentSpies
+                .Where(sr => sr.Round == country.World.Round && sr.WinnerId == null)
+                .Select(sr => sr.NumberOfSpies)
+                .Sum();
+
+            units.Where(u => u.Name == UnitConstants.Felfedezo).SingleOrDefault().Count += spyCount;
+
+            return units;
         }
 
         public async Task<PagedResult<LoggedAttackDto>> GetLoggedAttacksAsync(PaginationData data)
@@ -105,7 +120,7 @@ namespace UnderSea.Bll.Services
             var country = await GetCountry();
 
             var attacks = await _context.Attacks
-                                            .Where(c => (c.DefenderCountryId == country.Id && c.AttackRound != country.World.Round+1) || c.AttackerCountryId == country.Id)
+                                            .Where(c => (c.DefenderCountryId == country.Id && c.AttackRound != country.World.Round) || c.AttackerCountryId == country.Id)
                                             .OrderByDescending(a => a.AttackRound)
                                             .Include(a => a.AttackUnits)
                                                 .ThenInclude(au => au.Unit)
