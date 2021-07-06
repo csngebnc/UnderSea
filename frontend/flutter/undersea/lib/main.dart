@@ -47,8 +47,8 @@ Future<void> initServices() async {
   Get.put(UpgradesController(Get.find()));
   Get.put(BattleDataProvider());
   Get.put(BattleDataController(Get.find()));
-  await roundController.initPlatformState();
-  log((await roundController.signalR.isConnected).toString());
+  roundController.initPlatformState();
+  //log((await roundController.signalR.isConnected).toString());
 }
 
 class MyApp extends StatelessWidget {

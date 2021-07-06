@@ -8,27 +8,22 @@ import 'package:undersea/network/providers/next_round_provider.dart';
 import 'battle_data_controller.dart';
 import 'building_data_controller.dart';
 import 'country_data_controller.dart';
-import 'package:signalr_flutter/signalr_flutter.dart';
+
+import 'package:signalr_core/signalr_core.dart';
 
 class RoundController extends GetxController {
   final NextRoundProvider _roundProvider;
   late String serverUrl;
-  late SignalR signalR;
+
   RoundController(this._roundProvider) {
     serverUrl = _roundProvider.httpClient.baseUrl! + 'roundHub';
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   void nextRound() async {
     try {
-      log((await signalR.isConnected).toString());
       final response = await _roundProvider.nextRound();
       if (response.statusCode == 200) {
-        refreshOnNextRound();
+        log('Next round pressed');
       }
     } catch (error) {
       log('$error');
@@ -36,15 +31,20 @@ class RoundController extends GetxController {
   }
 
   Future<void> initPlatformState() async {
-    signalR = SignalR(
-      serverUrl,
-      "SendMessage",
-      hubMethods: ["SendMessage"],
-      //statusChangeCallback: _onStatusChange,
-      hubCallback: (methodName, message) => log('signalR working'),
-    );
+    final connection = HubConnectionBuilder()
+        .withUrl(
+            serverUrl,
+            HttpConnectionOptions(
+              logging: (level, message) => print(message),
+            ))
+        .build();
 
-    signalR.connect();
+    await connection.start();
+
+    connection.on('SendMessage', (message) {
+      refreshOnNextRound();
+      log(message.toString());
+    });
   }
 
   void refreshOnNextRound() {
