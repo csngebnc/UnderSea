@@ -32,6 +32,8 @@ namespace UnderSea.Bll.Services
 
             var country = await _context.Countries
                 .Where(u => u.OwnerId == userid)
+                .Include(c => c.CountryMaterials)
+                    .ThenInclude(cm => cm.Material)
                 .Include(c => c.ActiveConstructions)
                 .Include(c => c.CountryBuildings)
                     .ThenInclude(cb => cb.Building)
@@ -65,12 +67,19 @@ namespace UnderSea.Bll.Services
             {
                 MaxUnitCount = country.MaxUnitCount,
                 Units = _mapper.Map<ICollection<BattleUnitDto>>(units),
-                Coral = country.Coral,
-                Pearl = country.Pearl,
                 Population = country.Population,
                 HasSonarCanon = hasSonarCanon,
-                CurrentCoralProduction = (int)(country.Production.BaseCoralProduction * country.Production.CoralProductionMultiplier),
-                CurrentPearlProduction = (int)(country.Production.BasePearlProduction * country.Production.PearlProductionMultiplier),
+                Materials = country.CountryMaterials.Select(cm =>
+                {
+                    return new Dtos.Material.MaterialDetailsDto
+                    {
+                        Id = cm.MaterialId,
+                        Name = cm.Material.Name,
+                        Production = (int)(cm.BaseProduction * cm.Multiplier),
+                        Amount = cm.Amount,
+                        ImageUrl = cm.Material.ImageUrl
+                    };
+                }).ToList(),
                 Buildings = buildings.Select(building =>
                 {
                     var countryBuilding = country.CountryBuildings.SingleOrDefault(cb => cb.BuildingId == building.Id);

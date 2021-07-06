@@ -28,6 +28,11 @@ namespace UnderSea.Dal.EntityConfigurations
                  {
                      BuildingId = 2,
                      EffectId = 3
+                 },
+                 new BuildingEffect()
+                 {
+                     BuildingId = 3,
+                     EffectId = 10
                  }
             );
         }

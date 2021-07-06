@@ -12,6 +12,7 @@ using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
+using UnderSea.Model.Models.Materials;
 
 namespace UnderSea.Bll.Services
 {
@@ -26,19 +27,14 @@ namespace UnderSea.Bll.Services
             _hubService = hubService;
         }
 
-        public void PayTax(ICollection<Country> countries)
+        public void PayMaterial(ICollection<Country> countries)
         {
             foreach(var country in countries)
             {
-                country.Pearl += (int)Math.Round(country.Production.BasePearlProduction * country.Production.PearlProductionMultiplier);
-            }
-        }
-
-        public void PayCoral(ICollection<Country> countries)
-        {
-            foreach (var country in countries)
-            {
-                country.Coral += (int)Math.Round(country.Production.BaseCoralProduction * country.Production.CoralProductionMultiplier);
+                foreach(var material in country.CountryMaterials)
+                {
+                    material.Amount += (int)Math.Round(material.BaseProduction * material.Multiplier); 
+                }
             }
         }
 
@@ -46,15 +42,18 @@ namespace UnderSea.Bll.Services
         {
             foreach (var country in countries)
             {
-                foreach(var unit in country.CountryUnits.OrderByDescending(c => c.Unit.Price))
+                foreach(var unit in country.CountryUnits.OrderByDescending(c => c.Unit.UnitMaterials.Sum(c => c.Amount)))
                 {
                     int requiredFood = unit.Unit.SupplyPerRound * unit.Count;
                     int requiredMercenary = unit.Unit.MercenaryPerRound * unit.Count;
 
-                    if(requiredFood <= country.Coral && requiredMercenary <= country.Pearl)
+                    var coralCountryMaterial = country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Coral);
+                    var pearlCountryMaterial = country.CountryMaterials.SingleOrDefault(cm => cm.Material.MaterialType == MaterialTypeConstants.Pearl);
+
+                    if (requiredFood <= coralCountryMaterial.Amount && requiredMercenary <= pearlCountryMaterial.Amount)
                     {
-                        country.Coral -= requiredFood;
-                        country.Pearl -= requiredMercenary;
+                        coralCountryMaterial.Amount -= requiredFood;
+                        pearlCountryMaterial.Amount -= requiredMercenary;
                     }
                     else
                     {
@@ -65,7 +64,7 @@ namespace UnderSea.Bll.Services
                             int food = unit.Unit.SupplyPerRound * i;
                             int mercenary = unit.Unit.MercenaryPerRound * i;
 
-                            if (food <= country.Coral && mercenary <= country.Pearl)
+                            if (food <= coralCountryMaterial.Amount && mercenary <= pearlCountryMaterial.Amount)
                             {
                                 numberOfAlive = i;
                             }
@@ -77,8 +76,8 @@ namespace UnderSea.Bll.Services
 
                         unit.Count = numberOfAlive;
 
-                        country.Coral -= numberOfAlive * unit.Unit.SupplyPerRound;
-                        country.Pearl -= numberOfAlive * unit.Unit.MercenaryPerRound;
+                        coralCountryMaterial.Amount -= numberOfAlive * unit.Unit.SupplyPerRound;
+                        pearlCountryMaterial.Amount -= numberOfAlive * unit.Unit.MercenaryPerRound;
                     }
                 }
             }
@@ -88,7 +87,7 @@ namespace UnderSea.Bll.Services
         {
             foreach (var country in countries)
             {
-                foreach(var upgrade in country.ActiveUpgradings.Where(c => c.EstimatedFinish == world.Round))
+                foreach(var upgrade in country.ActiveUpgradings.Where(c => c.EstimatedFinish == world.Round+1))
                 {
                     var newCountryUpgrade = new CountryUpgrade()
                     {
@@ -113,7 +112,7 @@ namespace UnderSea.Bll.Services
             foreach (var country in countries)
             {
                 foreach (var building in country.ActiveConstructions
-                    .Where(c => c.EstimatedFinish == world.Round))
+                    .Where(c => c.EstimatedFinish == world.Round+1))
                 {
                     var cbuilding = country.CountryBuildings
                         .Where(c => c.BuildingId == building.BuildingId)
@@ -179,11 +178,11 @@ namespace UnderSea.Bll.Services
                             unit.Count = (int)Math.Round(unit.Count * 0.9);
                         }
 
-                        attackerCountry.Pearl += attack.DefenderCountry.Pearl / 2;
-                        attackerCountry.Coral += attack.DefenderCountry.Coral / 2;
-
-                        attack.DefenderCountry.Pearl /= 2;
-                        attack.DefenderCountry.Coral /= 2;
+                        foreach (var material in attack.DefenderCountry.CountryMaterials)
+                        {
+                            attackerCountry.CountryMaterials.SingleOrDefault(cm => cm.MaterialId == material.MaterialId).Amount += material.Amount;
+                            material.Amount /= 2;
+                        }
                     } 
                     else
                     {
@@ -312,6 +311,9 @@ namespace UnderSea.Bll.Services
 
             var countries = await _context.Countries.Include(e => e.CountryUnits)
                                                         .ThenInclude(e => e.Unit)
+                                                            .ThenInclude(e => e.UnitMaterials)
+                                                    .Include(e => e.CountryMaterials)
+                                                        .ThenInclude(e => e.Material)
                                                     .Include(e => e.Attacks)
                                                         .ThenInclude(e => e.AttackUnits)
                                                             .ThenInclude(e => e.Unit)
@@ -344,9 +346,7 @@ namespace UnderSea.Bll.Services
 
             using (var transaction = _context.Database.BeginTransaction())
             {
-                PayTax(countries);
-
-                PayCoral(countries);
+                PayMaterial(countries);
 
                 PayMercenaryAndFeedSoldiers(countries);
 

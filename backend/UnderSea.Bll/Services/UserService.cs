@@ -5,13 +5,16 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
+using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
+using UnderSea.Model.Models.Joins;
 
 namespace UnderSea.Bll.Services
 {
@@ -40,15 +43,30 @@ namespace UnderSea.Bll.Services
             }
             
             var result = await _userManager.CreateAsync(user, registerDto.Password);
+            var materials = await _context.Materials.ToListAsync();
 
             var country = new Country {
                 Name = registerDto.CountryName,
                 OwnerId = user.Id,
-                Production = new Production(),
                 FightPoint = new FightPoint(),
-                WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id
+                WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id,
+                CountryMaterials = new List<CountryMaterial>()
+
             };
             _context.Countries.Add(country);
+
+            foreach (var material in materials)
+            {
+                country.CountryMaterials.Add(new CountryMaterial
+                {
+                    MaterialId = material.Id,
+                    CountryId = country.Id,
+                    Multiplier = 1,
+                    BaseProduction = 0,
+                    Amount = material.MaterialType == MaterialTypeConstants.Pearl ? 5000 : 0,
+                });
+            }
+
             await _context.SaveChangesAsync();
             return result.Succeeded;
         }

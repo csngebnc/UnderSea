@@ -41,18 +41,30 @@ namespace UnderSea.Bll.Services
 
             var buildings = await _context.Buildings
                                         .Include(b => b.BuildingEffects)
-                                        .ThenInclude(be => be.Effect)
+                                            .ThenInclude(be => be.Effect)
+                                        .Include(b => b.BuildingMaterials)
+                                            .ThenInclude(bm => bm.Material)
                                         .ToListAsync();
 
             return buildings.Select(building =>
             {
+                var countryBuilding = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).SingleOrDefault();
                 return new BuildingDetailsDto
                 {
                     Id = building.Id,
                     Name = building.Name,
                     Effects = _mapper.Map<ICollection<EffectDto>>(building.BuildingEffects.Select(be => be.Effect)),
-                    Price = building.Price,
-                    Count = country.CountryBuildings.Where(cb => cb.BuildingId == building.Id).SingleOrDefault().Count,
+                    RequiredMaterials = building.BuildingMaterials.Select(bm =>
+                    {
+                        return new Dtos.Material.MaterialDto
+                        {
+                            Id = bm.MaterialId,
+                            Name = bm.Material.Name,
+                            Amount = bm.Amount,
+                            ImageUrl = bm.Material.ImageUrl
+                        };
+                    }).ToList(),
+                    Count = countryBuilding != null ? countryBuilding.Count : 0,
                     UnderConstruction = country.ActiveConstructions.Any(ac => ac.BuildingId == building.Id),
                     ImageUrl = building.ImageUrl
                 };
@@ -64,6 +76,7 @@ namespace UnderSea.Bll.Services
             var country = await _context.Countries
                                     .Where(c => c.OwnerId == _identityService.GetCurrentUserId())
                                     .Include(c => c.World)
+                                    .Include(c => c.CountryMaterials)
                                     .FirstOrDefaultAsync();
 
             if (country == null)
@@ -71,20 +84,24 @@ namespace UnderSea.Bll.Services
                 throw new NotExistsException("Nem létezik ilyen ország.");
             }
 
-            var building = await _context.Buildings.Where(c => c.Id == buildingDto.BuildingId).FirstOrDefaultAsync();
+            var building = await _context.Buildings
+                .Where(b => b.Id == buildingDto.BuildingId)
+                .Include(b => b.BuildingMaterials)
+                    .ThenInclude(bm => bm.Material)
+                .FirstOrDefaultAsync();
+
             if (building == null)
             {
                 throw new NotExistsException("Nem létezik ilyen épület.");
             }
 
-            var activebuilding = await _context.ActiveConstructions.Where(ac => ac.CountryId == country.Id).FirstOrDefaultAsync();
+            var activebuilding = await _context.ActiveConstructions.FirstOrDefaultAsync(ac => ac.CountryId == country.Id);
             if (activebuilding != null)
             {
                 throw new InvalidParameterException("Már folyamatban van egy építés.");
             }
 
-            if (building.Price <= country.Pearl)
-            {
+
                 var activeConstruction = new ActiveConstruction()
                 {
                     BuildingId = building.Id,
@@ -93,12 +110,10 @@ namespace UnderSea.Bll.Services
                 };
                 _context.ActiveConstructions.Add(activeConstruction);
 
-                country.Pearl -= building.Price;
-            }
-            else
-            {
-                throw new InvalidParameterException("Nincs elég nyersanyagod az épület megvásárlásához.");
-            }
+                foreach (var materialRequirement in building.BuildingMaterials)
+                {
+                    country.CountryMaterials.SingleOrDefault(cm => cm.MaterialId == materialRequirement.MaterialId).Amount -= materialRequirement.Amount;
+                }
 
             await _context.SaveChangesAsync();
         }

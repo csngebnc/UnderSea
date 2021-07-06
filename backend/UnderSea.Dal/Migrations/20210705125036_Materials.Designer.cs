@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UnderSea.Dal.Data;
 
 namespace UnderSea.Dal.Migrations
 {
     [DbContext(typeof(UnderSeaDbContext))]
-    partial class UnderSeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210705125036_Materials")]
+    partial class Materials
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -919,9 +921,6 @@ namespace UnderSea.Dal.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("MaterialType")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)")
@@ -938,21 +937,18 @@ namespace UnderSea.Dal.Migrations
                         new
                         {
                             Id = 1,
-                            ImageUrl = "https://underseastorage.blob.core.windows.net/currency/shell.svg",
                             MaterialType = "material_pearl",
                             Name = "gyöngy"
                         },
                         new
                         {
                             Id = 2,
-                            ImageUrl = "https://underseastorage.blob.core.windows.net/currency/coral.svg",
                             MaterialType = "material_coral",
                             Name = "korall"
                         },
                         new
                         {
                             Id = 3,
-                            ImageUrl = "https://underseastorage.blob.core.windows.net/currency/stone.png",
                             MaterialType = "material_stone",
                             Name = "kő"
                         });

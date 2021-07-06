@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnderSea.Model.Models.Joins;
 
 namespace UnderSea.Model.Models
 {
@@ -12,11 +13,7 @@ namespace UnderSea.Model.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Population { get; set; } = 100;
-        public int Pearl { get; set; } = 1000;
-        public int Coral { get; set; }
         public int MaxUnitCount { get; set; }
-
-        public Production Production { get; set; } //= new Production();
         public FightPoint FightPoint { get; set; } //= new FightPoint();
 
         public string OwnerId { get; set; }
@@ -25,6 +22,7 @@ namespace UnderSea.Model.Models
         public int WorldId { get; set; }
         public World World { get; set; }
 
+        public ICollection<CountryMaterial> CountryMaterials { get; set; }
         public ICollection<Attack> Attacks { get; set; }
         public ICollection<Attack> Defenses { get; set; }
         public ICollection<SpyReport> SentSpies { get; set; }
