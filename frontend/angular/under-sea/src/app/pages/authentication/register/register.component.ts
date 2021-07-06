@@ -11,8 +11,6 @@ import {
   AbstractControl,
   ValidatorFn,
 } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
-import { HttpError } from '@microsoft/signalr';
 
 @Component({
   selector: 'register',
@@ -44,7 +42,7 @@ export class RegisterComponent implements OnInit {
     ]),
   });
 
-  regFailed = new BehaviorSubject(false);
+  regFailed: string;
 
   constructor(
     private authService: AuthenticationService,
@@ -66,7 +64,7 @@ export class RegisterComponent implements OnInit {
           });
       },
       (e) => {
-        this.setFormInvalid(e);
+        this.setFormInvalid(JSON.parse(e['response']));
       }
     );
   }
@@ -82,9 +80,29 @@ export class RegisterComponent implements OnInit {
     };
   }
 
-  private setFormInvalid(e: HttpError): void {
-    //itt elvileg más hibák is lesznek, majd a backend küldi miért lett rossz a reg
-    this.regFailed.next(true);
-    this.registerForm.controls['userName'].setErrors({ invalid: true });
+  private setFormInvalid(e: any): void {
+    console.log(e);
+    const errors = e['errors'];
+    if (errors['userName']) {
+      this.registerForm.controls['userName'].setErrors(errors['userName']);
+      this.regFailed = errors['userName'];
+      console.log(this.registerForm.controls['userName']);
+    }
+    if (errors['password']) {
+      this.registerForm.controls['password'].setErrors(errors['password']);
+      this.regFailed = errors['password'];
+    }
+    if (errors['confirmPassword']) {
+      this.registerForm.controls['confirmPassword'].setErrors(
+        errors['confirmPassword']
+      );
+      this.regFailed = errors['confirmPassword'];
+    }
+    if (errors['countryName']) {
+      this.registerForm.controls['countryName'].setErrors(
+        errors['countryName']
+      );
+      this.regFailed = errors['countryName'];
+    }
   }
 }

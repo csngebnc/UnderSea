@@ -62,6 +62,8 @@ export class BuildingsComponent implements OnInit, OnDestroy {
   }
 
   setBuilding(building: BuildingDetails): void {
+    console.log(this.materials);
+    console.log(building.price);
     this.selectedBuilding = building.id;
     this.priceTooHigh = this.materials.some(
       (m) => m.count < building.price.find((p) => p.id === m.id).count

@@ -12,7 +12,7 @@ import {
   SetLoading,
   SetNotLoading,
 } from 'src/app/states/loading/loading.actions';
-import { finalize } from 'rxjs/operators';
+import { finalize, tap, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
