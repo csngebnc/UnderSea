@@ -61,7 +61,7 @@ class BattleDataProvider extends NetworkProvider {
       get("/api/Battle/history",
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           contentType: 'application/json',
-          query: {'PageNumber': pageNumber, 'PageSize': pageSize},
+          query: {'PageNumber': '$pageNumber', 'PageSize': '$pageSize'},
           decoder: (response) =>
               PagedResultOfLoggedAttackDto.fromJson(response));
 

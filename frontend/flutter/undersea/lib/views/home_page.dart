@@ -31,6 +31,8 @@ class _HomePageState extends State<HomePage> {
     countryDataController.getCountryDetails();
     Get.find<BattleDataController>().getAllUnits();
     Get.find<BattleDataController>().getAttackableUsers();
+    Get.find<BattleDataController>().getHistory();
+
     super.initState();
   }
 

@@ -52,8 +52,12 @@ class RoundController extends GetxController {
     Get.find<CountryDataController>().getCountryDetails();
     Get.find<BuildingDataController>().getBuildingDetails();
     Get.find<UpgradesController>().getUpgradeDetails();
-    Get.find<BattleDataController>().getUnitTypes();
-    Get.find<BattleDataController>().getAllUnits();
-    Get.find<BattleDataController>().getSpies();
+    var battleController = Get.find<BattleDataController>();
+    battleController.reset();
+    battleController.getUnitTypes();
+    battleController.getAllUnits();
+    battleController.getSpies();
+    battleController.getAttackableUsers();
+    battleController.getHistory();
   }
 }

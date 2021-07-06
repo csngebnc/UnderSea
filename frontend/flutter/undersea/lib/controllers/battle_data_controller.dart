@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:undersea/models/response/attackable_user_dto.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/buy_unit_dto.dart';
+import 'package:undersea/models/response/logged_attack_dto.dart';
 
 import 'package:undersea/models/response/paged_result_of_attackable_user_dto.dart';
 import 'package:undersea/models/response/paged_result_of_logged_attack_dto.dart';
@@ -21,17 +22,25 @@ class BattleDataController extends GetxController {
   final BattleDataProvider _battleDataProvider;
   int? countryToBeAttacked;
   BattleDataController(this._battleDataProvider);
+
+  //AttackableUser stuff
+  Rx<PagedResultOfAttackableUserDto?> attackableUsers = Rx(null);
   var searchText = ''.obs;
   var pageNumber = 1.obs;
   var alreadyDownloadedPageNumber = 0.obs;
   var pageSize = 5.obs;
-  var actualPageSize = 3.obs;
+  var attackableUserList = <AttackableUserDto>[].obs;
+
+  //AttackLogStuff
+  Rx<PagedResultOfLoggedAttackDto?> loggedAttacks = Rx(null);
+  var attackLogPageNumber = 1.obs;
+  var alreadyDownloadedAttackLogPageNumber = 0.obs;
+  var attackLogsList = <LoggedAttackDto>[].obs;
+
   Rx<List<BattleUnitDto>> availableUnitsInfo = Rx([]);
   Rx<List<BattleUnitDto>> allUnitsInfo = Rx([]);
   Rx<BattleUnitDto?> spiesInfo = Rx(null);
-  Rx<PagedResultOfLoggedAttackDto?> loggedAttacks = Rx(null);
-  var attackableUserList = <AttackableUserDto>[].obs;
-  Rx<PagedResultOfAttackableUserDto?> attackableUsers = Rx(null);
+
   Rx<PagedResultOfSpyReportDto?> spyingHistory = Rx(null);
   Rx<List<UnitDto>> unitTypesInfo = Rx([]);
 
@@ -164,12 +173,20 @@ class BattleDataController extends GetxController {
     }
   }
 
-  getHistory(int pageSize, int pageNumber) async {
+  getHistory() async {
     try {
-      final response =
-          await _battleDataProvider.getHistory(pageSize, pageNumber);
+      if (loggedAttacks.value != null &&
+          loggedAttacks.value!.allResultsCount <=
+              alreadyDownloadedAttackLogPageNumber.value *
+                  attackLogPageNumber.value) return;
+      final response = await _battleDataProvider.getHistory(
+          pageSize.value, attackLogPageNumber.value);
       if (response.statusCode == 200) {
         loggedAttacks = Rx(response.body!);
+        if (alreadyDownloadedAttackLogPageNumber.value !=
+            loggedAttacks.value!.pageNumber)
+          attackLogsList.value += loggedAttacks.value?.results ?? [];
+        alreadyDownloadedPageNumber.value = pageNumber.value;
         update();
       }
     } catch (error) {
@@ -189,9 +206,7 @@ class BattleDataController extends GetxController {
         if (alreadyDownloadedPageNumber.value !=
             attackableUsers.value!.pageNumber)
           attackableUserList.value += attackableUsers.value?.results ?? [];
-        alreadyDownloadedPageNumber.value = pageNumber.value;
-
-        actualPageSize.value = attackableUsers.value!.allResultsCount;
+        alreadyDownloadedAttackLogPageNumber.value = attackLogPageNumber.value;
         update();
       }
     } catch (error) {
@@ -237,5 +252,20 @@ class BattleDataController extends GetxController {
     } catch (error) {
       log('$error');
     }
+  }
+
+  void reset() {
+    attackableUsers = Rx(null);
+    searchText.value = '';
+    pageNumber.value = 1;
+    alreadyDownloadedPageNumber.value = 0;
+    pageSize.value = 5;
+    attackableUserList.value.clear();
+
+    //AttackLogStuff
+    loggedAttacks = Rx(null);
+    attackLogPageNumber.value = 1;
+    alreadyDownloadedAttackLogPageNumber.value = 0;
+    attackLogsList.value.clear();
   }
 }

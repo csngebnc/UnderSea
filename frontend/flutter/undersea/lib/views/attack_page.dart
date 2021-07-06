@@ -6,8 +6,7 @@ import 'package:undersea/controllers/battle_data_controller.dart';
 
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/attackable_user_dto.dart';
-import 'package:undersea/models/response/paged_result_of_attackable_user_dto.dart';
-import 'package:undersea/models/soldier.dart';
+
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/attack_tabs/attack_tab_bar.dart';
 

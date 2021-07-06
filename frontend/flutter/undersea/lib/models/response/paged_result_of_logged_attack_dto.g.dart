@@ -13,7 +13,7 @@ PagedResultOfLoggedAttackDto _$PagedResultOfLoggedAttackDtoFromJson(
     pageNumber: json['pageNumber'] as int,
     pageSize: json['pageSize'] as int,
     results: (json['results'] as List<dynamic>?)
-        ?.map((e) => AttackableUserDto.fromJson(e as Map<String, dynamic>))
+        ?.map((e) => LoggedAttackDto.fromJson(e as Map<String, dynamic>))
         .toList(),
   );
 }
