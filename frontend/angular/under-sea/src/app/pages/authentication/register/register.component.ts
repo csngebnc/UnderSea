@@ -12,6 +12,7 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
+import { HttpError } from '@microsoft/signalr';
 
 @Component({
   selector: 'register',
@@ -42,7 +43,7 @@ export class RegisterComponent implements OnInit {
     ]),
   });
 
-  loginFailed = new BehaviorSubject(false);
+  regFailed = new BehaviorSubject(false);
 
   constructor(
     private authService: AuthenticationService,
@@ -63,8 +64,8 @@ export class RegisterComponent implements OnInit {
             this.router.navigate(['main']);
           });
       },
-      () => {
-        this.setFormInvalid();
+      (e) => {
+        this.setFormInvalid(e);
       }
     );
   }
@@ -80,13 +81,9 @@ export class RegisterComponent implements OnInit {
     };
   }
 
-  private setFormInvalid(): void {
-    this.loginFailed.next(true);
-    this.registerForm.controls['userName'].setErrors({ incorrect: true });
-    this.registerForm.controls['password'].setErrors({ incorrect: true });
-    this.registerForm.controls['confirmPassword'].setErrors({
-      incorrect: true,
-    });
-    this.registerForm.controls['countryName'].setErrors({ incorrect: true });
+  private setFormInvalid(e: HttpError): void {
+    //itt elvileg más hibák is lesznek, majd a backend küldi miért lett rossz a reg
+    this.regFailed.next(true);
+    this.registerForm.controls['userName'].setErrors({ invalid: true });
   }
 }

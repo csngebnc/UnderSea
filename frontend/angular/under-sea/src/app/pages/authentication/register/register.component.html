@@ -35,14 +35,16 @@
         required
         formControlName="countryName"
       />
-      <span *ngIf="loginFailed.value" class="error-text"
-        >Sikertelen regisztráció!</span
-      >
+
       <div class="error-container w-85">
+        <p *ngIf="regFailed.value" class="error-text">
+          A felhasználónév már foglalt!
+        </p>
         <p
           *ngIf="
             !registerForm.controls['userName'].valid &&
-            registerForm.controls['userName'].touched
+            registerForm.controls['userName'].touched &&
+            !regFailed.value
           "
           class="error-text"
         >
@@ -75,7 +77,7 @@
           "
           class="error-text"
         >
-          Kötelező országnevet megadni!
+          Kötelező ország nevet megadni!
         </p>
       </div>
       <button
