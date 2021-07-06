@@ -90,7 +90,6 @@ class BattleDataProvider extends NetworkProvider {
           contentType: 'application/json',
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           decoder: (response) {
-        log(response.toString());
         return (response as List).map((e) => UnitDto.fromJson(e)).toList();
       });
 

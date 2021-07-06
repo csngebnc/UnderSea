@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:undersea/controllers/battle_data_controller.dart';
 
 import 'package:undersea/lang/strings.dart';
+import 'package:undersea/models/response/attackable_user_dto.dart';
 import 'package:undersea/models/response/paged_result_of_attackable_user_dto.dart';
 import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
@@ -17,21 +18,32 @@ class AttackPage extends StatefulWidget {
 
 class _AttackPageState extends State<AttackPage> {
   var controller = Get.find<BattleDataController>();
+  final ScrollController _scrollController = ScrollController();
 
-  late Rx<PagedResultOfAttackableUserDto?> attackableUsersList;
+  //late Rx<PagedResultOfAttackableUserDto?> attackableUsersList;
 
   int? _selectedIndex;
   var sliderValues = List<int>.generate(3, (index) => 0);
   var mercenaryPrice = 0;
   bool firstPage = true;
   late int itemCount;
+  List<AttackableUserDto?> results = [];
 
   @override
   void initState() {
     controller.getAttackableUsers();
     firstPage = true;
-    attackableUsersList = controller.attackableUsers;
-    itemCount = controller.actualPageSize.value * 2 + 2;
+    //attackableUsersList = controller.attackableUsers;
+    //itemCount = attackableUsersList.value.length * 2 + 2;
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        if (controller.pageNumber.value >
+            controller.alreadyDownloadedPageNumber.value) return;
+        controller.pageNumber.value++;
+        controller.getAttackableUsers();
+      }
+    });
     super.initState();
   }
 
@@ -47,8 +59,11 @@ class _AttackPageState extends State<AttackPage> {
           });
         },
         list: GetBuilder<BattleDataController>(builder: (controller) {
-          itemCount = controller.actualPageSize.value * 2 + 2;
+          results = controller.attackableUserList.value;
+          itemCount =
+              results.length * 2 + 2; //controller.actualPageSize.value * 2 + 2;
           return ListView.builder(
+              controller: _scrollController,
               itemCount: itemCount,
               itemBuilder: (BuildContext context, int i) {
                 if (i == itemCount - 1) return SizedBox(height: 130);
@@ -77,8 +92,7 @@ class _AttackPageState extends State<AttackPage> {
                   );
                 }
 
-                var user =
-                    controller.attackableUsers.value!.results![i ~/ 2 - 1];
+                var user = results[i ~/ 2 - 1];
 
                 return ListTile(
                     onTap: () {
@@ -101,7 +115,7 @@ class _AttackPageState extends State<AttackPage> {
                                     style: UnderseaStyles.listRegular),
                                 width: 30),
                             SizedBox(width: 20),
-                            Text(user.userName ?? '',
+                            Text(user?.userName ?? '',
                                 style: UnderseaStyles.listRegular
                                     .copyWith(fontSize: 20)),
                             Expanded(child: Container()),

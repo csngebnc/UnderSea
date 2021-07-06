@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:undersea/models/response/attackable_user_dto.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/buy_unit_dto.dart';
 
@@ -22,12 +23,14 @@ class BattleDataController extends GetxController {
   BattleDataController(this._battleDataProvider);
   var searchText = ''.obs;
   var pageNumber = 1.obs;
-  var pageSize = 20.obs;
-  var actualPageSize = 20.obs;
+  var alreadyDownloadedPageNumber = 0.obs;
+  var pageSize = 5.obs;
+  var actualPageSize = 3.obs;
   Rx<List<BattleUnitDto>> availableUnitsInfo = Rx([]);
   Rx<List<BattleUnitDto>> allUnitsInfo = Rx([]);
   Rx<BattleUnitDto?> spiesInfo = Rx(null);
   Rx<PagedResultOfLoggedAttackDto?> loggedAttacks = Rx(null);
+  var attackableUserList = <AttackableUserDto>[].obs;
   Rx<PagedResultOfAttackableUserDto?> attackableUsers = Rx(null);
   Rx<PagedResultOfSpyReportDto?> spyingHistory = Rx(null);
   Rx<List<UnitDto>> unitTypesInfo = Rx([]);
@@ -176,10 +179,18 @@ class BattleDataController extends GetxController {
 
   getAttackableUsers() async {
     try {
+      if (attackableUsers.value != null &&
+          attackableUsers.value!.allResultsCount <=
+              alreadyDownloadedPageNumber.value * pageSize.value) return;
       final response = await _battleDataProvider.getAttackableUsers(
           pageSize.value, pageNumber.value, searchText.value);
       if (response.statusCode == 200) {
         attackableUsers = Rx(response.body!);
+        if (alreadyDownloadedPageNumber.value !=
+            attackableUsers.value!.pageNumber)
+          attackableUserList.value += attackableUsers.value?.results ?? [];
+        alreadyDownloadedPageNumber.value = pageNumber.value;
+
         actualPageSize.value = attackableUsers.value!.allResultsCount;
         update();
       }

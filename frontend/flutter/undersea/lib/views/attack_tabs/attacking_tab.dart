@@ -48,8 +48,6 @@ class _AttackingTabState extends State<AttackingTab> {
   Widget build(BuildContext context) {
     return GetBuilder<BattleDataController>(builder: (controller) {
       var itemCount = controller.unitTypesInfo.value.length + 2;
-      /*sliderValues = List<int>.generate(
-          controller.unitTypesInfo.value.length - 1, (index) => 0);*/
 
       return UnderseaStyles.tabSkeleton(
           buttonText: Strings.lets_attack,
