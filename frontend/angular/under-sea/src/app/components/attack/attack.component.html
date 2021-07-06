@@ -22,9 +22,10 @@
       </div>
       <div class="pl-2 w-50">
         <h3 class="modal-description mb-1">
-          <strong>2. Állítsd be, kiket küldesz harcba:</strong>
+          <strong>2. Állítsd be, kiket küldesz harcba.</strong>
         </h3>
-        <div class="stack align-center">
+        <p class="modal-description">Legalább 1 hadvezért kötelező küldened!</p>
+        <div class="stack align-center mt-2">
           <ng-container *ngFor="let unit of units">
             <unit-slider
               *ngIf="unit.count !== 0"
@@ -41,7 +42,7 @@
       <button
         type="button"
         class="gradient-button mt-2"
-        [disabled]="isButtonDisabled()"
+        [disabled]="!selectedUnitcount || !generalSelected || !targetId"
         (click)="attack()"
       >
         Megtámadom!

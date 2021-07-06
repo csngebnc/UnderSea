@@ -23,6 +23,8 @@ export class AttackComponent implements OnInit {
   filter: string | undefined = undefined;
   targetId: number;
   attackerUnits: Array<AttackUnitDto> = [];
+  generalSelected: boolean = false;
+  selectedUnitcount = 0;
 
   constructor(private battleService: BattleService) {}
 
@@ -59,21 +61,9 @@ export class AttackComponent implements OnInit {
   }
 
   onSetUnit(unit: AttackUnitDto): void {
-    const index = this.attackerUnits.findIndex((u) => u.unitId === unit.unitId);
-    if (index !== -1) {
-      this.attackerUnits[index].count = unit.count;
-    } else {
-      this.attackerUnits.push({ unitId: unit.unitId, count: unit.count });
-    }
-  }
-
-  isButtonDisabled(): boolean {
-    let sum: number = 0;
-    this.attackerUnits.forEach((unit) => {
-      sum += unit.count;
-    });
-
-    return !(this.targetId && sum);
+    if (unit.unitId === 5) this.setGeneral(unit);
+    this.setUnits(unit);
+    this.sumUnits();
   }
 
   onSwitchPage(pageNumber: number): void {
@@ -94,5 +84,32 @@ export class AttackComponent implements OnInit {
       },
       (e) => console.error(e)
     );
+  }
+
+  private sumUnits(): void {
+    let sum: number = 0;
+    this.attackerUnits.forEach((unit) => {
+      sum += unit.count;
+    });
+
+    this.selectedUnitcount = sum;
+  }
+
+  private setGeneral(general: AttackUnitDto): void {
+    if (general.count === 0) this.generalSelected = false;
+    else this.generalSelected = true;
+  }
+
+  private setUnits(unit: AttackUnitDto): void {
+    const index = this.attackerUnits.findIndex((u) => u.unitId === unit.unitId);
+    if (index !== -1) {
+      this.attackerUnits[index].count = unit.count;
+    } else {
+      if (unit.count !== 0) {
+        this.attackerUnits.push({ unitId: unit.unitId, count: unit.count });
+      } else {
+        this.attackerUnits.splice(index, 1);
+      }
+    }
   }
 }

@@ -1,3 +1,5 @@
+import { Material } from './material.model';
+
 export type UnitDetails = {
   id: number;
   name: string;
@@ -6,6 +8,6 @@ export type UnitDetails = {
   defense: number;
   mercenary: number;
   supply: number;
-  price: number;
+  price: Array<Material>;
   icon?: string;
 };

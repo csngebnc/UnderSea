@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { Resources } from 'src/app/models/resources.model';
 import { Unit } from 'src/app/models/unit.model';
 import { Building } from 'src/app/models/building.model';
+import { Material } from 'src/app/models/material.model';
 
 @Injectable({
   providedIn: 'root',
@@ -46,13 +47,20 @@ export class ApiService {
           };
         });
 
+        const materials: Array<Material> = cd.materials.map((m) => {
+          return {
+            id: m.id,
+            name: m.name,
+            count: m.amount,
+            imageUrl: m.imageUrl,
+            production: m.production,
+          };
+        });
+
         return {
           units: units,
           buildings: buildings,
-          corals: cd.coral,
-          coralsPerRound: cd.currentCoralProduction,
-          pearls: cd.pearl,
-          pearlsPerRound: cd.currentPearlProduction,
+          materials: materials,
           hasSonar: cd.hasSonarCanon,
           maxUnitCount: cd.maxUnitCount,
         };

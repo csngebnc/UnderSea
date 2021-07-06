@@ -35,6 +35,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     if (!this.tokenService.isTokenValid()) {
       this.autService.logout();
       return false;
-    } else return true;
+    } else {
+      return true;
+    }
   }
 }

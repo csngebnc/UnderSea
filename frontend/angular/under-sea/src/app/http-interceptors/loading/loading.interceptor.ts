@@ -22,8 +22,9 @@ export class LoadingInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    if (this.isUrlOnWhiteList(request.url, whitelist))
+    if (this.isUrlOnWhiteList(request.url, whitelist)) {
       return next.handle(request);
+    }
 
     Promise.resolve(null).then(() => {
       this.store.dispatch(SetLoading);

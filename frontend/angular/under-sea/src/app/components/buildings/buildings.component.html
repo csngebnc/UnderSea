@@ -12,8 +12,8 @@
             <button
               type="button"
               class="item-btn"
-              (click)="setBuilding(building.id)"
-              [disabled]="isUnderConstruction || building.price > money"
+              (click)="setBuilding(building)"
+              [disabled]="isUnderConstruction"
             >
               <building-details
                 class="item item-lg stack align-center"
@@ -25,11 +25,17 @@
         <div class="divider"></div>
         <button
           type="button"
-          [disabled]="!selectedBuilding || isUnderConstruction"
+          [disabled]="!selectedBuilding || isUnderConstruction || priceTooHigh"
           class="gradient-button mt-2"
           (click)="onBuy()"
         >
-          {{ isUnderConstruction ? "Folyamatban..." : "Megveszem" }}
+          {{
+            isUnderConstruction
+              ? "Folyamatban..."
+              : priceTooHigh
+              ? "Nincs elég nyersannyagod!"
+              : "Megveszem"
+          }}
         </button>
       </div>
     </div>

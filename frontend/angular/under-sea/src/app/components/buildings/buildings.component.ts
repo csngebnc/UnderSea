@@ -1,3 +1,4 @@
+import { Material } from './../../models/material.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BuildingDetails } from 'src/app/models/building-details.model';
 import { Observable, Subject } from 'rxjs';
@@ -21,17 +22,18 @@ export class BuildingsComponent implements OnInit, OnDestroy {
   @Select(LoadingState.isLoading)
   loading$: Observable<boolean>;
 
-  @Select(ResourcesState.pearls)
-  private pearlCount$: Observable<number>;
+  @Select(ResourcesState.materials)
+  private materialCount$: Observable<Array<Material>>;
 
   private destroy$ = new Subject<void>();
 
-  money: number = 0;
+  materials: Array<Material> = [];
+  priceTooHigh: boolean = false;
 
   constructor(private buildingService: BuildingService, private store: Store) {
-    this.pearlCount$
+    this.materialCount$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((m) => (this.money = m));
+      .subscribe((m) => (this.materials = m));
   }
 
   ngOnInit(): void {
@@ -59,8 +61,11 @@ export class BuildingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  setBuilding(id: number): void {
-    this.selectedBuilding = id;
+  setBuilding(building: BuildingDetails): void {
+    this.selectedBuilding = building.id;
+    this.priceTooHigh = this.materials.some(
+      (m) => m.count < building.price.find((p) => p.id === m.id).count
+    );
   }
 
   onBuy(): void {
