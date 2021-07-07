@@ -11,6 +11,7 @@ import 'package:undersea/models/response/paged_result_of_logged_attack_dto.dart'
 import 'package:undersea/models/response/paged_result_of_spy_report_dto.dart';
 import 'package:undersea/models/response/send_attack_dto.dart';
 import 'package:undersea/models/response/send_spy_dto.dart';
+import 'package:undersea/models/response/spy_report_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
 import 'package:undersea/models/soldier.dart';
 
@@ -37,11 +38,16 @@ class BattleDataController extends GetxController {
   var alreadyDownloadedAttackLogPageNumber = 0.obs;
   var attackLogsList = <LoggedAttackDto>[].obs;
 
+  //SpyLogStuff
+  Rx<PagedResultOfSpyReportDto?> spyingHistory = Rx(null);
+  var spyLogPageNumber = 1.obs;
+  var alreadyDownloadedSpyLogPageNumber = 0.obs;
+  var spyLogsList = <SpyReportDto>[].obs;
+
   Rx<List<BattleUnitDto>> availableUnitsInfo = Rx([]);
   Rx<List<BattleUnitDto>> allUnitsInfo = Rx([]);
   Rx<BattleUnitDto?> spiesInfo = Rx(null);
 
-  Rx<PagedResultOfSpyReportDto?> spyingHistory = Rx(null);
   Rx<List<UnitDto>> unitTypesInfo = Rx([]);
 
   static const imageNameMap = {
@@ -173,8 +179,13 @@ class BattleDataController extends GetxController {
       if (response.statusCode == 200) {
         UnderseaStyles.snackbar('Sikeresen elküldted a felfedezőid!',
             'Az egységeidet elküldted felfedezésre');
+        spyingHistory = Rx(null);
+        spyLogPageNumber.value = 1;
+        alreadyDownloadedSpyLogPageNumber.value = 0;
+        spyLogsList.value.clear();
         getAllUnits();
         getSpies();
+        getSpyingHistory();
       }
     } catch (error) {
       log('$error');
@@ -225,12 +236,20 @@ class BattleDataController extends GetxController {
     }
   }
 
-  getSpyingHistory(int pageSize, int pageNumber, String name) async {
+  getSpyingHistory() async {
     try {
+      if (spyingHistory.value != null &&
+          spyingHistory.value!.allResultsCount <=
+              alreadyDownloadedSpyLogPageNumber.value * pageSize.value) return;
       final response = await _battleDataProvider.getSpyingHistory(
-          pageSize, pageNumber, name);
+          pageSize.value, spyLogPageNumber.value, 'name');
       if (response.statusCode == 200) {
         spyingHistory = Rx(response.body!);
+        if (alreadyDownloadedSpyLogPageNumber.value !=
+            spyingHistory.value!.pageNumber) {
+          spyLogsList.value += spyingHistory.value?.results ?? [];
+          alreadyDownloadedSpyLogPageNumber.value = spyLogPageNumber.value;
+        }
         update();
       }
     } catch (error) {
@@ -278,5 +297,12 @@ class BattleDataController extends GetxController {
     attackLogPageNumber.value = 1;
     alreadyDownloadedAttackLogPageNumber.value = 0;
     attackLogsList.value.clear();
+
+    //SpyLogStuff
+
+    spyingHistory = Rx(null);
+    spyLogPageNumber.value = 1;
+    alreadyDownloadedSpyLogPageNumber.value = 0;
+    spyLogsList.value.clear();
   }
 }

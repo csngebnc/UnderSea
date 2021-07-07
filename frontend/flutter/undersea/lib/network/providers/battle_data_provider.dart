@@ -83,7 +83,11 @@ class BattleDataProvider extends NetworkProvider {
       get("/api/Battle/spy-history",
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           contentType: 'application/json',
-          query: {'PageNumber': pageNumber, 'PageSize': pageSize, 'name': name},
+          query: {
+            'PageNumber': '$pageNumber',
+            'PageSize': '$pageSize',
+            'name': name
+          },
           decoder: (response) => PagedResultOfSpyReportDto.fromJson(response));
 
   Future<Response<List<UnitDto>>> getUnitTypes() => get("/api/Battle/units",
