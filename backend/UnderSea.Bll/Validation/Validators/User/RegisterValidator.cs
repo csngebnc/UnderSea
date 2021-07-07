@@ -42,7 +42,7 @@ namespace UnderSea.Bll.Validation
 
         private bool UserNameMatchRegex(string userName)
         {
-            var userNameRegex = new Regex(@"^[-0-9A-Za-z_]{2,}$");
+            var userNameRegex = new Regex(@"^[-0-9A-Za-z_]{3,}$");
 
             return userNameRegex.IsMatch(userName) && !userName.Contains(" ") && !userName.Contains(" ");
         }
