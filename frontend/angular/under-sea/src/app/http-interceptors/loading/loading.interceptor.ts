@@ -7,12 +7,12 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { loadingWhitelist as whitelist } from 'src/assets/config.json';
+import { loadingWhitelist as whitelist, apiUrl } from 'src/assets/config.json';
 import {
   SetLoading,
   SetNotLoading,
 } from 'src/app/states/loading/loading.actions';
-import { finalize, tap, catchError } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
@@ -37,8 +37,8 @@ export class LoadingInterceptor implements HttpInterceptor {
   }
 
   private isUrlOnWhiteList(url: string, whitelist: Array<string>): boolean {
-    return whitelist.some((path) =>
-      url.toLowerCase().includes(path.toLowerCase())
+    return whitelist.some(
+      (path) => url.toLowerCase() === apiUrl + path.toLowerCase()
     );
   }
 }

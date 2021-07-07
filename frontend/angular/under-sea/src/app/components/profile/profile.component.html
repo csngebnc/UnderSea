@@ -1,7 +1,11 @@
 <div class="modal-container">
   <div class="modal modal-sm">
     <h2 class="modal-title">Profil</h2>
-    <form [formGroup]="countryForm" (ngSubmit)="setNewName()">
+    <form
+      *ngIf="!(loading$ | async)"
+      [formGroup]="countryForm"
+      (ngSubmit)="setNewName()"
+    >
       <p class="modal-description">
         Országod jelenlegi neve: <strong>{{ name }}</strong>
       </p>

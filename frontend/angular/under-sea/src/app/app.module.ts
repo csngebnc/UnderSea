@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -80,6 +81,7 @@ import { LoadingInterceptor } from './http-interceptors/loading/loading.intercep
     ReactiveFormsModule,
     HttpClientModule,
     NgxsModule.forRoot([ResourcesState, UserDataState, LoadingState]),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
   ],
   providers: [
     { provide: generated.API_BASE_URL, useValue: config.apiUrl },

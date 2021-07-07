@@ -45,9 +45,9 @@
           class="error-text"
         >
           {{
-            registerForm.controls["userName"].hasError(null)
+            registerForm.controls["userName"].errors.length
               ? registerForm.controls["userName"].errors
-              : "A felhasználónévnek legalább 3 karakter hosszúnak kell lenni, és nem tartalmazhat szóközt vagy speciális karaktert.asd"
+              : "A felhasználónévnek legalább 3 karakter hosszúnak kell lenni, és nem tartalmazhat szóközt vagy speciális karaktert."
           }}
         </p>
         <p
@@ -58,8 +58,10 @@
           class="error-text"
         >
           {{
-            registerForm.controls["password"].hasError()
+            registerForm.controls["password"].errors.length
               ? registerForm.controls["password"].errors
+              : pwRegEx.test(registerForm.controls["password"].value)
+              ? "A jelszavak nem egyeznek!"
               : "A jelszónak legalább 6 karakter hosszúnak kell lennie, tartalmaznia kell számot, kis és nagy betűt és speciális karaktert (._#$^+=!*()@%&)!"
           }}
         </p>
@@ -71,7 +73,7 @@
           class="error-text"
         >
           {{
-            registerForm.controls["confirmPassword"].hasError()
+            registerForm.controls["confirmPassword"].errors.length
               ? registerForm.controls["confirmPassword"].errors
               : "A jelszavak nem egyeznek!"
           }}
@@ -84,7 +86,7 @@
           class="error-text"
         >
           {{
-            registerForm.controls["countryName"].hasError()
+            registerForm.controls["countryName"].errors.length
               ? registerForm.controls["countryName"].errors
               : "Az ország nevét kötelező megadni!"
           }}
