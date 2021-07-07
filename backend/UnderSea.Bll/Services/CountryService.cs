@@ -66,7 +66,16 @@ namespace UnderSea.Bll.Services
             return new CountryDetailsDto
             {
                 MaxUnitCount = country.MaxUnitCount,
-                Units = _mapper.Map<ICollection<BattleUnitDto>>(units),
+                Units = units.Select(unit =>
+                {
+                    return new BattleUnitDto
+                    {
+                        Id = unit.Id,
+                        Name = unit.Name,
+                        ImageUrl = unit.ImageUrl,
+                        Count = country.CountryUnits.SingleOrDefault(u => u.UnitId == unit.Id)?.Count ?? 0
+                    };
+                }).ToList(),
                 Population = country.Population,
                 HasSonarCanon = hasSonarCanon,
                 Materials = country.CountryMaterials.Select(cm =>
