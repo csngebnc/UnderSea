@@ -45,9 +45,9 @@
           class="error-text"
         >
           {{
-            registerForm.controls["userName"].hasError()
+            registerForm.controls["userName"].hasError(null)
               ? registerForm.controls["userName"].errors
-              : "A felhasználónévnek legalább 3 karakter hosszúnak kell lennie!"
+              : "A felhasználónévnek legalább 3 karakter hosszúnak kell lenni, és nem tartalmazhat szóközt vagy speciális karaktert.asd"
           }}
         </p>
         <p
@@ -60,7 +60,7 @@
           {{
             registerForm.controls["password"].hasError()
               ? registerForm.controls["password"].errors
-              : "A jelszónak legalább 6 karakter hosszúnak kell lennie, tartalmaznia kell számot, kis és nagy betűt és speciális karaktert!"
+              : "A jelszónak legalább 6 karakter hosszúnak kell lennie, tartalmaznia kell számot, kis és nagy betűt és speciális karaktert (._#$^+=!*()@%&)!"
           }}
         </p>
         <p

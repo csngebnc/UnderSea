@@ -24,17 +24,18 @@ export class RegisterComponent implements OnInit {
   registerForm = new FormGroup({
     userName: new FormControl('', [
       Validators.required,
-      Validators.pattern(this.userNameRegEx),
+      //Validators.pattern(this.userNameRegEx),
       Validators.minLength(3),
     ]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
       Validators.pattern(this.pwRegEx),
+      this.doPasswordsMatch('confirmPassword'),
     ]),
     confirmPassword: new FormControl('', [
       Validators.required,
-      this.doPasswordsMatch(),
+      this.doPasswordsMatch('password'),
     ]),
     countryName: new FormControl('', [
       Validators.required,
@@ -69,24 +70,27 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  private doPasswordsMatch(): ValidatorFn {
+  private doPasswordsMatch(controlName: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const fg = control.parent;
       if (fg) {
-        const matching = control.value === fg.controls['password'].value;
-        return matching ? null : { passwordMismatch: true };
+        const matching = control.value === fg.controls[controlName].value;
+        if (matching || fg.controls[controlName].untouched) {
+          fg.controls[controlName].setErrors(null);
+          return null;
+        } else {
+          return { invalid: true };
+        }
       }
       return null;
     };
   }
 
   private setFormInvalid(e: any): void {
-    console.log(e);
     const errors = e['errors'];
     if (errors['userName']) {
       this.registerForm.controls['userName'].setErrors(errors['userName']);
       this.regFailed = errors['userName'];
-      console.log(this.registerForm.controls['userName']);
     }
     if (errors['password']) {
       this.registerForm.controls['password'].setErrors(errors['password']);

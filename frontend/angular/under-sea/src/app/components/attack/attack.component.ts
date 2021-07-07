@@ -1,9 +1,12 @@
+import { GetResources } from 'src/app/states/resources/resources.actions';
 import { Component, OnInit } from '@angular/core';
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
 import { PagedList } from 'src/app/models/paged-list.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-code';
+import { Select, Store } from '@ngxs/store';
+import { LoadingState } from 'src/app/states/loading/loading.state';
 
 @Component({
   selector: 'attack',
@@ -26,7 +29,10 @@ export class AttackComponent implements OnInit {
   generalSelected: boolean = false;
   selectedUnitcount = 0;
 
-  constructor(private battleService: BattleService) {}
+  @Select(LoadingState.isLoading)
+  loading$: Observable<boolean>;
+
+  constructor(private battleService: BattleService, private store: Store) {}
 
   ngOnInit(): void {
     this.initAttack();
@@ -48,9 +54,9 @@ export class AttackComponent implements OnInit {
     let units = this.battleService.getAttackerUnits();
 
     forkJoin([users, units]).subscribe(
-      (responses) => {
-        this.players = responses[0];
-        this.units = responses[1];
+      ([users, units]) => {
+        this.players = users;
+        this.units = units;
       },
       (e) => console.error(e)
     );
@@ -80,6 +86,7 @@ export class AttackComponent implements OnInit {
   attack(): void {
     this.battleService.attack(this.targetId, this.attackerUnits).subscribe(
       (r) => {
+        this.store.dispatch(GetResources);
         this.initAttack();
       },
       (e) => console.error(e)
