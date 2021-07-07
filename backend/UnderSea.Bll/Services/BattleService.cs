@@ -58,16 +58,22 @@ namespace UnderSea.Bll.Services
 
         public async Task<IEnumerable<BattleUnitDto>> GetUserUnitsAsync()
         {
-            var country = await GetCountry();
+            var country = await _context.Countries
+                .Include(c => c.CountryUnits)
+                .SingleOrDefaultAsync(c => c.OwnerId == _identityService.GetCurrentUserId());
 
-            var userunits = await _context.CountryUnits
-                .Include(c => c.Unit)
-                .Where(c => c.CountryId == country.Id && c.Unit.Name != UnitNameConstants.Felfedezo)
-                .Select(c => c.Unit)
-                .ProjectTo<BattleUnitDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            var units = await _context.Units.ToListAsync();
 
-            return userunits;
+            return units.Select(unit =>
+            {
+                return new BattleUnitDto
+                {
+                    Id = unit.Id,
+                    Name = unit.Name,
+                    ImageUrl = unit.ImageUrl,
+                    Count = country.CountryUnits.SingleOrDefault(u => u.UnitId == unit.Id)?.Count ?? 0
+                };
+            }).ToList();
         }
 
         public async Task<IEnumerable<BattleUnitDto>> GetUserAllUnitsAsync()
