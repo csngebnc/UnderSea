@@ -33,6 +33,10 @@ namespace UnderSea.Bll.Services
             {
                 foreach(var material in country.CountryMaterials)
                 {
+                    if(material.Material.MaterialType == MaterialTypeConstants.Pearl)
+                    {
+                        material.BaseProduction = country.Population * EffectConstants.PopulationPearlMultiplier;
+                    }
                     material.Amount += (int)Math.Round(material.BaseProduction * material.Multiplier); 
                 }
             }
