@@ -221,7 +221,9 @@ class BattleDataController extends GetxController {
           attackableUsers.value!.allResultsCount <=
               alreadyDownloadedPageNumber.value * pageSize.value) return;
       final response = await _battleDataProvider.getAttackableUsers(
-          pageSize.value, pageNumber.value, searchText.value);
+          pageSize.value,
+          pageNumber.value,
+          searchText.value.removeAllWhitespace);
       if (response.statusCode == 200) {
         attackableUsers = Rx(response.body!);
         if (alreadyDownloadedPageNumber.value !=

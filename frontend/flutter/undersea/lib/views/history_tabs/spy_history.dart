@@ -40,29 +40,6 @@ class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    /*var spyReportList = <SpyReportDto>[
-      SpyReportDto(
-          outCome: FightOutcome.NotPlayedYet,
-          spyReportId: 1,
-          defensePoints: null,
-          spiedCountryName: 'Atlantisz'),
-      SpyReportDto(
-          outCome: FightOutcome.CurrentUser,
-          spyReportId: 2,
-          defensePoints: 260,
-          spiedCountryName: 'Atalantisz'),
-      SpyReportDto(
-          outCome: FightOutcome.OtherUser,
-          spyReportId: 3,
-          defensePoints: null,
-          spiedCountryName: 'Ausztrália'),
-      SpyReportDto(
-          outCome: FightOutcome.CurrentUser,
-          spyReportId: 4,
-          defensePoints: 800,
-          spiedCountryName: 'Óceánia'),
-    ];*/
-
     return Expanded(
         child: Container(
             decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),

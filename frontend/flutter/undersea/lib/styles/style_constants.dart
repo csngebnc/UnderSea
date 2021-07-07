@@ -176,7 +176,7 @@ class UnderseaStyles {
 
   static Widget resourceIcon(String assetName, int current, int production) {
     return Container(
-        margin: EdgeInsets.all(12),
+        margin: EdgeInsets.all(5),
         child: Column(
           children: [
             UnderseaStyles.assetIcon(assetName),
@@ -207,7 +207,7 @@ class UnderseaStyles {
   static Widget buildingIcon(String assetName, int amount,
       {String additional = '@3x'}) {
     return Container(
-        margin: EdgeInsets.all(12),
+        margin: EdgeInsets.all(5),
         child: Column(
           children: [
             UnderseaStyles.assetIcon(assetName, isBuilding: true, iconSize: 60),
@@ -350,8 +350,7 @@ class UnderseaStyles {
 
   static void snackbar(String title, String body) {
     return Get.snackbar(title, body,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.blueAccent);
+        snackPosition: SnackPosition.TOP, backgroundColor: Colors.blueAccent);
   }
 
   static Widget iconsFromImages(String name, {double size = 35}) {

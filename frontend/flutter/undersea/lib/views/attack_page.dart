@@ -32,8 +32,7 @@ class _AttackPageState extends State<AttackPage> {
   void initState() {
     controller.getAttackableUsers();
     firstPage = true;
-    //attackableUsersList = controller.attackableUsers;
-    //itemCount = attackableUsersList.value.length * 2 + 2;
+    controller.searchText.value = '';
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -59,8 +58,7 @@ class _AttackPageState extends State<AttackPage> {
         },
         list: GetBuilder<BattleDataController>(builder: (controller) {
           results = controller.attackableUserList.value;
-          itemCount =
-              results.length * 2 + 2; //controller.actualPageSize.value * 2 + 2;
+          itemCount = results.length * 2 + 2;
           return ListView.builder(
               controller: _scrollController,
               itemCount: itemCount,
@@ -81,12 +79,16 @@ class _AttackPageState extends State<AttackPage> {
                                   .copyWith(fontSize: 22)),
                           SizedBox(height: 20),
                           UnderseaStyles.inputField(
-                              hint: Strings.username.tr,
-                              color: Color(0xFF657A9D),
-                              hintColor: UnderseaStyles.alternativeHintColor,
-                              /* controller: TextEditingController(
-                                  text: controller.searchText.value),*/
-                              onChanged: controller.onSearchChanged),
+                            hint: Strings.username.tr,
+                            color: Color(0xFF657A9D),
+                            hintColor: UnderseaStyles.alternativeHintColor,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedIndex = null;
+                              });
+                              controller.onSearchChanged(value);
+                            },
+                          )
                         ]),
                   );
                 }
