@@ -59,5 +59,6 @@ class RoundController extends GetxController {
     battleController.getSpies();
     battleController.getAttackableUsers();
     battleController.getHistory();
+    battleController.getAvailableUnits();
   }
 }

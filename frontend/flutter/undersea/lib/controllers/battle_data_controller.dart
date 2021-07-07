@@ -62,6 +62,9 @@ class BattleDataController extends GetxController {
 
   void onSearchChanged(String value) {
     searchText.value = value;
+    pageNumber.value = 1;
+    alreadyDownloadedPageNumber.value = 0;
+    attackableUserList.value.clear();
   }
 
   var soldierList = <Soldier>[
@@ -184,9 +187,11 @@ class BattleDataController extends GetxController {
       if (response.statusCode == 200) {
         loggedAttacks = Rx(response.body!);
         if (alreadyDownloadedAttackLogPageNumber.value !=
-            loggedAttacks.value!.pageNumber)
+            loggedAttacks.value!.pageNumber) {
           attackLogsList.value += loggedAttacks.value?.results ?? [];
-        alreadyDownloadedPageNumber.value = pageNumber.value;
+          alreadyDownloadedAttackLogPageNumber.value =
+              attackLogPageNumber.value;
+        }
         update();
       }
     } catch (error) {
@@ -204,9 +209,10 @@ class BattleDataController extends GetxController {
       if (response.statusCode == 200) {
         attackableUsers = Rx(response.body!);
         if (alreadyDownloadedPageNumber.value !=
-            attackableUsers.value!.pageNumber)
+            attackableUsers.value!.pageNumber) {
           attackableUserList.value += attackableUsers.value?.results ?? [];
-        alreadyDownloadedAttackLogPageNumber.value = attackLogPageNumber.value;
+          alreadyDownloadedPageNumber.value = pageNumber.value;
+        }
         update();
       }
     } catch (error) {
