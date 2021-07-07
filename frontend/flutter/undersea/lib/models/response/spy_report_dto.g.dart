@@ -50,7 +50,7 @@ K _$enumDecode<K, V>(
 }
 
 const _$FightOutcomeEnumMap = {
-  FightOutcome.NotPlayedYet: 'NotPlayedYet',
-  FightOutcome.CurrentUser: 'CurrentUser',
-  FightOutcome.OtherUser: 'OtherUser',
+  FightOutcome.NotPlayedYet: 0,
+  FightOutcome.CurrentUser: 1,
+  FightOutcome.OtherUser: 2,
 };
