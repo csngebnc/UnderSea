@@ -23,10 +23,8 @@ class _SpyingTabState extends State<SpyingTab> {
     return true;
   }
 
-  //dummy data
   int spyNumber = 0;
 
-  List<Soldier> soldierList = Get.find<BattleDataController>().soldierList;
   @override
   Widget build(BuildContext context) {
     return GetBuilder<BattleDataController>(builder: (controller) {

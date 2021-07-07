@@ -17,23 +17,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //final List<String> imageList; =
-  /*Get.find<BuildingDataController>().*/
-
-  //final Random rng = Random();
-
   final userDataController = Get.find<UserDataController>();
   final countryDataController = Get.find<CountryDataController>();
-
+  final battleDatacontroller = Get.find<BattleDataController>();
   @override
   void initState() {
     userDataController.userInfo();
     countryDataController.getCountryDetails();
-    Get.find<BattleDataController>().getAllUnits();
-    Get.find<BattleDataController>().getAttackableUsers();
-    Get.find<BattleDataController>().getHistory();
-    Get.find<BattleDataController>().getAvailableUnits();
-    Get.find<BattleDataController>().getSpyingHistory();
+    userDataController.getRankList();
+    battleDatacontroller.getAllUnits();
+    battleDatacontroller.getAttackableUsers();
+    battleDatacontroller.getHistory();
+    battleDatacontroller.getAvailableUnits();
+    battleDatacontroller.getSpyingHistory();
 
     super.initState();
   }

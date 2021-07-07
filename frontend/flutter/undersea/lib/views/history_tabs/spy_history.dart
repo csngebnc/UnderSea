@@ -46,6 +46,7 @@ class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
             child: GetBuilder<BattleDataController>(builder: (controller) {
               results = controller.spyLogsList.value;
               return ListView.builder(
+                  controller: _scrollController,
                   itemCount: results.length * 2 + 1,
                   itemBuilder: (BuildContext context, int i) {
                     if (i == 0) return SizedBox(height: 20);
