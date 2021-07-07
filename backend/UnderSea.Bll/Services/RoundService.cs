@@ -239,8 +239,8 @@ namespace UnderSea.Bll.Services
 
                         var defenderGenerals = defenseUnits.SingleOrDefault(u => u.UnitId == generalId)?.Count ?? 0;
 
-                        spyreport.DefensePoints = (int)(spyreport.DefensePoints* defenderCountry.FightPoint.DefensePointMultiplier);
-                        spyreport.DefensePoints = (int)(spyreport.DefensePoints * defenderGenerals * UnitValueConstants.GeneralBonus);
+                        spyreport.DefensePoints = (int)(spyreport.DefensePoints* (1+defenderCountry.FightPoint.DefensePointMultiplier));
+                        spyreport.DefensePoints = (int)(spyreport.DefensePoints * (1+defenderGenerals * UnitValueConstants.GeneralBonus));
                         attackerCountry.CountryUnits.Where(cu => cu.Unit.Name == UnitNameConstants.Felfedezo).FirstOrDefault().Count += spyreport.NumberOfSpies;
                     }
                     else
