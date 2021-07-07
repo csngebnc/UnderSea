@@ -152,9 +152,14 @@ class BattleDataController extends GetxController {
       if (response.statusCode == 200) {
         UnderseaStyles.snackbar(
             'Sikeres támadás!', 'Az egységeidet elküldted támadni');
+        loggedAttacks = Rx(null);
+        attackLogPageNumber.value = 1;
+        alreadyDownloadedAttackLogPageNumber.value = 0;
+        attackLogsList.value.clear();
         getAllUnits();
         getAttackableUsers();
         getUnitTypes();
+        getHistory();
       } else
         log('$response');
     } catch (error) {
@@ -180,8 +185,8 @@ class BattleDataController extends GetxController {
     try {
       if (loggedAttacks.value != null &&
           loggedAttacks.value!.allResultsCount <=
-              alreadyDownloadedAttackLogPageNumber.value *
-                  attackLogPageNumber.value) return;
+              alreadyDownloadedAttackLogPageNumber.value * pageSize.value)
+        return;
       final response = await _battleDataProvider.getHistory(
           pageSize.value, attackLogPageNumber.value);
       if (response.statusCode == 200) {

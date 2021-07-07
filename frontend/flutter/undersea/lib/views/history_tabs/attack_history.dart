@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/battle_data_controller.dart';
-import 'package:undersea/models/attack.dart';
+
+import 'package:undersea/models/fight_outcome.dart';
 import 'package:undersea/models/response/logged_attack_dto.dart';
 import 'package:undersea/styles/style_constants.dart';
 
@@ -12,6 +13,12 @@ class AttackHistoryPage extends StatefulWidget {
 
 class _AttackHistoryPageState extends State<AttackHistoryPage> {
   var controller = Get.find<BattleDataController>();
+
+  var outcomeMap = {
+    FightOutcome.NotPlayedYet: 'Folyamatban',
+    FightOutcome.CurrentUser: 'Győzelem',
+    FightOutcome.OtherUser: 'Vereség'
+  };
   final ScrollController _scrollController = ScrollController();
   List<LoggedAttackDto?> results = [];
   late int itemCount;
@@ -57,7 +64,9 @@ class _AttackHistoryPageState extends State<AttackHistoryPage> {
     var column = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(actualAttack?.attackedCountryName ?? '',
+        Text(
+            (actualAttack?.attackedCountryName ?? '') +
+                ' - ${outcomeMap[actualAttack?.outcome]}',
             style: UnderseaStyles.listBold.copyWith(fontSize: 20)),
       ],
     );

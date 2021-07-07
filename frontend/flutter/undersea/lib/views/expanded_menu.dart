@@ -13,17 +13,10 @@ import 'package:undersea/styles/style_constants.dart';
 class ExpandedMenu extends StatelessWidget {
   ExpandedMenu();
 
-  /*final List<Soldier> militaryList =
-      Get.find<BattleDataController>().soldierList;*/
-
   Widget _enumerateSoldiers(List<BattleUnitDto> units) {
     final allUnits = Get.find<BattleDataController>().allUnitsInfo.value;
     final spiesCount = Get.find<BattleDataController>().spiesInfo.value?.count;
-    /*final allSpies = Get.find<BattleDataController>()
-        .allUnitsInfo
-        .value
-        .firstWhere((element) => element.name == 'Felfedező')
-        .count;*/
+
     List<Widget> list = <Widget>[];
     units.forEach((element) {
       var isSpy = element.name == 'Felfedező';
