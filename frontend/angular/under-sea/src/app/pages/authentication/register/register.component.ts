@@ -18,7 +18,7 @@ import {
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  private pwRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[._#$^+=!*()@%&]).{6,}$/;
+  pwRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[._#$^+=!*()@%&]).{6,}$/;
   private userNameRegEx = /^[a-zA-Z0-9_@\.\-]*$/;
   private countryRegex = /^(?!\s*$).+/;
   registerForm = new FormGroup({
