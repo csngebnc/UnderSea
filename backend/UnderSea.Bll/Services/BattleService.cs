@@ -132,6 +132,7 @@ namespace UnderSea.Bll.Services
                                             .OrderByDescending(a => a.AttackRound)
                                             .Include(a => a.AttackUnits)
                                                 .ThenInclude(au => au.Unit)
+                                            .Include(a => a.AttackerCountry)
                                             .Include(a => a.DefenderCountry)
                                             .ToPagedList(data.PageSize, data.PageNumber);
 
@@ -141,7 +142,7 @@ namespace UnderSea.Bll.Services
                 result.Add(
                     new LoggedAttackDto
                     {
-                        AttackedCountryName = attack.DefenderCountry.Name,
+                        AttackedCountryName = country.Name == attack.DefenderCountry.Name ? attack.AttackerCountry.Name : attack.DefenderCountry.Name,
                         Units = _mapper.Map<ICollection<BattleUnitDto>>(attack.AttackUnits),
                         Outcome = attack.WinnerId == null ? Model.Enums.FightOutcome.NotPlayedYet :
                                     attack.WinnerId == _identityService.GetCurrentUserId() ?
