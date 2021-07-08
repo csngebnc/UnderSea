@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Material } from './../../models/material.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BuildingDetails } from 'src/app/models/building-details.model';
@@ -31,7 +32,11 @@ export class BuildingsComponent implements OnInit, OnDestroy {
   materials: Array<Material> = [];
   priceTooHigh: boolean = false;
 
-  constructor(private buildingService: BuildingService, private store: Store) {
+  constructor(
+    private buildingService: BuildingService,
+    private store: Store,
+    private toastr: ToastrService
+  ) {
     this.materialCount$
       .pipe(takeUntil(this.destroy$))
       .subscribe((m) => (this.materials = m));
@@ -52,7 +57,11 @@ export class BuildingsComponent implements OnInit, OnDestroy {
 
         this.checkUnderConstruction();
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 
@@ -77,7 +86,11 @@ export class BuildingsComponent implements OnInit, OnDestroy {
         this.isUnderConstruction = true;
         this.store.dispatch(GetResources);
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 }

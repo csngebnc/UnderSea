@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit, Input } from '@angular/core';
 import { Building } from 'src/app/models/building.model';
 import { RoundService } from 'src/app/services/round/round.service';
@@ -17,7 +18,10 @@ export class BuildingContainerComponent implements OnInit {
   flowcontrol: string = config.imageUrl + config.images.flowcontrol;
   stonemine: string = config.imageUrl + config.images.stonemine;
 
-  constructor(private roundService: RoundService) {}
+  constructor(
+    private roundService: RoundService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -31,7 +35,11 @@ export class BuildingContainerComponent implements OnInit {
   nextRound(): void {
     this.roundService.nextRound().subscribe(
       (r) => r,
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 }
