@@ -4,13 +4,12 @@ part 'user_rank_dto.g.dart';
 
 @JsonSerializable()
 class UserRankDto {
-  String name;
+  String? name;
   int points;
+  int placement;
 
-  UserRankDto({
-    required this.name,
-    required this.points,
-  });
+  UserRankDto(
+      {required this.name, required this.points, required this.placement});
 
   factory UserRankDto.fromJson(Map<String, dynamic> json) =>
       _$UserRankDtoFromJson(json);

@@ -110,4 +110,13 @@ class UserDataController extends GetxController {
       log('$error');
     }
   }
+
+  void reset() {
+    pagedRankList = Rx(null);
+    searchText.value = '';
+    pageNumber.value = 1;
+    alreadyDownloadedPageNumber.value = 0;
+    pageSize.value = 5;
+    rankList.value.clear();
+  }
 }

@@ -25,8 +25,8 @@ class _LeaderboardState extends State<Leaderboard> {
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
-    controller.getRankList();
     controller.searchText.value = '';
+    controller.getRankList();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -97,7 +97,7 @@ class _LeaderboardState extends State<Leaderboard> {
                     child: Row(
                       children: [
                         SizedBox(
-                            child: Text('${i ~/ 2}. ',
+                            child: Text('${user?.placement}. ',
                                 style: UnderseaStyles.listRegular),
                             width: 30),
                         SizedBox(width: 20),

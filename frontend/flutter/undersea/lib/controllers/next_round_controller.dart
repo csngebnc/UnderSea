@@ -48,8 +48,10 @@ class RoundController extends GetxController {
   }
 
   void refreshOnNextRound() {
-    Get.find<UserDataController>().userInfo();
-    Get.find<UserDataController>().getRankList();
+    var userDataController = Get.find<UserDataController>();
+    userDataController.userInfo();
+    userDataController.getRankList();
+    userDataController.reset();
     Get.find<CountryDataController>().getCountryDetails();
     Get.find<BuildingDataController>().getBuildingDetails();
     Get.find<UpgradesController>().getUpgradeDetails();

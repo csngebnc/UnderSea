@@ -8,8 +8,9 @@ part of 'user_rank_dto.dart';
 
 UserRankDto _$UserRankDtoFromJson(Map<String, dynamic> json) {
   return UserRankDto(
-    name: json['name'] as String,
+    name: json['name'] as String?,
     points: json['points'] as int,
+    placement: json['placement'] as int,
   );
 }
 
@@ -17,4 +18,5 @@ Map<String, dynamic> _$UserRankDtoToJson(UserRankDto instance) =>
     <String, dynamic>{
       'name': instance.name,
       'points': instance.points,
+      'placement': instance.placement,
     };

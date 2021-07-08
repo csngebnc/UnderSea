@@ -30,9 +30,9 @@ class _AttackPageState extends State<AttackPage> {
 
   @override
   void initState() {
+    controller.searchText.value = '';
     controller.getAttackableUsers();
     firstPage = true;
-    controller.searchText.value = '';
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
