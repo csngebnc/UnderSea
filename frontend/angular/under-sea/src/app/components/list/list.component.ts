@@ -27,6 +27,7 @@ export class ListComponent implements OnInit {
   }
 
   search(text: string): void {
-    this.filter.emit(text);
+    const trimmed = text.trim();
+    if (trimmed.length >= 1) this.filter.emit(text);
   }
 }
