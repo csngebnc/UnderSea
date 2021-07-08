@@ -1,8 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:undersea/models/response/logged_attack_dto.dart';
 
-import 'attackable_user_dto.dart';
-
 part 'paged_result_of_logged_attack_dto.g.dart';
 
 @JsonSerializable()

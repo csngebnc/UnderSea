@@ -55,4 +55,8 @@ class Strings {
   static const first_step = 'first_step';
   static const back = 'back';
   static const leaderboard = 'leaderboard';
+
+  static const battle = 'battle';
+  static const spying = 'spying';
+  static const spying_second_step = 'spying_second_step';
 }

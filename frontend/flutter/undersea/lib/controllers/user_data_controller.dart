@@ -40,7 +40,9 @@ class UserDataController extends GetxController {
     searchText.value = value;
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
-    rankList.value.clear();
+
+    rankList.clear();
+    //rankList.value.clear();
   }
 
   register(
@@ -117,6 +119,7 @@ class UserDataController extends GetxController {
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
     pageSize.value = 5;
-    rankList.value.clear();
+    rankList.clear();
+    //rankList.value.clear();
   }
 }

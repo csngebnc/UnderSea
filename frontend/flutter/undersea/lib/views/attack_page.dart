@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/battle_data_controller.dart';
@@ -57,7 +55,7 @@ class _AttackPageState extends State<AttackPage> {
           });
         },
         list: GetBuilder<BattleDataController>(builder: (controller) {
-          results = controller.attackableUserList.value;
+          results = controller.attackableUserList.toList();
           itemCount = results.length * 2 + 2;
           return ListView.builder(
               controller: _scrollController,

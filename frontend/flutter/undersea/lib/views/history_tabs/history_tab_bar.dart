@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:undersea/lang/strings.dart';
+
 import 'package:undersea/styles/style_constants.dart';
-import 'package:undersea/views/attack_tabs/attacking_tab.dart';
-import 'package:undersea/views/attack_tabs/spying_tab.dart';
+
 import 'package:undersea/views/history_tabs/attack_history.dart';
 import 'package:undersea/views/history_tabs/spy_history.dart';
 

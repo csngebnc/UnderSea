@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/views/registration.dart';
-import 'bottom_nav_bar.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class LoginPage extends StatefulWidget {

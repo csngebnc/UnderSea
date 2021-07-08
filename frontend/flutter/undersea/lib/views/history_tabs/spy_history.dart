@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/battle_data_controller.dart';
-import 'package:undersea/models/attack.dart';
 import 'package:undersea/models/fight_outcome.dart';
 import 'package:undersea/models/response/spy_report_dto.dart';
 import 'package:undersea/styles/style_constants.dart';
@@ -44,7 +43,7 @@ class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
         child: Container(
             decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
             child: GetBuilder<BattleDataController>(builder: (controller) {
-              results = controller.spyLogsList.value;
+              results = controller.spyLogsList.toList();
               return ListView.builder(
                   controller: _scrollController,
                   itemCount: results.length * 2 + 1,

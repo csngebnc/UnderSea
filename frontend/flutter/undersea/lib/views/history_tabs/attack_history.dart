@@ -44,7 +44,7 @@ class _AttackHistoryPageState extends State<AttackHistoryPage> {
         child: Container(
             decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
             child: GetBuilder<BattleDataController>(builder: (controller) {
-              results = controller.attackLogsList.value;
+              results = controller.attackLogsList.toList();
               itemCount = results.length * 2 + 1;
               return ListView.builder(
                   controller: _scrollController,

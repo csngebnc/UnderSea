@@ -13,7 +13,6 @@ import 'package:undersea/models/response/send_attack_dto.dart';
 import 'package:undersea/models/response/send_spy_dto.dart';
 import 'package:undersea/models/response/spy_report_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
-import 'package:undersea/models/soldier.dart';
 
 import 'package:undersea/network/providers/battle_data_provider.dart';
 
@@ -70,7 +69,8 @@ class BattleDataController extends GetxController {
     searchText.value = value;
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
-    attackableUserList.value.clear();
+    attackableUserList.clear();
+    //attackableUserList.value.clear();
   }
 
   getAvailableUnits() async {
@@ -118,7 +118,8 @@ class BattleDataController extends GetxController {
         loggedAttacks = Rx(null);
         attackLogPageNumber.value = 1;
         alreadyDownloadedAttackLogPageNumber.value = 0;
-        attackLogsList.value.clear();
+        //attackLogsList.value.clear();
+        attackLogsList.clear();
         getAllUnits();
         getAttackableUsers();
         getUnitTypes();
@@ -139,7 +140,8 @@ class BattleDataController extends GetxController {
         spyingHistory = Rx(null);
         spyLogPageNumber.value = 1;
         alreadyDownloadedSpyLogPageNumber.value = 0;
-        spyLogsList.value.clear();
+        spyLogsList.clear();
+        //spyLogsList.value.clear();
         getAllUnits();
         getSpies();
         getSpyingHistory();
@@ -249,19 +251,22 @@ class BattleDataController extends GetxController {
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
     pageSize.value = 5;
-    attackableUserList.value.clear();
+    attackableUserList.clear();
+    //attackableUserList.value.clear();
 
     //AttackLogStuff
     loggedAttacks = Rx(null);
     attackLogPageNumber.value = 1;
     alreadyDownloadedAttackLogPageNumber.value = 0;
-    attackLogsList.value.clear();
+    //attackLogsList.value.clear();
+    attackLogsList.clear();
 
     //SpyLogStuff
 
     spyingHistory = Rx(null);
     spyLogPageNumber.value = 1;
     alreadyDownloadedSpyLogPageNumber.value = 0;
-    spyLogsList.value.clear();
+    spyLogsList.clear();
+    //spyLogsList.value.clear();
   }
 }

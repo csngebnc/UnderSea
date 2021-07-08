@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/upgrade_dto.dart';
-import 'package:undersea/models/upgrade.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:get/get.dart';
 

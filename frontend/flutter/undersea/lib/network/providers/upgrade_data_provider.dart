@@ -1,6 +1,4 @@
 import 'package:get/get.dart';
-import 'package:undersea/models/response/building_details_dto.dart';
-import 'package:undersea/models/response/country_details_dto.dart';
 import 'package:undersea/models/response/upgrade_dto.dart';
 
 import '../../constants.dart';

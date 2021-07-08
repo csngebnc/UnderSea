@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
@@ -73,7 +71,7 @@ class _LeaderboardState extends State<Leaderboard> {
           ],
         ),
         body: GetBuilder<UserDataController>(builder: (controller) {
-          results = controller.rankList.value;
+          results = controller.rankList.toList();
           itemCount = results.length * 2 + 2;
 
           return ListView.builder(

@@ -8,7 +8,6 @@ import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/buy_unit_details_dto.dart';
 import 'package:undersea/models/response/buy_unit_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
-import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class Military extends StatefulWidget {
