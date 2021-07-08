@@ -29,7 +29,7 @@ class BattleDataController extends GetxController {
   var searchText = ''.obs;
   var pageNumber = 1.obs;
   var alreadyDownloadedPageNumber = 0.obs;
-  var pageSize = 5.obs;
+  var pageSize = 10.obs;
   var attackableUserList = <AttackableUserDto>[].obs;
 
   //AttackLogStuff

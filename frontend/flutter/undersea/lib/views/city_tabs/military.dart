@@ -136,8 +136,8 @@ class _MilitaryTabState extends State<Military> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: 110,
-                width: 110,
+                height: 70,
+                width: 70,
                 child: UnderseaStyles.assetIcon(
                     BattleDataController.imageNameMap[actualSoldier.name] ??
                         'shark'),

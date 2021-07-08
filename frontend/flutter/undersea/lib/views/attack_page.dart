@@ -73,10 +73,10 @@ class _AttackPageState extends State<AttackPage> {
                         children: [
                           Text(Strings.first_step.tr,
                               style: UnderseaStyles.listBold
-                                  .copyWith(fontSize: 22)),
+                                  .copyWith(fontSize: 18)),
                           Text(Strings.select.tr,
                               style: UnderseaStyles.listRegular
-                                  .copyWith(fontSize: 22)),
+                                  .copyWith(fontSize: 18)),
                           SizedBox(height: 20),
                           UnderseaStyles.inputField(
                             hint: Strings.username.tr,
@@ -118,7 +118,7 @@ class _AttackPageState extends State<AttackPage> {
                             SizedBox(width: 20),
                             Text(user?.userName ?? '',
                                 style: UnderseaStyles.listRegular
-                                    .copyWith(fontSize: 20)),
+                                    .copyWith(fontSize: 16)),
                             Expanded(child: Container()),
                             if (i == _selectedIndex)
                               UnderseaStyles.iconsFromImages("done", size: 28),

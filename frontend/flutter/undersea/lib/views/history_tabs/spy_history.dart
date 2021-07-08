@@ -69,25 +69,25 @@ class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
             Row(
               children: [
                 Text(report?.spiedCountryName ?? '',
-                    style: UnderseaStyles.listBold.copyWith(fontSize: 20)),
+                    style: UnderseaStyles.listBold.copyWith(fontSize: 16)),
                 Expanded(
                   child: Container(),
                 ),
                 Text('Védekezőerő',
-                    style: UnderseaStyles.listBold.copyWith(fontSize: 17))
+                    style: UnderseaStyles.listBold.copyWith(fontSize: 15))
               ],
             ),
             Row(
               children: [
                 Text(outcome!,
-                    style: UnderseaStyles.listRegular
-                        .copyWith(height: 2, fontSize: 20)),
+                    style: UnderseaStyles.listRegular.copyWith(height: 2)),
                 Expanded(
                   child: Container(),
                 ),
                 Text('${report?.defensePoints ?? '?'}',
-                    style: UnderseaStyles.listRegular
-                        .copyWith(height: 2, fontSize: 20)),
+                    style: UnderseaStyles.listRegular.copyWith(
+                      height: 2,
+                    )),
               ],
             )
           ],

@@ -30,12 +30,12 @@ class ToggleableElevatedButton extends StatelessWidget {
                 : UnderseaStyles.buttonGradient,
             borderRadius: BorderRadius.circular(200)),
         child: Container(
-          width: 250,
-          height: 70,
+          width: 200,
+          height: 50,
           alignment: Alignment.center,
           child: Text(
             text,
-            style: UnderseaStyles.buttonTextStyle.copyWith(fontSize: 24),
+            style: UnderseaStyles.buttonTextStyle.copyWith(fontSize: 19),
           ),
         ),
       ),

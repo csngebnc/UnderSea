@@ -23,6 +23,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     userDataController.userInfo();
+    userDataController.searchText.value = '';
+    userDataController.getRankList();
     countryDataController.getCountryDetails();
     userDataController.getRankList();
     battleDatacontroller.getAllUnits();

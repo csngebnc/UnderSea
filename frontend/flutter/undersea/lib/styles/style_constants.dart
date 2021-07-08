@@ -42,7 +42,7 @@ class UnderseaStyles {
   static const navbarIconColor = Color(0xFF001234);
   static const unselectedNavbarIconColor = Color(0x33001234);
   static const hintStyle =
-      TextStyle(color: UnderseaStyles.hintColor, fontSize: 19);
+      TextStyle(color: UnderseaStyles.hintColor, fontSize: 15);
 
   static void _defaultOnChanged(String s) {}
 
@@ -88,12 +88,12 @@ class UnderseaStyles {
             padding: padding,
             child: Text(title,
                 style: UnderseaStyles.whiteOpenSans
-                    .copyWith(fontWeight: FontWeight.bold, fontSize: 20))),
+                    .copyWith(fontWeight: FontWeight.bold, fontSize: 16))),
         if (hint.isNotEmpty)
           Padding(
             padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
             child: Text(hint,
-                style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 20)),
+                style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 16)),
           ),
       ],
     );
@@ -109,11 +109,13 @@ class UnderseaStyles {
   }
 
   static Widget buildingImage(String name, {String additional = ''}) {
-    return Image.asset('assets/buildings/$name$additional.png');
+    return Image.asset(
+      'assets/buildings/$name$additional.png',
+    );
   }
 
   static Widget assetIcon(String iconName,
-      {double iconSize = 40, bool isBuilding = false}) {
+      {double iconSize = 30, bool isBuilding = false}) {
     return Container(
       decoration: isBuilding
           ? null
@@ -136,7 +138,7 @@ class UnderseaStyles {
   }
 
   static TextStyle listRegular = UnderseaStyles.whiteOpenSans
-      .copyWith(fontWeight: FontWeight.normal, fontSize: 18, height: 1.5);
+      .copyWith(fontWeight: FontWeight.normal, fontSize: 14, height: 1.5);
   static TextStyle listBold = UnderseaStyles.listRegular.copyWith(
     fontWeight: FontWeight.bold,
   );
@@ -156,7 +158,7 @@ class UnderseaStyles {
               style: UnderseaStyles.buttonTextStyle.copyWith(
                   color: Color(0xFF1C3E76),
                   fontWeight: FontWeight.w800,
-                  fontSize: 22),
+                  fontSize: 16),
             )
           ],
         ));
@@ -169,14 +171,14 @@ class UnderseaStyles {
       elevation: 2.0,
       fillColor: UnderseaStyles.underseaLogoColor,
       child: UnderseaStyles.iconsFromImages(iconName),
-      padding: EdgeInsets.all(5.0),
+      padding: EdgeInsets.all(2.0),
       shape: CircleBorder(),
     );
   }
 
   static Widget resourceIcon(String assetName, int current, int production) {
     return Container(
-        margin: EdgeInsets.all(5),
+        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Column(
           children: [
             UnderseaStyles.assetIcon(assetName),
@@ -187,7 +189,7 @@ class UnderseaStyles {
                   style: UnderseaStyles.buttonTextStyle.copyWith(
                       color: Color(0xFF1C3E76),
                       fontWeight: FontWeight.w800,
-                      fontSize: 22,
+                      fontSize: 16,
                       height: 1.2),
                 ),
                 Text(
@@ -195,7 +197,7 @@ class UnderseaStyles {
                   style: UnderseaStyles.buttonTextStyle.copyWith(
                       color: Color(0xFF1C3E76),
                       fontWeight: FontWeight.w800,
-                      fontSize: 22,
+                      fontSize: 12,
                       height: 1.1),
                 )
               ],
@@ -210,13 +212,13 @@ class UnderseaStyles {
         margin: EdgeInsets.all(5),
         child: Column(
           children: [
-            UnderseaStyles.assetIcon(assetName, isBuilding: true, iconSize: 60),
+            UnderseaStyles.assetIcon(assetName, isBuilding: true, iconSize: 50),
             Text(
               '$amount',
               style: UnderseaStyles.buttonTextStyle.copyWith(
                   color: Color(0xFF1C3E76),
                   fontWeight: FontWeight.w800,
-                  fontSize: 22),
+                  fontSize: 18),
             ),
           ],
         ));
@@ -257,7 +259,7 @@ class UnderseaStyles {
               style: UnderseaStyles.buttonTextStyle.copyWith(
                   color: UnderseaStyles.hintColor,
                   fontWeight: FontWeight.w800,
-                  fontSize: 22),
+                  fontSize: 20),
             )));
   }
 
@@ -273,8 +275,8 @@ class UnderseaStyles {
   static Widget elevatedButton(
       {required String text,
       required Function onPressed,
-      double width = 250,
-      double height = 70}) {
+      double width = 200,
+      double height = 55}) {
     return ElevatedButton(
       onPressed: () {
         onPressed();
@@ -294,7 +296,7 @@ class UnderseaStyles {
           alignment: Alignment.center,
           child: Text(
             text,
-            style: buttonTextStyle.copyWith(fontSize: 24),
+            style: buttonTextStyle.copyWith(fontSize: 20),
           ),
         ),
       ),
@@ -304,7 +306,7 @@ class UnderseaStyles {
   static const bottomNavbarTextStyle = TextStyle(
       color: UnderseaStyles.navbarIconColor,
       fontFamily: 'Baloo 2',
-      fontSize: 15,
+      fontSize: 11,
       fontStyle: FontStyle.normal,
       fontWeight: FontWeight.bold);
 
@@ -316,7 +318,7 @@ class UnderseaStyles {
       Text(
         text,
         style: UnderseaStyles.inputTextStyle.copyWith(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 19),
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
       ),
     ]);
   }
@@ -329,7 +331,7 @@ class UnderseaStyles {
         child: Text(
           text,
           style: UnderseaStyles.inputTextStyle.copyWith(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
         ),
       ),
     );

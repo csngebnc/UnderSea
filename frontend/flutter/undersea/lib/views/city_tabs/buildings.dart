@@ -147,7 +147,7 @@ class _BuildingsTabState extends State<Buildings> {
                                 //Strings.under_construction.tr,
                                 style: TextStyle(
                                     color: UnderseaStyles.underseaLogoColor,
-                                    fontSize: 16),
+                                    fontSize: 12),
                               ))
                           : Container(),
                     ],

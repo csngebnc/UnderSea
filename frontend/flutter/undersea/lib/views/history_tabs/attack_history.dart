@@ -67,13 +67,13 @@ class _AttackHistoryPageState extends State<AttackHistoryPage> {
         Text(
             (actualAttack?.attackedCountryName ?? '') +
                 ' - ${outcomeMap[actualAttack?.outcome]}',
-            style: UnderseaStyles.listBold.copyWith(fontSize: 20)),
+            style: UnderseaStyles.listBold),
       ],
     );
     actualAttack?.units?.forEach((element) {
       column.children.add(Text(
         '${element.name} ${element.count}',
-        style: UnderseaStyles.listRegular.copyWith(height: 2, fontSize: 20),
+        style: UnderseaStyles.listRegular.copyWith(height: 2),
       ));
     });
 

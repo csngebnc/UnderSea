@@ -120,7 +120,7 @@ class _UpgradesTabState extends State<Upgrades> {
                                 'még ${actualUpgrade.remainingTime} kör',
                                 style: TextStyle(
                                     color: UnderseaStyles.underseaLogoColor,
-                                    fontSize: 16),
+                                    fontSize: 12),
                               ))
                           : Container(),
                     ],
