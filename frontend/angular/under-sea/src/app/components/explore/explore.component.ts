@@ -1,3 +1,4 @@
+import { GetResources } from './../../states/resources/resources.actions';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
@@ -5,7 +6,7 @@ import { BattleService } from 'src/app/services/battle/battle.service';
 import { PagedList } from 'src/app/models/paged-list.model';
 import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-code';
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { LoadingState } from 'src/app/states/loading/loading.state';
 
 @Component({
@@ -32,6 +33,7 @@ export class ExploreComponent implements OnInit {
 
   constructor(
     private battleService: BattleService,
+    private store: Store,
     private toastr: ToastrService
   ) {
     this.initExplore();
@@ -94,6 +96,7 @@ export class ExploreComponent implements OnInit {
   sendSpy(): void {
     this.battleService.spy(this.targetId, this.selectedCount).subscribe(
       (r) => {
+        this.store.dispatch(GetResources);
         this.initExplore();
       },
       (e) => {
