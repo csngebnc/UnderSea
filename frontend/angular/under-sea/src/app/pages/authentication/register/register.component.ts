@@ -19,7 +19,7 @@ import {
 })
 export class RegisterComponent implements OnInit {
   pwRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[._#$^+=!*()@%&]).{6,}$/;
-  private userNameRegEx = /^[a-zA-Z0-9_@\.\-]*$/;
+  private userNameRegEx = /^[-0-9A-Za-z_]{3,}$/;
   private countryRegex = /^(?!\s*$).+/;
   registerForm = new FormGroup({
     userName: new FormControl('', [
@@ -35,6 +35,8 @@ export class RegisterComponent implements OnInit {
     ]),
     confirmPassword: new FormControl('', [
       Validators.required,
+      Validators.minLength(6),
+      Validators.pattern(this.pwRegEx),
       this.doPasswordsMatch('password'),
     ]),
     countryName: new FormControl('', [

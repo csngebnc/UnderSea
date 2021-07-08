@@ -12,11 +12,24 @@ export class SignalRService {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${apiUrl}/roundHub`)
       .build();
+    this.connectInit();
+    this.reconnectInit();
+  };
+
+  private reconnectInit(): void {
+    this.hubConnection.onclose(() => {
+      setTimeout(() => {
+        this.connectInit();
+      }, 3000);
+    });
+  }
+
+  private connectInit(): void {
     this.hubConnection
       .start()
       .then(() => console.log('Connection started'))
       .catch((err: any) =>
         console.log('Error while starting connection: ' + err)
       );
-  };
+  }
 }

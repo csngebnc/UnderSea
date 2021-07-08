@@ -77,7 +77,6 @@ export class UnitsComponent implements OnInit, OnDestroy {
 
   onBuy(): void {
     this.justBoughtUnits$.next(true);
-    console.log(this.cart);
     this.battleService.buyUnits(this.cart).subscribe(
       (r) => {
         this.store.dispatch(GetResources);

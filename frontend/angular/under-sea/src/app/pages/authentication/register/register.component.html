@@ -75,7 +75,9 @@
           {{
             registerForm.controls["confirmPassword"].errors.length
               ? registerForm.controls["confirmPassword"].errors
-              : "A jelszavak nem egyeznek!"
+              : pwRegEx.test(registerForm.controls["password"].value)
+              ? "A jelszavak nem egyeznek!"
+              : "A jelszónak legalább 6 karakter hosszúnak kell lennie, tartalmaznia kell számot, kis és nagy betűt és speciális karaktert (._#$^+=!*()@%&)!"
           }}
         </p>
         <p

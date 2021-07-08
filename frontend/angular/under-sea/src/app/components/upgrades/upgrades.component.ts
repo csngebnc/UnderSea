@@ -29,13 +29,12 @@ export class UpgradesComponent implements OnInit {
     this.upgradeService.getUpgrades().subscribe(
       (r: Array<Upgrade>) => {
         this.upgrades = r;
+        this.upgrades.forEach((u) => {
+          if (u.isUnderConstruction) this.isResearching = true;
+        });
       },
       (e) => console.error(e)
     );
-
-    this.upgrades.forEach((u) => {
-      if (u.isUnderConstruction) this.isResearching = true;
-    });
   }
 
   setUpgrade(id: number): void {
