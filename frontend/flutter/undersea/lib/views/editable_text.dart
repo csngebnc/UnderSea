@@ -37,7 +37,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
             Text(
               Strings.city_name.tr,
               style: UnderseaStyles.whiteOpenSans
-                  .copyWith(fontWeight: FontWeight.bold, fontSize: 21),
+                  .copyWith(fontWeight: FontWeight.bold, fontSize: 17),
             ),
             SizedBox(height: 5),
             _editableText(),
@@ -123,7 +123,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
                 if (countryName != null)
                   return Text(
                     countryName,
-                    style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 21),
+                    style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 17),
                   );
                 /*else if (snapshot.hasError)
                       return Text('error',

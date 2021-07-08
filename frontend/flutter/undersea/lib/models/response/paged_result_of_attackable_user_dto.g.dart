@@ -10,8 +10,8 @@ PagedResultOfAttackableUserDto _$PagedResultOfAttackableUserDtoFromJson(
     Map<String, dynamic> json) {
   return PagedResultOfAttackableUserDto(
     allResultsCount: json['allResultsCount'] as int,
-    pageNumber: json['pageNumber'] as int,
-    pageSize: json['pageSize'] as int,
+    pageNumber: json['pageNumber'] as int?,
+    pageSize: json['pageSize'] as int?,
     results: (json['results'] as List<dynamic>?)
         ?.map((e) => AttackableUserDto.fromJson(e as Map<String, dynamic>))
         .toList(),

@@ -1,8 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:undersea/controllers/battle_data_controller.dart';
 import 'package:undersea/models/attack.dart';
+import 'package:undersea/models/response/paged_result_of_attackable_user_dto.dart';
 import 'package:undersea/styles/style_constants.dart';
 
-class MyArmyPage extends StatelessWidget {
+class MyArmyPage extends StatefulWidget {
+  @override
+  _MyArmyPageState createState() => _MyArmyPageState();
+}
+
+class _MyArmyPageState extends State<MyArmyPage> {
+  var controller = Get.find<BattleDataController>();
+
+  late Rx<PagedResultOfAttackableUserDto?> attackableUsersList;
+
+  @override
+  void initState() {
+    attackableUsersList = controller.attackableUsers;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var attackList = <AttackDetails>[

@@ -12,7 +12,6 @@ import 'home_page.dart';
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({Key? key}) : super(key: key);
   final BottomNavBarController controller = Get.find<BottomNavBarController>();
-  //final playerController = Get.find<PlayerController>();
   static List<Widget> _appbarTitleOptions = <Widget>[
     SizedBox(
       height: 35,
@@ -28,7 +27,6 @@ class BottomNavBar extends StatelessWidget {
     HomePage(),
     CityTabBar(),
     AttackPage(),
-    //MyArmyPage(),
     HistoryTabBar(() {})
   ];
 

@@ -8,13 +8,13 @@ part 'paged_result_of_attackable_user_dto.g.dart';
 class PagedResultOfAttackableUserDto {
   List<AttackableUserDto>? results;
   int allResultsCount;
-  int pageNumber;
-  int pageSize;
+  int? pageNumber;
+  int? pageSize;
 
   PagedResultOfAttackableUserDto(
       {required this.allResultsCount,
-      required this.pageNumber,
-      required this.pageSize,
+      this.pageNumber,
+      this.pageSize,
       this.results});
 
   factory PagedResultOfAttackableUserDto.fromJson(Map<String, dynamic> json) =>

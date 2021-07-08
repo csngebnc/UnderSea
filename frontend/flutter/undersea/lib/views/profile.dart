@@ -53,7 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: UnderseaStyles.inputTextStyle.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 21));
+                          fontSize: 17));
                 /*else if (snapshot.hasError)
                       return Text('error',
                           style: UnderseaStyles.inputTextStyle.copyWith(
@@ -95,7 +95,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                         child: Text(Strings.logout.tr,
                             style: UnderseaStyles.buttonTextStyle.copyWith(
-                                color: UnderseaStyles.underseaLogoColor)),
+                                color: UnderseaStyles.underseaLogoColor,
+                                fontSize: 17)),
                       ),
                     ),
                   ),

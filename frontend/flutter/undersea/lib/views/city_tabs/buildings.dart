@@ -5,6 +5,7 @@ import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 
 import 'package:undersea/models/response/building_details_dto.dart';
+import 'package:undersea/models/response/material_dto.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:get/get.dart';
 
@@ -40,7 +41,7 @@ class _BuildingsTabState extends State<Buildings> {
         },
         isDisabled: !_canStartBuilding(),
         list: ListView.builder(
-            itemCount: 4,
+            itemCount: buildingList.value.length + 2,
             itemBuilder: (BuildContext context, int i) {
               if (i == 0)
                 return UnderseaStyles.infoPanel(
@@ -59,8 +60,15 @@ class _BuildingsTabState extends State<Buildings> {
     if (_selectedIndex == null) return false;
     if (buildingList.value.any((element) => element.underConstruction))
       return false;
-    if (buildingList.value[_selectedIndex!].price >
-        playerController.countryDetailsData.value!.pearl) return false;
+    var materials = buildingList.value[_selectedIndex!].requiredMaterials ??
+        <MaterialDto>[];
+    for (int i = 0; i < materials.length; i++) {
+      var cost = materials[i];
+      var available = playerController.countryDetailsData.value!.materials
+          ?.firstWhere((element) => element.id == cost.id);
+      if (cost.amount > available!.amount) return false;
+    }
+
     return true;
   }
 
@@ -71,6 +79,19 @@ class _BuildingsTabState extends State<Buildings> {
           .add(Text(element.name ?? 'effect', style: UnderseaStyles.listBold));
     });
     return effects;
+  }
+
+  List<Widget> _listResourceCost(BuildingDetailsDto building) {
+    var costs = <Widget>[];
+    bool isFirst = true;
+    building.requiredMaterials?.forEach((element) {
+      costs.add(Text(
+          (isFirst ? '' : ', ') + '${element.amount} ${element.name}',
+          style: UnderseaStyles.listRegular));
+      isFirst = false;
+    });
+
+    return costs;
   }
 
   Widget _buildRow(int index, List<BuildingDetailsDto> list) {
@@ -100,33 +121,33 @@ class _BuildingsTabState extends State<Buildings> {
                               width: 150,
                               child: UnderseaStyles.buildingImage(
                                   BuildingDataController
-                                          .imageNameMap[actualBuilding.name]! +
-                                      '@3x'),
+                                          .imageNameMap[actualBuilding.name] ??
+                                      '' + '@3x'),
                             ),
-                            Text(actualBuilding.name!,
+                            Text(actualBuilding.name ?? '',
                                 style: UnderseaStyles.listBold),
                             ..._listEffects(actualBuilding),
                             Text(
                                 actualBuilding.count.toString() +
                                     Strings.amount.tr,
                                 style: UnderseaStyles.listRegular),
-                            Text(
-                                actualBuilding.price.toString() +
-                                    Strings.pearl_cost_per_unit.tr,
-                                style: UnderseaStyles.listRegular)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [..._listResourceCost(actualBuilding)],
+                            )
                           ],
                         ),
                       ),
                       actualBuilding.underConstruction
                           ? Padding(
-                              //////////////////////////////////////////////////////////////////////////////////////////
                               padding: EdgeInsets.all(10),
                               child: Text(
                                 'épül',
                                 //Strings.under_construction.tr,
                                 style: TextStyle(
                                     color: UnderseaStyles.underseaLogoColor,
-                                    fontSize: 16),
+                                    fontSize: 12),
                               ))
                           : Container(),
                     ],

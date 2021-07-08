@@ -8,13 +8,13 @@ part of 'buy_unit_dto.dart';
 
 BuyUnitDto _$BuyUnitDtoFromJson(Map<String, dynamic> json) {
   return BuyUnitDto(
-    unitId: json['unitId'] as int,
-    number: json['number'] as int,
+    units: (json['units'] as List<dynamic>)
+        .map((e) => BuyUnitDetailsDto.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
 Map<String, dynamic> _$BuyUnitDtoToJson(BuyUnitDto instance) =>
     <String, dynamic>{
-      'unitId': instance.unitId,
-      'number': instance.number,
+      'units': instance.units,
     };
