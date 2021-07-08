@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos.Material;
+using UnderSea.Bll.Dtos.Unit;
 
 namespace UnderSea.Bll.Dtos
 {
@@ -12,8 +13,7 @@ namespace UnderSea.Bll.Dtos
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int AttackPoint { get; set; }
-        public int DefensePoint { get; set; }
+        public ICollection<UnitLevelDto> UnitLevels { get; set; }
         public int MercenaryPerRound { get; set; }
         public int SupplyPerRound { get; set; }
         public ICollection<MaterialDto> RequiredMaterials { get; set; }

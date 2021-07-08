@@ -41,6 +41,7 @@ namespace UnderSea.Dal.Data
         public DbSet<BuildingMaterial> BuildingMaterials { get; set; }
         public DbSet<UnitMaterial> UnitMaterials { get; set; }
         public DbSet<CountryMaterial> CountryMaterials { get; set; }
+        public DbSet<UnitLevel> UnitLevels { get; set; }
 
         public UnderSeaDbContext(DbContextOptions options) : base(options)
         {

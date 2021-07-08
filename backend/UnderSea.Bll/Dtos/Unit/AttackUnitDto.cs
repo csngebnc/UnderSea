@@ -10,6 +10,7 @@ namespace UnderSea.Bll.Dtos
     public class AttackUnitDto
     {
         public int UnitId { get; set; }
+        public int Level { get; set; }
         public int Count { get; set; }
     }
 }

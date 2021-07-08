@@ -64,18 +64,23 @@ namespace UnderSea.Bll.Services
 
             var units = await _context.Units.ToListAsync();
 
-            return units
-                .Where(unit => unit.Name != UnitNameConstants.Felfedezo)
-                .Select(unit =>
+            return country.CountryUnits
+                .Where(unit => unit.Unit.Name != UnitNameConstants.Felfedezo)
+                .ToList()
+                .GroupBy(ug => new {ug.UnitId, Level = ug.GetLevel()})
+                .Select(gb => 
                 {
+                    var defaultUnit = units.SingleOrDefault(du => du.Id == gb.Key.UnitId);
                     return new BattleUnitDto
                     {
-                        Id = unit.Id,
-                        Name = unit.Name,
-                        ImageUrl = unit.ImageUrl,
-                        Count = country.CountryUnits.SingleOrDefault(u => u.UnitId == unit.Id)?.Count ?? 0
+                        Id = gb.Key.UnitId,
+                        Name = defaultUnit.Name,
+                        Count = gb.Sum(uu => uu.Count),
+                        ImageUrl = defaultUnit.ImageUrl,
+                        Level = gb.Key.Level
                     };
-                }).ToList();
+                }).ToList()
+                ;
         }
 
         public async Task<IEnumerable<BattleUnitDto>> GetUserAllUnitsAsync()
@@ -205,6 +210,7 @@ namespace UnderSea.Bll.Services
             return (await _context.Units
                 .Include(um => um.UnitMaterials)
                 .ThenInclude(m => m.Material)
+                .Include(u => u.UnitLevels)
                 .ToListAsync())
                 .Select(unit =>
                 {
@@ -217,8 +223,16 @@ namespace UnderSea.Bll.Services
                     {
                         Id = unit.Id,
                         Name = unit.Name,
-                        AttackPoint = unit.AttackPoint,
-                        DefensePoint = unit.DefensePoint,
+                        UnitLevels = unit.UnitLevels.Select(u =>
+                        {
+                            return new UnitLevelDto
+                            {
+                                AttackPoint = u.AttackPoint,
+                                DefensePoint = u.DefensePoint,
+                                MinimumBattles = u.MinimumBattles,
+                                Level = u.Level
+                            };
+                        }).ToList(),
                         MercenaryPerRound = unit.MercenaryPerRound,
                         SupplyPerRound = unit.SupplyPerRound,
                         RequiredMaterials = unit.UnitMaterials.Select(c =>
