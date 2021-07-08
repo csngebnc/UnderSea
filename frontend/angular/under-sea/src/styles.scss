@@ -176,6 +176,10 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   height: 584px;
 }
 
+.attack-modal {
+  height: 730px;
+}
+
 .modal-lg {
   width: 1400px;
 }
@@ -335,6 +339,10 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   flex-wrap: nowrap;
 }
 
+.fg {
+  flex-grow: 1;
+}
+
 .align-center {
   align-items: center;
 }
@@ -423,6 +431,14 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 
 .h-70 {
   height: 70%;
+}
+
+.h-attack {
+  height: calc(100% - 51px);
+}
+
+.h-attack-list {
+  height: calc(100% - 54px);
 }
 
 .p-1 {

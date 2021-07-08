@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CountryService } from 'src/app/services/country/country.service';
+import { LoadingState } from 'src/app/states/loading/loading.state';
+import { Observable } from 'rxjs';
+import { Select } from '@ngxs/store';
 
 @Component({
   selector: 'profile',
@@ -10,6 +13,9 @@ import { CountryService } from 'src/app/services/country/country.service';
 export class ProfileComponent implements OnInit {
   name: string = '';
   private countryRegex = /^(?!\s*$).+/;
+
+  @Select(LoadingState.isLoading)
+  loading$: Observable<boolean>;
 
   countryForm = new FormGroup({
     newName: new FormControl('', [

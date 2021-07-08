@@ -11,8 +11,6 @@ import {
   AbstractControl,
   ValidatorFn,
 } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
-import { HttpError } from '@microsoft/signalr';
 
 @Component({
   selector: 'register',
@@ -20,7 +18,7 @@ import { HttpError } from '@microsoft/signalr';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  private pwRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[._#$^+=!*()@%&]).{6,}$/;
+  pwRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[._#$^+=!*()@%&]).{6,}$/;
   private userNameRegEx = /^[a-zA-Z0-9_@\.\-]*$/;
   private countryRegex = /^(?!\s*$).+/;
   registerForm = new FormGroup({
@@ -33,10 +31,11 @@ export class RegisterComponent implements OnInit {
       Validators.required,
       Validators.minLength(6),
       Validators.pattern(this.pwRegEx),
+      this.doPasswordsMatch('confirmPassword'),
     ]),
     confirmPassword: new FormControl('', [
       Validators.required,
-      this.doPasswordsMatch(),
+      this.doPasswordsMatch('password'),
     ]),
     countryName: new FormControl('', [
       Validators.required,
@@ -44,7 +43,7 @@ export class RegisterComponent implements OnInit {
     ]),
   });
 
-  regFailed = new BehaviorSubject(false);
+  regFailed: string;
 
   constructor(
     private authService: AuthenticationService,
@@ -66,25 +65,48 @@ export class RegisterComponent implements OnInit {
           });
       },
       (e) => {
-        this.setFormInvalid(e);
+        this.setFormInvalid(JSON.parse(e['response']));
       }
     );
   }
 
-  private doPasswordsMatch(): ValidatorFn {
+  private doPasswordsMatch(controlName: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const fg = control.parent;
       if (fg) {
-        const matching = control.value === fg.controls['password'].value;
-        return matching ? null : { passwordMismatch: true };
+        const matching = control.value === fg.controls[controlName].value;
+        if (matching || fg.controls[controlName].untouched) {
+          fg.controls[controlName].setErrors(null);
+          return null;
+        } else {
+          return { invalid: true };
+        }
       }
       return null;
     };
   }
 
-  private setFormInvalid(e: HttpError): void {
-    //itt elvileg más hibák is lesznek, majd a backend küldi miért lett rossz a reg
-    this.regFailed.next(true);
-    this.registerForm.controls['userName'].setErrors({ invalid: true });
+  private setFormInvalid(e: any): void {
+    const errors = e['errors'];
+    if (errors['userName']) {
+      this.registerForm.controls['userName'].setErrors(errors['userName']);
+      this.regFailed = errors['userName'];
+    }
+    if (errors['password']) {
+      this.registerForm.controls['password'].setErrors(errors['password']);
+      this.regFailed = errors['password'];
+    }
+    if (errors['confirmPassword']) {
+      this.registerForm.controls['confirmPassword'].setErrors(
+        errors['confirmPassword']
+      );
+      this.regFailed = errors['confirmPassword'];
+    }
+    if (errors['countryName']) {
+      this.registerForm.controls['countryName'].setErrors(
+        errors['countryName']
+      );
+      this.regFailed = errors['countryName'];
+    }
   }
 }

@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { loadingWhitelist as whitelist } from 'src/assets/config.json';
+import { loadingWhitelist as whitelist, apiUrl } from 'src/assets/config.json';
 import {
   SetLoading,
   SetNotLoading,
@@ -37,8 +37,8 @@ export class LoadingInterceptor implements HttpInterceptor {
   }
 
   private isUrlOnWhiteList(url: string, whitelist: Array<string>): boolean {
-    return whitelist.some((path) =>
-      url.toLowerCase().includes(path.toLowerCase())
+    return whitelist.some(
+      (path) => url.toLowerCase() === apiUrl + path.toLowerCase()
     );
   }
 }

@@ -8,6 +8,7 @@ import { ResourcesState } from 'src/app/states/resources/resources.state';
 import { GetResources } from 'src/app/states/resources/resources.actions';
 import { takeUntil } from 'rxjs/operators';
 import { LoadingState } from 'src/app/states/loading/loading.state';
+import { findNode } from '@angular/compiler';
 
 @Component({
   selector: 'buildings',
@@ -63,9 +64,11 @@ export class BuildingsComponent implements OnInit, OnDestroy {
 
   setBuilding(building: BuildingDetails): void {
     this.selectedBuilding = building.id;
-    this.priceTooHigh = this.materials.some(
-      (m) => m.count < building.price.find((p) => p.id === m.id).count
-    );
+    this.priceTooHigh = this.materials.some((m: Material) => {
+      const found = building.price.find((p: Material) => p.id === m.id);
+      if (!found) return false;
+      else return m.count < found.count;
+    });
   }
 
   onBuy(): void {

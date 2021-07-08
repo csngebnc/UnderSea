@@ -4,7 +4,7 @@
     <div class="p-1 w-100">
       <infobar
         [round]="(userData | async).round"
-        [placement]="(userData | async).placement + 1"
+        [placement]="(userData | async).placement"
         [resources]="resources | async"
       ></infobar>
     </div>

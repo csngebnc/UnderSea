@@ -37,19 +37,18 @@
       />
 
       <div class="error-container w-85">
-        <p *ngIf="regFailed.value" class="error-text">
-          A felhasználónév már foglalt!
-        </p>
         <p
           *ngIf="
             !registerForm.controls['userName'].valid &&
-            registerForm.controls['userName'].touched &&
-            !regFailed.value
+            registerForm.controls['userName'].touched
           "
           class="error-text"
         >
-          A felhasználónevet kötelező megadni és nem tartalmazhat szóközt vagy
-          speciális karaktert!
+          {{
+            registerForm.controls["userName"].errors.length
+              ? registerForm.controls["userName"].errors
+              : "A felhasználónévnek legalább 3 karakter hosszúnak kell lenni, és nem tartalmazhat szóközt vagy speciális karaktert."
+          }}
         </p>
         <p
           *ngIf="
@@ -58,8 +57,13 @@
           "
           class="error-text"
         >
-          A jelszónak tartalmaznia kell 1 nagybetűt, 1 kisbetűt, 1 számot és 1
-          speciális karaktert és hossza legalább 6 karakter legyen!
+          {{
+            registerForm.controls["password"].errors.length
+              ? registerForm.controls["password"].errors
+              : pwRegEx.test(registerForm.controls["password"].value)
+              ? "A jelszavak nem egyeznek!"
+              : "A jelszónak legalább 6 karakter hosszúnak kell lennie, tartalmaznia kell számot, kis és nagy betűt és speciális karaktert (._#$^+=!*()@%&)!"
+          }}
         </p>
         <p
           *ngIf="
@@ -68,7 +72,11 @@
           "
           class="error-text"
         >
-          A két jelszó nem egyezik meg!
+          {{
+            registerForm.controls["confirmPassword"].errors.length
+              ? registerForm.controls["confirmPassword"].errors
+              : "A jelszavak nem egyeznek!"
+          }}
         </p>
         <p
           *ngIf="
@@ -77,7 +85,11 @@
           "
           class="error-text"
         >
-          Kötelező ország nevet megadni!
+          {{
+            registerForm.controls["countryName"].errors.length
+              ? registerForm.controls["countryName"].errors
+              : "Az ország nevét kötelező megadni!"
+          }}
         </p>
       </div>
       <button
