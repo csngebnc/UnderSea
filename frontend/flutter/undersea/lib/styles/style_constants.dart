@@ -101,7 +101,7 @@ class UnderseaStyles {
 
   static Widget building(String name, {double? top, double? left}) {
     return Positioned(
-        height: 180,
+        height: 140,
         top: top ?? 0,
         left: left ?? 0,
         child: UnderseaStyles.buildingImage(name,

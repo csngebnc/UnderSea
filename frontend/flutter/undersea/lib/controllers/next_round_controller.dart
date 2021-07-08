@@ -37,9 +37,13 @@ class RoundController extends GetxController {
             HttpConnectionOptions(
               logging: (level, message) => print(message),
             ))
+        .withAutomaticReconnect()
         .build();
-
-    await connection.start();
+    try {
+      await connection.start();
+    } catch (error) {
+      log('$error');
+    }
 
     connection.on('SendMessage', (message) {
       refreshOnNextRound();
