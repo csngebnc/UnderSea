@@ -58,16 +58,24 @@ namespace UnderSea.Bll.Services
 
         public async Task<IEnumerable<BattleUnitDto>> GetUserUnitsAsync()
         {
-            var country = await GetCountry();
+            var country = await _context.Countries
+                .Include(c => c.CountryUnits)
+                .SingleOrDefaultAsync(c => c.OwnerId == _identityService.GetCurrentUserId());
 
-            var userunits = await _context.CountryUnits
-                .Include(c => c.Unit)
-                .Where(c => c.CountryId == country.Id && c.Unit.Name != UnitConstants.Felfedezo)
-                .Select(c => c.Unit)
-                .ProjectTo<BattleUnitDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            var units = await _context.Units.ToListAsync();
 
-            return userunits;
+            return units
+                .Where(unit => unit.Name != UnitNameConstants.Felfedezo)
+                .Select(unit =>
+                {
+                    return new BattleUnitDto
+                    {
+                        Id = unit.Id,
+                        Name = unit.Name,
+                        ImageUrl = unit.ImageUrl,
+                        Count = country.CountryUnits.SingleOrDefault(u => u.UnitId == unit.Id)?.Count ?? 0
+                    };
+                }).ToList();
         }
 
         public async Task<IEnumerable<BattleUnitDto>> GetUserAllUnitsAsync()
@@ -110,7 +118,7 @@ namespace UnderSea.Bll.Services
                 .Select(sr => sr.NumberOfSpies)
                 .Sum();
 
-            units.Where(u => u.Name == UnitConstants.Felfedezo).SingleOrDefault().Count += spyCount;
+            units.Where(u => u.Name == UnitNameConstants.Felfedezo).SingleOrDefault().Count += spyCount;
 
             return units;
         }
@@ -234,7 +242,7 @@ namespace UnderSea.Bll.Services
                 .Include(c => c.CountryUnits)
                 .FirstOrDefaultAsync();
 
-            var spyUnit = await _context.Units.SingleOrDefaultAsync(c => c.Name == UnitConstants.Felfedezo);
+            var spyUnit = await _context.Units.SingleOrDefaultAsync(c => c.Name == UnitNameConstants.Felfedezo);
             var spies = country.CountryUnits.SingleOrDefault(cu => cu.UnitId == spyUnit.Id);
 
             return new BattleUnitDto
@@ -272,7 +280,7 @@ namespace UnderSea.Bll.Services
                 var unitSum = country.CountryUnits.Select(cu => cu.Count).Sum();
                 if (country.MaxUnitCount - unitSum - unitDto.Count < 0)
                 {
-                    throw new InvalidParameterException("Nem lehetséges ez a művelet: a maximális egység számánál nem lehet több a felhasználó egységeinek száma.");
+                    throw new InvalidParameterException(nameof(country.MaxUnitCount),"Nem lehetséges ez a művelet: a maximális egység számánál nem lehet több a felhasználó egységeinek száma.");
                 }
 
                 var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id)
@@ -319,12 +327,12 @@ namespace UnderSea.Bll.Services
             }
 
             var spyId = (await _context.Units
-                .FirstOrDefaultAsync(u => u.Name == UnitConstants.Felfedezo))
+                .FirstOrDefaultAsync(u => u.Name == UnitNameConstants.Felfedezo))
                 .Id;
 
             if (attackDto.Units.Any(au => au.UnitId == spyId))
             {
-                throw new InvalidParameterException("Kémet nem küldhetsz támadni.");
+                throw new InvalidParameterException("unit","Kémet nem küldhetsz támadni.");
             }
 
             var secondAttack = await _context.Attacks
@@ -334,12 +342,12 @@ namespace UnderSea.Bll.Services
 
             if (secondAttack)
             {
-                throw new InvalidParameterException("Nem támadható ugyanaz az ország egy körben!");
+                throw new InvalidParameterException("country","Nem támadható ugyanaz az ország egy körben!");
             }
 
             if (attackerCountry.Id == attackDto.AttackedCountryId)
             {
-                throw new InvalidParameterException("Nem támadhatja meg saját magát az ország.");
+                throw new InvalidParameterException("country","Nem támadhatja meg saját magát az ország.");
             }
 
             attackDto.Units = attackDto.Units.GroupBy(u => u.UnitId)
@@ -362,11 +370,11 @@ namespace UnderSea.Bll.Services
 
             if (spies.SpiedCountryId == country.Id)
             {
-                throw new InvalidParameterException("Nem kémlelheti saját magát az ország.");
+                throw new InvalidParameterException("country", "Nem kémlelheti saját magát az ország.");
             }
 
             var attackerSpyUnits = country.CountryUnits
-                .FirstOrDefault(cu => cu.Unit.Name == UnitConstants.Felfedezo);
+                .FirstOrDefault(cu => cu.Unit.Name == UnitNameConstants.Felfedezo);
 
             if (attackerSpyUnits == null)
                 throw new NotExistsException("Nincsenek kém egységek, amiket el lehetne küldeni!");
@@ -387,6 +395,12 @@ namespace UnderSea.Bll.Services
 
         public async Task AttackLogic(Country attackerCountry, Country attackedCountry, SendAttackDto attackDto)
         {
+            var generalId = (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
+            if(!attackDto.Units.Any(u => u.UnitId == generalId))
+            {
+                throw new InvalidParameterException("unit","A támadáshoz legalább egy hadvezért is küldeni kell.");
+            }
+
             var attack = new Attack()
             {
                 AttackerCountryId = attackerCountry.Id,
@@ -403,7 +417,7 @@ namespace UnderSea.Bll.Services
                     var cunit = attackerCountry.CountryUnits.FirstOrDefault(c => c.UnitId == unit.UnitId);
                     if (cunit == null)
                     {
-                        throw new InvalidParameterException("Nincsen ilyen egysége az országnak.");
+                        throw new InvalidParameterException("unit","Nincsen ilyen egysége az országnak.");
                     }
 
                     cunit.Count -= unit.Count;

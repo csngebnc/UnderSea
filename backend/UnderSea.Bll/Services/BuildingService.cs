@@ -98,7 +98,7 @@ namespace UnderSea.Bll.Services
             var activebuilding = await _context.ActiveConstructions.FirstOrDefaultAsync(ac => ac.CountryId == country.Id);
             if (activebuilding != null)
             {
-                throw new InvalidParameterException("Már folyamatban van egy építés.");
+                throw new InvalidParameterException("building", "Már folyamatban van egy építés.");
             }
 
 

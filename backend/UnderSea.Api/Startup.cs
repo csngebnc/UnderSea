@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
@@ -24,6 +25,7 @@ using UnderSea.Bll.Mapper;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
+using UnderSea.Bll.Validation.ProblemDetails;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -190,12 +192,42 @@ namespace UnderSea.Api
 
         private void ConfigureProblemDetails(ProblemDetailsOptions options)
         {
-            options.MapToStatusCode<NotExistsException>(StatusCodes.Status404NotFound);
+            options.IncludeExceptionDetails = (ctx, ex) => false;
 
-            options.MapToStatusCode<InvalidParameterException>(StatusCodes.Status400BadRequest);
-            options.MapToStatusCode<ArgumentOutOfRangeException>(StatusCodes.Status400BadRequest);
+            options.Map<InvalidParameterException>(
+              (ctx, ex) =>
+              {
+                  var pd = new ErrorBodyProblemDetails();
+                  pd.Status = 400;
+                  pd.Title = "Bad request (400)";
+                  pd.Errors = ex.Errors;
+                  return pd;
+              }
+              );
 
-            options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
+            options.Map<ArgumentOutOfRangeException>(
+              (ctx, ex) =>
+              {
+                  var errors = new List<string>();
+                  errors.Add(ex.Message);
+                  var dict = new Dictionary<string, ICollection<string>>();
+                  dict.Add(ex.ParamName, errors);
+                  var pd = new ErrorBodyProblemDetails();
+                  pd.Status = 400;
+                  pd.Title = "Bad request (400)";
+                  pd.Errors = dict;
+                  return pd;
+              }
+              );
+
+            options.Map<NotExistsException>(
+              (ctx, ex) =>
+              {
+                  var pd = StatusCodeProblemDetails.Create(StatusCodes.Status401Unauthorized);
+                  pd.Title = ex.Message;
+                  return pd;
+              }
+              );
         }
 
     }
