@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UnitDetails } from 'src/app/models/unit-details.model';
 import { CartUnit } from 'src/app/models/cart-unit.model';
@@ -32,7 +33,11 @@ export class UnitsComponent implements OnInit, OnDestroy {
 
   destroy$ = new Subject<void>();
 
-  constructor(private battleService: BattleService, private store: Store) {}
+  constructor(
+    private battleService: BattleService,
+    private store: Store,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.initUnits();
@@ -50,7 +55,11 @@ export class UnitsComponent implements OnInit, OnDestroy {
       (response) => {
         this.units = response;
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 
@@ -81,7 +90,11 @@ export class UnitsComponent implements OnInit, OnDestroy {
       (r) => {
         this.store.dispatch(GetResources);
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 }

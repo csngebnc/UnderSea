@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { BattleService } from 'src/app/services/battle/battle.service';
 import { PagedBattles } from 'src/app/models/paged-battles.model';
@@ -25,7 +26,10 @@ export class BattleComponent implements OnInit {
   notYet = FightOutcome.NotPlayedYet;
   lose = FightOutcome.OtherUser;
 
-  constructor(private battleService: BattleService) {}
+  constructor(
+    private battleService: BattleService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.initBattles();
@@ -36,7 +40,11 @@ export class BattleComponent implements OnInit {
       (r) => {
         this.pagedBattles = r;
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 

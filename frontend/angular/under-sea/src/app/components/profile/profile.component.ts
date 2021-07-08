@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CountryService } from 'src/app/services/country/country.service';
@@ -24,7 +25,10 @@ export class ProfileComponent implements OnInit {
     ]),
   });
 
-  constructor(private countryService: CountryService) {}
+  constructor(
+    private countryService: CountryService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.getName();
@@ -35,7 +39,11 @@ export class ProfileComponent implements OnInit {
       (response) => {
         this.name = response;
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 
@@ -44,7 +52,11 @@ export class ProfileComponent implements OnInit {
       .setCountryName(this.countryForm.get('newName').value)
       .subscribe(
         () => this.getName(),
-        (e) => console.error(e)
+        (e) => {
+          const error = JSON.parse(e['response']);
+          const errorText = Object.values(error['errors'])[0][0];
+          this.toastr.error(errorText);
+        }
       );
   }
 }

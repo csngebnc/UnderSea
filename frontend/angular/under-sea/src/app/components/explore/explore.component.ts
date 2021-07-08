@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { BattleService } from 'src/app/services/battle/battle.service';
@@ -29,7 +30,10 @@ export class ExploreComponent implements OnInit {
   targetId: number;
   selectedCount: number;
 
-  constructor(private battleService: BattleService) {
+  constructor(
+    private battleService: BattleService,
+    private toastr: ToastrService
+  ) {
     this.initExplore();
   }
 
@@ -40,7 +44,11 @@ export class ExploreComponent implements OnInit {
       (r) => {
         this.players = r;
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 
@@ -55,7 +63,11 @@ export class ExploreComponent implements OnInit {
         this.players = users;
         this.spies = units;
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 
@@ -84,7 +96,11 @@ export class ExploreComponent implements OnInit {
       (r) => {
         this.initExplore();
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 }

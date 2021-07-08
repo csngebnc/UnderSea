@@ -7,6 +7,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-code';
 import { Select, Store } from '@ngxs/store';
 import { LoadingState } from 'src/app/states/loading/loading.state';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'attack',
@@ -32,7 +33,11 @@ export class AttackComponent implements OnInit {
   @Select(LoadingState.isLoading)
   loading$: Observable<boolean>;
 
-  constructor(private battleService: BattleService, private store: Store) {}
+  constructor(
+    private battleService: BattleService,
+    private store: Store,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.initAttack();
@@ -43,7 +48,11 @@ export class AttackComponent implements OnInit {
       (r) => {
         this.players = r;
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 
@@ -58,7 +67,11 @@ export class AttackComponent implements OnInit {
         this.players = users;
         this.units = units;
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 
@@ -89,7 +102,11 @@ export class AttackComponent implements OnInit {
         this.store.dispatch(GetResources);
         this.initAttack();
       },
-      (e) => console.error(e)
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
     );
   }
 
