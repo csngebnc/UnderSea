@@ -64,16 +64,18 @@ namespace UnderSea.Bll.Services
 
             var units = await _context.Units.ToListAsync();
 
-            return units.Select(unit =>
-            {
-                return new BattleUnitDto
+            return units
+                .Where(unit => unit.Name != UnitNameConstants.Felfedezo)
+                .Select(unit =>
                 {
-                    Id = unit.Id,
-                    Name = unit.Name,
-                    ImageUrl = unit.ImageUrl,
-                    Count = country.CountryUnits.SingleOrDefault(u => u.UnitId == unit.Id)?.Count ?? 0
-                };
-            }).ToList();
+                    return new BattleUnitDto
+                    {
+                        Id = unit.Id,
+                        Name = unit.Name,
+                        ImageUrl = unit.ImageUrl,
+                        Count = country.CountryUnits.SingleOrDefault(u => u.UnitId == unit.Id)?.Count ?? 0
+                    };
+                }).ToList();
         }
 
         public async Task<IEnumerable<BattleUnitDto>> GetUserAllUnitsAsync()
