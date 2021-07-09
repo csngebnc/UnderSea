@@ -7,8 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EventNotificationComponent implements OnInit {
   event = { name: 'jajj', description: 'this happened' };
+  random: number;
 
-  constructor() {}
+  constructor() {
+    this.random = Math.ceil(Math.random() * 9);
+  }
 
   ngOnInit(): void {}
 }
