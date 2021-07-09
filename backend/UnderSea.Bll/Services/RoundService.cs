@@ -261,14 +261,14 @@ namespace UnderSea.Bll.Services
 
                     foreach(var attackUnit in attackUnits)
                     {
-                        if(attackUnit.BattlesPlayed <= attackUnit.Unit.UnitLevels.Max(ul => ul.MinimumBattles))
+                        if(attackUnit.BattlesPlayed < attackUnit.Unit.UnitLevels.Max(ul => ul.MinimumBattles))
                         {
                             attackUnit.BattlesPlayed++;
                         }
                         if(attackerCountry.CountryUnits.Any(cu => cu.UnitId == attackUnit.UnitId && cu.BattlesPlayed == attackUnit.BattlesPlayed))
                         {
                             var unit = attackerCountry.CountryUnits.SingleOrDefault(cu => cu.UnitId == attackUnit.UnitId && cu.BattlesPlayed == attackUnit.BattlesPlayed);
-                            unit.Count = attackUnit.Count;
+                            unit.Count += attackUnit.Count;
                         }
                         else
                         {
