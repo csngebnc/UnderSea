@@ -31,23 +31,28 @@ class _EventLogPageState extends State<EventLogPage> {
   Widget _buildRow(int i) {
     int roundNumber = 50;
     String eventName = "Elképesztő elemi csapás";
-    return Padding(
-        padding: EdgeInsets.only(left: 20, right: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(eventName,
-                    style: UnderseaStyles.listBold.copyWith(fontSize: 16)),
-                Expanded(
-                  child: Container(),
-                ),
-                Text('$roundNumber. kör',
-                    style: UnderseaStyles.listBold.copyWith(fontSize: 15))
-              ],
-            ),
-          ],
-        ));
+    return Tooltip(
+        decoration: BoxDecoration(
+            color: UnderseaStyles.hintColor,
+            borderRadius: BorderRadius.all(Radius.circular(32))),
+        textStyle: UnderseaStyles.listRegular,
+        showDuration: Duration(milliseconds: 500),
+        message:
+            'Katonáid elégedettek ebben a körben, minden katona támadása csökken eggyel.',
+        child: ListTile(
+            title: Padding(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Row(
+            children: [
+              Text(eventName,
+                  style: UnderseaStyles.listBold.copyWith(fontSize: 16)),
+              Expanded(
+                child: Container(),
+              ),
+              Text('$roundNumber. kör',
+                  style: UnderseaStyles.listBold.copyWith(fontSize: 15))
+            ],
+          ),
+        )));
   }
 }
