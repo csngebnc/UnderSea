@@ -28,6 +28,7 @@ class _AttackPageState extends State<AttackPage> {
   @override
   void initState() {
     controller.searchText.value = '';
+    controller.alreadyDownloadedPageNumber.value = 0;
     controller.getAttackableUsers();
     firstPage = true;
     _scrollController.addListener(() {

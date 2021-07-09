@@ -24,6 +24,7 @@ class _LeaderboardState extends State<Leaderboard> {
   @override
   void initState() {
     controller.searchText.value = '';
+    controller.alreadyDownloadedPageNumber.value = 0;
     controller.getRankList();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
