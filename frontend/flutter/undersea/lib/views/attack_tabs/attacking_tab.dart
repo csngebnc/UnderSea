@@ -31,7 +31,8 @@ class _AttackingTabState extends State<AttackingTab> {
     for (int i = 0; i < soldierList.value.length; i++) {
       if (soldierList.value[i].name == 'Hadvezér') generalIndex = i;
     }
-    sliderValues = List<int>.generate(soldierList.value.length, (index) => 0);
+    sliderValues =
+        List<int>.generate(soldierList.value.length /** 3*/, (index) => 0);
     super.initState();
   }
 
@@ -107,59 +108,188 @@ class _AttackingTabState extends State<AttackingTab> {
                 if (i == itemCount - 1) return SizedBox(height: 130);
                 var actualSoldier = soldierList.value.elementAt(i - 1);
 
-                if (actualSoldier.name == 'Felfedező') return Container();
+                if (actualSoldier.name == 'Felfedező' ||
+                    actualSoldier.currentCount == 0) return Container();
 
                 return Padding(
                     padding: EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 70,
-                          width: 70,
-                          child: UnderseaStyles.assetIcon(BattleDataController
-                              .imageNameMap[actualSoldier.name]!),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  left: 25,
-                                ),
-                                child: Text(
-                                    '${soldierList.value[i - 1].name} ${sliderValues[i - 1]}/${actualSoldier.currentCount}',
-                                    style: UnderseaStyles.listRegular
-                                        .copyWith(height: 1.2)),
-                              ),
-                              SizedBox(height: 8),
-                              Container(
-                                height: 20,
-                                child: Slider(
-                                  value: sliderValues[i - 1].toDouble(),
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      var amountBeforeChange =
-                                          sliderValues[i - 1];
-                                      sliderValues[i - 1] = newValue.round();
-                                      mercenaryPrice = (mercenaryPrice +
-                                              newValue -
-                                              amountBeforeChange *
-                                                  1) //actualSoldier.price)
-                                          .toInt();
-                                    });
-                                  },
-                                  min: 0,
-                                  max: actualSoldier.currentCount.toDouble(),
-                                  activeColor: UnderseaStyles.underseaLogoColor,
-                                  inactiveColor: Color(0x883B7DBD),
-                                ),
-                              ),
-                            ],
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(soldierList.value[i - 1].name,
+                              style: UnderseaStyles.listBold
+                                  .copyWith(height: 1.2, fontSize: 16)),
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                      ],
-                    ));
+                          Row(
+                            children: [
+                              SizedBox(
+                                height: 70,
+                                width: 70,
+                                child: UnderseaStyles.assetIcon(
+                                    BattleDataController
+                                        .imageNameMap[actualSoldier.name]!),
+                              ),
+                              Expanded(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              left: 25,
+                                            ),
+                                            child: Text('1. ',
+                                                style: UnderseaStyles
+                                                    .listRegular
+                                                    .copyWith(height: 1.2)),
+                                          ),
+                                          Container(
+                                            height: 20,
+                                            child: Slider(
+                                              value: sliderValues[i - 1]
+                                                  .toDouble(),
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  var amountBeforeChange =
+                                                      sliderValues[i - 1];
+                                                  sliderValues[i - 1] =
+                                                      newValue.round();
+                                                  mercenaryPrice = (mercenaryPrice +
+                                                          newValue -
+                                                          amountBeforeChange *
+                                                              1) //actualSoldier.price)
+                                                      .toInt();
+                                                });
+                                              },
+                                              min: 0,
+                                              max: actualSoldier.currentCount
+                                                  .toDouble(),
+                                              activeColor: UnderseaStyles
+                                                  .underseaLogoColor,
+                                              inactiveColor: Color(0x883B7DBD),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              left: 15,
+                                            ),
+                                            child: Text(
+                                                '${sliderValues[i - 1]}/${actualSoldier.currentCount}',
+                                                style: UnderseaStyles
+                                                    .listRegular
+                                                    .copyWith(height: 1.2)),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              left: 25,
+                                            ),
+                                            child: Text('1. ',
+                                                style: UnderseaStyles
+                                                    .listRegular
+                                                    .copyWith(height: 1.2)),
+                                          ),
+                                          Container(
+                                            height: 20,
+                                            child: Slider(
+                                              value: sliderValues[i - 1]
+                                                  .toDouble(),
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  var amountBeforeChange =
+                                                      sliderValues[i - 1];
+                                                  sliderValues[i - 1] =
+                                                      newValue.round();
+                                                  mercenaryPrice = (mercenaryPrice +
+                                                          newValue -
+                                                          amountBeforeChange *
+                                                              1) //actualSoldier.price)
+                                                      .toInt();
+                                                });
+                                              },
+                                              min: 0,
+                                              max: actualSoldier.currentCount
+                                                  .toDouble(),
+                                              activeColor: UnderseaStyles
+                                                  .underseaLogoColor,
+                                              inactiveColor: Color(0x883B7DBD),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              left: 15,
+                                            ),
+                                            child: Text(
+                                                '${sliderValues[i - 1]}/${actualSoldier.currentCount}',
+                                                style: UnderseaStyles
+                                                    .listRegular
+                                                    .copyWith(height: 1.2)),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              left: 25,
+                                            ),
+                                            child: Text('1. ',
+                                                style: UnderseaStyles
+                                                    .listRegular
+                                                    .copyWith(height: 1.2)),
+                                          ),
+                                          Container(
+                                            height: 20,
+                                            child: Slider(
+                                              value: sliderValues[i - 1]
+                                                  .toDouble(),
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  var amountBeforeChange =
+                                                      sliderValues[i - 1];
+                                                  sliderValues[i - 1] =
+                                                      newValue.round();
+                                                  mercenaryPrice = (mercenaryPrice +
+                                                          newValue -
+                                                          amountBeforeChange *
+                                                              1) //actualSoldier.price)
+                                                      .toInt();
+                                                });
+                                              },
+                                              min: 0,
+                                              max: actualSoldier.currentCount
+                                                  .toDouble(),
+                                              activeColor: UnderseaStyles
+                                                  .underseaLogoColor,
+                                              inactiveColor: Color(0x883B7DBD),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              left: 15,
+                                            ),
+                                            child: Text(
+                                                '${sliderValues[i - 1]}/${actualSoldier.currentCount}',
+                                                style: UnderseaStyles
+                                                    .listRegular
+                                                    .copyWith(height: 1.2)),
+                                          ),
+                                        ],
+                                      ),
+                                    ]),
+                              )
+                            ],
+                          )
+                        ]));
               }));
     });
   }

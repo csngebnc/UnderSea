@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/paged_result_of_user_rank_dto.dart';
 import 'package:undersea/models/response/register_dto.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
@@ -64,14 +65,16 @@ class UserDataController extends GetxController {
       else if (response.statusCode == 400) {
         var errors = response.bodyString!.split('"errors":')[1];
         var start = errors.indexOf('[') + 2;
-        var end = errors.indexOf('(') - 1;
-        var errorMessage = errors.substring(start, end);
+        var end_ = errors.indexOf('(') - 1;
+        var end = errors.indexOf(']') - 2;
+        var errorMessage = errors.substring(start, end_ != -2 ? end_ : end);
 
         log(errorMessage);
-        UnderseaStyles.snackbar('Hiba történt', errorMessage);
+        UnderseaStyles.snackbar(Strings.error_occurred.tr, errorMessage);
       }
     } catch (error) {
-      UnderseaStyles.snackbar('Error', 'Regisztrációs hiba');
+      UnderseaStyles.snackbar(
+          Strings.error.tr, Strings.something_went_wrong.tr);
     }
   }
 
@@ -85,12 +88,13 @@ class UserDataController extends GetxController {
         Get.off(BottomNavBar());
       } else {
         UnderseaStyles.snackbar(
-            'Hiba történt', 'Érvénytelen felhasználónév vagy jelszó');
+            Strings.error_occurred.tr, Strings.invalid_username_password.tr);
         log('${response.bodyString}');
       }
     } catch (error) {
       log('$error');
-      UnderseaStyles.snackbar('Error', 'Bejelentkezési hiba');
+      UnderseaStyles.snackbar(
+          Strings.error.tr, Strings.something_went_wrong.tr);
     }
   }
 

@@ -69,4 +69,11 @@ const Map<String, String> hu_HU = {
   Strings.new_units: 'Új egységeid a rendelkezésedre állnak',
   Strings.new_building: 'Az épületet elkezdted felépíteni',
   Strings.new_upgrade: 'A fejlesztés 15 kör múlva lesz elérhető',
+  Strings.error: 'Hiba',
+  Strings.invalid_username_password: 'Hibás felhasználónév vagy jelszó',
+  Strings.something_went_wrong: 'Valami hiba történt, próbálkozz újra',
+  Strings.error_occurred: 'Hiba történt',
+  Strings.passwords_differ: 'Nem egyezik a két jelszó',
+  Strings.empty_field: 'Nem hagyhatod üresen ezt a mezőt',
+  Strings.invalid_username: 'Nem szerepelhet speciális karakter a mezőben',
 };

@@ -47,10 +47,9 @@ class UnderseaStyles {
   static void _defaultOnChanged(String s) {}
   static String? _defaultValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Nem hagyhatod üresen ezt a mezőt!';
+      return Strings.empty_field.tr;
     }
-    if (value.removeAllWhitespace != value)
-      return 'Nem szerepelhet szóköz a mezőben!';
+    if (value.removeAllWhitespace != value) return Strings.invalid_username.tr;
   }
 
   static const resourceNamesMap = {

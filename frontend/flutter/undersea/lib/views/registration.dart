@@ -53,12 +53,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
         },
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Nem hagyhatod üresen ezt a mezőt!';
+            return Strings.empty_field.tr;
           }
-          if (value.removeAllWhitespace != value)
-            return 'Nem szerepelhet szóköz a mezőben!';
-          if (confirmPasswordController.text != passwordController.text)
-            return 'Nem egyezik a két jelszó!';
+          if (value.removeAllWhitespace != value) {
+            return Strings.invalid_username.tr;
+          }
+          if (confirmPasswordController.text != passwordController.text) {
+            return Strings.passwords_differ.tr;
+          }
         });
     final passwordValidationField = UnderseaStyles.inputField(
         hint: Strings.password_again.tr,
@@ -71,12 +73,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
         },
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Nem hagyhatod üresen ezt a mezőt!';
+            return Strings.empty_field.tr;
           }
-          if (value.removeAllWhitespace != value)
-            return 'Nem szerepelhet szóköz a mezőben!';
-          if (confirmPasswordController.text != passwordController.text)
-            return 'Nem egyezik a két jelszó!';
+          if (value.removeAllWhitespace != value) {
+            return Strings.invalid_username.tr;
+          }
+          if (confirmPasswordController.text != passwordController.text) {
+            return Strings.passwords_differ.tr;
+          }
         });
     final cityNameField = UnderseaStyles.inputField(
         hint: Strings.city_name_hint.tr,
@@ -88,7 +92,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         },
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Nem hagyhatod üresen ezt a mezőt!';
+            return Strings.empty_field.tr;
           }
         });
 

@@ -82,11 +82,11 @@ class _SpyingTabState extends State<SpyingTab> {
                   children: [
                     Text(Strings.spy.tr,
                         style: UnderseaStyles.listBold
-                            .copyWith(height: 1.2, fontSize: 22)),
+                            .copyWith(height: 1.2, fontSize: 16)),
                     SizedBox(height: 5),
                     Text('$spyNumber/${controller.spiesInfo.value!.count}',
                         style: UnderseaStyles.listRegular
-                            .copyWith(height: 1.2, fontSize: 20)),
+                            .copyWith(height: 1.2, fontSize: 15)),
                     SizedBox(height: 8),
                     Container(
                       height: 20,

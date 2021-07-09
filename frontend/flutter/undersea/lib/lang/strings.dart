@@ -72,4 +72,11 @@ class Strings {
   static const new_units = 'new_units';
   static const new_building = 'new_building';
   static const new_upgrade = 'new_upgrade';
+  static const error = 'error';
+  static const invalid_username_password = 'invalid_username_password';
+  static const something_went_wrong = 'something_went_wrong';
+  static const error_occurred = 'error_occurred';
+  static const passwords_differ = 'passwords_differ';
+  static const invalid_username = 'invalid_username';
+  static const empty_field = 'empty_field';
 }
