@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UnderSea.Model.Models.Events
 {
-    class UnsatisfiedUnits : Effect
+    public class UnsatisfiedUnits : Effect
     {
         public override void ApplyEffect(Country country)
         {

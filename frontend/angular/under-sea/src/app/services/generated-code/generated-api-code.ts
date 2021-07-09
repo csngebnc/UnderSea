@@ -854,6 +854,73 @@ export class CountryService {
 }
 
 @Injectable()
+export class EventService {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    userEvents(pageSize: number | undefined, pageNumber: number | undefined): Observable<PagedResultOfEventDto> {
+        let url_ = this.baseUrl + "/api/Event/user-events?";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageNumber === null)
+            throw new Error("The parameter 'pageNumber' cannot be null.");
+        else if (pageNumber !== undefined)
+            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUserEvents(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUserEvents(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultOfEventDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultOfEventDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUserEvents(response: HttpResponseBase): Observable<PagedResultOfEventDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <PagedResultOfEventDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultOfEventDto>(<any>null);
+    }
+}
+
+@Injectable()
 export class RoundService {
     private http: HttpClient;
     private baseUrl: string;
@@ -1268,6 +1335,7 @@ export interface CountryDetailsDto {
     hasSonarCanon: boolean;
     buildings?: BuildingInfoDto[] | undefined;
     units?: BattleUnitDto[] | undefined;
+    event?: EventDto | undefined;
 }
 
 export interface MaterialDetailsDto {
@@ -1284,6 +1352,20 @@ export interface BuildingInfoDto {
     buildingsCount: number;
     activeConstructionCount: number;
     iconImageUrl?: string | undefined;
+}
+
+export interface EventDto {
+    id: number;
+    name?: string | undefined;
+    eventRound: number;
+    effects?: EffectDto[] | undefined;
+}
+
+export interface PagedResultOfEventDto {
+    results?: EventDto[] | undefined;
+    allResultsCount: number;
+    pageNumber: number;
+    pageSize: number;
 }
 
 export interface UpgradeDto {

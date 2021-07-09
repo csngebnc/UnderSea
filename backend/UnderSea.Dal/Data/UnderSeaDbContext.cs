@@ -13,6 +13,7 @@ using UnderSea.Dal.EntityConfigurations;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
 using UnderSea.Model.Models.Effects;
+using UnderSea.Model.Models.Events;
 using UnderSea.Model.Models.Joins;
 using UnderSea.Model.Models.Materials;
 
@@ -90,10 +91,11 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<UnitLevel>()
                 .HasKey(ul => new { ul.UnitId, ul.Level });
 
-            modelBuilder.Entity<BuildingEffect>().HasKey(be => new { be.BuildingId, be.EffectId });
             modelBuilder.Entity<CountryUnit>().HasKey(cu => new { cu.CountryId, cu.UnitId, cu.BattlesPlayed });
             modelBuilder.Entity<CountryUpgrade>().HasKey(cu => new { cu.CountryId, cu.UpgradeId });
             modelBuilder.Entity<UpgradeEffect>().HasKey(ue => new { ue.EffectId, ue.UpgradeId });
+            modelBuilder.Entity<EventEffect>().HasKey(ue => new { ue.EffectId, ue.EventId });
+            modelBuilder.Entity<BuildingEffect>().HasKey(be => new { be.BuildingId, be.EffectId });
 
             modelBuilder.Entity<Country>().OwnsOne(p => p.FightPoint);
 
@@ -131,6 +133,15 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<UnderwaterMartialArt>().HasData(new UnderwaterMartialArt { Id = 8, Name = "Növeli a védelmi és támadóerőt pontokat 10%-kal" });
             modelBuilder.Entity<Alchemy>().HasData(new Alchemy { Id = 9, Name = "Növeli a beszedett adót 30%-kal" });
             modelBuilder.Entity<StoneEffect>().HasData(new StoneEffect { Id = 10, Name = "25 követ termel körönként" });
+            modelBuilder.Entity<PlagueEffect>().HasData(new PlagueEffect { Id = 11, Name = " Az országodban kitört a pestis, elveszítesz 50 embert és egy áramlásirányítót." });
+            modelBuilder.Entity<WaterFire>().HasData(new WaterFire { Id = 12, Name = "Az országodban tűz ütött ki és leégett egy zátonyvár." });
+            modelBuilder.Entity<Goldmine>().HasData(new Goldmine { Id = 13, Name = "Az embereid felfedeztek egy új aranybányát, kapsz 1000 bónusz gyöngyöt." });
+            modelBuilder.Entity<GoodHarvest>().HasData(new GoodHarvest { Id = 14, Name = "Minden áramlásirányító 250 korallt ad ebben a körben." });
+            modelBuilder.Entity<BadHarvest>().HasData(new BadHarvest { Id = 15, Name = "Minden áramlásirányító 150 korallt ad ebben a körben." });
+            modelBuilder.Entity<SatisfiedUnits>().HasData(new SatisfiedUnits { Id = 16, Name = "Katonáid elégedettek ebben a körben, minden katona támadása nő eggyel." });
+            modelBuilder.Entity<UnsatisfiedUnits>().HasData(new UnsatisfiedUnits { Id = 17, Name = "Katonáid elégedetlenek ebben a körben, minden katona támadása csökken eggyel." });
+            modelBuilder.Entity<SatisfiedPeople>().HasData(new SatisfiedPeople { Id = 18, Name = "Az országodban elégedettek az emberek, ezért extra 50 ember költözött be és építettek maguknak egy áramlásirányítót" });
+            modelBuilder.Entity<UnsatisfiedPeople>().HasData(new UnsatisfiedPeople { Id = 19, Name = "Az országodban elégedetlenek az emberek, ezért 50 ember elköltözött és az áramlásirányítójuk lerombolták" });
 
             modelBuilder.ApplyConfiguration(new WorldEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
@@ -138,6 +149,7 @@ namespace UnderSea.Dal.Data
             modelBuilder.ApplyConfiguration(new CountryEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CountryMaterialEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuildingEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new EventEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuildingMaterialEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UnitEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UnitMaterialEntityConfiguration());
@@ -146,6 +158,7 @@ namespace UnderSea.Dal.Data
             modelBuilder.ApplyConfiguration(new UpgradeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuildingEffectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UpgradeEffectEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new EventEffectEntityConfiguration());
         }
 
 

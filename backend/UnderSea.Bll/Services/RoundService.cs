@@ -361,7 +361,8 @@ namespace UnderSea.Bll.Services
                     country.CountryEvents.Add(new Model.Models.Joins.CountryEvent
                     {
                         CountryId = country.Id,
-                        EventId = events[eventNumber].Id
+                        EventId = events[eventNumber].Id,
+                        EventRound = world.Round
                     });
                     foreach (var eventEffect in events[eventNumber].EventEffects)
                     {
@@ -382,6 +383,7 @@ namespace UnderSea.Bll.Services
             var countries = await _context.Countries.Include(e => e.CountryUnits)
                                                         .ThenInclude(e => e.Unit)
                                                             .ThenInclude(e => e.UnitMaterials)
+                                                    .Include(e => e.FightPoint)
                                                     .Include(e => e.CountryMaterials)
                                                         .ThenInclude(e => e.Material)
                                                     .Include(e => e.Attacks)

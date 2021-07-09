@@ -146,6 +146,7 @@ namespace UnderSea.Dal.EntityConfigurations
                 fightpoints.Add(new
                 {
                     CountryId = i,
+                    BonusAttackPoint = 0,
                     AttackPointMultiplier = 1.0,
                     DefensePointMultiplier = 1.0
                 });

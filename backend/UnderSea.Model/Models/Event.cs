@@ -12,5 +12,6 @@ namespace UnderSea.Model.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<EventEffect> EventEffects { get; set; }
+        public ICollection<CountryEvent> CountryEvents { get; set; }
     }
 }
