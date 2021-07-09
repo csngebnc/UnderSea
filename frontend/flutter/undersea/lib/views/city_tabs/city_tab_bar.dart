@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:undersea/controllers/battle_data_controller.dart';
 import 'package:undersea/controllers/building_data_controller.dart';
 import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/lang/strings.dart';
@@ -12,6 +13,9 @@ class CityTabBar extends StatelessWidget {
   CityTabBar() {
     Get.find<UpgradesController>().getUpgradeDetails();
     Get.find<BuildingDataController>().getBuildingDetails();
+    Get.find<BattleDataController>().getUnitTypes();
+    Get.find<BattleDataController>().getAllUnits();
+    Get.find<BattleDataController>().getSpies();
   }
   @override
   Widget build(BuildContext context) {

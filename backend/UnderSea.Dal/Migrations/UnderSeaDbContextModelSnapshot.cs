@@ -909,6 +909,12 @@ namespace UnderSea.Dal.Migrations
                             UnitId = 4,
                             MaterialId = 1,
                             Amount = 50
+                        },
+                        new
+                        {
+                            UnitId = 5,
+                            MaterialId = 1,
+                            Amount = 200
                         });
                 });
 
@@ -1063,6 +1069,16 @@ namespace UnderSea.Dal.Migrations
                             MercenaryPerRound = 1,
                             Name = "Felfedező",
                             SupplyPerRound = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AttackPoint = 0,
+                            DefensePoint = 0,
+                            ImageUrl = "https://underseastorage.blob.core.windows.net/units/general.png",
+                            MercenaryPerRound = 4,
+                            Name = "Hadvezér",
+                            SupplyPerRound = 2
                         });
                 });
 

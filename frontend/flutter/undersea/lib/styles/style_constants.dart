@@ -42,9 +42,15 @@ class UnderseaStyles {
   static const navbarIconColor = Color(0xFF001234);
   static const unselectedNavbarIconColor = Color(0x33001234);
   static const hintStyle =
-      TextStyle(color: UnderseaStyles.hintColor, fontSize: 19);
+      TextStyle(color: UnderseaStyles.hintColor, fontSize: 15);
 
   static void _defaultOnChanged(String s) {}
+
+  static const resourceNamesMap = {
+    'korall': 'coral',
+    'gyöngy': 'pearl',
+    'kő': 'stone'
+  };
 
   static Widget inputField({
     required String hint,
@@ -82,12 +88,12 @@ class UnderseaStyles {
             padding: padding,
             child: Text(title,
                 style: UnderseaStyles.whiteOpenSans
-                    .copyWith(fontWeight: FontWeight.bold, fontSize: 20))),
+                    .copyWith(fontWeight: FontWeight.bold, fontSize: 16))),
         if (hint.isNotEmpty)
           Padding(
             padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
             child: Text(hint,
-                style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 20)),
+                style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 16)),
           ),
       ],
     );
@@ -95,18 +101,21 @@ class UnderseaStyles {
 
   static Widget building(String name, {double? top, double? left}) {
     return Positioned(
-        height: 180,
+        height: 140,
         top: top ?? 0,
         left: left ?? 0,
-        child: UnderseaStyles.buildingImage(name, additional: "@3x"));
+        child: UnderseaStyles.buildingImage(name,
+            additional: name == 'stone_mine' ? '' : "@3x"));
   }
 
   static Widget buildingImage(String name, {String additional = ''}) {
-    return Image.asset('assets/buildings/$name$additional.png');
+    return Image.asset(
+      'assets/buildings/$name$additional.png',
+    );
   }
 
   static Widget assetIcon(String iconName,
-      {double iconSize = 40, bool isBuilding = false}) {
+      {double iconSize = 30, bool isBuilding = false}) {
     return Container(
       decoration: isBuilding
           ? null
@@ -129,7 +138,7 @@ class UnderseaStyles {
   }
 
   static TextStyle listRegular = UnderseaStyles.whiteOpenSans
-      .copyWith(fontWeight: FontWeight.normal, fontSize: 18, height: 1.5);
+      .copyWith(fontWeight: FontWeight.normal, fontSize: 14, height: 1.5);
   static TextStyle listBold = UnderseaStyles.listRegular.copyWith(
     fontWeight: FontWeight.bold,
   );
@@ -140,7 +149,7 @@ class UnderseaStyles {
 
   static Widget militaryIcon(String assetName, int current, int max) {
     return Container(
-        margin: EdgeInsets.all(12),
+        margin: EdgeInsets.all(6),
         child: Column(
           children: [
             UnderseaStyles.assetIcon(assetName),
@@ -149,7 +158,7 @@ class UnderseaStyles {
               style: UnderseaStyles.buttonTextStyle.copyWith(
                   color: Color(0xFF1C3E76),
                   fontWeight: FontWeight.w800,
-                  fontSize: 22),
+                  fontSize: 16),
             )
           ],
         ));
@@ -162,14 +171,14 @@ class UnderseaStyles {
       elevation: 2.0,
       fillColor: UnderseaStyles.underseaLogoColor,
       child: UnderseaStyles.iconsFromImages(iconName),
-      padding: EdgeInsets.all(5.0),
+      padding: EdgeInsets.all(2.0),
       shape: CircleBorder(),
     );
   }
 
   static Widget resourceIcon(String assetName, int current, int production) {
     return Container(
-        margin: EdgeInsets.all(12),
+        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Column(
           children: [
             UnderseaStyles.assetIcon(assetName),
@@ -180,7 +189,7 @@ class UnderseaStyles {
                   style: UnderseaStyles.buttonTextStyle.copyWith(
                       color: Color(0xFF1C3E76),
                       fontWeight: FontWeight.w800,
-                      fontSize: 22,
+                      fontSize: 16,
                       height: 1.2),
                 ),
                 Text(
@@ -188,7 +197,7 @@ class UnderseaStyles {
                   style: UnderseaStyles.buttonTextStyle.copyWith(
                       color: Color(0xFF1C3E76),
                       fontWeight: FontWeight.w800,
-                      fontSize: 22,
+                      fontSize: 12,
                       height: 1.1),
                 )
               ],
@@ -200,16 +209,16 @@ class UnderseaStyles {
   static Widget buildingIcon(String assetName, int amount,
       {String additional = '@3x'}) {
     return Container(
-        margin: EdgeInsets.all(12),
+        margin: EdgeInsets.all(5),
         child: Column(
           children: [
-            UnderseaStyles.assetIcon(assetName, isBuilding: true, iconSize: 60),
+            UnderseaStyles.assetIcon(assetName, isBuilding: true, iconSize: 50),
             Text(
               '$amount',
               style: UnderseaStyles.buttonTextStyle.copyWith(
                   color: Color(0xFF1C3E76),
                   fontWeight: FontWeight.w800,
-                  fontSize: 22),
+                  fontSize: 18),
             ),
           ],
         ));
@@ -250,7 +259,7 @@ class UnderseaStyles {
               style: UnderseaStyles.buttonTextStyle.copyWith(
                   color: UnderseaStyles.hintColor,
                   fontWeight: FontWeight.w800,
-                  fontSize: 22),
+                  fontSize: 20),
             )));
   }
 
@@ -266,8 +275,8 @@ class UnderseaStyles {
   static Widget elevatedButton(
       {required String text,
       required Function onPressed,
-      double width = 250,
-      double height = 70}) {
+      double width = 200,
+      double height = 55}) {
     return ElevatedButton(
       onPressed: () {
         onPressed();
@@ -287,7 +296,7 @@ class UnderseaStyles {
           alignment: Alignment.center,
           child: Text(
             text,
-            style: buttonTextStyle.copyWith(fontSize: 24),
+            style: buttonTextStyle.copyWith(fontSize: 20),
           ),
         ),
       ),
@@ -297,7 +306,7 @@ class UnderseaStyles {
   static const bottomNavbarTextStyle = TextStyle(
       color: UnderseaStyles.navbarIconColor,
       fontFamily: 'Baloo 2',
-      fontSize: 15,
+      fontSize: 11,
       fontStyle: FontStyle.normal,
       fontWeight: FontWeight.bold);
 
@@ -309,7 +318,7 @@ class UnderseaStyles {
       Text(
         text,
         style: UnderseaStyles.inputTextStyle.copyWith(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 19),
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
       ),
     ]);
   }
@@ -322,7 +331,7 @@ class UnderseaStyles {
         child: Text(
           text,
           style: UnderseaStyles.inputTextStyle.copyWith(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
         ),
       ),
     );
@@ -343,8 +352,7 @@ class UnderseaStyles {
 
   static void snackbar(String title, String body) {
     return Get.snackbar(title, body,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.blueAccent);
+        snackPosition: SnackPosition.TOP, backgroundColor: Colors.blueAccent);
   }
 
   static Widget iconsFromImages(String name, {double size = 35}) {
@@ -368,28 +376,30 @@ class UnderseaStyles {
         decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
       ),
       list,
-      Column(
-        children: [
-          Expanded(
-            flex: 8,
-            child: IgnorePointer(
-                child: Container(
-              decoration: BoxDecoration(color: Colors.transparent),
-            )),
-          ),
-          Expanded(
-              flex: 2,
-              child: Container(
-                  decoration: BoxDecoration(color: Colors.white54),
-                  child: Align(
-                      alignment: Alignment.center,
-                      child: ToggleableElevatedButton(
-                        text: buttonText.tr,
-                        onPressed: onButtonPressed,
-                        isDisabled: isDisabled,
-                      ))))
-        ],
-      ),
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: Column(
+          children: [
+            Expanded(
+              child: IgnorePointer(
+                  child: Container(
+                decoration: BoxDecoration(color: Colors.transparent),
+              )),
+            ),
+            Container(
+                decoration: BoxDecoration(color: Colors.white54),
+                child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: ToggleableElevatedButton(
+                          text: buttonText.tr,
+                          onPressed: onButtonPressed,
+                          isDisabled: isDisabled,
+                        ))))
+          ],
+        ),
+      )
     ]));
   }
 }

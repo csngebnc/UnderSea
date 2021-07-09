@@ -9,12 +9,6 @@ namespace UnderSea.Bll.Services.Interfaces
 {
     public interface IRoundService
     {
-        void PayMaterial(ICollection<Country> countries);
-        void PayMercenaryAndFeedSoldiers(ICollection<Country> countries);
-        void MakeUpgrades(ICollection<Country> countries, World world);
-        void MakeBuildings(ICollection<Country> countries, World world);
-        void Fights(ICollection<Country> countries, World world);
-        void CalculatePoints(ICollection<Country> countries);
         Task NextRound();
     }
 }

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:undersea/models/response/buy_unit_details_dto.dart';
 
 import 'attackable_user_dto.dart';
 
@@ -6,12 +7,9 @@ part 'buy_unit_dto.g.dart';
 
 @JsonSerializable()
 class BuyUnitDto {
-  int unitId;
-  int number;
-
+  List<BuyUnitDetailsDto> units;
   BuyUnitDto({
-    required this.unitId,
-    required this.number,
+    required this.units,
   });
 
   factory BuyUnitDto.fromJson(Map<String, dynamic> json) =>

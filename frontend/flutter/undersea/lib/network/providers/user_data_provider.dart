@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:undersea/models/response/paged_result_of_user_rank_dto.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
 import 'package:undersea/network/response/login_response.dart';
 import 'package:flutter/foundation.dart';
@@ -18,9 +19,17 @@ class UserDataProvider extends NetworkProvider {
           contentType: 'application/json', decoder: (response) => {});
 
   Future<Response<UserInfoDto>> getUserInfo() =>
-      get("/api/User", contentType: 'application/json',
-          //headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
-          decoder: (response) {
+      get("/api/User", contentType: 'application/json', decoder: (response) {
         return UserInfoDto.fromJson(response);
+      });
+
+  Future<Response<PagedResultOfUserRankDto>> getRankList(
+          int pageSize, int pageNumber, String name) =>
+      get("/api/User/ranklist", contentType: 'application/json', query: {
+        'PageSize': '$pageSize',
+        'PageNumber': '$pageNumber',
+        'name': name
+      }, decoder: (response) {
+        return PagedResultOfUserRankDto.fromJson(response);
       });
 }

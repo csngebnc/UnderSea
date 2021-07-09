@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user/user.service';
 import { PagedList } from 'src/app/models/paged-list.model';
@@ -22,7 +23,10 @@ export class ScoreboardComponent implements OnInit {
   @Select(LoadingState.isLoading)
   loading$: Observable<boolean>;
 
-  constructor(private userService: UserService, private store: Store) { }
+  constructor(
+    private userService: UserService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.initScoreBoard();
@@ -35,13 +39,20 @@ export class ScoreboardComponent implements OnInit {
         (r: PagedList) => {
           this.scoreboard = r;
         },
-        (e) => console.log(e)
+        (e) => {
+          const error = JSON.parse(e['response']);
+          const errorText = Object.values(error['errors'])[0][0];
+          this.toastr.error(errorText);
+        }
       );
   }
 
   onFilter(s: string): void {
-    if (s) { this.filter = s; }
-    else { this.filter = undefined; }
+    if (s) {
+      this.filter = s;
+    } else {
+      this.filter = undefined;
+    }
     this.scoreboard.pageNumber = 1;
     this.initScoreBoard();
   }

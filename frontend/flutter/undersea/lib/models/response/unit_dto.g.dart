@@ -14,7 +14,9 @@ UnitDto _$UnitDtoFromJson(Map<String, dynamic> json) {
     defensePoint: json['defensePoint'] as int,
     currentCount: json['currentCount'] as int,
     mercenaryPerRound: json['mercenaryPerRound'] as int,
-    price: json['price'] as int,
+    requiredMaterials: (json['requiredMaterials'] as List<dynamic>?)
+        ?.map((e) => MaterialDto.fromJson(e as Map<String, dynamic>))
+        .toList(),
     supplyPerRound: json['supplyPerRound'] as int,
   );
 }
@@ -26,6 +28,6 @@ Map<String, dynamic> _$UnitDtoToJson(UnitDto instance) => <String, dynamic>{
       'defensePoint': instance.defensePoint,
       'mercenaryPerRound': instance.mercenaryPerRound,
       'supplyPerRound': instance.supplyPerRound,
-      'price': instance.price,
+      'requiredMaterials': instance.requiredMaterials,
       'currentCount': instance.currentCount,
     };

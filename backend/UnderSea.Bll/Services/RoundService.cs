@@ -33,6 +33,10 @@ namespace UnderSea.Bll.Services
             {
                 foreach(var material in country.CountryMaterials)
                 {
+                    if(material.Material.MaterialType == MaterialTypeConstants.Pearl)
+                    {
+                        material.BaseProduction = country.Population * EffectConstants.PopulationPearlMultiplier;
+                    }
                     material.Amount += (int)Math.Round(material.BaseProduction * material.Multiplier); 
                 }
             }
@@ -144,7 +148,7 @@ namespace UnderSea.Bll.Services
             }
         }
 
-        public void Fights(ICollection<Country> countries, World world)
+        public void Fights(ICollection<Country> countries, World world, int generalId)
         {
             foreach (var attackerCountry in countries)
             {
@@ -168,6 +172,12 @@ namespace UnderSea.Bll.Services
 
                     attackPoints *= attackerCountry.FightPoint.AttackPointMultiplier * (1 - new Random().Next(-5, 5) / 100);
                     defensePoints *= attack.DefenderCountry.FightPoint.DefensePointMultiplier;
+
+                    var attackerGenerals = attackUnits.SingleOrDefault(u => u.UnitId == generalId).Count;
+                    var defenderGenerals = defenseUnits.SingleOrDefault(u => u.UnitId == generalId)?.Count ?? 0;
+
+                    attackPoints *= (1 + (attackerGenerals - 1) * UnitValueConstants.GeneralBonus);
+                    defensePoints *= (1 + defenderGenerals * UnitValueConstants.GeneralBonus);
 
                     if (attackPoints-defensePoints > 0)
                     {
@@ -198,7 +208,7 @@ namespace UnderSea.Bll.Services
 
         }
 
-        public void Spies(ICollection<SpyReport> spyReports)
+        public void Spies(ICollection<SpyReport> spyReports, int generalId)
         {
             foreach (var spyreport in spyReports)
             {
@@ -206,7 +216,7 @@ namespace UnderSea.Bll.Services
                 var defenderCountry = spyreport.SpiedCountry;
 
                 var attackPercentage = 60 + (spyreport.NumberOfSpies - 1) * 5;
-                var defenderSpies = defenderCountry.CountryUnits.Where(cu => cu.Unit.Name == UnitConstants.Felfedezo).FirstOrDefault();
+                var defenderSpies = defenderCountry.CountryUnits.Where(cu => cu.Unit.Name == UnitNameConstants.Felfedezo).FirstOrDefault();
                 var defensePercentage = defenderSpies == null ? 0 : defenderSpies.Count * 5;
 
                 var diff = attackPercentage - defensePercentage;
@@ -226,8 +236,12 @@ namespace UnderSea.Bll.Services
                         {
                             spyreport.DefensePoints += unit.Unit.DefensePoint * unit.Count;
                         }
-                        spyreport.DefensePoints = (int)(spyreport.DefensePoints* defenderCountry.FightPoint.DefensePointMultiplier);
-                        attackerCountry.CountryUnits.Where(cu => cu.Unit.Name == UnitConstants.Felfedezo).FirstOrDefault().Count += spyreport.NumberOfSpies;
+
+                        var defenderGenerals = defenseUnits.SingleOrDefault(u => u.UnitId == generalId)?.Count ?? 0;
+
+                        spyreport.DefensePoints = (int)(spyreport.DefensePoints* (1+defenderCountry.FightPoint.DefensePointMultiplier));
+                        spyreport.DefensePoints = (int)(spyreport.DefensePoints * (1+defenderGenerals * UnitValueConstants.GeneralBonus));
+                        attackerCountry.CountryUnits.Where(cu => cu.Unit.Name == UnitNameConstants.Felfedezo).FirstOrDefault().Count += spyreport.NumberOfSpies;
                     }
                     else
                     {
@@ -278,16 +292,16 @@ namespace UnderSea.Bll.Services
                 {
                     switch (unit.Unit.Name)
                     {
-                        case UnitConstants.RohamFoka:
+                        case UnitNameConstants.RohamFoka:
                             militaryPoints += unit.Count * PointConstants.Military;
                             break;
-                        case UnitConstants.Csatacsiko:
+                        case UnitNameConstants.Csatacsiko:
                             militaryPoints += unit.Count * PointConstants.Military;
                             break;
-                        case UnitConstants.Lezercapa:
+                        case UnitNameConstants.Lezercapa:
                             militaryPoints += unit.Count * PointConstants.MilitaryShark;
                             break;
-                        case UnitConstants.Felfedezo:
+                        case UnitNameConstants.Felfedezo:
                             militaryPoints += unit.Count * PointConstants.Spy;
                             break;
                         default:
@@ -320,6 +334,9 @@ namespace UnderSea.Bll.Services
                                                     .Include(e => e.Attacks)
                                                         .ThenInclude(e => e.DefenderCountry)
                                                             .ThenInclude(e => e.FightPoint)
+                                                    .Include(e => e.Attacks)
+                                                        .ThenInclude(e => e.DefenderCountry)
+                                                            .ThenInclude(e => e.CountryUnits)
                                                     .Include(e => e.CountryBuildings)
                                                         .ThenInclude(e => e.Building)
                                                     .Include(e => e.CountryUpgrades)
@@ -344,6 +361,8 @@ namespace UnderSea.Bll.Services
                         .ThenInclude(cu => cu.Unit)
                 .ToListAsync();
 
+            var generalId= (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
+
             using (var transaction = _context.Database.BeginTransaction())
             {
                 PayMaterial(countries);
@@ -354,9 +373,9 @@ namespace UnderSea.Bll.Services
 
                 MakeBuildings(countries,world);
 
-                Fights(countries,world);
+                Fights(countries,world, generalId);
 
-                Spies(spyreports);
+                Spies(spyreports, generalId);
 
                 await ReturnAttackUnits(countries, world);
 

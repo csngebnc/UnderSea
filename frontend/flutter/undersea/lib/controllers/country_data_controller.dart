@@ -27,7 +27,7 @@ class CountryDataController extends GetxController {
         //return response.body;
       }
     } catch (error) {
-      countryDetailsData.addError(error);
+      //countryDetailsData.addError(error);
       log('$error');
     }
   }

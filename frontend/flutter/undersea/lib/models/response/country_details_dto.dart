@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/building_info_dto.dart';
+import 'package:undersea/models/response/material_details_dto.dart';
 
 part 'country_details_dto.g.dart';
 
@@ -8,20 +9,14 @@ part 'country_details_dto.g.dart';
 class CountryDetailsDto {
   int maxUnitCount;
   List<BattleUnitDto>? units;
-  int coral;
-  int pearl;
-  int currentCoralProduction;
-  int currentPearlProduction;
+  List<MaterialDetailsDto>? materials;
   int population;
   bool hasSonarCanon;
   List<BuildingInfoDto>? buildings;
 
   CountryDetailsDto(
       {required this.maxUnitCount,
-      required this.coral,
-      required this.currentCoralProduction,
-      required this.currentPearlProduction,
-      required this.pearl,
+      this.materials,
       required this.population,
       this.buildings,
       this.units,

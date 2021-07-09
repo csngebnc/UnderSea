@@ -39,7 +39,7 @@ namespace UnderSea.Bll.Services
 
             if(await _context.Users.AnyAsync(u => u.UserName == registerDto.UserName))
             {
-                throw new InvalidParameterException("A megadott felhasználónévvel már van regisztrált felhasználó.");
+                throw new InvalidParameterException("userName", "A megadott felhasználónévvel már van regisztrált felhasználó.");
             }
             
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -62,7 +62,7 @@ namespace UnderSea.Bll.Services
                     MaterialId = material.Id,
                     CountryId = country.Id,
                     Multiplier = 1,
-                    BaseProduction = 0,
+                    BaseProduction = material.MaterialType == MaterialTypeConstants.Pearl ? country.Population * EffectConstants.PopulationPearlMultiplier : 0,
                     Amount = material.MaterialType == MaterialTypeConstants.Pearl ? 5000 : 0,
                 });
             }

@@ -15,6 +15,7 @@ namespace UnderSea.Model.Constants
         public static int Military = 5; // pont / egység (rohamfóka és csatacsikó)
         public static int MilitaryShark = 10; // pont / egység (rohamfóka és csatacsikó)
         public static int Spy = 5;
+        public static int General = 5;
 
         public static int Science = 100; // pont / fejlesztés
     }

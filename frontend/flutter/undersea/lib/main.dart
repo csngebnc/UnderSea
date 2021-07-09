@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -6,7 +8,6 @@ import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
 import 'package:undersea/controllers/next_round_controller.dart';
 
-import 'package:undersea/controllers/soldiers_controller.dart';
 import 'package:undersea/lang/app_translations.dart';
 import 'package:undersea/network/providers/country_data_provider.dart';
 import 'package:undersea/network/providers/next_round_provider.dart';
@@ -30,21 +31,24 @@ void main() async {
 
 Future<void> initServices() async {
   await GetStorage.init();
+  Get.put(NextRoundProvider());
 
+  Get.put(RoundController(Get.find()));
+  var roundController = Get.find<RoundController>();
   Get.put(BottomNavBarController());
-  Get.put(SoldiersController());
   Get.put(UserDataProvider());
   Get.put(UserDataController(Get.find()));
   Get.put(CountryDataProvider());
   Get.put(CountryDataController(Get.find()));
   Get.put(BuildingDataProvider());
   Get.put(BuildingDataController(Get.find()));
-  Get.put(NextRoundProvider());
-  Get.put(RoundController(Get.find()));
+
   Get.put(UpgradeDataProvider());
   Get.put(UpgradesController(Get.find()));
   Get.put(BattleDataProvider());
   Get.put(BattleDataController(Get.find()));
+  roundController.initPlatformState();
+  //log((await roundController.signalR.isConnected).toString());
 }
 
 class MyApp extends StatelessWidget {

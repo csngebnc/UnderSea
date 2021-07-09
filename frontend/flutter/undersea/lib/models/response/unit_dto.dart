@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'material_dto.dart';
+
 part 'unit_dto.g.dart';
 
 @JsonSerializable()
@@ -10,7 +12,7 @@ class UnitDto {
   int defensePoint;
   int mercenaryPerRound;
   int supplyPerRound;
-  int price;
+  List<MaterialDto>? requiredMaterials;
   int currentCount;
 
   UnitDto(
@@ -20,7 +22,7 @@ class UnitDto {
       required this.defensePoint,
       required this.currentCount,
       required this.mercenaryPerRound,
-      required this.price,
+      this.requiredMaterials,
       required this.supplyPerRound});
 
   factory UnitDto.fromJson(Map<String, dynamic> json) =>

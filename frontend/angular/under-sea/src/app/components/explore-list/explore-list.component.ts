@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { BattleService } from 'src/app/services/battle/battle.service';
 import { PagedSpyReport } from 'src/app/models/paged-spy-report.model';
@@ -23,7 +24,10 @@ export class ExploreListComponent implements OnInit {
   noSuccess = FightOutcome.OtherUser;
   success = FightOutcome.CurrentUser;
 
-  constructor(private battleService: BattleService) { }
+  constructor(
+    private battleService: BattleService,
+    private toastr: ToastrService
+  ) {}
 
   @Select(LoadingState.isLoading)
   loading$: Observable<boolean>;
@@ -33,9 +37,16 @@ export class ExploreListComponent implements OnInit {
   }
 
   private initExplorations(): void {
-    this.battleService.getExplorations(this.list.pageNumber).subscribe((r) => {
-      this.list = r;
-    });
+    this.battleService.getExplorations(this.list.pageNumber).subscribe(
+      (r) => {
+        this.list = r;
+      },
+      (e) => {
+        const error = JSON.parse(e['response']);
+        const errorText = Object.values(error['errors'])[0][0];
+        this.toastr.error(errorText);
+      }
+    );
   }
 
   onSwitchPage(pageNumber: number): void {

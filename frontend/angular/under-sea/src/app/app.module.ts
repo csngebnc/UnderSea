@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/authentication/login/login.component';
@@ -84,6 +86,12 @@ import { HasbuildingPipe } from './pipes/hasbuilding/hasbuilding.pipe';
     HttpClientModule,
     NgxsModule.forRoot([ResourcesState, UserDataState, LoadingState]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 4000,
+      positionClass: 'toast-top-center',
+      preventDuplicates: true,
+    }),
   ],
   providers: [
     { provide: generated.API_BASE_URL, useValue: apiUrl },

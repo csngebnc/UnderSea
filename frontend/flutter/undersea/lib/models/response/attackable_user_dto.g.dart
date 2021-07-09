@@ -8,15 +8,15 @@ part of 'attackable_user_dto.dart';
 
 AttackableUserDto _$AttackableUserDtoFromJson(Map<String, dynamic> json) {
   return AttackableUserDto(
-    number: json['number'] as int,
+    id: json['id'] as String?,
     countryId: json['countryId'] as int,
-    username: json['username'] as String,
+    userName: json['userName'] as String?,
   );
 }
 
 Map<String, dynamic> _$AttackableUserDtoToJson(AttackableUserDto instance) =>
     <String, dynamic>{
-      'number': instance.number,
-      'username': instance.username,
+      'id': instance.id,
+      'userName': instance.userName,
       'countryId': instance.countryId,
     };

@@ -12,5 +12,6 @@ namespace UnderSea.Model.Constants
         public static int CoralNumber = 200;
         public static int SoldierNumber = 200;
         public static int StoneNumber = 25;
+        public static int PopulationPearlMultiplier = 25;
     }
 }

@@ -1,20 +1,14 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+
 import 'package:undersea/models/response/building_details_dto.dart';
-import 'package:undersea/models/response/building_details_list.dart';
-import 'package:undersea/models/response/building_info_dto.dart';
+
 import 'package:undersea/models/response/buy_building_dto.dart';
-import 'package:undersea/models/response/register_dto.dart';
-import 'package:undersea/models/response/user_info_dto.dart';
+
 import 'package:undersea/network/providers/building_data_provider.dart';
 
-import 'package:undersea/network/providers/user_data_provider.dart';
 import 'package:undersea/styles/style_constants.dart';
-import 'package:undersea/views/bottom_nav_bar.dart';
-
-import '../constants.dart';
 
 class BuildingDataController extends GetxController {
   final BuildingDataProvider _buildingDataProvider;
@@ -50,7 +44,9 @@ class BuildingDataController extends GetxController {
   }
 
   static const imageNameMap = {
+    'Szonárágyú': 'szonaragyu',
     'Zátonyvár': 'zatonyvar',
-    'Áramlásirányító': 'aramlasiranyito'
+    'Áramlásirányító': 'aramlasiranyito',
+    'Kőbánya': 'stone_mine'
   };
 }

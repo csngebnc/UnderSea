@@ -18,7 +18,7 @@ namespace UnderSea.Dal.EntityConfigurations
                 new Unit()
                 {
                     Id = 1,
-                    Name = UnitConstants.RohamFoka,
+                    Name = UnitNameConstants.RohamFoka,
                     MercenaryPerRound = 1,
                     SupplyPerRound = 1,
                     AttackPoint = 6,
@@ -28,7 +28,7 @@ namespace UnderSea.Dal.EntityConfigurations
                 new Unit()
                 {
                     Id = 2,
-                    Name = UnitConstants.Csatacsiko,
+                    Name = UnitNameConstants.Csatacsiko,
                     MercenaryPerRound = 1,
                     SupplyPerRound = 1,
                     AttackPoint = 2,
@@ -38,7 +38,7 @@ namespace UnderSea.Dal.EntityConfigurations
                 new Unit()
                 {
                     Id = 3,
-                    Name = UnitConstants.Lezercapa,
+                    Name = UnitNameConstants.Lezercapa,
                     MercenaryPerRound = 3,
                     SupplyPerRound = 2,
                     AttackPoint = 5,
@@ -48,12 +48,22 @@ namespace UnderSea.Dal.EntityConfigurations
                 new Unit()
                 {
                     Id = 4,
-                    Name = UnitConstants.Felfedezo,
+                    Name = UnitNameConstants.Felfedezo,
                     MercenaryPerRound = 1,
                     SupplyPerRound = 1,
                     AttackPoint = 0,
                     DefensePoint = 0,
                     ImageUrl = @"https://underseastorage.blob.core.windows.net/units/spy.png"
+                },
+                new Unit()
+                {
+                    Id = 5,
+                    Name = UnitNameConstants.Hadvezer,
+                    MercenaryPerRound = 4,
+                    SupplyPerRound = 2,
+                    AttackPoint = 0,
+                    DefensePoint = 0,
+                    ImageUrl = @"https://underseastorage.blob.core.windows.net/units/general.png"
                 }
             );
         }
