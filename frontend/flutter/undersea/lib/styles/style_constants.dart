@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/fight_outcome.dart';
 import 'package:undersea/views/leaderboard.dart';
@@ -44,6 +45,13 @@ class UnderseaStyles {
       TextStyle(color: UnderseaStyles.hintColor, fontSize: 15);
 
   static void _defaultOnChanged(String s) {}
+  static String? _defaultValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Nem hagyhatod üresen ezt a mezőt!';
+    }
+    if (value.removeAllWhitespace != value)
+      return 'Nem szerepelhet szóköz a mezőben!';
+  }
 
   static const resourceNamesMap = {
     'korall': 'coral',
@@ -58,21 +66,42 @@ class UnderseaStyles {
     Color color = Colors.white,
     Color hintColor = hintColor,
     void Function(String) onChanged = _defaultOnChanged,
+    String? Function(String?) validator = _defaultValidator,
   }) {
-    return Container(
+    return Stack(children: [
+      Container(
+        height: 50,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(32.0), color: color),
-        child: TextField(
-          controller: controller,
-          obscureText: isPassword,
-          style: UnderseaStyles.inputTextStyle,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: hint,
-              hintStyle: UnderseaStyles.hintStyle.copyWith(color: hintColor),
-              border: InputBorder.none),
-        ));
+        //child:
+      ),
+      TextFormField(
+        validator: validator,
+        controller: controller,
+        obscureText: isPassword,
+        style: UnderseaStyles.inputTextStyle,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+            focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32.0),
+                borderSide: BorderSide(
+                    color: UnderseaStyles.navbarIconColor, width: 2)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32.0),
+                borderSide: BorderSide(
+                    color: UnderseaStyles.underseaLogoColor, width: 2)),
+            errorStyle:
+                TextStyle(color: UnderseaStyles.navbarIconColor, fontSize: 14),
+            errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32.0),
+                borderSide:
+                    BorderSide(color: UnderseaStyles.menuDarkBlue, width: 2)),
+            contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            hintText: hint,
+            hintStyle: UnderseaStyles.hintStyle.copyWith(color: hintColor),
+            border: InputBorder.none),
+      )
+    ]);
   }
 
   static Widget infoPanel(

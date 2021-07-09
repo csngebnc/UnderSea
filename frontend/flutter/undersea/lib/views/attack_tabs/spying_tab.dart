@@ -69,8 +69,8 @@ class _SpyingTabState extends State<SpyingTab> {
                 height: 20,
               ),
               SizedBox(
-                height: 100,
-                width: 100,
+                height: 70,
+                width: 70,
                 child: UnderseaStyles.assetIcon('dora'),
               ),
               SizedBox(

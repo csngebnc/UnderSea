@@ -59,7 +59,17 @@ class UserDataController extends GetxController {
           countryName: countryName);
       final response =
           await _userDataProvider.register(registrationData.toJson());
-      if (response.statusCode == 200) onSuccess != null ? onSuccess() : {};
+      if (response.statusCode == 200)
+        onSuccess != null ? onSuccess() : {};
+      else if (response.statusCode == 400) {
+        var errors = response.bodyString!.split('"errors":')[1];
+        var start = errors.indexOf('[') + 2;
+        var end = errors.indexOf('(') - 1;
+        var errorMessage = errors.substring(start, end);
+
+        log(errorMessage);
+        UnderseaStyles.snackbar('Hiba történt', errorMessage);
+      }
     } catch (error) {
       UnderseaStyles.snackbar('Error', 'Regisztrációs hiba');
     }
@@ -70,11 +80,16 @@ class UserDataController extends GetxController {
       final body =
           'username=$username&password=$password&grant_type=password&client_id=undersea-angular&scope=openid+api-openid';
       final response = await _userDataProvider.login(body);
-      if (response.body != null) {
+      if (response.statusCode == 200) {
         storage.write(Constants.TOKEN, response.body!.token);
         Get.off(BottomNavBar());
+      } else {
+        UnderseaStyles.snackbar(
+            'Hiba történt', 'Érvénytelen felhasználónév vagy jelszó');
+        log('${response.bodyString}');
       }
     } catch (error) {
+      log('$error');
       UnderseaStyles.snackbar('Error', 'Bejelentkezési hiba');
     }
   }

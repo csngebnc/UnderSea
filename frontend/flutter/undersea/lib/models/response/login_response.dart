@@ -1,5 +1,5 @@
 class LoginResponse {
-  final String token;
+  final String? token;
 
   LoginResponse(this.token);
 }
