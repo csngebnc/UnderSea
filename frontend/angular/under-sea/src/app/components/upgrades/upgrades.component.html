@@ -14,7 +14,7 @@
         <ul *ngIf="!(loading$ | async)" class="item-container">
           <li *ngFor="let upgrade of upgrades" class="non-styled-list-item">
             <button type="button" class="item-btn pos-rel" (click)="setUpgrade(upgrade.id)"
-              [disabled]="upgrade.doesExist || upgrade.isUnderConstruction">
+              [disabled]="upgrade.doesExist || isResearching">
               <span *ngIf="upgrade.doesExist" class="dot overlay">&#x2714;</span>
               <span *ngIf="upgrade.isUnderConstruction" class="remaining-text overlay">még {{ upgrade.remainingTime }}
                 kör</span>

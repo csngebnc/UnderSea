@@ -44,40 +44,42 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 .tooltip {
   position: relative;
   display: inline-block;
-}
 
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 150px;
-  background-color: $dark-navy;
-  color: $white;
-  text-align: center;
-  padding: 0.5rem;
-  border-radius: 6px;
+  .tooltiptext {
+    visibility: hidden;
+    width: 150px;
+    background-color: $dark-navy;
+    color: $white;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 6px;
 
-  top: 100%;
-  left: 50%;
-  margin-left: -75px;
+    top: 100%;
+    left: 50%;
+    margin-left: -75px;
 
-  position: absolute;
-  z-index: 1;
+    position: absolute;
+    z-index: 1;
 
-  word-wrap: break-word;
-}
+    word-wrap: break-word;
 
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-}
+    &::after {
+      content: " ";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent $dark-navy transparent;
+    }
+  }
 
-.tooltip .tooltiptext::after {
-  content: " ";
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent $dark-navy transparent;
+  &:hover {
+    .tooltiptext {
+      visibility: visible;
+    }
+  }
 }
 
 .text-input {
@@ -92,15 +94,15 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   padding: 0.5rem 1rem;
   margin: 0.5rem;
   border: 2px solid transparent;
-}
 
-.text-input.ng-invalid.ng-touched {
-  border-color: $invalid;
-}
+  &.ng-invalid.ng-touched {
+    border-color: $invalid;
+  }
 
-.text-input:focus {
-  outline: none;
-  border-color: $dark-navy;
+  &:focus {
+    outline: none;
+    border-color: $dark-navy;
+  }
 }
 
 .error-text {
@@ -201,10 +203,10 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 
 .clickable-text {
   cursor: pointer;
-}
 
-.clickable-text:hover {
-  color: $blue;
+  &:hover {
+    color: $blue;
+  }
 }
 
 .link-active {
@@ -272,11 +274,11 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   margin: auto;
   cursor: pointer;
   box-shadow: 0px 3px 6px #3b7dbd;
-}
 
-.gradient-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 }
 
 .link {
@@ -347,20 +349,17 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
 
-.item-btn:hover {
-  border-color: $selected-blue;
-}
+  &:hover,
+  &:focus {
+    border-color: $selected-blue;
+  }
 
-.item-btn:focus {
-  background-color: $selected-blue;
-}
-
-.item-btn:disabled {
-  border: none;
-  background-color: none;
-  cursor: not-allowed;
+  &:disabled {
+    border: none;
+    background-color: none;
+    cursor: not-allowed;
+  }
 }
 
 .item-lg {
