@@ -8,7 +8,7 @@ main {
 
 @font-face {
   font-family: "Baloo";
-  src: url("./assets/fonts/Baloo-Regular.ttf") format("truetype");
+  src: url("./assets//fonts/Baloo-Regular.ttf") format("truetype");
 }
 
 @font-face {
@@ -40,6 +40,45 @@ $foggy: 0.39;
 $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 
 //css classes
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: $dark-navy;
+  color: $white;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+
+  top: 100%;
+  left: 50%;
+  margin-left: -75px;
+
+  position: absolute;
+  z-index: 1;
+
+  word-wrap: break-word;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent $dark-navy transparent;
+}
 
 .text-input {
   font-size: 1.1rem;
