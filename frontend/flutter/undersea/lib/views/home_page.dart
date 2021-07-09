@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/battle_data_controller.dart';
@@ -18,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   final userDataController = Get.find<UserDataController>();
   final countryDataController = Get.find<CountryDataController>();
   final battleDatacontroller = Get.find<BattleDataController>();
+  var rng = Random();
   @override
   void initState() {
     userDataController.userInfo();
@@ -95,6 +98,44 @@ class _HomePageState extends State<HomePage> {
               width: 100,
               height: 50,
               onPressed: () {
+                Get.defaultDialog(
+                    title: "Breaking news!!4!négy",
+                    backgroundColor: UnderseaStyles.hintColor,
+                    titleStyle: UnderseaStyles.listBold.copyWith(fontSize: 16),
+                    barrierDismissible: true,
+                    radius: 20,
+                    content: Padding(
+                        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        child: Container(
+                            width: 300,
+                            height: 350,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  child: Image.asset(
+                                    UnderseaStyles
+                                        .randomEventImageMap[rng.nextInt(9)],
+                                    width: 150,
+                                  ),
+                                ),
+                                SizedBox(height: 15),
+                                Text('Valami szörnyűség',
+                                    style: UnderseaStyles.listBold),
+                                SizedBox(height: 10),
+                                Text(
+                                    'Részletekbe bocsátkoznak a backendesek, hogy mi történt',
+                                    style: UnderseaStyles.listRegular),
+                                Expanded(child: Container()),
+                                UnderseaStyles.elevatedButton(
+                                    text: 'Ok',
+                                    width: 100,
+                                    height: 40,
+                                    onPressed: () {
+                                      Get.back();
+                                    }),
+                              ],
+                            ))));
                 Get.find<RoundController>().nextRound();
               }),
           Expanded(

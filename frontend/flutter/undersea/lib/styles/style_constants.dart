@@ -103,6 +103,18 @@ class UnderseaStyles {
     ]);
   }
 
+  static const randomEventImageMap = [
+    'assets/buildings/underwater_fire.jpg',
+    'assets/buildings/goldmine.png',
+    'assets/buildings/bad_harvest.png',
+    'assets/buildings/happy_people.jpg',
+    'assets/buildings/sad_people.jpg',
+    'assets/buildings/happy_harvest.jpg',
+    'assets/buildings/happy_soldier.png',
+    'assets/buildings/angry_soldier.png',
+    'assets/buildings/plague.png',
+  ];
+
   static Widget infoPanel(
     String title,
     String hint, {
