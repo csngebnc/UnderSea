@@ -1,9 +1,3 @@
-html,
-app-root,
-main {
-  height: 100%;
-}
-
 //fonts
 
 @font-face {
@@ -531,12 +525,33 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   position: relative;
 }
 
+//basic setup
+
+html,
+app-root,
+main {
+  height: 100%;
+}
+
 body {
   height: 100%;
   font-family: "Baloo";
   margin: 0;
   background-image: $background;
-  background-position: center bottom;
   background-size: cover;
+  background-repeat: no-repeat;
   overflow: hidden;
+  animation-name: animatedBg;
+  animation-duration: 20s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes animatedBg {
+  from {
+    background-position: left top;
+  }
+  to {
+    background-position: right bottom;
+  }
 }
