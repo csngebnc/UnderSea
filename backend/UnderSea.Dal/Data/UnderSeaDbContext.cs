@@ -79,6 +79,9 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<CountryMaterial>()
                 .HasKey(c => new { c.CountryId, c.MaterialId });
 
+            modelBuilder.Entity<UnitLevel>()
+                .HasKey(ul => new { ul.UnitId, ul.Level });
+
             modelBuilder.Entity<BuildingEffect>().HasKey(be => new { be.BuildingId, be.EffectId });
             modelBuilder.Entity<CountryUnit>().HasKey(cu => new { cu.CountryId, cu.UnitId });
             modelBuilder.Entity<CountryUpgrade>().HasKey(cu => new { cu.CountryId, cu.UpgradeId });
@@ -130,6 +133,7 @@ namespace UnderSea.Dal.Data
             modelBuilder.ApplyConfiguration(new BuildingMaterialEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UnitEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UnitMaterialEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitLevelEntityConfiguration());
             //modelBuilder.ApplyConfiguration(new EffectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UpgradeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuildingEffectEntityConfiguration());

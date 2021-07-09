@@ -17,5 +17,8 @@ namespace UnderSea.Model.Models
 
         public int UnitId { get; set; }
         public Unit Unit { get; set; }
+        public int BattlesPlayed { get; set; }
+        public int GetLevel()
+            => BattlesPlayed >= 5 ? 3 : BattlesPlayed >= 3 ? 2 : 1;
     }
 }

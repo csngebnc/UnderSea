@@ -21,8 +21,6 @@ namespace UnderSea.Dal.EntityConfigurations
                     Name = UnitNameConstants.RohamFoka,
                     MercenaryPerRound = 1,
                     SupplyPerRound = 1,
-                    AttackPoint = 6,
-                    DefensePoint = 2,
                     ImageUrl = @"https://underseastorage.blob.core.windows.net/units/seal.svg"
                 },
                 new Unit()
@@ -31,8 +29,6 @@ namespace UnderSea.Dal.EntityConfigurations
                     Name = UnitNameConstants.Csatacsiko,
                     MercenaryPerRound = 1,
                     SupplyPerRound = 1,
-                    AttackPoint = 2,
-                    DefensePoint = 6,
                     ImageUrl = @"https://underseastorage.blob.core.windows.net/units/seahorse.svg"
                 },
                 new Unit()
@@ -41,8 +37,6 @@ namespace UnderSea.Dal.EntityConfigurations
                     Name = UnitNameConstants.Lezercapa,
                     MercenaryPerRound = 3,
                     SupplyPerRound = 2,
-                    AttackPoint = 5,
-                    DefensePoint = 5,
                     ImageUrl = @"https://underseastorage.blob.core.windows.net/units/shark.svg"
                 },
                 new Unit()
@@ -51,8 +45,6 @@ namespace UnderSea.Dal.EntityConfigurations
                     Name = UnitNameConstants.Felfedezo,
                     MercenaryPerRound = 1,
                     SupplyPerRound = 1,
-                    AttackPoint = 0,
-                    DefensePoint = 0,
                     ImageUrl = @"https://underseastorage.blob.core.windows.net/units/spy.png"
                 },
                 new Unit()
@@ -61,8 +53,6 @@ namespace UnderSea.Dal.EntityConfigurations
                     Name = UnitNameConstants.Hadvezer,
                     MercenaryPerRound = 4,
                     SupplyPerRound = 2,
-                    AttackPoint = 0,
-                    DefensePoint = 0,
                     ImageUrl = @"https://underseastorage.blob.core.windows.net/units/general.png"
                 }
             );
