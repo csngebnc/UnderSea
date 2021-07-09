@@ -31,7 +31,7 @@ class HistoryTabBar extends StatelessWidget {
                   tabs: [
                     UnderseaStyles.tab(Strings.battle.tr),
                     UnderseaStyles.tab(Strings.spying.tr),
-                    UnderseaStyles.tab("Események")
+                    UnderseaStyles.tab(Strings.events.tr)
                   ],
                 ),
               ),

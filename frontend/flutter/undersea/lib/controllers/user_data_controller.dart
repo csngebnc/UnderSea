@@ -114,7 +114,7 @@ class UserDataController extends GetxController {
   getRankList() async {
     try {
       if (pagedRankList.value != null &&
-          pagedRankList.value!.allResultsCount <=
+          pagedRankList.value!.allResultsCount <
               alreadyDownloadedPageNumber.value * pageSize.value) return;
       final response = await _userDataProvider.getRankList(pageSize.value,
           pageNumber.value, searchText.value.removeAllWhitespace);
@@ -137,7 +137,7 @@ class UserDataController extends GetxController {
     searchText.value = '';
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
-    pageSize.value = 5;
+    pageSize.value = 10;
     rankList.clear();
     //rankList.value.clear();
   }

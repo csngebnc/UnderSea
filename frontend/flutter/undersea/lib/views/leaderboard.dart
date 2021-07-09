@@ -39,6 +39,7 @@ class _LeaderboardState extends State<Leaderboard> {
 
   @override
   Widget build(BuildContext context) {
+    results = [];
     return Scaffold(
         backgroundColor: UnderseaStyles.menuDarkBlue,
         appBar: AppBar(

@@ -179,7 +179,7 @@ class BattleDataController extends GetxController {
   getAttackableUsers() async {
     try {
       if (attackableUsers.value != null &&
-          attackableUsers.value!.allResultsCount <=
+          attackableUsers.value!.allResultsCount <
               alreadyDownloadedPageNumber.value * pageSize.value) return;
       final response = await _battleDataProvider.getAttackableUsers(
           pageSize.value,
@@ -202,7 +202,7 @@ class BattleDataController extends GetxController {
   getSpyingHistory() async {
     try {
       if (spyingHistory.value != null &&
-          spyingHistory.value!.allResultsCount <=
+          spyingHistory.value!.allResultsCount <
               alreadyDownloadedSpyLogPageNumber.value * pageSize.value) return;
       final response = await _battleDataProvider.getSpyingHistory(
           pageSize.value, spyLogPageNumber.value, 'name');
@@ -252,7 +252,7 @@ class BattleDataController extends GetxController {
     searchText.value = '';
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
-    pageSize.value = 5;
+    pageSize.value = 10;
     attackableUserList.clear();
     //attackableUserList.value.clear();
 

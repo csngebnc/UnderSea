@@ -76,4 +76,5 @@ const Map<String, String> hu_HU = {
   Strings.passwords_differ: 'Nem egyezik a két jelszó',
   Strings.empty_field: 'Nem hagyhatod üresen ezt a mezőt',
   Strings.invalid_username: 'Nem szerepelhet speciális karakter a mezőben',
+  Strings.events: 'Események',
 };

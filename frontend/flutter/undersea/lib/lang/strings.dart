@@ -79,4 +79,5 @@ class Strings {
   static const passwords_differ = 'passwords_differ';
   static const invalid_username = 'invalid_username';
   static const empty_field = 'empty_field';
+  static const events = 'events';
 }
