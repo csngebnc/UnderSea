@@ -46,6 +46,8 @@ import { ReportsComponent } from './components/reports/reports.component';
 import { LoadingState } from './states/loading/loading.state';
 import { LoadingInterceptor } from './http-interceptors/loading/loading.interceptor';
 import { HasbuildingPipe } from './pipes/hasbuilding/hasbuilding.pipe';
+import { EventsComponent } from './components/events/events.component';
+import { EventNotificationComponent } from './components/event-notification/event-notification.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +79,8 @@ import { HasbuildingPipe } from './pipes/hasbuilding/hasbuilding.pipe';
     ExploreListComponent,
     ReportsComponent,
     HasbuildingPipe,
+    EventsComponent,
+    EventNotificationComponent,
   ],
   imports: [
     BrowserModule,
