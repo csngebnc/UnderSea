@@ -51,10 +51,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
               countryName: citynameController.text,
               onSuccess: () {
                 Get.back();
-                /*Get.snackbar(Strings.registr_snackbar_title.tr,
-                    Strings.registr_snackbar_body.tr,
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: Colors.blueAccent);*/
                 UnderseaStyles.snackbar(
                   Strings.registr_snackbar_title.tr,
                   Strings.registr_snackbar_body.tr,

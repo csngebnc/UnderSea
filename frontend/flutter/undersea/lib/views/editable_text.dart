@@ -9,7 +9,7 @@ class CityNameEditableText extends StatefulWidget {
   CityNameEditableText();
 
   @override
-  _CityNameEditableTextState createState() => new _CityNameEditableTextState();
+  _CityNameEditableTextState createState() => _CityNameEditableTextState();
 }
 
 class _CityNameEditableTextState extends State<CityNameEditableText> {
@@ -49,7 +49,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
       ),
       GetBuilder<CountryDataController>(builder: (controller) {
         final countryName = controller.countryName.value;
-        if (countryName != null)
+        if (countryName != null) {
           return InkWell(
             onTap: () {
               setState(() {
@@ -60,7 +60,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
             child:
                 UnderseaStyles.imageIcon("edit", color: Colors.white, size: 32),
           );
-        else
+        } else {
           return InkWell(
             onTap: () {
               setState(() {
@@ -71,21 +71,13 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
             child:
                 UnderseaStyles.imageIcon("edit", color: Colors.white, size: 32),
           );
+        }
       }),
-      /*InkWell(
-        onTap: () {
-          setState(() {
-            _editingController.text = controller.countryName.value ?? 'default';
-            _isEditingText = true;
-          });
-        },
-        child: UnderseaStyles.imageIcon("edit", color: Colors.white, size: 32),
-      )*/
     ]);
   }
 
   Widget _editableText() {
-    if (_isEditingText)
+    if (_isEditingText) {
       return SizedBox(
           width: 150,
           height: 60,
@@ -107,36 +99,27 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
                 autofocus: true,
                 controller: _editingController,
               )));
-    else
+    } else {
       return SizedBox(
           width: 150,
           height: 40,
           child: Align(
               alignment: Alignment.centerLeft,
-              child:
-                  /*Text(
-                controller.countryName.value ?? 'default',
-                style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 21),
-              ))*/
-                  GetBuilder<CountryDataController>(builder: (controller) {
+              child: GetBuilder<CountryDataController>(builder: (controller) {
                 final countryName = controller.countryName.value;
-                if (countryName != null)
+                if (countryName != null) {
                   return Text(
                     countryName,
                     style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 17),
                   );
-                /*else if (snapshot.hasError)
-                      return Text('error',
-                          style: UnderseaStyles.inputTextStyle.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 21));*/
-                else
+                } else {
                   return Text(
                     'default',
                     style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 21),
                   );
+                }
               })));
+    }
   }
 
   @override

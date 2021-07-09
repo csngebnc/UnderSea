@@ -48,24 +48,26 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               GetBuilder<UserDataController>(builder: (controller) {
                 final userInfoData = controller.userInfoData.value;
-                if (userInfoData != null)
+                if (userInfoData != null) {
                   return Text(userInfoData.name!,
                       style: UnderseaStyles.inputTextStyle.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 17));
+                }
                 /*else if (snapshot.hasError)
                       return Text('error',
                           style: UnderseaStyles.inputTextStyle.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 21));*/
-                else
+                else {
                   return Text('default',
                       style: UnderseaStyles.inputTextStyle.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 21));
+                }
               }),
               SizedBox(
                 height: 10,

@@ -24,8 +24,9 @@ class _UpgradesTabState extends State<Upgrades> {
 
   bool _canStartUpgrade() {
     if (_selectedIndex == null) return false;
-    if (upgradeList.value.any((element) => element.isUnderConstruction))
+    if (upgradeList.value.any((element) => element.isUnderConstruction)) {
       return false;
+    }
     if (upgradeList.value[_selectedIndex!].doesExist) return false;
     return true;
   }
@@ -48,10 +49,11 @@ class _UpgradesTabState extends State<Upgrades> {
         list: ListView.builder(
             itemCount: 8,
             itemBuilder: (BuildContext context, int i) {
-              if (i == 0)
+              if (i == 0) {
                 return UnderseaStyles.infoPanel(
                     Strings.upgrades_manual_title.tr,
                     Strings.upgrades_manual_hint.tr);
+              }
               if (i > upgradeList.value.length) return SizedBox(height: 100);
 
               return GetBuilder<UpgradesController>(builder: (controller) {
@@ -66,10 +68,11 @@ class _UpgradesTabState extends State<Upgrades> {
     return ListTile(
         onTap: () {
           setState(() {
-            if ((index - 1) != _selectedIndex)
+            if ((index - 1) != _selectedIndex) {
               _selectedIndex = index - 1;
-            else
+            } else {
               _selectedIndex = null;
+            }
           });
         },
         title: Padding(

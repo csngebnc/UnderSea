@@ -46,13 +46,12 @@ Future<void> initServices() async {
   Get.put(BattleDataProvider());
   Get.put(BattleDataController(Get.find()));
   roundController.initPlatformState();
-  //log((await roundController.signalR.isConnected).toString());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  static String _title = Strings.undersea.tr;
+  static final String _title = Strings.undersea.tr;
 
   @override
   Widget build(BuildContext context) {

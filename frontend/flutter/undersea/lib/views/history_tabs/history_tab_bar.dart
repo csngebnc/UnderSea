@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:undersea/lang/strings.dart';
+import 'package:get/get.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 import 'package:undersea/views/history_tabs/attack_history.dart';
@@ -27,8 +28,8 @@ class HistoryTabBar extends StatelessWidget {
                   indicatorSize: TabBarIndicatorSize.label,
                   indicatorWeight: 3,
                   tabs: [
-                    UnderseaStyles.tab('Csata'),
-                    UnderseaStyles.tab('Felfedezés'),
+                    UnderseaStyles.tab(Strings.battle.tr),
+                    UnderseaStyles.tab(Strings.spying.tr),
                   ],
                 ),
               ),

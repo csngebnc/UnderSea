@@ -17,8 +17,6 @@ class _AttackPageState extends State<AttackPage> {
   var controller = Get.find<BattleDataController>();
   final ScrollController _scrollController = ScrollController();
 
-  //late Rx<PagedResultOfAttackableUserDto?> attackableUsersList;
-
   int? _selectedIndex;
   var sliderValues = List<int>.generate(3, (index) => 0);
   var mercenaryPrice = 0;
@@ -45,7 +43,7 @@ class _AttackPageState extends State<AttackPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (firstPage)
+    if (firstPage) {
       return UnderseaStyles.tabSkeleton(
         buttonText: Strings.proceed,
         isDisabled: _selectedIndex == null ? true : false,
@@ -126,11 +124,12 @@ class _AttackPageState extends State<AttackPage> {
               });
         }),
       );
-    else
+    } else {
       return AttackTabBar(() {
         setState(() {
           firstPage = true;
         });
       });
+    }
   }
 }

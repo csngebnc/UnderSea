@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/attackable_user_dto.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/buy_unit_dto.dart';
@@ -124,8 +125,9 @@ class BattleDataController extends GetxController {
         getAttackableUsers();
         getUnitTypes();
         getHistory();
-      } else
+      } else {
         log('$response');
+      }
     } catch (error) {
       log('$error');
     }
@@ -135,13 +137,12 @@ class BattleDataController extends GetxController {
     try {
       final response = await _battleDataProvider.sendSpies(spyData.toJson());
       if (response.statusCode == 200) {
-        UnderseaStyles.snackbar('Sikeresen elküldted a felfedezőid!',
-            'Az egységeidet elküldted felfedezésre');
+        UnderseaStyles.snackbar(
+            Strings.send_spies_title.tr, Strings.send_spies_body.tr);
         spyingHistory = Rx(null);
         spyLogPageNumber.value = 1;
         alreadyDownloadedSpyLogPageNumber.value = 0;
         spyLogsList.clear();
-        //spyLogsList.value.clear();
         getAllUnits();
         getSpies();
         getSpyingHistory();
@@ -155,8 +156,9 @@ class BattleDataController extends GetxController {
     try {
       if (loggedAttacks.value != null &&
           loggedAttacks.value!.allResultsCount <=
-              alreadyDownloadedAttackLogPageNumber.value * pageSize.value)
+              alreadyDownloadedAttackLogPageNumber.value * pageSize.value) {
         return;
+      }
       final response = await _battleDataProvider.getHistory(
           pageSize.value, attackLogPageNumber.value);
       if (response.statusCode == 200) {
@@ -238,7 +240,7 @@ class BattleDataController extends GetxController {
         getUnitTypes();
         getSpies();
         UnderseaStyles.snackbar(
-            'Sikeres vásárlás', 'Új egységeid besorolásra kerültek');
+            Strings.successful_purchase.tr, Strings.new_units.tr);
       }
     } catch (error) {
       log('$error');

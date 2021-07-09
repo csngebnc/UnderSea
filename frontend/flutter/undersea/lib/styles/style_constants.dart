@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/lang/strings.dart';
+import 'package:undersea/models/fight_outcome.dart';
 import 'package:undersea/views/leaderboard.dart';
 
 import 'disablable_elevated_button.dart';
@@ -335,7 +336,11 @@ class UnderseaStyles {
     );
   }
 
-  static const outcomes = {0: 'Még nem ismert', 1: 'Sikeres', 2: 'Sikertelen'};
+  static var outcomeMap = {
+    FightOutcome.NotPlayedYet: Strings.in_progress.tr,
+    FightOutcome.CurrentUser: Strings.victory.tr,
+    FightOutcome.OtherUser: Strings.defeat.tr
+  };
 
   static Widget imageIcon(String name,
       {String additional = '@3x', Color? color, double? size}) {

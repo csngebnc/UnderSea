@@ -29,7 +29,7 @@ class ExpandedMenu extends StatelessWidget {
           element.count,
           isSpy ? spiesCount! : actualSoldierMax));
     });
-    return new Row(mainAxisAlignment: MainAxisAlignment.center, children: list);
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: list);
   }
 
   List<Widget> _enumerateBuildings(List<BuildingInfoDto> buildingDtos) {
@@ -73,8 +73,9 @@ class ExpandedMenu extends StatelessWidget {
             children: [..._enumerateBuildings(countryData.buildings!)],
           )
         ]);
-      } else
+      } else {
         return Expanded(child: Container());
+      }
     });
   }
 }

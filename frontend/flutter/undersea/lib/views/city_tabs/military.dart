@@ -38,16 +38,17 @@ class _MilitaryTabState extends State<Military> {
           var list = <BuyUnitDetailsDto>[];
 
           for (int i = 0; i < soldierList.value.length; i++) {
-            if (buyList[i] != 0)
+            if (buyList[i] != 0) {
               list.add(BuyUnitDetailsDto(
                   unitId: soldierList.value[i].id, count: buyList[i]));
+            }
           }
           controller.buyUnits(BuyUnitDto(units: list));
         },
         list: ListView.builder(
             itemCount: count,
             itemBuilder: (BuildContext context, int i) {
-              if (i == 0)
+              if (i == 0) {
                 return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -55,10 +56,13 @@ class _MilitaryTabState extends State<Military> {
                           Strings.military_manual_hint.tr),
                       SizedBox(height: 25)
                     ]);
-              if (i > soldierList.value.length * 2 - 1)
+              }
+              if (i > soldierList.value.length * 2 - 1) {
                 return SizedBox(height: 100);
-              if (i.isEven && i < soldierList.value.length * 2)
+              }
+              if (i.isEven && i < soldierList.value.length * 2) {
                 return UnderseaStyles.divider();
+              }
 
               return GetBuilder<BattleDataController>(builder: (controller) {
                 final allUnits = controller.allUnitsInfo.value;
@@ -95,8 +99,9 @@ class _MilitaryTabState extends State<Military> {
     controller.allUnitsInfo.value.forEach((element) {
       allUnitsCount += element.count;
     });
-    if (countryData!.maxUnitCount < allUnitsCount + unitsToBeBought)
+    if (countryData!.maxUnitCount < allUnitsCount + unitsToBeBought) {
       return false;
+    }
 
     return areResourcesEnough;
   }

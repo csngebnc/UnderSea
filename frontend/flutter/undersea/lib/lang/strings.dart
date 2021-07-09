@@ -59,4 +59,17 @@ class Strings {
   static const battle = 'battle';
   static const spying = 'spying';
   static const spying_second_step = 'spying_second_step';
+  static const spy = 'spy';
+  static const send = 'send';
+  static const in_progress = 'in_progress';
+  static const victory = 'victory';
+  static const defeat = 'defeat';
+  static const defense_points = 'defense_points';
+  static const send_spies_title = 'send_spies_title';
+
+  static const send_spies_body = 'send_spies_body';
+  static const successful_purchase = 'successful_purchase';
+  static const new_units = 'new_units';
+  static const new_building = 'new_building';
+  static const new_upgrade = 'new_upgrade';
 }

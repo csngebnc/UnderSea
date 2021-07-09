@@ -28,7 +28,7 @@ class _SpyingTabState extends State<SpyingTab> {
   Widget build(BuildContext context) {
     return GetBuilder<BattleDataController>(builder: (controller) {
       return UnderseaStyles.tabSkeleton(
-          buttonText: 'Küldés!',
+          buttonText: Strings.send.tr,
           isDisabled: !_canAttack(),
           onButtonPressed: () {
             controller.sendSpies(SendSpyDto(
@@ -63,7 +63,6 @@ class _SpyingTabState extends State<SpyingTab> {
                 alignment: Alignment.centerLeft,
                 child: UnderseaStyles.infoPanel(
                     Strings.second_step.tr, Strings.spying_second_step.tr,
-                    //'Állítsd be, hány felfedezőt szeretnél küldeni:',
                     padding: EdgeInsets.fromLTRB(20, 10, 0, 0)),
               ),
               SizedBox(
@@ -81,7 +80,7 @@ class _SpyingTabState extends State<SpyingTab> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Felfedező',
+                    Text(Strings.spy.tr,
                         style: UnderseaStyles.listBold
                             .copyWith(height: 1.2, fontSize: 22)),
                     SizedBox(height: 5),
@@ -96,12 +95,7 @@ class _SpyingTabState extends State<SpyingTab> {
                         value: spyNumber.toDouble(),
                         onChanged: (newValue) {
                           setState(() {
-                            //var amountBeforeChange = spyNumber;
                             spyNumber = newValue.round();
-                            /*mercenaryPrice = (mercenaryPrice +
-                                  newValue -
-                                  amountBeforeChange * spyPrice)
-                              .toInt();*/
                           });
                         },
                         min: 0,

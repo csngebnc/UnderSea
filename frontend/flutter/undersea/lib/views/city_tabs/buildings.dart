@@ -43,10 +43,11 @@ class _BuildingsTabState extends State<Buildings> {
         list: ListView.builder(
             itemCount: buildingList.value.length + 2,
             itemBuilder: (BuildContext context, int i) {
-              if (i == 0)
+              if (i == 0) {
                 return UnderseaStyles.infoPanel(
                     Strings.buildings_manual_title.tr,
                     Strings.buildings_manual_hint.tr);
+              }
               if (i > buildingList.value.length) return SizedBox(height: 100);
 
               return GetBuilder<BuildingDataController>(builder: (controller) {
@@ -58,8 +59,9 @@ class _BuildingsTabState extends State<Buildings> {
 
   bool _canStartBuilding() {
     if (_selectedIndex == null) return false;
-    if (buildingList.value.any((element) => element.underConstruction))
+    if (buildingList.value.any((element) => element.underConstruction)) {
       return false;
+    }
     var materials = buildingList.value[_selectedIndex!].requiredMaterials ??
         <MaterialDto>[];
     for (int i = 0; i < materials.length; i++) {
@@ -99,10 +101,11 @@ class _BuildingsTabState extends State<Buildings> {
     return ListTile(
         onTap: () {
           setState(() {
-            if ((index - 1) != _selectedIndex)
+            if ((index - 1) != _selectedIndex) {
               _selectedIndex = index - 1;
-            else
+            } else {
               _selectedIndex = null;
+            }
           });
         },
         title: Padding(
@@ -143,8 +146,7 @@ class _BuildingsTabState extends State<Buildings> {
                           ? Padding(
                               padding: EdgeInsets.all(10),
                               child: Text(
-                                'épül',
-                                //Strings.under_construction.tr,
+                                Strings.under_construction.tr,
                                 style: TextStyle(
                                     color: UnderseaStyles.underseaLogoColor,
                                     fontSize: 12),
