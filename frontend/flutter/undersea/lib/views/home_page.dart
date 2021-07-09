@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                         child: Container(
                             width: 300,
-                            height: 350,
+                            height: 300,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -117,6 +117,7 @@ class _HomePageState extends State<HomePage> {
                                     UnderseaStyles
                                         .randomEventImageMap[rng.nextInt(9)],
                                     width: 150,
+                                    height: 150,
                                   ),
                                 ),
                                 SizedBox(height: 15),
