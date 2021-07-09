@@ -13,34 +13,18 @@
       <div class="stack align-center">
         <ul *ngIf="!(loading$ | async)" class="item-container">
           <li *ngFor="let upgrade of upgrades" class="non-styled-list-item">
-            <button
-              type="button"
-              class="item-btn pos-rel"
-              (click)="setUpgrade(upgrade.id)"
-              [disabled]="upgrade.doesExist || upgrade.isUnderConstruction"
-            >
-              <span *ngIf="upgrade.doesExist" class="dot overlay"
-                >&#x2714;</span
-              >
-              <span
-                *ngIf="upgrade.isUnderConstruction"
-                class="remaining-text overlay"
-                >még {{ upgrade.remainingTime }} kör</span
-              >
-              <upgrade-details
-                class="item item-sm stack align-center"
-                [upgrade]="upgrade"
-              ></upgrade-details>
+            <button type="button" class="item-btn pos-rel" (click)="setUpgrade(upgrade.id)"
+              [disabled]="upgrade.doesExist || upgrade.isUnderConstruction">
+              <span *ngIf="upgrade.doesExist" class="dot overlay">&#x2714;</span>
+              <span *ngIf="upgrade.isUnderConstruction" class="remaining-text overlay">még {{ upgrade.remainingTime }}
+                kör</span>
+              <upgrade-details class="item item-sm stack align-center" [upgrade]="upgrade"></upgrade-details>
             </button>
           </li>
         </ul>
         <div class="divider"></div>
-        <button
-          type="submit"
-          [disabled]="!selectedUpgrade || isResearching"
-          class="gradient-button mt-2"
-          (click)="onBuy()"
-        >
+        <button type="submit" [disabled]="!selectedUpgrade || isResearching" class="gradient-button mt-2"
+          (click)="onBuy()">
           {{ isResearching ? "Folyamatban..." : "Megveszem" }}
         </button>
       </div>

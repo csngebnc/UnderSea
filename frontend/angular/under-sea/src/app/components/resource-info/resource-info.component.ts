@@ -11,7 +11,7 @@ export class ResourceInfoComponent implements OnInit {
   @Input() perRound?: number;
   @Input() underConstruction?: number;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

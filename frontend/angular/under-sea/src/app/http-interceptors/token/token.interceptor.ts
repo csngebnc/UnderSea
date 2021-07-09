@@ -15,7 +15,7 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(
     private tokenService: TokenService,
     private authService: AuthenticationService
-  ) {}
+  ) { }
 
   intercept(
     request: HttpRequest<unknown>,
@@ -41,8 +41,8 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(reqWithToken);
   }
 
-  private isUrlOnWhiteList(url: string, whitelist: Array<string>): boolean {
-    return whitelist.some((path) =>
+  private isUrlOnWhiteList(url: string, wl: Array<string>): boolean {
+    return wl.some((path) =>
       url.toLowerCase().includes(path.toLowerCase())
     );
   }

@@ -15,18 +15,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(
     private tokenService: TokenService,
     private autService: AuthenticationService
-  ) {}
+  ) { }
 
   canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
   ): boolean {
     return this.validate();
   }
 
   canActivateChild(
-    childRoute: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
   ): boolean {
     return this.validate();
   }

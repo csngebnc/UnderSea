@@ -8,9 +8,9 @@ describe('UpgradeDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UpgradeDetailsComponent ]
+      declarations: [UpgradeDetailsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

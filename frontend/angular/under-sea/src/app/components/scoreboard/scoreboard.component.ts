@@ -22,7 +22,7 @@ export class ScoreboardComponent implements OnInit {
   @Select(LoadingState.isLoading)
   loading$: Observable<boolean>;
 
-  constructor(private userService: UserService, private store: Store) {}
+  constructor(private userService: UserService, private store: Store) { }
 
   ngOnInit(): void {
     this.initScoreBoard();
@@ -40,8 +40,8 @@ export class ScoreboardComponent implements OnInit {
   }
 
   onFilter(s: string): void {
-    if (s) this.filter = s;
-    else this.filter = undefined;
+    if (s) { this.filter = s; }
+    else { this.filter = undefined; }
     this.scoreboard.pageNumber = 1;
     this.initScoreBoard();
   }

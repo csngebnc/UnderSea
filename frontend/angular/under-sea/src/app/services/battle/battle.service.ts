@@ -16,13 +16,12 @@ import { PagedBattles } from 'src/app/models/paged-battles.model';
 import { PagedList } from 'src/app/models/paged-list.model';
 import { AttackerUnit } from 'src/app/models/attacker-unit.model';
 import { PagedSpyReport } from 'src/app/models/paged-spy-report.model';
-import { count } from 'console';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BattleService {
-  constructor(private battleService: bService) {}
+  constructor(private battleService: bService) { }
 
   getUnits(): Observable<Array<UnitDetails>> {
     return this.battleService.units().pipe(
@@ -57,7 +56,7 @@ export class BattleService {
   getBattles(pageNumber: number): Observable<PagedBattles> {
     return this.battleService.history(10, pageNumber).pipe(
       map((r: PagedResultOfLoggedAttackDto) => {
-        let result: PagedBattles = {
+        const result: PagedBattles = {
           battles: [],
           pageNumber: 1,
           pageSize: 0,
@@ -75,7 +74,7 @@ export class BattleService {
           result.battles.push({
             target: b.attackedCountryName,
             result: b.outcome,
-            units: units,
+            units
           });
         });
 
@@ -123,7 +122,7 @@ export class BattleService {
   }
 
   attack(id: number, units: Array<AttackUnitDto>): Observable<any> {
-    return this.battleService.attack({ attackedCountryId: id, units: units });
+    return this.battleService.attack({ attackedCountryId: id, units });
   }
 
   buyUnits(units: BuyUnitDto): Observable<any> {

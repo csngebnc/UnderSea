@@ -51,9 +51,9 @@ export class RegisterComponent implements OnInit {
     private authService: AuthenticationService,
     private tokenService: TokenService,
     private router: Router
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit(): void {
     const rf = this.registerForm;

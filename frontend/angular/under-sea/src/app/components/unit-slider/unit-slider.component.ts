@@ -10,11 +10,11 @@ import { AttackUnitDto } from 'src/app/services/generated-code/generated-api-cod
 export class UnitSliderComponent implements OnInit {
   @Input() unit: AttackerUnit;
   @Output() setUnit = new EventEmitter<AttackUnitDto>();
-  selectedCount: number = 0;
+  selectedCount = 0;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   setUnitCount(id: number, count: string): void {
     this.setUnit.emit({ unitId: id, count: parseInt(count) });

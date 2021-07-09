@@ -10,7 +10,7 @@ import { debounce } from 'lodash';
 export class ListComponent implements OnInit {
   @Input() list: Array<UserListItem>;
   @Input() clickable?: boolean;
-  @Input() defaultValue: string = '';
+  @Input() defaultValue = '';
   @Output() selectTarget = new EventEmitter<number>();
   @Output() filter = new EventEmitter<string>();
   selectedTargetId: number | null = null;
@@ -19,7 +19,7 @@ export class ListComponent implements OnInit {
     this.search = debounce(this.search, 1000);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSelect(id: number): void {
     this.selectedTargetId = id;
@@ -28,6 +28,6 @@ export class ListComponent implements OnInit {
 
   search(text: string): void {
     const trimmed = text.trim();
-    if (trimmed.length >= 1) this.filter.emit(text);
+    if (trimmed.length >= 1) { this.filter.emit(text); }
   }
 }

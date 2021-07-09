@@ -11,9 +11,9 @@ export class PagerButtonsComponent implements OnInit {
   @Input() allResultsCount: number;
   @Output() switchPage = new EventEmitter<number>();
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onClick(page: number): void {
     this.switchPage.emit(page);

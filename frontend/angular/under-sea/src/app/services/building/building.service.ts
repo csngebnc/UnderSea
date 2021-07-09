@@ -13,7 +13,7 @@ import { Effect } from 'src/app/models/effect.model';
   providedIn: 'root',
 })
 export class BuildingService {
-  constructor(private buildingService: bService) {}
+  constructor(private buildingService: bService) { }
 
   getBuildings(): Observable<Array<BuildingDetails>> {
     return this.buildingService.userBuildings().pipe(
@@ -38,7 +38,7 @@ export class BuildingService {
             name: b.name,
             price: materials,
             underConstruction: b.underConstruction,
-            effects: effects,
+            effects,
             count: b.count,
           });
         });

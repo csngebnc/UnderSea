@@ -9,7 +9,7 @@ import { BuildingDetails } from 'src/app/models/building-details.model';
 export class BuildingDetailsComponent implements OnInit {
   @Input() building: BuildingDetails;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }
