@@ -42,7 +42,7 @@ class AttackTabBar extends StatelessWidget {
           body: TabBarView(
             children: [
               AttackingTab(onButtonPressed: onButtonPressed),
-              SpyingTab(onButtonPressed: onButtonPressed)
+              SpyingTab(onButtonPressed: onButtonPressed),
             ],
           ),
         ),

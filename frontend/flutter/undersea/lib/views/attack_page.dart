@@ -6,7 +6,8 @@ import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/attackable_user_dto.dart';
 
 import 'package:undersea/styles/style_constants.dart';
-import 'package:undersea/views/attack_tabs/attack_tab_bar.dart';
+
+import 'attack_tabs/attack_tab_bar.dart';
 
 class AttackPage extends StatefulWidget {
   @override
