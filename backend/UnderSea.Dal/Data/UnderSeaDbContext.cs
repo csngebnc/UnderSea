@@ -42,6 +42,9 @@ namespace UnderSea.Dal.Data
         public DbSet<UnitMaterial> UnitMaterials { get; set; }
         public DbSet<CountryMaterial> CountryMaterials { get; set; }
         public DbSet<UnitLevel> UnitLevels { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<EventEffect> EventEffects { get; set; }
+        public DbSet<CountryEvent> CountryEvents { get; set; }
 
         public UnderSeaDbContext(DbContextOptions options) : base(options)
         {
@@ -63,6 +66,11 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<Attack>()
                 .HasOne(a => a.AttackerCountry)
                 .WithMany(c => c.Attacks)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Country>()
+                .HasMany(c => c.CountryEvents)
+                .WithOne(e => e.Country)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Attack>()

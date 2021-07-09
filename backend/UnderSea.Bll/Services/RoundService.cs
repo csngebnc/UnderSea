@@ -27,6 +27,20 @@ namespace UnderSea.Bll.Services
             _hubService = hubService;
         }
 
+        public void RemovePreviousRoundEvents(ICollection<Country> countries)
+        {
+            foreach (var country in countries)
+            {
+                foreach (var countryEvent in country.CountryEvents)
+                {
+                    foreach (var effect in countryEvent.Event.EventEffects)
+                    {
+                        effect.Effect.RemoveEffect(country);
+                    }
+                }
+            }
+        }
+
         public void PayMaterial(ICollection<Country> countries)
         {
             foreach(var country in countries)
@@ -162,7 +176,7 @@ namespace UnderSea.Bll.Services
 
                     foreach (var unit in attackUnits)
                     {
-                        attackPoints += unit.Unit.UnitLevels.SingleOrDefault(ul => ul.Level == unit.GetLevel()).AttackPoint* unit.Count;
+                        attackPoints += (unit.Unit.UnitLevels.SingleOrDefault(ul => ul.Level == unit.GetLevel()).AttackPoint + attackerCountry.FightPoint.BonusAttackPoint)* unit.Count;
                     }
 
                     foreach (var unit in defenseUnits)
@@ -334,6 +348,29 @@ namespace UnderSea.Bll.Services
             }
         }
 
+        public void GenerateCountryEvents(ICollection<Country> countries, List<Event> events, World world)
+        {
+            var random = new Random();
+
+            foreach (var country in countries)
+            {
+                var randomNumber = random.Next(0, 10);
+                if(randomNumber == 5)
+                {
+                    var eventNumber = random.Next(0, events.Count);
+                    country.CountryEvents.Add(new Model.Models.Joins.CountryEvent
+                    {
+                        CountryId = country.Id,
+                        EventId = events[eventNumber].Id
+                    });
+                    foreach (var eventEffect in events[eventNumber].EventEffects)
+                    {
+                        eventEffect.Effect.ApplyEffect(country);
+                    }
+                }
+            }
+        }
+
         public async Task NextRound()
         {
             var world = await _context.Worlds.FirstOrDefaultAsync();
@@ -370,6 +407,10 @@ namespace UnderSea.Bll.Services
                                                             .ThenInclude(e => e.BuildingEffects)
                                                                 .ThenInclude(e => e.Effect)
                                                     .Include(e => e.Owner)
+                                                    .Include(c => c.CountryEvents)
+                                                        .ThenInclude(ce => ce.Event)
+                                                            .ThenInclude(e => e.EventEffects)
+                                                                .ThenInclude(ee => ee.Effect)
                                                     .ToListAsync();
 
             var spyreports = await _context.SpyReports.Where(sr => sr.Round == world.Round)
@@ -381,10 +422,17 @@ namespace UnderSea.Bll.Services
                         .ThenInclude(cu => cu.Unit)
                 .ToListAsync();
 
+            var events = await _context.Events
+                .Include(e => e.EventEffects)
+                    .ThenInclude(ee => ee.Effect)
+                .ToListAsync();
+
             var generalId= (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
 
             using (var transaction = _context.Database.BeginTransaction())
             {
+                RemovePreviousRoundEvents(countries);
+
                 PayMaterial(countries);
 
                 PayMercenaryAndFeedSoldiers(countries);
@@ -400,6 +448,8 @@ namespace UnderSea.Bll.Services
                 await ReturnAttackUnits(countries, world);
 
                 CalculatePoints(countries);
+
+                GenerateCountryEvents(countries, events, world);
 
                 world.Round++;
 
