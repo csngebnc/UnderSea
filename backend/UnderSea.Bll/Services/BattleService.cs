@@ -423,17 +423,18 @@ namespace UnderSea.Bll.Services
                                 BattlesPlayed = cunit.BattlesPlayed,
                                 Count = cunit.Count
                             });
-                            cunit.Count = 0;
+                            attackerCountry.CountryUnits.FirstOrDefault(cu => cu.UnitId == cunit.UnitId && cu.BattlesPlayed == cunit.BattlesPlayed).Count = 0;
                         }
                         else
                         {
-                            attackUnits.Add(new AttackUnit
+                            var newAttackUnit = new AttackUnit
                             {
                                 UnitId = cunit.UnitId,
                                 BattlesPlayed = cunit.BattlesPlayed,
-                                Count = unit.Count
-                            });
-                            cunit.Count -= unit.Count;
+                                Count = (unit.Count - attackUnits.Sum(a => a.Count))
+                            };
+                            attackUnits.Add(newAttackUnit);
+                            attackerCountry.CountryUnits.FirstOrDefault(cu => cu.UnitId == cunit.UnitId && cu.BattlesPlayed == cunit.BattlesPlayed).Count -= newAttackUnit.Count;
                             break;
                         }
                     }

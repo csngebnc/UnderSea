@@ -173,8 +173,8 @@ namespace UnderSea.Bll.Services
                     attackPoints *= attackerCountry.FightPoint.AttackPointMultiplier * (1 - new Random().Next(-5, 5) / 100);
                     defensePoints *= attack.DefenderCountry.FightPoint.DefensePointMultiplier;
 
-                    var attackerGenerals = attackUnits.SingleOrDefault(u => u.UnitId == generalId).Count;
-                    var defenderGenerals = defenseUnits.SingleOrDefault(u => u.UnitId == generalId)?.Count ?? 0;
+                    var attackerGenerals = attackUnits.FirstOrDefault(u => u.UnitId == generalId).Count;
+                    var defenderGenerals = defenseUnits.FirstOrDefault(u => u.UnitId == generalId)?.Count ?? 0;
 
                     attackPoints *= (1 + (attackerGenerals - 1) * UnitValueConstants.GeneralBonus);
                     defensePoints *= (1 + defenderGenerals * UnitValueConstants.GeneralBonus);
@@ -272,12 +272,15 @@ namespace UnderSea.Bll.Services
                         }
                         else
                         {
+                            
                             attackerCountry.CountryUnits.Add(new CountryUnit
                             {
                                 CountryId = attackerCountry.Id,
                                 UnitId = attackUnit.UnitId,
-                                Count = attackUnit.Count
+                                Count = attackUnit.Count,
+                                BattlesPlayed = attackUnit.BattlesPlayed
                             });
+                            
                         }
                     }
                 }
