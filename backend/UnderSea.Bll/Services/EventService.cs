@@ -12,7 +12,7 @@ using UnderSea.Dal.Data;
 
 namespace UnderSea.Bll.Services
 {
-    public class EventService
+    public class EventService : IEventService
     {
         private readonly UnderSeaDbContext _context;
         private readonly IIdentityService _identityService;
