@@ -48,6 +48,7 @@ import { LoadingInterceptor } from './http-interceptors/loading/loading.intercep
 import { HasbuildingPipe } from './pipes/hasbuilding/hasbuilding.pipe';
 import { EventsComponent } from './components/events/events.component';
 import { EventNotificationComponent } from './components/event-notification/event-notification.component';
+import { EventnotificationPipe } from './pipes/eventnotification/eventnotification.pipe';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import { EventNotificationComponent } from './components/event-notification/even
     HasbuildingPipe,
     EventsComponent,
     EventNotificationComponent,
+    EventnotificationPipe,
   ],
   imports: [
     BrowserModule,
@@ -106,9 +108,10 @@ import { EventNotificationComponent } from './components/event-notification/even
     generated.BuildingService,
     generated.CountryService,
     generated.RoundService,
+    generated.EventService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

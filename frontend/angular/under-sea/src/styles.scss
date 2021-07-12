@@ -41,7 +41,7 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 
   .tooltiptext {
     visibility: hidden;
-    width: 150px;
+    min-width: 150px;
     background-color: $dark-navy;
     color: $white;
     text-align: center;

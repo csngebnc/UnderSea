@@ -21,6 +21,8 @@ export class MainComponent implements OnInit {
   @Select(UserDataState.userData)
   userData: Observable<UserData>;
 
+  closedNotification = false;
+
   constructor(private signalr: SignalRService, private store: Store) {
     this.signalr.startConnection();
     this.signalr.hubConnection.on('SendMessage', () => {
@@ -35,5 +37,9 @@ export class MainComponent implements OnInit {
   private loadResources(): void {
     this.store.dispatch(GetResources);
     this.store.dispatch(GetUserData);
+  }
+
+  onNotificationClose(): void {
+    this.closedNotification = true;
   }
 }

@@ -24,13 +24,13 @@ export class ExploreListComponent implements OnInit {
   noSuccess = FightOutcome.OtherUser;
   success = FightOutcome.CurrentUser;
 
+  @Select(LoadingState.isLoading)
+  loading$: Observable<boolean>;
+
   constructor(
     private battleService: BattleService,
     private toastr: ToastrService
   ) {}
-
-  @Select(LoadingState.isLoading)
-  loading$: Observable<boolean>;
 
   ngOnInit(): void {
     this.initExplorations();
