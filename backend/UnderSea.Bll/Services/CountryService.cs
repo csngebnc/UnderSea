@@ -73,7 +73,7 @@ namespace UnderSea.Bll.Services
                         Id = unit.Id,
                         Name = unit.Name,
                         ImageUrl = unit.ImageUrl,
-                        Count = country.CountryUnits.Where(u => u.UnitId == unit.Id).ToList().Sum(u => u.Count)
+                        Count = country.CountryUnits.Where(u => u.UnitId == unit.Id).Sum(u => u.Count)
                     };
                 }).ToList(),
                 Population = country.Population,
