@@ -208,7 +208,7 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .list-modal {
-  height: 584px;
+  height: 630px;
 }
 
 .attack-modal {
@@ -446,7 +446,7 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .h-list {
-  height: calc(100% - 51px);
+  height: calc(100% - 85px);
 }
 
 .h-100 {
@@ -542,7 +542,7 @@ body {
   background-repeat: no-repeat;
   overflow: hidden;
   animation-name: animatedBg;
-  animation-duration: 20s;
+  animation-duration: 30s;
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }

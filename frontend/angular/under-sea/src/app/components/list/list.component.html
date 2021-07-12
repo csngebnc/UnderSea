@@ -6,7 +6,7 @@
     <div class="list-item" [ngClass]="{ 'clickable-list-item': clickable }"
       (click)="clickable && onSelect(item.countryId)">
       <div class="d-flex">
-        <div *ngIf="item.placement" class="w-2r">{{ item.placement }}.</div>
+        <span *ngIf="item.placement" class="w-2r">{{ item.placement }}.</span>
         <span>{{ item.name }}</span>
       </div>
       <span *ngIf="item.score || item.score === 0">{{

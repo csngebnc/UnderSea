@@ -49,6 +49,8 @@ import { HasbuildingPipe } from './pipes/hasbuilding/hasbuilding.pipe';
 import { EventsComponent } from './components/events/events.component';
 import { EventNotificationComponent } from './components/event-notification/event-notification.component';
 import { EventnotificationPipe } from './pipes/eventnotification/eventnotification.pipe';
+import { RanklistComponent } from './components/ranklist/ranklist.component';
+import { WinnersComponent } from './components/winners/winners.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +85,8 @@ import { EventnotificationPipe } from './pipes/eventnotification/eventnotificati
     EventsComponent,
     EventNotificationComponent,
     EventnotificationPipe,
+    RanklistComponent,
+    WinnersComponent,
   ],
   imports: [
     BrowserModule,

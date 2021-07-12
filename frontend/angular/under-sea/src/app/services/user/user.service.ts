@@ -1,3 +1,5 @@
+import { WorldWinner } from './../../models/worldwinner.model';
+import { PagedWinners } from './../../models/paged-winners.model';
 import { Injectable } from '@angular/core';
 import {
   UserService as uService,
@@ -11,7 +13,7 @@ import { PagedList } from 'src/app/models/paged-list.model';
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private userService: uService) { }
+  constructor(private userService: uService) {}
 
   getScoreBoard(
     pageNumber: number,
@@ -40,6 +42,28 @@ export class UserService {
             })
           );
         }
+
+        return result;
+      })
+    );
+  }
+
+  getWinners(
+    pageNumber: number,
+    filter: string | undefined
+  ): Observable<PagedWinners> {
+    return this.userService.worldwinners(10, pageNumber, filter).pipe(
+      map((w) => {
+        const result: PagedWinners = {
+          pageSize: w.pageSize,
+          pageNumber: w.pageNumber,
+          allResultsCount: w.allResultsCount,
+          winners: [],
+        };
+
+        w.results.forEach((r) => {
+          result.winners.push(r as WorldWinner);
+        });
 
         return result;
       })
