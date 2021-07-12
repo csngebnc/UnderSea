@@ -12,11 +12,11 @@ export class UnitSliderComponent implements OnInit {
   @Output() setUnit = new EventEmitter<AttackUnitDto>();
   selectedCount = 0;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   setUnitCount(id: number, count: string): void {
-    this.setUnit.emit({ unitId: id, count: parseInt(count) });
+    this.setUnit.emit({ unitId: id, count: parseInt(count), level: 1 });
   }
 }

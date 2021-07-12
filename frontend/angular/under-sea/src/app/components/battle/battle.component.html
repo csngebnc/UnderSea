@@ -22,8 +22,11 @@
         <div class="d-flex to-flex-end">
           <div *ngFor="let unit of battle.units" class="pl-1 tooltip">
             {{ unit.count }} {{ unit.name }}
-            <span
-              class="tooltiptext">asfasfasfafsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</span>
+            <ul class="tooltiptext m-0 p-0">
+              <li *ngFor="let level of unit.levels" class="non-styled-list-item">
+                {{level.level}}. szint: {{level.count}} db
+              </li>
+            </ul>
           </div>
         </div>
       </div>

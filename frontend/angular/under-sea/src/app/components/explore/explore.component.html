@@ -15,7 +15,7 @@
               class="w-100 d-flex align-center to-center mt-1"></pager-buttons>
           </div>
         </div>
-        <div class="pl-2 w-50">
+        <div class="pl-2 w-50 h-100">
           <h3 class="modal-description mb-1">
             <strong>2. Állítsd be, hány felfedezőt küldesz:</strong>
           </h3>
@@ -26,12 +26,13 @@
           </div>
         </div>
       </div>
+      <div class="stack align-center">
+        <div class="divider mt-1"></div>
+        <button type="button" class="gradient-button mt-2" [disabled]="!selectedCount || !targetId" (click)="sendSpy()">
+          Felfedezem!
+        </button>
+      </div>
     </div>
-    <div class="stack align-center">
-      <div class="divider mt-1"></div>
-      <button type="button" class="gradient-button mt-2" [disabled]="!selectedCount || !targetId" (click)="sendSpy()">
-        Felfedezem!
-      </button>
-    </div>
+
   </div>
 </div>

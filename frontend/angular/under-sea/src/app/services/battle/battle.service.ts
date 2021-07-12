@@ -1,3 +1,4 @@
+import { UnitLevel } from './../../models/unit-level.model';
 import { Material } from './../../models/material.model';
 import { Injectable } from '@angular/core';
 import {
@@ -21,7 +22,7 @@ import { PagedSpyReport } from 'src/app/models/paged-spy-report.model';
   providedIn: 'root',
 })
 export class BattleService {
-  constructor(private battleService: bService) { }
+  constructor(private battleService: bService) {}
 
   getUnits(): Observable<Array<UnitDetails>> {
     return this.battleService.units().pipe(
@@ -36,12 +37,19 @@ export class BattleService {
               name: m.name,
             };
           });
+
+          const stats: Array<UnitLevel> = u.unitLevels.map((l) => {
+            return {
+              attackPoint: l.attackPoint,
+              defensePoint: l.defensePoint,
+              level: l.level,
+            };
+          });
           result.push({
             id: u.id,
             name: u.name,
             count: u.currentCount,
-            defense: u.defensePoint,
-            attack: u.attackPoint,
+            stats,
             mercenary: u.mercenaryPerRound,
             supply: u.supplyPerRound,
             price: materials,
@@ -69,12 +77,24 @@ export class BattleService {
         r.results.forEach((b) => {
           const units = [];
           b.units.forEach((u) => {
-            units.push({ name: u.name, count: u.count });
+            if (!units.find((unit) => unit.name === u.name)) {
+              units.push({ name: u.name, count: 0, levels: [] });
+            }
           });
+
+          b.units.forEach((u) => {
+            console.log(u.name, u.count);
+            const index = units.findIndex((unit) => unit.name === u.name);
+            if (index !== -1) {
+              units[index].count = u.count + units[index].count;
+              units[index].levels.push({ count: u.count, level: u.level });
+            }
+          });
+
           result.battles.push({
             target: b.attackedCountryName,
             result: b.outcome,
-            units
+            units,
           });
         });
 

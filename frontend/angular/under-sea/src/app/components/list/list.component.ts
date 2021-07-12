@@ -19,7 +19,7 @@ export class ListComponent implements OnInit {
     this.search = debounce(this.search, 1000);
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onSelect(id: number): void {
     this.selectedTargetId = id;
@@ -28,6 +28,8 @@ export class ListComponent implements OnInit {
 
   search(text: string): void {
     const trimmed = text.trim();
-    if (trimmed.length >= 1) { this.filter.emit(text); }
+    if (trimmed.length >= 1 || text.length === 0) {
+      this.filter.emit(text);
+    }
   }
 }

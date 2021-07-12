@@ -2,7 +2,8 @@
   <img [src]="unit.imageUrl" [alt]="unit.name" class="h-100" />
 </div>
 <div class="pl-1 stack to-center w-233px">
-  <label for="unit_count" class="modal-description w-100">{{ unit.name }}: {{ selectedCount }} példány</label>
+  <label for="unit_count" class="modal-description w-100">{{ unit.name }} {{unit.level}}. sz.: {{ selectedCount }}
+    példány</label>
   <input type="range" name="unit_count" min="0" [max]="unit.count" step="1" [(ngModel)]="selectedCount" class="slider"
     (change)="setUnitCount(unit.id, $event.target.value)" />
 </div>

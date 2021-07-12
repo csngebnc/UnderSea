@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: "Baloo";
-  src: url("./assets//fonts/Baloo-Regular.ttf") format("truetype");
+  src: url("./assets/fonts/Baloo-Regular.ttf") format("truetype");
 }
 
 @font-face {
@@ -366,6 +366,14 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   height: 14.45rem;
 }
 
+.h-attack {
+  height: calc(100% - 159px);
+}
+
+.h-attack-list {
+  height: calc(100% - 51px);
+}
+
 .d-flex {
   display: flex;
   flex-wrap: nowrap;
@@ -463,14 +471,6 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 
 .h-70 {
   height: 70%;
-}
-
-.h-attack {
-  height: calc(100% - 51px);
-}
-
-.h-attack-list {
-  height: calc(100% - 54px);
 }
 
 .p-1 {
