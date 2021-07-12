@@ -56,7 +56,7 @@ namespace UnderSea.Bll.Services
             return attackable_users;
         }
 
-        public async Task<IEnumerable<BattleUnitDto>> GetUserUnitsAsync()
+        public async Task<ICollection<BattleUnitDto>> GetUserUnitsAsync()
         {
             var country = await _context.Countries
                 .Include(c => c.CountryUnits)
@@ -64,16 +64,20 @@ namespace UnderSea.Bll.Services
 
             var units = await _context.Units.ToListAsync();
 
-            return units
-                .Where(unit => unit.Name != UnitNameConstants.Felfedezo)
-                .Select(unit =>
+            return country.CountryUnits
+                .Where(unit => unit.Unit.Name != UnitNameConstants.Felfedezo)
+                .ToList()
+                .GroupBy(ug => new { ug.UnitId, Level = ug.GetLevel() })
+                .Select(gb =>
                 {
+                    var defaultUnit = units.SingleOrDefault(du => du.Id == gb.Key.UnitId);
                     return new BattleUnitDto
                     {
-                        Id = unit.Id,
-                        Name = unit.Name,
-                        ImageUrl = unit.ImageUrl,
-                        Count = country.CountryUnits.SingleOrDefault(u => u.UnitId == unit.Id)?.Count ?? 0
+                        Id = gb.Key.UnitId,
+                        Name = defaultUnit.Name,
+                        Count = gb.Sum(uu => uu.Count),
+                        ImageUrl = defaultUnit.ImageUrl,
+                        Level = gb.Key.Level
                     };
                 }).ToList();
         }
@@ -86,39 +90,37 @@ namespace UnderSea.Bll.Services
                 .Include(c => c.World)
                 .SingleOrDefaultAsync(c => c.OwnerId == _identityService.GetCurrentUserId());
 
-            var units = (await _context.Units.ToListAsync()).Select(u =>
-            {
-                return new BattleUnitDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    ImageUrl = u.ImageUrl,
-                    Count = 0
-                };
-            }).ToList();
-
-            foreach (var unit in country.CountryUnits)
-            {
-                units.Where(u => u.Id == unit.UnitId).SingleOrDefault().Count += unit.Count;
-            }
+            var units = await this.GetUserUnitsAsync();
 
             var attackUnits = await _context.AttackUnits
                 .Include(a => a.Attack)
-                .Where(a => a.Attack.AttackRound == country.World.Round && 
+                .Where(a => a.Attack.AttackRound == country.World.Round &&
                     a.Attack.AttackerCountryId == country.Id)
                 .ToListAsync();
 
             foreach (var unit in attackUnits)
             {
-                units.Where(u => u.Id == unit.UnitId).SingleOrDefault().Count += unit.Count;
+                units.SingleOrDefault(u => u.Id == unit.UnitId && u.Level == unit.GetLevel()).Count += unit.Count;
             }
 
-            var spyCount = country.SentSpies
+            var spy = await _context.Units
+                .Include(s => s.UnitLevels)
+                .SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Felfedezo);
+
+            var spiesInCountry = country.CountryUnits.SingleOrDefault(u => u.UnitId == spy.Id)?.Count ?? 0;
+            var spiesNotInCountry = country.SentSpies
                 .Where(sr => sr.Round == country.World.Round && sr.WinnerId == null)
                 .Select(sr => sr.NumberOfSpies)
                 .Sum();
 
-            units.Where(u => u.Name == UnitNameConstants.Felfedezo).SingleOrDefault().Count += spyCount;
+            units.Add(new BattleUnitDto
+            {
+                Id = spy.Id,
+                Name = spy.Name,
+                Count = spiesInCountry + spiesNotInCountry,
+                ImageUrl = spy.ImageUrl,
+                Level = spy.UnitLevels.FirstOrDefault().Level
+            });
 
             return units;
         }
@@ -136,6 +138,7 @@ namespace UnderSea.Bll.Services
                                             .Include(a => a.DefenderCountry)
                                             .ToPagedList(data.PageSize, data.PageNumber);
 
+            var units = await _context.Units.ToListAsync();
             var result = new List<LoggedAttackDto>();
             foreach (var attack in attacks.Results)
             {
@@ -143,7 +146,20 @@ namespace UnderSea.Bll.Services
                     new LoggedAttackDto
                     {
                         AttackedCountryName = country.Name == attack.DefenderCountry.Name ? attack.AttackerCountry.Name : attack.DefenderCountry.Name,
-                        Units = _mapper.Map<ICollection<BattleUnitDto>>(attack.AttackUnits),
+                        Units = attack.AttackUnits
+                .GroupBy(ug => new { ug.UnitId, Level = ug.GetLevel() })
+                .Select(gb =>
+                {
+                    var defaultUnit = units.SingleOrDefault(du => du.Id == gb.Key.UnitId);
+                    return new BattleUnitDto
+                    {
+                        Id = gb.Key.UnitId,
+                        Name = defaultUnit.Name,
+                        Count = gb.Sum(uu => uu.Count),
+                        ImageUrl = defaultUnit.ImageUrl,
+                        Level = gb.Key.Level
+                    };
+                }).ToList(),
                         Outcome = attack.WinnerId == null ? Model.Enums.FightOutcome.NotPlayedYet :
                                     attack.WinnerId == _identityService.GetCurrentUserId() ?
                                                 Model.Enums.FightOutcome.CurrentUser : Model.Enums.FightOutcome.OtherUser
@@ -205,6 +221,7 @@ namespace UnderSea.Bll.Services
             return (await _context.Units
                 .Include(um => um.UnitMaterials)
                 .ThenInclude(m => m.Material)
+                .Include(u => u.UnitLevels)
                 .ToListAsync())
                 .Select(unit =>
                 {
@@ -217,8 +234,16 @@ namespace UnderSea.Bll.Services
                     {
                         Id = unit.Id,
                         Name = unit.Name,
-                        AttackPoint = unit.AttackPoint,
-                        DefensePoint = unit.DefensePoint,
+                        UnitLevels = unit.UnitLevels.Select(u =>
+                        {
+                            return new UnitLevelDto
+                            {
+                                AttackPoint = u.AttackPoint,
+                                DefensePoint = u.DefensePoint,
+                                MinimumBattles = u.MinimumBattles,
+                                Level = u.Level
+                            };
+                        }).ToList(),
                         MercenaryPerRound = unit.MercenaryPerRound,
                         SupplyPerRound = unit.SupplyPerRound,
                         RequiredMaterials = unit.UnitMaterials.Select(c =>
@@ -243,7 +268,9 @@ namespace UnderSea.Bll.Services
                 .Include(c => c.CountryUnits)
                 .FirstOrDefaultAsync();
 
-            var spyUnit = await _context.Units.SingleOrDefaultAsync(c => c.Name == UnitNameConstants.Felfedezo);
+            var spyUnit = await _context.Units
+                .Include(s => s.UnitLevels)
+                .SingleOrDefaultAsync(c => c.Name == UnitNameConstants.Felfedezo);
             var spies = country.CountryUnits.SingleOrDefault(cu => cu.UnitId == spyUnit.Id);
 
             return new BattleUnitDto
@@ -251,7 +278,8 @@ namespace UnderSea.Bll.Services
                 Id = spyUnit.Id,
                 Name = spyUnit.Name,
                 ImageUrl = spyUnit.ImageUrl,
-                Count = spies == null ? 0 : spies.Count
+                Count = spies == null ? 0 : spies.Count,
+                Level = spyUnit.UnitLevels.FirstOrDefault().Level
             };
         }
 
@@ -269,7 +297,7 @@ namespace UnderSea.Bll.Services
             {
                 var unit = await _context.Units
                     .Include(um => um.UnitMaterials)
-                    .ThenInclude(m => m.Material)
+                        .ThenInclude(m => m.Material)
                     .Where(c => c.Id == unitDto.UnitId)
                     .FirstOrDefaultAsync();
 
@@ -281,10 +309,10 @@ namespace UnderSea.Bll.Services
                 var unitSum = country.CountryUnits.Select(cu => cu.Count).Sum();
                 if (country.MaxUnitCount - unitSum - unitDto.Count < 0)
                 {
-                    throw new InvalidParameterException(nameof(country.MaxUnitCount),"Nem lehetséges ez a művelet: a maximális egység számánál nem lehet több a felhasználó egységeinek száma.");
+                    throw new InvalidParameterException(nameof(country.MaxUnitCount), "Nem lehetséges ez a művelet: a maximális egység számánál nem lehet több a felhasználó egységeinek száma.");
                 }
 
-                var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id)
+                var counit = await _context.CountryUnits.Where(c => c.CountryId == country.Id && c.UnitId == unit.Id && c.BattlesPlayed == 0)
                                                         .FirstOrDefaultAsync();
 
                 if (counit == null)
@@ -293,7 +321,8 @@ namespace UnderSea.Bll.Services
                     {
                         UnitId = unit.Id,
                         CountryId = country.Id,
-                        Count = unitDto.Count
+                        Count = unitDto.Count,
+                        BattlesPlayed = 0
                     };
                     _context.CountryUnits.Add(countryUnit);
                 }
@@ -333,7 +362,7 @@ namespace UnderSea.Bll.Services
 
             if (attackDto.Units.Any(au => au.UnitId == spyId))
             {
-                throw new InvalidParameterException("unit","Kémet nem küldhetsz támadni.");
+                throw new InvalidParameterException("unit", "Kémet nem küldhetsz támadni.");
             }
 
             var secondAttack = await _context.Attacks
@@ -343,22 +372,86 @@ namespace UnderSea.Bll.Services
 
             if (secondAttack)
             {
-                throw new InvalidParameterException("country","Nem támadható ugyanaz az ország egy körben!");
+                throw new InvalidParameterException("country", "Nem támadható ugyanaz az ország egy körben!");
             }
 
             if (attackerCountry.Id == attackDto.AttackedCountryId)
             {
-                throw new InvalidParameterException("country","Nem támadhatja meg saját magát az ország.");
+                throw new InvalidParameterException("country", "Nem támadhatja meg saját magát az ország.");
             }
 
-            attackDto.Units = attackDto.Units.GroupBy(u => u.UnitId)
+            attackDto.Units = attackDto.Units.GroupBy(u => new { u.UnitId, u.Level })
                 .Select(u => new AttackUnitDto
                 {
-                    UnitId = u.Key,
+                    UnitId = u.Key.UnitId,
+                    Level = u.Key.Level,
                     Count = u.Sum(uu => uu.Count)
                 }).ToList();
 
             await AttackLogic(attackerCountry, attackedCountry, attackDto);
+        }
+
+        public async Task AttackLogic(Country attackerCountry, Country attackedCountry, SendAttackDto attackDto)
+        {
+            var generalId = (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
+            if (!attackDto.Units.Any(u => u.UnitId == generalId))
+            {
+                throw new InvalidParameterException("unit", "A támadáshoz legalább egy hadvezért is küldeni kell.");
+            }
+
+            var attack = new Attack()
+            {
+                AttackerCountryId = attackerCountry.Id,
+                DefenderCountryId = attackedCountry.Id,
+                AttackRound = attackerCountry.World.Round,
+                AttackUnits = attackDto.Units.SelectMany(unit =>
+                {
+                    var cunits = attackerCountry.CountryUnits
+                    .Where(cu => cu.UnitId == unit.UnitId && cu.GetLevel() == unit.Level)
+                    .OrderByDescending(cu => cu.BattlesPlayed)
+                    .ToList();
+
+                    var attackUnits = new List<AttackUnit>();
+                    foreach (var cunit in cunits)
+                    {
+                        if (cunit.Count < (unit.Count - attackUnits.Sum(a => a.Count)))
+                        {
+                            attackUnits.Add(new AttackUnit
+                            {
+                                UnitId = cunit.UnitId,
+                                BattlesPlayed = cunit.BattlesPlayed,
+                                Count = cunit.Count
+                            });
+                            attackerCountry.CountryUnits.FirstOrDefault(cu => cu.UnitId == cunit.UnitId && cu.BattlesPlayed == cunit.BattlesPlayed).Count = 0;
+                        }
+                        else
+                        {
+                            var newAttackUnit = new AttackUnit
+                            {
+                                UnitId = cunit.UnitId,
+                                BattlesPlayed = cunit.BattlesPlayed,
+                                Count = (unit.Count - attackUnits.Sum(a => a.Count))
+                            };
+                            attackUnits.Add(newAttackUnit);
+                            attackerCountry.CountryUnits.FirstOrDefault(cu => cu.UnitId == cunit.UnitId && cu.BattlesPlayed == cunit.BattlesPlayed).Count -= newAttackUnit.Count;
+                            break;
+                        }
+                    }
+
+                    if((unit.Count != attackUnits.Sum(a => a.Count)))
+                    {
+                        throw new InvalidParameterException("unit","Nem áll rendelkezésre elég egység.");
+                    }
+
+                    return attackUnits;
+                }).ToList(),
+                WinnerId = null
+            };
+
+            _context.Attacks.Add(attack);
+
+            await _context.SaveChangesAsync();
+
         }
 
         public async Task SpyAsync(SendSpyDto spies)
@@ -392,46 +485,6 @@ namespace UnderSea.Bll.Services
 
             _context.SpyReports.Add(spyreport);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task AttackLogic(Country attackerCountry, Country attackedCountry, SendAttackDto attackDto)
-        {
-            var generalId = (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
-            if(!attackDto.Units.Any(u => u.UnitId == generalId))
-            {
-                throw new InvalidParameterException("unit","A támadáshoz legalább egy hadvezért is küldeni kell.");
-            }
-
-            var attack = new Attack()
-            {
-                AttackerCountryId = attackerCountry.Id,
-                DefenderCountryId = attackedCountry.Id,
-                AttackRound = attackerCountry.World.Round,
-                AttackUnits = attackDto.Units.Select(unit =>
-                {
-                    var attackUnit = new AttackUnit()
-                    {
-                        Count = unit.Count,
-                        UnitId = unit.UnitId
-                    };
-
-                    var cunit = attackerCountry.CountryUnits.FirstOrDefault(c => c.UnitId == unit.UnitId);
-                    if (cunit == null)
-                    {
-                        throw new InvalidParameterException("unit","Nincsen ilyen egysége az országnak.");
-                    }
-
-                    cunit.Count -= unit.Count;
-
-                    return attackUnit;
-                }).ToList(),
-                WinnerId = null
-            };
-
-            _context.Attacks.Add(attack);
-
-            await _context.SaveChangesAsync();
-
         }
 
         private async Task<Country> GetCountry()

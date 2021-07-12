@@ -41,6 +41,7 @@ namespace UnderSea.Dal.Data
         public DbSet<BuildingMaterial> BuildingMaterials { get; set; }
         public DbSet<UnitMaterial> UnitMaterials { get; set; }
         public DbSet<CountryMaterial> CountryMaterials { get; set; }
+        public DbSet<UnitLevel> UnitLevels { get; set; }
 
         public UnderSeaDbContext(DbContextOptions options) : base(options)
         {
@@ -78,8 +79,11 @@ namespace UnderSea.Dal.Data
             modelBuilder.Entity<CountryMaterial>()
                 .HasKey(c => new { c.CountryId, c.MaterialId });
 
+            modelBuilder.Entity<UnitLevel>()
+                .HasKey(ul => new { ul.UnitId, ul.Level });
+
             modelBuilder.Entity<BuildingEffect>().HasKey(be => new { be.BuildingId, be.EffectId });
-            modelBuilder.Entity<CountryUnit>().HasKey(cu => new { cu.CountryId, cu.UnitId });
+            modelBuilder.Entity<CountryUnit>().HasKey(cu => new { cu.CountryId, cu.UnitId, cu.BattlesPlayed });
             modelBuilder.Entity<CountryUpgrade>().HasKey(cu => new { cu.CountryId, cu.UpgradeId });
             modelBuilder.Entity<UpgradeEffect>().HasKey(ue => new { ue.EffectId, ue.UpgradeId });
 
@@ -129,6 +133,7 @@ namespace UnderSea.Dal.Data
             modelBuilder.ApplyConfiguration(new BuildingMaterialEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UnitEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UnitMaterialEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UnitLevelEntityConfiguration());
             //modelBuilder.ApplyConfiguration(new EffectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UpgradeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BuildingEffectEntityConfiguration());

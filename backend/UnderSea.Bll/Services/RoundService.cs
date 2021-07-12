@@ -162,19 +162,19 @@ namespace UnderSea.Bll.Services
 
                     foreach (var unit in attackUnits)
                     {
-                        attackPoints += unit.Unit.AttackPoint * unit.Count;
+                        attackPoints += unit.Unit.UnitLevels.SingleOrDefault(ul => ul.Level == unit.GetLevel()).AttackPoint* unit.Count;
                     }
 
                     foreach (var unit in defenseUnits)
                     {
-                        defensePoints += unit.Unit.DefensePoint * unit.Count;
+                        defensePoints += unit.Unit.UnitLevels.SingleOrDefault(ul => ul.Level == unit.GetLevel()).DefensePoint * unit.Count;
                     }
 
                     attackPoints *= attackerCountry.FightPoint.AttackPointMultiplier * (1 - new Random().Next(-5, 5) / 100);
                     defensePoints *= attack.DefenderCountry.FightPoint.DefensePointMultiplier;
 
-                    var attackerGenerals = attackUnits.SingleOrDefault(u => u.UnitId == generalId).Count;
-                    var defenderGenerals = defenseUnits.SingleOrDefault(u => u.UnitId == generalId)?.Count ?? 0;
+                    var attackerGenerals = attackUnits.FirstOrDefault(u => u.UnitId == generalId).Count;
+                    var defenderGenerals = defenseUnits.FirstOrDefault(u => u.UnitId == generalId)?.Count ?? 0;
 
                     attackPoints *= (1 + (attackerGenerals - 1) * UnitValueConstants.GeneralBonus);
                     defensePoints *= (1 + defenderGenerals * UnitValueConstants.GeneralBonus);
@@ -234,7 +234,7 @@ namespace UnderSea.Bll.Services
                         spyreport.DefensePoints = 0;
                         foreach (var unit in defenseUnits)
                         {
-                            spyreport.DefensePoints += unit.Unit.DefensePoint * unit.Count;
+                            spyreport.DefensePoints += unit.Unit.UnitLevels.SingleOrDefault(ul => ul.Level == unit.GetLevel()).DefensePoint * unit.Count;
                         }
 
                         var defenderGenerals = defenseUnits.SingleOrDefault(u => u.UnitId == generalId)?.Count ?? 0;
@@ -261,8 +261,27 @@ namespace UnderSea.Bll.Services
 
                     foreach(var attackUnit in attackUnits)
                     {
-                        var unit = attackerCountry.CountryUnits.Where(ac => ac.UnitId == attackUnit.UnitId).FirstOrDefault();
-                        unit.Count += attackUnit.Count;
+                        if(attackUnit.BattlesPlayed < attackUnit.Unit.UnitLevels.Max(ul => ul.MinimumBattles))
+                        {
+                            attackUnit.BattlesPlayed++;
+                        }
+                        if(attackerCountry.CountryUnits.Any(cu => cu.UnitId == attackUnit.UnitId && cu.BattlesPlayed == attackUnit.BattlesPlayed))
+                        {
+                            var unit = attackerCountry.CountryUnits.SingleOrDefault(cu => cu.UnitId == attackUnit.UnitId && cu.BattlesPlayed == attackUnit.BattlesPlayed);
+                            unit.Count += attackUnit.Count;
+                        }
+                        else
+                        {
+                            
+                            attackerCountry.CountryUnits.Add(new CountryUnit
+                            {
+                                CountryId = attackerCountry.Id,
+                                UnitId = attackUnit.UnitId,
+                                Count = attackUnit.Count,
+                                BattlesPlayed = attackUnit.BattlesPlayed
+                            });
+                            
+                        }
                     }
                 }
             }
@@ -331,6 +350,7 @@ namespace UnderSea.Bll.Services
                                                     .Include(e => e.Attacks)
                                                         .ThenInclude(e => e.AttackUnits)
                                                             .ThenInclude(e => e.Unit)
+                                                                .ThenInclude(u => u.UnitLevels)
                                                     .Include(e => e.Attacks)
                                                         .ThenInclude(e => e.DefenderCountry)
                                                             .ThenInclude(e => e.FightPoint)

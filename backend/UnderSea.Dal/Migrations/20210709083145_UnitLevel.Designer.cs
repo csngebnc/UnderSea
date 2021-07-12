@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UnderSea.Dal.Data;
 
 namespace UnderSea.Dal.Migrations
 {
     [DbContext(typeof(UnderSeaDbContext))]
-    partial class UnderSeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210709083145_UnitLevel")]
+    partial class UnitLevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -513,7 +515,7 @@ namespace UnderSea.Dal.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.HasKey("CountryId", "UnitId", "BattlesPlayed");
+                    b.HasKey("CountryId", "UnitId");
 
                     b.HasIndex("UnitId");
 

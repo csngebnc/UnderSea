@@ -1154,6 +1154,7 @@ export interface AttackableUserDto {
 export interface BattleUnitDto {
     id: number;
     name?: string | undefined;
+    level: number;
     count: number;
     imageUrl?: string | undefined;
 }
@@ -1165,6 +1166,7 @@ export interface SendAttackDto {
 
 export interface AttackUnitDto {
     unitId: number;
+    level: number;
     count: number;
 }
 
@@ -1209,13 +1211,19 @@ export interface SpyReportDto {
 export interface UnitDto {
     id: number;
     name?: string | undefined;
-    attackPoint: number;
-    defensePoint: number;
+    unitLevels?: UnitLevelDto[] | undefined;
     mercenaryPerRound: number;
     supplyPerRound: number;
     requiredMaterials?: MaterialDto[] | undefined;
     currentCount: number;
     imageUrl?: string | undefined;
+}
+
+export interface UnitLevelDto {
+    minimumBattles: number;
+    attackPoint: number;
+    defensePoint: number;
+    level: number;
 }
 
 export interface MaterialDto {
