@@ -32,7 +32,7 @@ namespace UnderSea.Bll.Services
             var events = await _context.CountryEvents
                 .Include(ce => ce.Event)
                     .ThenInclude(e => e.EventEffects)
-                    .ThenInclude(ce => ce.Effect)
+                        .ThenInclude(ce => ce.Effect)
                 .Where(ee => ee.CountryId == country.Id)
                 .Select(ee => new EventDto
                 {
