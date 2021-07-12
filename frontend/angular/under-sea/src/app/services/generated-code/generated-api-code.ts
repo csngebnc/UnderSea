@@ -1096,7 +1096,7 @@ export class UserService {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    register(registerDto: RegisterDto): Observable<string> {
+    register(registerDto: RegisterDto): Observable<void> {
         let url_ = this.baseUrl + "/api/User/register";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1108,7 +1108,6 @@ export class UserService {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             })
         };
 
@@ -1119,14 +1118,14 @@ export class UserService {
                 try {
                     return this.processRegister(<any>response_);
                 } catch (e) {
-                    return <Observable<string>><any>_observableThrow(e);
+                    return <Observable<void>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<string>><any>_observableThrow(response_);
+                return <Observable<void>><any>_observableThrow(response_);
         }));
     }
 
-    protected processRegister(response: HttpResponseBase): Observable<string> {
+    protected processRegister(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1135,16 +1134,14 @@ export class UserService {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            result200 = _responseText === "" ? null : <string>JSON.parse(_responseText, this.jsonParseReviver);
-            return _observableOf(result200);
+            return _observableOf<void>(<any>null);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<string>(<any>null);
+        return _observableOf<void>(<any>null);
     }
 
     ranklist(pageSize: number | undefined, pageNumber: number | undefined, name: string | null | undefined): Observable<PagedResultOfUserRankDto> {
@@ -1204,7 +1201,7 @@ export class UserService {
         return _observableOf<PagedResultOfUserRankDto>(<any>null);
     }
 
-    worldwinners(pageSize: number | undefined, pageNumber: number | undefined, name: string | null | undefined): Observable<PagedResultOfUserRankDto> {
+    worldwinners(pageSize: number | undefined, pageNumber: number | undefined, name: string | null | undefined): Observable<PagedResultOfWorldWinnerDto> {
         let url_ = this.baseUrl + "/api/User/worldwinners?";
         if (pageSize === null)
             throw new Error("The parameter 'pageSize' cannot be null.");
@@ -1233,14 +1230,14 @@ export class UserService {
                 try {
                     return this.processWorldwinners(<any>response_);
                 } catch (e) {
-                    return <Observable<PagedResultOfUserRankDto>><any>_observableThrow(e);
+                    return <Observable<PagedResultOfWorldWinnerDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<PagedResultOfUserRankDto>><any>_observableThrow(response_);
+                return <Observable<PagedResultOfWorldWinnerDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processWorldwinners(response: HttpResponseBase): Observable<PagedResultOfUserRankDto> {
+    protected processWorldwinners(response: HttpResponseBase): Observable<PagedResultOfWorldWinnerDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1250,7 +1247,7 @@ export class UserService {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
-            result200 = _responseText === "" ? null : <PagedResultOfUserRankDto>JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = _responseText === "" ? null : <PagedResultOfWorldWinnerDto>JSON.parse(_responseText, this.jsonParseReviver);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1258,7 +1255,7 @@ export class UserService {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<PagedResultOfUserRankDto>(<any>null);
+        return _observableOf<PagedResultOfWorldWinnerDto>(<any>null);
     }
 }
 
@@ -1457,6 +1454,22 @@ export interface UserRankDto {
     name?: string | undefined;
     points: number;
     placement: number;
+}
+
+export interface PagedResultOfWorldWinnerDto {
+    results?: WorldWinnerDto[] | undefined;
+    allResultsCount: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
+export interface WorldWinnerDto {
+    id: number;
+    userName?: string | undefined;
+    countryName?: string | undefined;
+    points: number;
+    worldRound: number;
+    date: Date;
 }
 
 export interface UserInfoDto {
