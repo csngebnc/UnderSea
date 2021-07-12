@@ -15,7 +15,7 @@ namespace UnderSea.Model.Models.Events
 
         public override void RemoveEffect(Country country)
         {
-            country.FightPoint.BonusAttackPoint -= 1;
+            country.FightPoint.BonusAttackPoint += 1;
         }
     }
 }

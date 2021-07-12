@@ -33,6 +33,7 @@ namespace UnderSea.Bll.Services
 
             var country = await _context.Countries
                 .Where(u => u.OwnerId == userid)
+                .Include(c => c.World)
                 .Include(c => c.CountryMaterials)
                     .ThenInclude(cm => cm.Material)
                 .Include(c => c.ActiveConstructions)

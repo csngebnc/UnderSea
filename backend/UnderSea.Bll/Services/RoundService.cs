@@ -362,7 +362,7 @@ namespace UnderSea.Bll.Services
                     {
                         CountryId = country.Id,
                         EventId = events[eventNumber].Id,
-                        EventRound = world.Round
+                        EventRound = world.Round+1
                     });
                     foreach (var eventEffect in events[eventNumber].EventEffects)
                     {
