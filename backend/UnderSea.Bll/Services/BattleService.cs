@@ -122,7 +122,7 @@ namespace UnderSea.Bll.Services
                 Level = spy.UnitLevels.FirstOrDefault().Level
             });
 
-            return units;
+            return units.OrderBy(u => u.Name).ThenBy(u => u.Level);
         }
 
         public async Task<PagedResult<LoggedAttackDto>> GetLoggedAttacksAsync(PaginationData data)

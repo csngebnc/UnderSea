@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UnderSea.Dal.Data;
 
 namespace UnderSea.Dal.Migrations
 {
     [DbContext(typeof(UnderSeaDbContext))]
-    partial class UnderSeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210709141139_EventSeed")]
+    partial class EventSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -672,11 +674,6 @@ namespace UnderSea.Dal.Migrations
 
             modelBuilder.Entity("UnderSea.Model.Models.Joins.CountryEvent", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
@@ -686,9 +683,7 @@ namespace UnderSea.Dal.Migrations
                     b.Property<int>("EventRound")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
+                    b.HasKey("CountryId", "EventId");
 
                     b.HasIndex("EventId");
 
@@ -2127,8 +2122,8 @@ namespace UnderSea.Dal.Migrations
                             b1.Property<double>("AttackPointMultiplier")
                                 .HasColumnType("float");
 
-                            b1.Property<double>("BonusAttackPoint")
-                                .HasColumnType("float");
+                            b1.Property<int>("BonusAttackPoint")
+                                .HasColumnType("int");
 
                             b1.Property<double>("DefensePointMultiplier")
                                 .HasColumnType("float");
@@ -2145,70 +2140,70 @@ namespace UnderSea.Dal.Migrations
                                 {
                                     CountryId = 1,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
+                                    BonusAttackPoint = 0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 2,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
+                                    BonusAttackPoint = 0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 3,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
+                                    BonusAttackPoint = 0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 4,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
+                                    BonusAttackPoint = 0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 5,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
+                                    BonusAttackPoint = 0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 6,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
+                                    BonusAttackPoint = 0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 7,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
+                                    BonusAttackPoint = 0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 8,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
+                                    BonusAttackPoint = 0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 9,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
+                                    BonusAttackPoint = 0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 10,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
+                                    BonusAttackPoint = 0,
                                     DefensePointMultiplier = 1.0
                                 });
                         });
