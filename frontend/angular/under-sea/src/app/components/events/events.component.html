@@ -1,0 +1,21 @@
+<h2 class="modal-title">Események</h2>
+<div class="divider"></div>
+<div *ngIf="true" class="stack paged-list to-sides">
+    <ul class="p-0 m-0">
+        <li *ngFor="let item of list" class="non-styled-list-item">
+            <div class="list-item">
+                <div class="d-flex">
+                    <div>{{item}}</div>
+                </div>
+                <div class="tooltip">
+                    <strong>asd</strong>
+                    <span class="tooltiptext">hahahah</span>
+                </div>
+
+            </div>
+            <div class="divider"></div>
+        </li>
+    </ul>
+    <pager-buttons [pageSize]="0" [pageNumber]="1" [allResultsCount]="0" (switchPage)="onSwitchPage($event)"
+        class="w-100 d-flex align-center to-center mt-1"></pager-buttons>
+</div>

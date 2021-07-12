@@ -8,51 +8,35 @@
             <strong>1. Jelöld ki, kit szeretnél megtámadni:</strong>
           </h3>
           <div class="h-attack-list stack to-sides">
-            <list
-              [list]="players.list"
-              [clickable]="true"
-              (filter)="onFilter($event)"
-              (selectTarget)="onSelectTarget($event)"
-            ></list>
-            <pager-buttons
-              [pageSize]="players.pageSize"
-              [pageNumber]="players.pageNumber"
-              [allResultsCount]="players.allResultsCount"
-              (switchPage)="onSwitchPage($event)"
-              class="w-100 d-flex align-center to-center mt-1"
-            ></pager-buttons>
+            <list [list]="players.list" [clickable]="true" (filter)="onFilter($event)"
+              (selectTarget)="onSelectTarget($event)" [defaultValue]="filter"></list>
+            <pager-buttons [pageSize]="players.pageSize" [pageNumber]="players.pageNumber"
+              [allResultsCount]="players.allResultsCount" (switchPage)="onSwitchPage($event)"
+              class="w-100 d-flex align-center to-center mt-1"></pager-buttons>
           </div>
         </div>
-        <div class="pl-2 w-50">
+        <div class="pl-2 w-50 h-100">
           <h3 class="modal-description mb-1">
             <strong>2. Állítsd be, kiket küldesz harcba.</strong>
           </h3>
           <p class="modal-description">
             Legalább 1 hadvezért kötelező küldened!
           </p>
-          <div class="stack align-center mt-2">
-            <ng-container *ngFor="let unit of units">
-              <unit-slider
-                *ngIf="unit.count !== 0"
-                [unit]="unit"
-                class="d-flex w-100 p-1 to-center"
-                (setUnit)="onSetUnit($event)"
-              ></unit-slider>
-            </ng-container>
+          <div class="stack align-center mt-2 scrollable">
+            <unit-slider *ngFor=" let unit of units" [unit]="unit" class="d-flex w-100 p-1 to-center"
+              (setUnit)="onSetUnit($event)">
+            </unit-slider>
           </div>
         </div>
       </div>
-    </div>
-    <div class="stack align-center">
-      <div class="divider mt-1"></div>
-      <button
-        type="button"
-        class="gradient-button mt-2"
-        [disabled]="!selectedUnitcount || !generalSelected || !targetId"
-        (click)="attack()"
-      >
-        Megtámadom!
-      </button>
+
+      <div class="stack align-center">
+        <div class="divider mt-1"></div>
+        <button type="button" class="gradient-button mt-2"
+          [disabled]="!selectedUnitcount || !generalSelected || !targetId" (click)="attack()">
+          Megtámadom!
+        </button>
+      </div>
     </div>
   </div>
 </div>

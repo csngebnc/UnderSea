@@ -12,20 +12,20 @@
   -webkit-transition: 0.2s;
   transition: opacity 0.2s;
   flex-flow: 0;
-}
 
-.slider:hover {
-  opacity: 1;
-}
+  &:hover {
+    opacity: 1;
+  }
 
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 15px;
-  width: 15px;
-  border-radius: 50%;
-  background: $teal;
-  cursor: pointer;
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background: $teal;
+    cursor: pointer;
+  }
 }
 
 .w-233px {

@@ -16,7 +16,7 @@ import { Material } from 'src/app/models/material.model';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private apiService: aService) {}
+  constructor(private apiService: aService) { }
 
   getUser(): Observable<UserData> {
     return this.apiService.user().pipe(
@@ -58,9 +58,9 @@ export class ApiService {
         });
 
         return {
-          units: units,
-          buildings: buildings,
-          materials: materials,
+          units,
+          buildings,
+          materials,
           hasSonar: cd.hasSonarCanon,
           maxUnitCount: cd.maxUnitCount,
         };

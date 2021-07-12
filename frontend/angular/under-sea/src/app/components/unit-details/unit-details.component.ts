@@ -27,11 +27,11 @@ export class UnitDetailsComponent implements OnInit, OnDestroy {
   @Input() remainingCapacity: number;
   @Input() justBoughtUnits$: BehaviorSubject<boolean>;
   @Output() countModified: EventEmitter<CartUnit> = new EventEmitter();
-  unitPrice: number = 0;
-  selected: number = 0;
+  unitPrice = 0;
+  selected = 0;
   private destroy$ = new Subject<void>();
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) { }
 
   ngOnInit(): void {
     this.unitPrice = this.unit.price.find((m) => m.id === 1).count;

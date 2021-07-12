@@ -8,7 +8,7 @@ import { Upgrade } from 'src/app/models/upgrade.model';
 })
 export class UpgradeDetailsComponent implements OnInit {
 
-   @Input() upgrade: Upgrade;
+  @Input() upgrade: Upgrade;
 
   constructor() { }
 

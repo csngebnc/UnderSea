@@ -2,20 +2,14 @@
 <div class="divider"></div>
 <div *ngIf="!(loading$ | async)" class="stack paged-list to-sides">
   <ul class="p-0 m-0">
-    <li
-      *ngFor="let battle of pagedBattles.battles"
-      class="non-styled-list-item"
-    >
+    <li *ngFor="let battle of pagedBattles.battles" class="non-styled-list-item">
       <div class="list-item">
         <div class="d-flex">
           <div>{{ battle.target }}</div>
-          <div
-            class="dot ml-1"
-            [ngClass]="{
+          <div class="dot ml-1" [ngClass]="{
               'lose-bg': battle.result === lose,
               'not-yet-bg': battle.result === notYet
-            }"
-          >
+            }">
             {{
               battle.result === lose
                 ? "&#x2718;"
@@ -26,19 +20,20 @@
           </div>
         </div>
         <div class="d-flex to-flex-end">
-          <div *ngFor="let unit of battle.units" class="pl-1">
+          <div *ngFor="let unit of battle.units" class="pl-1 tooltip">
             {{ unit.count }} {{ unit.name }}
+            <ul class="tooltiptext m-0 p-0">
+              <li *ngFor="let level of unit.levels" class="non-styled-list-item">
+                {{level.level}}. szint: {{level.count}} db
+              </li>
+            </ul>
           </div>
         </div>
       </div>
       <div class="divider"></div>
     </li>
   </ul>
-  <pager-buttons
-    [pageSize]="pagedBattles.pageSize"
-    [pageNumber]="pagedBattles.pageNumber"
-    [allResultsCount]="pagedBattles.allResultsCount"
-    (switchPage)="onSwitchPage($event)"
-    class="w-100 d-flex align-center to-center mt-1"
-  ></pager-buttons>
+  <pager-buttons [pageSize]="pagedBattles.pageSize" [pageNumber]="pagedBattles.pageNumber"
+    [allResultsCount]="pagedBattles.allResultsCount" (switchPage)="onSwitchPage($event)"
+    class="w-100 d-flex align-center to-center mt-1"></pager-buttons>
 </div>

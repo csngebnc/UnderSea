@@ -11,7 +11,7 @@ export class ItemImgComponent implements OnInit {
   @Input() name: string;
   @Input() effects: Array<Effect>;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

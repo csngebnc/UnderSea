@@ -11,7 +11,7 @@ import { PagedList } from 'src/app/models/paged-list.model';
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private userService: uService) {}
+  constructor(private userService: uService) { }
 
   getScoreBoard(
     pageNumber: number,
@@ -20,7 +20,7 @@ export class UserService {
     if (!filter) filter = undefined;
     return this.userService.ranklist(10, pageNumber, filter).pipe(
       map((r) => {
-        let result: PagedList = {
+        const result: PagedList = {
           list: [],
           pageNumber: 1,
           pageSize: 0,
@@ -31,7 +31,7 @@ export class UserService {
         result.pageSize = r.pageSize;
         result.allResultsCount = r.allResultsCount;
 
-        if (r.results)
+        if (r.results) {
           r.results.forEach((u: UserRankDto, index) =>
             result.list.push({
               placement: u.placement,
@@ -39,6 +39,7 @@ export class UserService {
               score: u.points,
             })
           );
+        }
 
         return result;
       })

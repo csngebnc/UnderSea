@@ -2,8 +2,8 @@
 
 .clickable-list-item {
   cursor: pointer;
-}
 
-.clickable-list-item:hover {
-  background: $selected-blue;
+  &:hover {
+    background: $selected-blue;
+  }
 }

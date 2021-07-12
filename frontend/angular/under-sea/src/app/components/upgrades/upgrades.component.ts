@@ -12,14 +12,14 @@ import { Observable } from 'rxjs';
 })
 export class UpgradesComponent implements OnInit {
   selectedUpgrade: number | null = null;
-  isResearching: boolean = false;
+  isResearching = false;
 
   upgrades: Array<Upgrade> = [];
 
   @Select(LoadingState.isLoading)
   loading$: Observable<boolean>;
 
-  constructor(private upgradeService: UpgradeService) {}
+  constructor(private upgradeService: UpgradeService) { }
 
   ngOnInit(): void {
     this.initUpgrades();
@@ -30,7 +30,7 @@ export class UpgradesComponent implements OnInit {
       (r: Array<Upgrade>) => {
         this.upgrades = r;
         this.upgrades.forEach((u) => {
-          if (u.isUnderConstruction) this.isResearching = true;
+          if (u.isUnderConstruction) { this.isResearching = true; }
         });
       },
       (e) => console.error(e)

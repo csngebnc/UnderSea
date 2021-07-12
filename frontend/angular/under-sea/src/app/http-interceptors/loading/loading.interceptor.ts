@@ -16,7 +16,7 @@ import { finalize } from 'rxjs/operators';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
-  constructor(private store: Store) {}
+  constructor(private store: Store) { }
 
   intercept(
     request: HttpRequest<unknown>,
@@ -36,8 +36,8 @@ export class LoadingInterceptor implements HttpInterceptor {
     );
   }
 
-  private isUrlOnWhiteList(url: string, whitelist: Array<string>): boolean {
-    return whitelist.some(
+  private isUrlOnWhiteList(url: string, wl: Array<string>): boolean {
+    return wl.some(
       (path) => url.toLowerCase() === apiUrl + path.toLowerCase()
     );
   }

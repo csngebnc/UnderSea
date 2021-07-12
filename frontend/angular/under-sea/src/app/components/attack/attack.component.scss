@@ -1,0 +1,29 @@
+@import "src/styles.scss";
+
+.scrollable {
+  overflow-y: scroll;
+  height: calc(100% - 108px);
+  max-height: calc(100% - 108px);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $dark-blue;
+  border-radius: 10px;
+
+  &:hover {
+    background: $selected-blue;
+  }
+}
+
+::-webkit-scrollbar-thumb {
+  background: $navy;
+  border-radius: 10px;
+
+  &:hover {
+    background: $blue;
+  }
+}

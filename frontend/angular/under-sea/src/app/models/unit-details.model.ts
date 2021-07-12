@@ -1,11 +1,11 @@
+import { UnitLevel } from './unit-level.model';
 import { Material } from './material.model';
 
 export type UnitDetails = {
   id: number;
   name: string;
   count: number;
-  attack: number;
-  defense: number;
+  stats: Array<UnitLevel>;
   mercenary: number;
   supply: number;
   price: Array<Material>;

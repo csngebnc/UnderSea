@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class TokenService {
-  constructor() {}
+  constructor() { }
 
   getToken(): string {
     return localStorage.getItem('token');
@@ -20,7 +20,7 @@ export class TokenService {
 
   isTokenValid(): boolean {
     const token = this.getToken();
-    if (!token) return false;
+    if (!token) { return false; }
     const arr = token.split('.');
 
     const decoded = JSON.parse(atob(arr[1]));
