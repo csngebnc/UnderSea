@@ -47,8 +47,8 @@ namespace UnderSea.Bll.Services
                             .ThenInclude(ue => ue.Effect)
                 .Include(ce => ce.CountryEvents)
                     .ThenInclude(ce => ce.Event)
-                    .ThenInclude(e => e.EventEffects)
-                    .ThenInclude(ce => ce.Effect)
+                        .ThenInclude(e => e.EventEffects)
+                            .ThenInclude(ce => ce.Effect)
                 .FirstOrDefaultAsync();
 
             if (country == null)
