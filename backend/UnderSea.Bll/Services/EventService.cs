@@ -34,6 +34,7 @@ namespace UnderSea.Bll.Services
                     .ThenInclude(e => e.EventEffects)
                         .ThenInclude(ce => ce.Effect)
                 .Where(ee => ee.CountryId == country.Id)
+                .OrderByDescending(e => e.EventRound)
                 .Select(ee => new EventDto
                 {
                     Id = ee.EventId,
