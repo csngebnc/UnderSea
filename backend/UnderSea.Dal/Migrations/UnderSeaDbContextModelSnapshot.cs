@@ -1687,6 +1687,33 @@ namespace UnderSea.Dal.Migrations
                         });
                 });
 
+            modelBuilder.Entity("UnderSea.Model.Models.WorldWinner", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CountryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WorldRound")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorldWinners");
+                });
+
             modelBuilder.Entity("UnderSea.Model.Models.Alchemy", b =>
                 {
                     b.HasBaseType("UnderSea.Model.Models.Effect");

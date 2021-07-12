@@ -4,12 +4,12 @@ import { UnitDetails } from 'src/app/models/unit-details.model';
 import { CartUnit } from 'src/app/models/cart-unit.model';
 import { BattleService } from 'src/app/services/battle/battle.service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { BuyUnitDto } from 'src/app/services/generated-code/generated-api-code';
 import { Store, Select } from '@ngxs/store';
 import { ResourcesState } from 'src/app/states/resources/resources.state';
 import { GetResources } from 'src/app/states/resources/resources.actions';
 import { takeUntil } from 'rxjs/operators';
 import { LoadingState } from 'src/app/states/loading/loading.state';
+import { AttackUnit } from 'src/app/models/attack-unit.model';
 
 @Component({
   selector: 'units',
@@ -18,7 +18,8 @@ import { LoadingState } from 'src/app/states/loading/loading.state';
 })
 export class UnitsComponent implements OnInit, OnDestroy {
   units: Array<UnitDetails> = [];
-  cart: BuyUnitDto = { units: [] };
+  cart: Array<AttackUnit> = [];
+  emptyCart = true;
   remainingMoney: number;
   justBoughtUnits$ = new BehaviorSubject(false);
 
@@ -64,29 +65,29 @@ export class UnitsComponent implements OnInit, OnDestroy {
   }
 
   addToCart(unit: CartUnit): void {
-    let index = this.cart.units.findIndex((u) => u.unitId === unit.unitId);
+    const index = this.cart.findIndex((u) => u.unitId === unit.unitId);
     if (index !== -1) {
-      this.remainingMoney += this.cart.units[index].count * unit.price;
-      this.cart.units[index].count = unit.count;
+      this.remainingMoney += this.cart[index].count * unit.price;
+      this.cart[index].count = unit.count;
       this.remainingMoney -= unit.count * unit.price;
     } else {
       this.remainingMoney -= unit.count * unit.price;
-      this.cart.units.push({ unitId: unit.unitId, count: unit.count });
+      this.cart.push({ unitId: unit.unitId, count: unit.count });
     }
+
+    this.emptyCart = this.isCartEmpty();
   }
 
-  isCartEmpty(): boolean {
+  private isCartEmpty(): boolean {
     let sum = 0;
-    this.cart.units.forEach((unit) => {
-      sum += unit.count;
-    });
+    this.cart.forEach((u) => (sum += u.count));
 
     return !sum;
   }
 
   onBuy(): void {
     this.justBoughtUnits$.next(true);
-    this.battleService.buyUnits(this.cart).subscribe(
+    this.battleService.buyUnits({ units: this.cart }).subscribe(
       (r) => {
         this.store.dispatch(GetResources);
       },

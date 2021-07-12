@@ -8,15 +8,15 @@
   border: none;
   font-size: 1.1rem;
   cursor: pointer;
-}
 
-.pager-button:hover {
-  color: $blue;
-}
+  &:hover {
+    color: $blue;
+  }
 
-.pager-button:disabled {
-  opacity: $foggy;
-  cursor: not-allowed;
+  &:disabled {
+    opacity: $foggy;
+    cursor: not-allowed;
+  }
 }
 
 .page-number {

@@ -9,24 +9,13 @@
       {{ remainingCapacity$ | async }}
     </p>
     <div *ngIf="!(loading$ | async)" class="d-flex mt-1 to-sides">
-      <unit-details
-        *ngFor="let unit of units"
-        [unit]="unit"
-        [remainingMoney]="remainingMoney"
-        [remainingCapacity]="remainingCapacity$ | async"
-        [justBoughtUnits$]="justBoughtUnits$"
-        (countModified)="addToCart($event)"
-        class="m-1 stack align-center modal-description w-350px"
-      ></unit-details>
+      <unit-details *ngFor="let unit of units" [unit]="unit" [remainingMoney]="remainingMoney"
+        [remainingCapacity]="remainingCapacity$ | async" [justBoughtUnits$]="justBoughtUnits$"
+        (countModified)="addToCart($event)" class="m-1 stack align-center modal-description w-350px"></unit-details>
     </div>
     <div class="divider"></div>
     <div class="d-flex to-center">
-      <button
-        type="button"
-        class="gradient-button mt-2"
-        [disabled]="isCartEmpty()"
-        (click)="onBuy()"
-      >
+      <button type="button" class="gradient-button mt-2" [disabled]="emptyCart" (click)="onBuy()">
         Megveszem
       </button>
     </div>

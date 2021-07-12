@@ -9,26 +9,14 @@
       <div class="stack align-center">
         <ul *ngIf="!(loading$ | async)" class="item-container">
           <li *ngFor="let building of buildings" class="non-styled-list-item">
-            <button
-              type="button"
-              class="item-btn"
-              (click)="setBuilding(building)"
-              [disabled]="isUnderConstruction"
-            >
-              <building-details
-                class="item item-lg stack align-center"
-                [building]="building"
-              ></building-details>
+            <button type="button" class="item-btn" (click)="setBuilding(building)" [disabled]="isUnderConstruction">
+              <building-details class="item item-lg stack align-center" [building]="building"></building-details>
             </button>
           </li>
         </ul>
         <div class="divider"></div>
-        <button
-          type="button"
-          [disabled]="!selectedBuilding || isUnderConstruction || priceTooHigh"
-          class="gradient-button mt-2"
-          (click)="onBuy()"
-        >
+        <button type="button" [disabled]="!selectedBuilding || isUnderConstruction || priceTooHigh"
+          class="gradient-button mt-2" (click)="onBuy()">
           {{
             isUnderConstruction
               ? "Folyamatban..."

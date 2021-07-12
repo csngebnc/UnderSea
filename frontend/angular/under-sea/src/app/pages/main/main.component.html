@@ -1,30 +1,20 @@
-<ng-container *ngIf="userData | async; else loading">
-  <div *ngIf="resources | async; else loading" class="stack h-100 to-center">
-    <router-outlet></router-outlet>
-    <div class="p-1 w-100">
-      <infobar
-        [round]="(userData | async).round"
-        [placement]="(userData | async).placement"
-        [resources]="resources | async"
-      ></infobar>
-    </div>
-    <div class="d-flex h-100 w-100">
-      <div class="w-300px p-1 h-100">
-        <sidebar [userName]="(userData | async).name"></sidebar>
-      </div>
-      <a routerLink="/main" class="building-container-link">
-        <div class="p-1 w-100 h-100 pos-rel">
-          <building-container
-            [hasSonar]="(resources | async).hasSonar"
-            [buildings]="(resources | async).buildings"
-            class="w-100 h-100"
-          ></building-container>
-        </div>
-      </a>
-    </div>
+<div *ngIf="resources | async" class="stack h-100 to-center">
+  <router-outlet></router-outlet>
+  <div class="p-1 w-100">
+    <infobar [round]="(userData | async).round" [placement]="(userData | async).placement"
+      [resources]="resources | async"></infobar>
   </div>
-</ng-container>
+  <div class="d-flex h-100 w-100">
+    <div class="w-300px p-1 h-100">
+      <sidebar [userName]="(userData | async).name"></sidebar>
+    </div>
+    <a routerLink="/main" class="building-container-link">
+      <div class="p-1 w-100 h-100 pos-rel">
+        <building-container [hasSonar]="(resources | async).hasSonar" [buildings]="(resources | async).buildings"
+          class="w-100 h-100"></building-container>
+      </div>
+    </a>
+  </div>
+</div>
 
-<ng-template #loading>
-  <loading class="w-100 h-100 d-flex to-center align-center"></loading>
-</ng-template>
+<event-notification *ngIf="false"></event-notification>

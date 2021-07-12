@@ -1,10 +1,5 @@
-<item-img
-  class="item-image stack align-center h-70"
-  [id]="building.id"
-  [name]="building.name"
-  [effects]="building.effects"
-  [img]="building.imageUrl"
-></item-img>
+<item-img class="item-image stack align-center h-70" [id]="building.id" [name]="building.name"
+  [effects]="building.effects" [img]="building.imageUrl"></item-img>
 <div class="h-30 stack align-center">
   <p class="modal-description mt-1">{{ building.count }} db</p>
   <p *ngFor="let material of building.price" class="modal-description mt-05">

@@ -120,8 +120,11 @@ export class AttackComponent implements OnInit {
   }
 
   private setGeneral(general: AttackUnitDto): void {
-    if (general.count === 0) this.generalSelected = false;
-    else this.generalSelected = true;
+    if (general.count === 0) {
+      this.generalSelected = false;
+    } else {
+      this.generalSelected = true;
+    }
   }
 
   private setUnits(unit: AttackUnitDto): void {
@@ -130,7 +133,11 @@ export class AttackComponent implements OnInit {
       this.attackerUnits[index].count = unit.count;
     } else {
       if (unit.count !== 0) {
-        this.attackerUnits.push({ unitId: unit.unitId, count: unit.count });
+        this.attackerUnits.push({
+          unitId: unit.unitId,
+          count: unit.count,
+          level: unit.level,
+        });
       } else {
         this.attackerUnits.splice(index, 1);
       }

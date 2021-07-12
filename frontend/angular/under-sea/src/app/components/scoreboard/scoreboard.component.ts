@@ -48,8 +48,11 @@ export class ScoreboardComponent implements OnInit {
   }
 
   onFilter(s: string): void {
-    if (s) this.filter = s;
-    else this.filter = undefined;
+    if (s) {
+      this.filter = s;
+    } else {
+      this.filter = undefined;
+    }
     this.scoreboard.pageNumber = 1;
     this.initScoreBoard();
   }

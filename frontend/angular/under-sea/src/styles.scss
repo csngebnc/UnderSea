@@ -1,9 +1,3 @@
-html,
-app-root,
-main {
-  height: 100%;
-}
-
 //fonts
 
 @font-face {
@@ -41,6 +35,47 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 
 //css classes
 
+.tooltip {
+  position: relative;
+  display: inline-block;
+
+  .tooltiptext {
+    visibility: hidden;
+    width: 150px;
+    background-color: $dark-navy;
+    color: $white;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 6px;
+
+    top: 100%;
+    left: 50%;
+    margin-left: -75px;
+
+    position: absolute;
+    z-index: 1;
+
+    word-wrap: break-word;
+
+    &::after {
+      content: " ";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent $dark-navy transparent;
+    }
+  }
+
+  &:hover {
+    .tooltiptext {
+      visibility: visible;
+    }
+  }
+}
+
 .text-input {
   font-size: 1.1rem;
   background: $white;
@@ -53,15 +88,15 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   padding: 0.5rem 1rem;
   margin: 0.5rem;
   border: 2px solid transparent;
-}
 
-.text-input.ng-invalid.ng-touched {
-  border-color: $invalid;
-}
+  &.ng-invalid.ng-touched {
+    border-color: $invalid;
+  }
 
-.text-input:focus {
-  outline: none;
-  border-color: $dark-navy;
+  &:focus {
+    outline: none;
+    border-color: $dark-navy;
+  }
 }
 
 .error-text {
@@ -162,10 +197,10 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 
 .clickable-text {
   cursor: pointer;
-}
 
-.clickable-text:hover {
-  color: $blue;
+  &:hover {
+    color: $blue;
+  }
 }
 
 .link-active {
@@ -233,11 +268,11 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   margin: auto;
   cursor: pointer;
   box-shadow: 0px 3px 6px #3b7dbd;
-}
 
-.gradient-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 }
 
 .link {
@@ -308,20 +343,17 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
 
-.item-btn:hover {
-  border-color: $selected-blue;
-}
+  &:hover,
+  &:focus {
+    border-color: $selected-blue;
+  }
 
-.item-btn:focus {
-  background-color: $selected-blue;
-}
-
-.item-btn:disabled {
-  border: none;
-  background-color: none;
-  cursor: not-allowed;
+  &:disabled {
+    border: none;
+    background-color: none;
+    cursor: not-allowed;
+  }
 }
 
 .item-lg {
@@ -332,6 +364,14 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 .item-sm {
   width: 14.75rem;
   height: 14.45rem;
+}
+
+.h-attack {
+  height: calc(100% - 159px);
+}
+
+.h-attack-list {
+  height: calc(100% - 51px);
 }
 
 .d-flex {
@@ -433,14 +473,6 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   height: 70%;
 }
 
-.h-attack {
-  height: calc(100% - 51px);
-}
-
-.h-attack-list {
-  height: calc(100% - 54px);
-}
-
 .p-1 {
   padding: 1rem;
   box-sizing: border-box;
@@ -493,12 +525,33 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   position: relative;
 }
 
+//basic setup
+
+html,
+app-root,
+main {
+  height: 100%;
+}
+
 body {
   height: 100%;
   font-family: "Baloo";
   margin: 0;
   background-image: $background;
-  background-position: center bottom;
   background-size: cover;
+  background-repeat: no-repeat;
   overflow: hidden;
+  animation-name: animatedBg;
+  animation-duration: 20s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes animatedBg {
+  from {
+    background-position: left top;
+  }
+  to {
+    background-position: right bottom;
+  }
 }

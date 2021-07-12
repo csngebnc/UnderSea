@@ -39,7 +39,7 @@ export class ExploreComponent implements OnInit {
     this.initExplore();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   private initPlayers(): void {
     this.battleService.getUsers(this.players.pageNumber, this.filter).subscribe(

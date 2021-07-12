@@ -15,17 +15,17 @@ export class AuthenticationService {
     private userService: UserService,
     private router: Router,
     private tokenService: TokenService
-  ) {}
+  ) { }
 
   login(userName: string, password: string): Observable<any> {
-    let body = new URLSearchParams();
+    const body = new URLSearchParams();
     body.set('username', userName);
     body.set('password', password);
     body.set('grant_type', 'password');
     body.set('client_id', 'undersea-angular');
     body.set('scope', 'openid api-openid');
 
-    let options = {
+    const options = {
       headers: new HttpHeaders().set(
         'Content-Type',
         'application/x-www-form-urlencoded'

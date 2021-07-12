@@ -4,27 +4,14 @@
     <span class="text">{{ placement }}. hely</span>
   </div>
   <div class="d-flex align-center w-85 to-flex-end">
-    <resource-info
-      *ngFor="let unit of resources.units"
-      [img]="unit.icon"
-      [count]="unit.count"
-      class="d-flex w-10 to-center align-center"
-    ></resource-info>
+    <resource-info *ngFor="let unit of resources.units" [img]="unit.icon" [count]="unit.count"
+      class="d-flex w-10 to-center align-center"></resource-info>
 
-    <resource-info
-      *ngFor="let material of resources.materials"
-      [img]="material.imageUrl"
-      [count]="material.count"
-      [perRound]="material.production"
-      class="d-flex w-10 to-center align-center"
-    ></resource-info>
+    <resource-info *ngFor="let material of resources.materials" [img]="material.imageUrl" [count]="material.count"
+      [perRound]="material.production" class="d-flex w-10 to-center align-center"></resource-info>
 
-    <resource-info
-      *ngFor="let building of resources.buildings"
-      [img]="building.iconImageUrl"
-      [count]="building.buildingsCount"
-      [underConstruction]="building.activeConstructionCount"
-      class="d-flex w-10 to-center align-center"
-    ></resource-info>
+    <resource-info *ngFor="let building of resources.buildings" [img]="building.iconImageUrl"
+      [count]="building.buildingsCount" [underConstruction]="building.activeConstructionCount"
+      class="d-flex w-10 to-center align-center"></resource-info>
   </div>
 </div>

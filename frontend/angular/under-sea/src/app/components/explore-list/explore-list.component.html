@@ -6,13 +6,10 @@
       <div class="list-item">
         <div class="d-flex">
           <div>{{ report.country }}</div>
-          <div
-            class="dot ml-1"
-            [ngClass]="{
+          <div class="dot ml-1" [ngClass]="{
               'lose-bg': report.outcome === noSuccess,
               'not-yet-bg': report.outcome === notYet
-            }"
-          >
+            }">
             {{
               report.outcome === noSuccess
                 ? "&#x2718;"
@@ -29,11 +26,6 @@
       <div class="divider"></div>
     </li>
   </ul>
-  <pager-buttons
-    [pageSize]="list.pageSize"
-    [pageNumber]="list.pageNumber"
-    [allResultsCount]="list.allResultsCount"
-    (switchPage)="onSwitchPage($event)"
-    class="w-100 d-flex align-center to-center mt-1"
-  ></pager-buttons>
+  <pager-buttons [pageSize]="list.pageSize" [pageNumber]="list.pageNumber" [allResultsCount]="list.allResultsCount"
+    (switchPage)="onSwitchPage($event)" class="w-100 d-flex align-center to-center mt-1"></pager-buttons>
 </div>

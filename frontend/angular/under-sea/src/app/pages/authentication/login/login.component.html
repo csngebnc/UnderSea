@@ -1,38 +1,18 @@
 <div class="container bg">
   <div class="stack align-center">
     <h1 class="title">UNDERSEA</h1>
-    <form
-      class="blurry-panel stack align-center w-461px"
-      [formGroup]="loginForm"
-      (ngSubmit)="onSubmit()"
-    >
+    <form class="blurry-panel stack align-center w-461px" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <h2 class="login-title">Belépés</h2>
-      <input
-        type="text"
-        placeholder="Felhasználónév"
-        class="text-input"
-        [ngClass]="{ invalid: loginFailed.value }"
-        formControlName="userName"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Jelszó"
-        class="text-input"
-        [ngClass]="{ invalid: loginFailed.value }"
-        formControlName="password"
-        required
-      />
+      <input type="text" placeholder="Felhasználónév" class="text-input" [ngClass]="{ invalid: loginFailed.value }"
+        formControlName="userName" required />
+      <input type="password" placeholder="Jelszó" class="text-input" [ngClass]="{ invalid: loginFailed.value }"
+        formControlName="password" required />
       <div class="error-container">
         <p *ngIf="loginFailed.value" class="error-text">
           Hibás felhasználónév vagy jelszó!
         </p>
       </div>
-      <button
-        type="submit"
-        class="gradient-button"
-        [disabled]="!loginForm.valid"
-      >
+      <button type="submit" class="gradient-button" [disabled]="!loginForm.valid">
         Belépés
       </button>
       <a class="link mt-2" routerLink="/register">Regisztráció</a>

@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import * as signalR from '@microsoft/signalr';
+import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr';
 import { apiUrl } from 'src/assets/config.json';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SignalRService {
-  hubConnection: any = signalR.HubConnection;
+  hubConnection: any = HubConnection;
 
   public startConnection = () => {
-    this.hubConnection = new signalR.HubConnectionBuilder()
+    this.hubConnection = new HubConnectionBuilder()
       .withUrl(`${apiUrl}/roundHub`)
       .build();
     this.connectInit();

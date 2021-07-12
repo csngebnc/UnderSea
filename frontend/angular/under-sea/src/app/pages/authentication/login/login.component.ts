@@ -13,10 +13,7 @@ import { BehaviorSubject } from 'rxjs';
 export class LoginComponent implements OnInit {
   loginForm = new FormGroup({
     userName: new FormControl('', Validators.required),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(6),
-    ]),
+    password: new FormControl('', Validators.required),
   });
 
   loginFailed = new BehaviorSubject(false);

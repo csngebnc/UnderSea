@@ -67,7 +67,9 @@ export class RegisterComponent implements OnInit {
           });
       },
       (e) => {
-        this.setFormInvalid(JSON.parse(e['response']));
+        if (e['response']) {
+          this.setFormInvalid(JSON.parse(e['response']));
+        }
       }
     );
   }

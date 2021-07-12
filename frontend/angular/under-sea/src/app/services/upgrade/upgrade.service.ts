@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class UpgradeService {
-  constructor(private upgradeService: uService) {}
+  constructor(private upgradeService: uService) { }
 
   getUpgrades(): Observable<Array<Upgrade>> {
     return this.upgradeService.list().pipe(

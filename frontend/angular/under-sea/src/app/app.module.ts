@@ -36,7 +36,7 @@ import { PagerButtonsComponent } from './components/pager-buttons/pager-buttons.
 import { LoadingComponent } from './components/loading/loading.component';
 
 import * as generated from './services/generated-code/generated-api-code';
-import * as config from 'src/assets/config.json';
+import { apiUrl } from 'src/assets/config.json';
 import { TokenInterceptor } from './http-interceptors/token/token.interceptor';
 import { ResourcesState } from './states/resources/resources.state';
 import { UserDataState } from './states/user-data/user-data.state';
@@ -45,6 +45,9 @@ import { ExploreListComponent } from './components/explore-list/explore-list.com
 import { ReportsComponent } from './components/reports/reports.component';
 import { LoadingState } from './states/loading/loading.state';
 import { LoadingInterceptor } from './http-interceptors/loading/loading.interceptor';
+import { HasbuildingPipe } from './pipes/hasbuilding/hasbuilding.pipe';
+import { EventsComponent } from './components/events/events.component';
+import { EventNotificationComponent } from './components/event-notification/event-notification.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +78,9 @@ import { LoadingInterceptor } from './http-interceptors/loading/loading.intercep
     ExploreComponent,
     ExploreListComponent,
     ReportsComponent,
+    HasbuildingPipe,
+    EventsComponent,
+    EventNotificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -92,7 +98,7 @@ import { LoadingInterceptor } from './http-interceptors/loading/loading.intercep
     }),
   ],
   providers: [
-    { provide: generated.API_BASE_URL, useValue: config.apiUrl },
+    { provide: generated.API_BASE_URL, useValue: apiUrl },
     generated.UserService,
     generated.ApiService,
     generated.BattleService,
@@ -105,4 +111,4 @@ import { LoadingInterceptor } from './http-interceptors/loading/loading.intercep
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

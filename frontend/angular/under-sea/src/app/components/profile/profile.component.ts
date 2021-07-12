@@ -12,7 +12,7 @@ import { Select } from '@ngxs/store';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  name: string = '';
+  name = '';
   private countryRegex = /^(?!\s*$).+/;
 
   @Select(LoadingState.isLoading)
