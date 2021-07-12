@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.User;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
@@ -90,6 +91,20 @@ namespace UnderSea.Bll.Services
             }
 
             return pagedList;
+        }
+
+        public async Task<PagedResult<WorldWinnerDto>> GetWorldWinners(PaginationData pagination, string nameFilter)
+        {
+            var users = _context.WorldWinners
+                .OrderByDescending(u => u.Date).AsQueryable()
+                .ProjectTo<WorldWinnerDto>(_mapper.ConfigurationProvider);
+
+            if (!string.IsNullOrEmpty(nameFilter) && !string.IsNullOrWhiteSpace(nameFilter))
+            {
+                users = users.Where(u => u.UserName.Contains(nameFilter));
+            }
+
+            return await users.ToPagedList(pagination.PageSize, pagination.PageNumber);
         }
 
         public async Task<UserInfoDto> GetUserInfo()

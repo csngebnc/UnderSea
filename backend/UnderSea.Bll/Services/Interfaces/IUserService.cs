@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.User;
 using UnderSea.Bll.Paging;
 
 namespace UnderSea.Bll.Services.Interfaces
@@ -12,6 +13,7 @@ namespace UnderSea.Bll.Services.Interfaces
     {
         Task<bool> Register(RegisterDto registerDto);
         Task<PagedResult<UserRankDto>> GetRanklist(PaginationData pagination, string nameFilter);
+        Task<PagedResult<WorldWinnerDto>> GetWorldWinners(PaginationData pagination, string nameFilter);
         Task<UserInfoDto> GetUserInfo();
 
     }

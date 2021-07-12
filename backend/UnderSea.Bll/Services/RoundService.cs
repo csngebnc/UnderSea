@@ -43,15 +43,15 @@ namespace UnderSea.Bll.Services
 
         public void PayMaterial(ICollection<Country> countries)
         {
-            foreach(var country in countries)
+            foreach (var country in countries)
             {
-                foreach(var material in country.CountryMaterials)
+                foreach (var material in country.CountryMaterials)
                 {
-                    if(material.Material.MaterialType == MaterialTypeConstants.Pearl)
+                    if (material.Material.MaterialType == MaterialTypeConstants.Pearl)
                     {
                         material.BaseProduction = country.Population * EffectConstants.PopulationPearlMultiplier;
                     }
-                    material.Amount += (int)Math.Round(material.BaseProduction * material.Multiplier); 
+                    material.Amount += (int)Math.Round(material.BaseProduction * material.Multiplier);
                 }
             }
         }
@@ -60,7 +60,7 @@ namespace UnderSea.Bll.Services
         {
             foreach (var country in countries)
             {
-                foreach(var unit in country.CountryUnits.OrderByDescending(c => c.Unit.UnitMaterials.Sum(c => c.Amount)))
+                foreach (var unit in country.CountryUnits.OrderByDescending(c => c.Unit.UnitMaterials.Sum(c => c.Amount)))
                 {
                     int requiredFood = unit.Unit.SupplyPerRound * unit.Count;
                     int requiredMercenary = unit.Unit.MercenaryPerRound * unit.Count;
@@ -77,7 +77,7 @@ namespace UnderSea.Bll.Services
                     {
                         int numberOfAlive = 0;
 
-                        for(int i = 0; i <= unit.Count; i++)
+                        for (int i = 0; i <= unit.Count; i++)
                         {
                             int food = unit.Unit.SupplyPerRound * i;
                             int mercenary = unit.Unit.MercenaryPerRound * i;
@@ -89,7 +89,7 @@ namespace UnderSea.Bll.Services
                             else
                             {
                                 break;
-                            }                          
+                            }
                         }
 
                         unit.Count = numberOfAlive;
@@ -105,7 +105,7 @@ namespace UnderSea.Bll.Services
         {
             foreach (var country in countries)
             {
-                foreach(var upgrade in country.ActiveUpgradings.Where(c => c.EstimatedFinish == world.Round+1))
+                foreach (var upgrade in country.ActiveUpgradings.Where(c => c.EstimatedFinish == world.Round + 1))
                 {
                     var newCountryUpgrade = new CountryUpgrade()
                     {
@@ -115,7 +115,7 @@ namespace UnderSea.Bll.Services
 
                     _context.CountryUpgrades.Add(newCountryUpgrade);
 
-                    foreach(var effect in upgrade.Upgrade.UpgradeEffects)
+                    foreach (var effect in upgrade.Upgrade.UpgradeEffects)
                     {
                         effect.Effect.ApplyEffect(country);
                     }
@@ -130,13 +130,13 @@ namespace UnderSea.Bll.Services
             foreach (var country in countries)
             {
                 foreach (var building in country.ActiveConstructions
-                    .Where(c => c.EstimatedFinish == world.Round+1))
+                    .Where(c => c.EstimatedFinish == world.Round + 1))
                 {
                     var cbuilding = country.CountryBuildings
                         .Where(c => c.BuildingId == building.BuildingId)
                         .FirstOrDefault();
 
-                    if(cbuilding == null)
+                    if (cbuilding == null)
                     {
                         var newCountryBuilding = new CountryBuilding()
                         {
@@ -166,7 +166,7 @@ namespace UnderSea.Bll.Services
         {
             foreach (var attackerCountry in countries)
             {
-                foreach(var attack in attackerCountry.Attacks.Where(c => c.WinnerId == null && world.Round == c.AttackRound))
+                foreach (var attack in attackerCountry.Attacks.Where(c => c.WinnerId == null && world.Round == c.AttackRound))
                 {
                     var attackUnits = attack.AttackUnits;
                     var defenseUnits = attack.DefenderCountry.CountryUnits;
@@ -176,7 +176,7 @@ namespace UnderSea.Bll.Services
 
                     foreach (var unit in attackUnits)
                     {
-                        attackPoints += (unit.Unit.UnitLevels.SingleOrDefault(ul => ul.Level == unit.GetLevel()).AttackPoint + attackerCountry.FightPoint.BonusAttackPoint)* unit.Count;
+                        attackPoints += (unit.Unit.UnitLevels.SingleOrDefault(ul => ul.Level == unit.GetLevel()).AttackPoint + attackerCountry.FightPoint.BonusAttackPoint) * unit.Count;
                     }
 
                     foreach (var unit in defenseUnits)
@@ -193,7 +193,7 @@ namespace UnderSea.Bll.Services
                     attackPoints *= (1 + (attackerGenerals - 1) * UnitValueConstants.GeneralBonus);
                     defensePoints *= (1 + defenderGenerals * UnitValueConstants.GeneralBonus);
 
-                    if (attackPoints-defensePoints > 0)
+                    if (attackPoints - defensePoints > 0)
                     {
                         attack.WinnerId = attackerCountry.OwnerId;
 
@@ -207,7 +207,7 @@ namespace UnderSea.Bll.Services
                             attackerCountry.CountryMaterials.SingleOrDefault(cm => cm.MaterialId == material.MaterialId).Amount += material.Amount;
                             material.Amount /= 2;
                         }
-                    } 
+                    }
                     else
                     {
                         attack.WinnerId = attack.DefenderCountry.OwnerId;
@@ -234,14 +234,14 @@ namespace UnderSea.Bll.Services
                 var defensePercentage = defenderSpies == null ? 0 : defenderSpies.Count * 5;
 
                 var diff = attackPercentage - defensePercentage;
-                if(diff <= 0)
+                if (diff <= 0)
                 {
                     spyreport.WinnerId = defenderCountry.OwnerId;
                 }
                 else
                 {
                     var resultNum = new Random().Next(0, 100);
-                    if(resultNum <= diff)
+                    if (resultNum <= diff)
                     {
                         spyreport.WinnerId = attackerCountry.OwnerId;
                         var defenseUnits = defenderCountry.CountryUnits;
@@ -253,8 +253,8 @@ namespace UnderSea.Bll.Services
 
                         var defenderGenerals = defenseUnits.SingleOrDefault(u => u.UnitId == generalId)?.Count ?? 0;
 
-                        spyreport.DefensePoints = (int)(spyreport.DefensePoints* (1+defenderCountry.FightPoint.DefensePointMultiplier));
-                        spyreport.DefensePoints = (int)(spyreport.DefensePoints * (1+defenderGenerals * UnitValueConstants.GeneralBonus));
+                        spyreport.DefensePoints = (int)(spyreport.DefensePoints * (1 + defenderCountry.FightPoint.DefensePointMultiplier));
+                        spyreport.DefensePoints = (int)(spyreport.DefensePoints * (1 + defenderGenerals * UnitValueConstants.GeneralBonus));
                         attackerCountry.CountryUnits.Where(cu => cu.Unit.Name == UnitNameConstants.Felfedezo).FirstOrDefault().Count += spyreport.NumberOfSpies;
                     }
                     else
@@ -269,24 +269,24 @@ namespace UnderSea.Bll.Services
         {
             foreach (var attackerCountry in countries)
             {
-                foreach (var attack in attackerCountry.Attacks.Where(c => world.Round == c.AttackRound)) 
+                foreach (var attack in attackerCountry.Attacks.Where(c => world.Round == c.AttackRound))
                 {
                     var attackUnits = attack.AttackUnits;
 
-                    foreach(var attackUnit in attackUnits)
+                    foreach (var attackUnit in attackUnits)
                     {
-                        if(attackUnit.BattlesPlayed < attackUnit.Unit.UnitLevels.Max(ul => ul.MinimumBattles))
+                        if (attackUnit.BattlesPlayed < attackUnit.Unit.UnitLevels.Max(ul => ul.MinimumBattles))
                         {
                             attackUnit.BattlesPlayed++;
                         }
-                        if(attackerCountry.CountryUnits.Any(cu => cu.UnitId == attackUnit.UnitId && cu.BattlesPlayed == attackUnit.BattlesPlayed))
+                        if (attackerCountry.CountryUnits.Any(cu => cu.UnitId == attackUnit.UnitId && cu.BattlesPlayed == attackUnit.BattlesPlayed))
                         {
                             var unit = attackerCountry.CountryUnits.SingleOrDefault(cu => cu.UnitId == attackUnit.UnitId && cu.BattlesPlayed == attackUnit.BattlesPlayed);
                             unit.Count += attackUnit.Count;
                         }
                         else
                         {
-                            
+
                             attackerCountry.CountryUnits.Add(new CountryUnit
                             {
                                 CountryId = attackerCountry.Id,
@@ -294,7 +294,7 @@ namespace UnderSea.Bll.Services
                                 Count = attackUnit.Count,
                                 BattlesPlayed = attackUnit.BattlesPlayed
                             });
-                            
+
                         }
                     }
                 }
@@ -302,14 +302,14 @@ namespace UnderSea.Bll.Services
             await _context.SaveChangesAsync();
         }
 
-        public void CalculatePoints(ICollection<Country> countries)
+        public void CalculatePoints(ICollection<Country> countries, List<Event> events, World world)
         {
             foreach (var country in countries)
             {
                 int populationPoints = country.Population * PointConstants.Population;
 
                 int buildingPoints = 0;
-                foreach(var building in country.CountryBuildings)
+                foreach (var building in country.CountryBuildings)
                 {
                     buildingPoints += building.Count * PointConstants.Buildings;
                 }
@@ -321,7 +321,7 @@ namespace UnderSea.Bll.Services
                 }
 
                 int militaryPoints = 0;
-                foreach(var unit in country.CountryUnits)
+                foreach (var unit in country.CountryUnits)
                 {
                     switch (unit.Unit.Name)
                     {
@@ -346,6 +346,30 @@ namespace UnderSea.Bll.Services
 
                 country.Owner.Points = populationPoints + buildingPoints + upgradePoints + militaryPoints;
             }
+
+            if (countries.Any(c => c.Owner.Points >= 1000000))
+            {
+                var winner = countries
+                    .OrderByDescending(c => c.Owner.Points)
+                    .FirstOrDefault();
+
+                _context.WorldWinners.Add(new WorldWinner
+                {
+                    UserName = winner.Owner.UserName,
+                    CountryName = winner.Name,
+                    Date = DateTime.Now,
+                    Points = winner.Owner.Points,
+                    WorldRound = world.Round
+                });
+
+                RestartWorld(countries, world);
+            }
+            else
+            {
+                GenerateCountryEvents(countries, events, world);
+                world.Round++;
+            }
+
         }
 
         public void GenerateCountryEvents(ICollection<Country> countries, List<Event> events, World world)
@@ -355,14 +379,14 @@ namespace UnderSea.Bll.Services
             foreach (var country in countries)
             {
                 var randomNumber = random.Next(0, 10);
-                if(randomNumber == 5)
+                if (randomNumber == 5)
                 {
                     var eventNumber = random.Next(0, events.Count);
                     country.CountryEvents.Add(new Model.Models.Joins.CountryEvent
                     {
                         CountryId = country.Id,
                         EventId = events[eventNumber].Id,
-                        EventRound = world.Round+1
+                        EventRound = world.Round + 1
                     });
                     foreach (var eventEffect in events[eventNumber].EventEffects)
                     {
@@ -370,6 +394,34 @@ namespace UnderSea.Bll.Services
                     }
                 }
             }
+        }
+
+        public void RestartWorld(ICollection<Country> countries, World world)
+        {
+            foreach (var country in countries)
+            {
+                country.MaxUnitCount = 0;
+                country.FightPoint.AttackPointMultiplier = 1;
+                country.FightPoint.BonusAttackPoint = 0;
+                country.FightPoint.DefensePointMultiplier = 1;
+                country.Population = 100;
+
+                _context.ActiveConstructions.RemoveRange(country.ActiveConstructions);
+                _context.ActiveUpgradings.RemoveRange(country.ActiveUpgradings);
+                _context.AttackUnits.RemoveRange(country.Attacks.SelectMany(a => a.AttackUnits));
+                _context.Attacks.RemoveRange(country.Attacks);
+                _context.CountryEvents.RemoveRange(country.CountryEvents);
+                _context.CountryUnits.RemoveRange(country.CountryUnits);
+                _context.SpyReports.RemoveRange(country.SentSpies);
+                _context.CountryUpgrades.RemoveRange(country.CountryUpgrades);
+                _context.CountryBuildings.RemoveRange(country.CountryBuildings);
+                foreach (var material in country.CountryMaterials)
+                {
+                    material.BaseProduction = material.Material.MaterialType == MaterialTypeConstants.Pearl ? country.Population * EffectConstants.PopulationPearlMultiplier : 0;
+                    material.Amount = material.Material.MaterialType == MaterialTypeConstants.Pearl ? 5000 : 0;
+                }
+            }
+            world.Round = 1;
         }
 
         public async Task NextRound()
@@ -383,6 +435,7 @@ namespace UnderSea.Bll.Services
             var countries = await _context.Countries.Include(e => e.CountryUnits)
                                                         .ThenInclude(e => e.Unit)
                                                             .ThenInclude(e => e.UnitMaterials)
+                                                    .Include(c => c.SentSpies)
                                                     .Include(e => e.FightPoint)
                                                     .Include(e => e.CountryMaterials)
                                                         .ThenInclude(e => e.Material)
@@ -424,12 +477,13 @@ namespace UnderSea.Bll.Services
                         .ThenInclude(cu => cu.Unit)
                 .ToListAsync();
 
+            var generalId= (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
             var events = await _context.Events
                 .Include(e => e.EventEffects)
                     .ThenInclude(ee => ee.Effect)
                 .ToListAsync();
 
-            var generalId= (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
+            var generalId = (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
 
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -439,21 +493,17 @@ namespace UnderSea.Bll.Services
 
                 PayMercenaryAndFeedSoldiers(countries);
 
-                MakeUpgrades(countries,world);
+                MakeUpgrades(countries, world);
 
-                MakeBuildings(countries,world);
+                MakeBuildings(countries, world);
 
-                Fights(countries,world, generalId);
+                Fights(countries, world, generalId);
 
                 Spies(spyreports, generalId);
 
                 await ReturnAttackUnits(countries, world);
 
-                CalculatePoints(countries);
-
-                GenerateCountryEvents(countries, events, world);
-
-                world.Round++;
+                CalculatePoints(countries, events, world);
 
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
