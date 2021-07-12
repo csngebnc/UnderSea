@@ -125,7 +125,11 @@ class _MilitaryTabState extends State<Military> {
 
     var actualSoldierMax = totalUnits
         .firstWhere((element) => element.id == actualSoldier.id,
-            orElse: () => BattleUnitDto(id: 0, name: 'name', count: 0))
+            orElse: () => BattleUnitDto(
+                id: 0,
+                name: 'name',
+                count: 0,
+                level: 1)) // TODO: átírni nem beégetettre
         .count;
 
     var isSpy = actualSoldier.name == 'Felfedező';
@@ -166,7 +170,7 @@ class _MilitaryTabState extends State<Military> {
                   UnderseaStyles.text(Strings.attack_defence.tr),
                   Expanded(child: Container()),
                   UnderseaStyles.text(
-                      '${actualSoldier.attackPoint}/${actualSoldier.defensePoint}'),
+                      '${/*actualSoldier.attackPoint*/ 6}/${/*actualSoldier.defensePoint*/ 6}'), // TODO: átírni nem beégetettre
                 ],
               ),
               Row(

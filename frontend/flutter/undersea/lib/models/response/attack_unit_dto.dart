@@ -6,8 +6,10 @@ part 'attack_unit_dto.g.dart';
 class AttackUnitDto {
   int unitId;
   int count;
+  int level;
 
-  AttackUnitDto({required this.unitId, required this.count});
+  AttackUnitDto(
+      {required this.unitId, required this.count, required this.level});
 
   factory AttackUnitDto.fromJson(Map<String, dynamic> json) =>
       _$AttackUnitDtoFromJson(json);

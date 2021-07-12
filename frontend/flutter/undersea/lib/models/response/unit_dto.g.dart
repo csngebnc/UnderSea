@@ -10,8 +10,9 @@ UnitDto _$UnitDtoFromJson(Map<String, dynamic> json) {
   return UnitDto(
     id: json['id'] as int,
     name: json['name'] as String,
-    attackPoint: json['attackPoint'] as int,
-    defensePoint: json['defensePoint'] as int,
+    unitLevels: (json['unitLevels'] as List<dynamic>?)
+        ?.map((e) => UnitLevelDto.fromJson(e as Map<String, dynamic>))
+        .toList(),
     currentCount: json['currentCount'] as int,
     mercenaryPerRound: json['mercenaryPerRound'] as int,
     requiredMaterials: (json['requiredMaterials'] as List<dynamic>?)
@@ -24,8 +25,7 @@ UnitDto _$UnitDtoFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$UnitDtoToJson(UnitDto instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'attackPoint': instance.attackPoint,
-      'defensePoint': instance.defensePoint,
+      'unitLevels': instance.unitLevels,
       'mercenaryPerRound': instance.mercenaryPerRound,
       'supplyPerRound': instance.supplyPerRound,
       'requiredMaterials': instance.requiredMaterials,

@@ -58,7 +58,9 @@ class _AttackingTabState extends State<AttackingTab> {
             for (int i = 0; i < sliderValues.length; i++) {
               if (sliderValues[i] != 0) {
                 units.add(AttackUnitDto(
-                    unitId: soldierList.value[i].id, count: sliderValues[i]));
+                    unitId: soldierList.value[i].id,
+                    count: sliderValues[i],
+                    level: 2)); // TODO: átírni nem beégetettre
               }
             }
             controller.attack(SendAttackDto(

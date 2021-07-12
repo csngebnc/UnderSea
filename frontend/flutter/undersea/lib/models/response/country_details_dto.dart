@@ -3,6 +3,8 @@ import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/building_info_dto.dart';
 import 'package:undersea/models/response/material_details_dto.dart';
 
+import 'event_dto.dart';
+
 part 'country_details_dto.g.dart';
 
 @JsonSerializable()
@@ -10,6 +12,7 @@ class CountryDetailsDto {
   int maxUnitCount;
   List<BattleUnitDto>? units;
   List<MaterialDetailsDto>? materials;
+  EventDto? event;
   int population;
   bool hasSonarCanon;
   List<BuildingInfoDto>? buildings;
@@ -20,6 +23,7 @@ class CountryDetailsDto {
       required this.population,
       this.buildings,
       this.units,
+      this.event,
       required this.hasSonarCanon});
 
   factory CountryDetailsDto.fromJson(Map<String, dynamic> json) =>

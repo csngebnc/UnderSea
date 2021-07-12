@@ -21,8 +21,11 @@ class ExpandedMenu extends StatelessWidget {
     units.forEach((element) {
       var isSpy = element.name == 'Felfedező';
       var actualSoldierMax = allUnits
-          .firstWhere((a) => a.id == element.id,
-              orElse: () => BattleUnitDto(id: 0, name: 'name', count: 0))
+          .firstWhere(
+            (a) => a.id == element.id,
+            orElse: () =>
+                BattleUnitDto(id: 0, name: 'name', count: 0, level: 1),
+          )
           .count;
       list.add(UnderseaStyles.militaryIcon(
           BattleDataController.imageNameMap[element.name] ?? 'shark',

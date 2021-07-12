@@ -10,6 +10,7 @@ AttackUnitDto _$AttackUnitDtoFromJson(Map<String, dynamic> json) {
   return AttackUnitDto(
     unitId: json['unitId'] as int,
     count: json['count'] as int,
+    level: json['level'] as int,
   );
 }
 
@@ -17,4 +18,5 @@ Map<String, dynamic> _$AttackUnitDtoToJson(AttackUnitDto instance) =>
     <String, dynamic>{
       'unitId': instance.unitId,
       'count': instance.count,
+      'level': instance.level,
     };

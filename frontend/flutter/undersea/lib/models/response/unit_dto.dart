@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:undersea/models/response/unit_level_dto.dart';
 
 import 'material_dto.dart';
 
@@ -8,8 +9,7 @@ part 'unit_dto.g.dart';
 class UnitDto {
   int id;
   String name;
-  int attackPoint;
-  int defensePoint;
+  List<UnitLevelDto>? unitLevels;
   int mercenaryPerRound;
   int supplyPerRound;
   List<MaterialDto>? requiredMaterials;
@@ -18,8 +18,7 @@ class UnitDto {
   UnitDto(
       {required this.id,
       required this.name,
-      required this.attackPoint,
-      required this.defensePoint,
+      this.unitLevels,
       required this.currentCount,
       required this.mercenaryPerRound,
       this.requiredMaterials,
