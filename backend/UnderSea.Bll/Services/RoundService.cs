@@ -477,13 +477,11 @@ namespace UnderSea.Bll.Services
                         .ThenInclude(cu => cu.Unit)
                 .ToListAsync();
 
-            var generalId= (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
+            var generalIdvar = (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
             var events = await _context.Events
                 .Include(e => e.EventEffects)
                     .ThenInclude(ee => ee.Effect)
                 .ToListAsync();
-
-            var generalId = (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
 
             using (var transaction = _context.Database.BeginTransaction())
             {
@@ -497,9 +495,9 @@ namespace UnderSea.Bll.Services
 
                 MakeBuildings(countries, world);
 
-                Fights(countries, world, generalId);
+                Fights(countries,world, generalIdvar);
 
-                Spies(spyreports, generalId);
+                Spies(spyreports, generalIdvar);
 
                 await ReturnAttackUnits(countries, world);
 
