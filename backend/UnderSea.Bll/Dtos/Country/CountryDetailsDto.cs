@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnderSea.Bll.Dtos.Event;
 using UnderSea.Bll.Dtos.Material;
 
 namespace UnderSea.Bll.Dtos
@@ -17,5 +18,6 @@ namespace UnderSea.Bll.Dtos
 
         public IEnumerable<BuildingInfoDto> Buildings { get; set; }
         public ICollection<BattleUnitDto> Units { get; set; }
+        public EventDto Event { get; set; }
     }
 }

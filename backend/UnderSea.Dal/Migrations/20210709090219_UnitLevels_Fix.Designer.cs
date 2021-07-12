@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UnderSea.Dal.Data;
 
 namespace UnderSea.Dal.Migrations
 {
     [DbContext(typeof(UnderSeaDbContext))]
-    partial class UnderSeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210709090219_UnitLevels_Fix")]
+    partial class UnitLevels_Fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -558,68 +560,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasDiscriminator<string>("EffectType").HasValue("effect_base");
                 });
 
-            modelBuilder.Entity("UnderSea.Model.Models.Event", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Events");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Pestis"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Víz alatti tűz"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Aranybánya"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Jó termés"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Rossz termés"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Elégedett katonák"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Elégedetlen katonák"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Elégedett emberek"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Elégedetlen emberek"
-                        });
-                });
-
             modelBuilder.Entity("UnderSea.Model.Models.Joins.BuildingMaterial", b =>
                 {
                     b.Property<int>("BuildingId")
@@ -668,31 +608,6 @@ namespace UnderSea.Dal.Migrations
                             MaterialId = 1,
                             Amount = 1000
                         });
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Joins.CountryEvent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventRound")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("CountryEvents");
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.Joins.CountryMaterial", b =>
@@ -958,68 +873,6 @@ namespace UnderSea.Dal.Migrations
                             Amount = 0,
                             BaseProduction = 0,
                             Multiplier = 1.0
-                        });
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Joins.EventEffect", b =>
-                {
-                    b.Property<int>("EffectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EffectId", "EventId");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("EventEffects");
-
-                    b.HasData(
-                        new
-                        {
-                            EffectId = 11,
-                            EventId = 1
-                        },
-                        new
-                        {
-                            EffectId = 12,
-                            EventId = 2
-                        },
-                        new
-                        {
-                            EffectId = 13,
-                            EventId = 3
-                        },
-                        new
-                        {
-                            EffectId = 14,
-                            EventId = 4
-                        },
-                        new
-                        {
-                            EffectId = 15,
-                            EventId = 5
-                        },
-                        new
-                        {
-                            EffectId = 16,
-                            EventId = 6
-                        },
-                        new
-                        {
-                            EffectId = 17,
-                            EventId = 7
-                        },
-                        new
-                        {
-                            EffectId = 18,
-                            EventId = 8
-                        },
-                        new
-                        {
-                            EffectId = 19,
-                            EventId = 9
                         });
                 });
 
@@ -1743,132 +1596,6 @@ namespace UnderSea.Dal.Migrations
                         });
                 });
 
-            modelBuilder.Entity("UnderSea.Model.Models.Events.BadHarvest", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Effect");
-
-                    b.HasDiscriminator().HasValue("BadHarvest");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 15,
-                            Name = "Minden áramlásirányító 150 korallt ad ebben a körben."
-                        });
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Events.Goldmine", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Effect");
-
-                    b.HasDiscriminator().HasValue("Goldmine");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 13,
-                            Name = "Az embereid felfedeztek egy új aranybányát, kapsz 1000 bónusz gyöngyöt."
-                        });
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Events.GoodHarvest", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Effect");
-
-                    b.HasDiscriminator().HasValue("GoodHarvest");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 14,
-                            Name = "Minden áramlásirányító 250 korallt ad ebben a körben."
-                        });
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Events.PlagueEffect", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Effect");
-
-                    b.HasDiscriminator().HasValue("PlagueEffect");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 11,
-                            Name = " Az országodban kitört a pestis, elveszítesz 50 embert és egy áramlásirányítót."
-                        });
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Events.SatisfiedPeople", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Effect");
-
-                    b.HasDiscriminator().HasValue("SatisfiedPeople");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 18,
-                            Name = "Az országodban elégedettek az emberek, ezért extra 50 ember költözött be és építettek maguknak egy áramlásirányítót"
-                        });
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Events.SatisfiedUnits", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Effect");
-
-                    b.HasDiscriminator().HasValue("SatisfiedUnits");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 16,
-                            Name = "Katonáid elégedettek ebben a körben, minden katona támadása nő eggyel."
-                        });
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Events.UnsatisfiedPeople", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Effect");
-
-                    b.HasDiscriminator().HasValue("UnsatisfiedPeople");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 19,
-                            Name = "Az országodban elégedetlenek az emberek, ezért 50 ember elköltözött és az áramlásirányítójuk lerombolták"
-                        });
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Events.UnsatisfiedUnits", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Effect");
-
-                    b.HasDiscriminator().HasValue("UnsatisfiedUnits");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 17,
-                            Name = "Katonáid elégedetlenek ebben a körben, minden katona támadása csökken eggyel."
-                        });
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Events.WaterFire", b =>
-                {
-                    b.HasBaseType("UnderSea.Model.Models.Effect");
-
-                    b.HasDiscriminator().HasValue("WaterFire");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 12,
-                            Name = "Az országodban tűz ütött ki és leégett egy zátonyvár."
-                        });
-                });
-
             modelBuilder.Entity("UnderSea.Model.Models.MilitaryEffect", b =>
                 {
                     b.HasBaseType("UnderSea.Model.Models.Effect");
@@ -2127,9 +1854,6 @@ namespace UnderSea.Dal.Migrations
                             b1.Property<double>("AttackPointMultiplier")
                                 .HasColumnType("float");
 
-                            b1.Property<double>("BonusAttackPoint")
-                                .HasColumnType("float");
-
                             b1.Property<double>("DefensePointMultiplier")
                                 .HasColumnType("float");
 
@@ -2145,70 +1869,60 @@ namespace UnderSea.Dal.Migrations
                                 {
                                     CountryId = 1,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 2,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 3,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 4,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 5,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 6,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 7,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 8,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 9,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
                                     DefensePointMultiplier = 1.0
                                 },
                                 new
                                 {
                                     CountryId = 10,
                                     AttackPointMultiplier = 1.0,
-                                    BonusAttackPoint = 0.0,
                                     DefensePointMultiplier = 1.0
                                 });
                         });
@@ -2296,25 +2010,6 @@ namespace UnderSea.Dal.Migrations
                     b.Navigation("Material");
                 });
 
-            modelBuilder.Entity("UnderSea.Model.Models.Joins.CountryEvent", b =>
-                {
-                    b.HasOne("UnderSea.Model.Models.Country", "Country")
-                        .WithMany("CountryEvents")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("UnderSea.Model.Models.Event", "Event")
-                        .WithMany("CountryEvents")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-
-                    b.Navigation("Event");
-                });
-
             modelBuilder.Entity("UnderSea.Model.Models.Joins.CountryMaterial", b =>
                 {
                     b.HasOne("UnderSea.Model.Models.Country", "Country")
@@ -2332,25 +2027,6 @@ namespace UnderSea.Dal.Migrations
                     b.Navigation("Country");
 
                     b.Navigation("Material");
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Joins.EventEffect", b =>
-                {
-                    b.HasOne("UnderSea.Model.Models.Effect", "Effect")
-                        .WithMany()
-                        .HasForeignKey("EffectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UnderSea.Model.Models.Event", "Event")
-                        .WithMany("EventEffects")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Effect");
-
-                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.Joins.UnitMaterial", b =>
@@ -2453,8 +2129,6 @@ namespace UnderSea.Dal.Migrations
 
                     b.Navigation("CountryBuildings");
 
-                    b.Navigation("CountryEvents");
-
                     b.Navigation("CountryMaterials");
 
                     b.Navigation("CountryUnits");
@@ -2471,13 +2145,6 @@ namespace UnderSea.Dal.Migrations
                     b.Navigation("BuildingEffects");
 
                     b.Navigation("UpgradeEffects");
-                });
-
-            modelBuilder.Entity("UnderSea.Model.Models.Event", b =>
-                {
-                    b.Navigation("CountryEvents");
-
-                    b.Navigation("EventEffects");
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.Unit", b =>

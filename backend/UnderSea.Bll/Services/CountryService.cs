@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.Event;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
@@ -43,6 +44,10 @@ namespace UnderSea.Bll.Services
                     .ThenInclude(cu => cu.Upgrade)
                         .ThenInclude(u => u.UpgradeEffects)
                             .ThenInclude(ue => ue.Effect)
+                .Include(ce => ce.CountryEvents)
+                    .ThenInclude(ce => ce.Event)
+                    .ThenInclude(e => e.EventEffects)
+                    .ThenInclude(ce => ce.Effect)
                 .FirstOrDefaultAsync();
 
             if (country == null)
@@ -73,10 +78,25 @@ namespace UnderSea.Bll.Services
                         Id = unit.Id,
                         Name = unit.Name,
                         ImageUrl = unit.ImageUrl,
-                        Count = country.CountryUnits.SingleOrDefault(u => u.UnitId == unit.Id)?.Count ?? 0
+                        Count = country.CountryUnits.Where(u => u.UnitId == unit.Id).ToList().Sum(u => u.Count)
                     };
                 }).ToList(),
                 Population = country.Population,
+                Event = country.CountryEvents
+                        .Select(ce => 
+                            new EventDto 
+                            { 
+                                Id = ce.EventId,
+                                Name = ce.Event.Name,
+                                EventRound = ce.EventRound,
+                                Effects = ce.Event.EventEffects.Select(ee =>
+                                new EffectDto { 
+                                    Id = ee.EffectId,
+                                    Name = ee.Effect.Name
+                                })
+                                .ToList()
+                            })
+                        .FirstOrDefault(ce => ce.EventRound == country.World.Round),
                 HasSonarCanon = hasSonarCanon,
                 Materials = country.CountryMaterials.Select(cm =>
                 {
