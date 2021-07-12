@@ -31,10 +31,9 @@ namespace UnderSea.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<bool> Register(RegisterDto registerDto)
+        public async Task Register(RegisterDto registerDto)
         {
             await _userService.Register(registerDto);
-            return true;
         }
         
         [HttpGet("ranklist")]
