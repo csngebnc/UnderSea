@@ -1203,6 +1203,63 @@ export class UserService {
         }
         return _observableOf<PagedResultOfUserRankDto>(<any>null);
     }
+
+    worldwinners(pageSize: number | undefined, pageNumber: number | undefined, name: string | null | undefined): Observable<PagedResultOfUserRankDto> {
+        let url_ = this.baseUrl + "/api/User/worldwinners?";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (pageNumber === null)
+            throw new Error("The parameter 'pageNumber' cannot be null.");
+        else if (pageNumber !== undefined)
+            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processWorldwinners(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processWorldwinners(<any>response_);
+                } catch (e) {
+                    return <Observable<PagedResultOfUserRankDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PagedResultOfUserRankDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processWorldwinners(response: HttpResponseBase): Observable<PagedResultOfUserRankDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : <PagedResultOfUserRankDto>JSON.parse(_responseText, this.jsonParseReviver);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PagedResultOfUserRankDto>(<any>null);
+    }
 }
 
 export interface PagedResultOfAttackableUserDto {

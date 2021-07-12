@@ -79,8 +79,7 @@ namespace UnderSea.Bll.Services
                         ImageUrl = defaultUnit.ImageUrl,
                         Level = gb.Key.Level
                     };
-                }).ToList()
-                ;
+                }).ToList();
         }
 
         public async Task<IEnumerable<BattleUnitDto>> GetUserAllUnitsAsync()
@@ -123,7 +122,7 @@ namespace UnderSea.Bll.Services
                 Level = spy.UnitLevels.FirstOrDefault().Level
             });
 
-            return units;
+            return units.OrderBy(u => u.Name).ThenBy(u => u.Level);
         }
 
         public async Task<PagedResult<LoggedAttackDto>> GetLoggedAttacksAsync(PaginationData data)

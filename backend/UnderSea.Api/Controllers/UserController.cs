@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.User;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
@@ -30,21 +31,27 @@ namespace UnderSea.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<string>> Register(RegisterDto registerDto)
+        public async Task Register(RegisterDto registerDto)
         {
-            return Ok(await _userService.Register(registerDto));
+            await _userService.Register(registerDto);
         }
         
         [HttpGet("ranklist")]
-        public async Task<ActionResult<PagedResult<UserRankDto>>> GetRanklist([FromQuery] PaginationData pagination, [FromQuery] string name)
+        public async Task<PagedResult<UserRankDto>> GetRanklist([FromQuery] PaginationData pagination, [FromQuery] string name)
         {
-            return Ok(await _userService.GetRanklist(pagination, name));
+            return await _userService.GetRanklist(pagination, name);
+        }
+
+        [HttpGet("worldwinners")]
+        public async Task<PagedResult<WorldWinnerDto>> GetWorldWinners([FromQuery] PaginationData pagination, [FromQuery] string name)
+        {
+            return await _userService.GetWorldWinners(pagination, name);
         }
 
         [HttpGet]
-        public async Task<ActionResult<UserInfoDto>> GetUserInfo()
+        public async Task<UserInfoDto> GetUserInfo()
         {
-            return Ok(await _userService.GetUserInfo());
+            return await _userService.GetUserInfo();
         }
     }
 }

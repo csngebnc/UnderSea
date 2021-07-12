@@ -43,9 +43,11 @@ namespace UnderSea.Dal.Data
         public DbSet<UnitMaterial> UnitMaterials { get; set; }
         public DbSet<CountryMaterial> CountryMaterials { get; set; }
         public DbSet<UnitLevel> UnitLevels { get; set; }
+
         public DbSet<Event> Events { get; set; }
         public DbSet<EventEffect> EventEffects { get; set; }
         public DbSet<CountryEvent> CountryEvents { get; set; }
+        public DbSet<WorldWinner> WorldWinners { get; set; }
 
         public UnderSeaDbContext(DbContextOptions options) : base(options)
         {

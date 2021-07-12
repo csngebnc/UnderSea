@@ -12,7 +12,7 @@ using UnderSea.Dal.Data;
 
 namespace UnderSea.Bll.Services
 {
-    public class EventService
+    public class EventService : IEventService
     {
         private readonly UnderSeaDbContext _context;
         private readonly IIdentityService _identityService;
@@ -32,8 +32,9 @@ namespace UnderSea.Bll.Services
             var events = await _context.CountryEvents
                 .Include(ce => ce.Event)
                     .ThenInclude(e => e.EventEffects)
-                    .ThenInclude(ce => ce.Effect)
+                        .ThenInclude(ce => ce.Effect)
                 .Where(ee => ee.CountryId == country.Id)
+                .OrderByDescending(e => e.EventRound)
                 .Select(ee => new EventDto
                 {
                     Id = ee.EventId,

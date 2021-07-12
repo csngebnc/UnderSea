@@ -33,6 +33,7 @@ namespace UnderSea.Bll.Services
 
             var country = await _context.Countries
                 .Where(u => u.OwnerId == userid)
+                .Include(c => c.World)
                 .Include(c => c.CountryMaterials)
                     .ThenInclude(cm => cm.Material)
                 .Include(c => c.ActiveConstructions)
@@ -46,8 +47,8 @@ namespace UnderSea.Bll.Services
                             .ThenInclude(ue => ue.Effect)
                 .Include(ce => ce.CountryEvents)
                     .ThenInclude(ce => ce.Event)
-                    .ThenInclude(e => e.EventEffects)
-                    .ThenInclude(ce => ce.Effect)
+                        .ThenInclude(e => e.EventEffects)
+                            .ThenInclude(ce => ce.Effect)
                 .FirstOrDefaultAsync();
 
             if (country == null)
@@ -78,7 +79,7 @@ namespace UnderSea.Bll.Services
                         Id = unit.Id,
                         Name = unit.Name,
                         ImageUrl = unit.ImageUrl,
-                        Count = country.CountryUnits.Where(u => u.UnitId == unit.Id).ToList().Sum(u => u.Count)
+                        Count = country.CountryUnits.Where(u => u.UnitId == unit.Id).Sum(u => u.Count)
                     };
                 }).ToList(),
                 Population = country.Population,
