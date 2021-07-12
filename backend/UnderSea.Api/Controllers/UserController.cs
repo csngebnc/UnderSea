@@ -41,6 +41,12 @@ namespace UnderSea.Api.Controllers
             return Ok(await _userService.GetRanklist(pagination, name));
         }
 
+        [HttpGet("worldwinners")]
+        public async Task<ActionResult<PagedResult<UserRankDto>>> GetWorldWinners([FromQuery] PaginationData pagination, [FromQuery] string name)
+        {
+            return Ok(await _userService.GetWorldWinners(pagination, name));
+        }
+
         [HttpGet]
         public async Task<ActionResult<UserInfoDto>> GetUserInfo()
         {
