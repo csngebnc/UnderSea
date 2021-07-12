@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>aspnet-UnderSea.Api-22186E29-28BD-44FB-A081-E22DF125F86A</UserSecretsId>
+
+	<SpaRoot>..\frontend\angular\under-sea\</SpaRoot>
+	<DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+	<BuildServerSideRenderer>false</BuildServerSideRenderer>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,6 +45,24 @@
 
 		<Delete Files="$(ProjectDir)\obj\$(MSBuildProjectFile).NSwag.targets" />
 
+	</Target>
+
+	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+		<Exec WorkingDirectory="../frontend/angular/under-sea" Command="npm install" />
+		<Exec WorkingDirectory="../frontend/angular/under-sea" Command="npm run build -- --prod" />
+		<Exec WorkingDirectory="../frontend/angular/under-sea" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+
+		<!-- Include the newly-built files in the publish output -->
+		<ItemGroup>
+			<DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+			<DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+				<RelativePath>%(DistFiles.Identity)</RelativePath>
+				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+				<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			</ResolvedFileToPublish>
+		</ItemGroup>
 	</Target>
     
 </Project>
