@@ -10,7 +10,7 @@ namespace UnderSea.Model.Models
     [Owned]
     public class FightPoint
     {
-        public int BonusAttackPoint { get; set; } = 0;
+        public double BonusAttackPoint { get; set; } = 0.0;
         public double AttackPointMultiplier { get; set; } = 1;
         public double DefensePointMultiplier { get; set; } = 1;
     }
