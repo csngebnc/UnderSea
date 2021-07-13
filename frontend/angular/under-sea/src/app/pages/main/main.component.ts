@@ -35,6 +35,7 @@ export class MainComponent implements OnInit {
   }
 
   private loadResources(): void {
+    this.closedNotification = false;
     this.store.dispatch(GetResources);
     this.store.dispatch(GetUserData);
   }

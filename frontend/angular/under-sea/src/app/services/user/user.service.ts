@@ -1,5 +1,3 @@
-import { WorldWinner } from './../../models/worldwinner.model';
-import { PagedWinners } from './../../models/paged-winners.model';
 import { Injectable } from '@angular/core';
 import {
   UserService as uService,
@@ -19,7 +17,6 @@ export class UserService {
     pageNumber: number,
     filter: string | undefined
   ): Observable<PagedList> {
-    if (!filter) filter = undefined;
     return this.userService.ranklist(10, pageNumber, filter).pipe(
       map((r) => {
         const result: PagedList = {
@@ -51,18 +48,24 @@ export class UserService {
   getWinners(
     pageNumber: number,
     filter: string | undefined
-  ): Observable<PagedWinners> {
+  ): Observable<PagedList> {
     return this.userService.worldwinners(10, pageNumber, filter).pipe(
       map((w) => {
-        const result: PagedWinners = {
+        const result: PagedList = {
           pageSize: w.pageSize,
           pageNumber: w.pageNumber,
           allResultsCount: w.allResultsCount,
-          winners: [],
+          list: [],
         };
 
         w.results.forEach((r) => {
-          result.winners.push(r as WorldWinner);
+          result.list.push({
+            name: r.userName,
+            countryName: r.countryName,
+            score: r.points,
+            worldRound: r.worldRound,
+            date: new Date(r.date),
+          });
         });
 
         return result;
