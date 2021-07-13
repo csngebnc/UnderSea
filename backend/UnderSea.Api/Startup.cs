@@ -5,6 +5,7 @@ using Hangfire;
 using Hangfire.SqlServer;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NSwag;
+using NSwag.AspNetCore;
+using NSwag.Generation.Processors.Security;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -117,6 +121,51 @@ namespace UnderSea.Api
                 }
                 );
 
+            services.AddAuthorization(options =>
+            {
+                // There is no role based authorization in the app, as all users are in the same role
+                // But there is a scope based authorization for the clients.
+                // The client app can only execute the request if it has the required scope
+                options.AddPolicy("api-openid", policy => policy.RequireAuthenticatedUser()
+                    .RequireClaim("scope", "api-openid")
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
+
+                options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .Build();
+            });
+
+            services.AddOpenApiDocument(config =>
+            {
+                config.Title = "UnderSea API";
+                config.Description = "Strategy game api";
+                config.DocumentName = "UnderSea";
+
+                config.AddSecurity("OAuth2", new OpenApiSecurityScheme
+                {
+                    OpenIdConnectUrl =
+                        $"{Configuration.GetValue<string>("Authentication:Authority")}/.well-known/openid-configuration",
+                    Scheme = "Bearer",
+                    Type = OpenApiSecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl =
+                                $"{Configuration.GetValue<string>("Authentication:Authority")}/connect/authorize",
+                            TokenUrl = $"{Configuration.GetValue<string>("Authentication:Authority")}/connect/token",
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { "openid", "OpenId" },
+                                { "api-openid", "all" }
+                            }
+                        }
+                    }
+                });
+
+                config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("OAuth2"));
+            });
+
             services.AddProblemDetails(ConfigureProblemDetails);
 
             services.AddControllersWithViews().AddFluentValidation(fv =>
@@ -170,7 +219,18 @@ namespace UnderSea.Api
             manager.AddOrUpdate<IRoundService>("Next round", (roundService) => roundService.NextRound(), Cron.Hourly());
 
             app.UseOpenApi();
-            app.UseSwaggerUi3();
+            app.UseSwaggerUi3(config =>
+            {
+                config.OAuth2Client = new OAuth2ClientSettings
+                {
+                    ClientId = "undersea-swagger",
+                    ClientSecret = null,
+                    UsePkceWithAuthorizationCodeGrant = true,
+                    ScopeSeparator = " ",
+                    Realm = null,
+                    AppName = "UnderSea Swagger Client"
+                };
+            });
 
             app.UseRouting();
 
