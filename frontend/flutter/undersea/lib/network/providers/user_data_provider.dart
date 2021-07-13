@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:undersea/models/response/paged_result_of_user_rank_dto.dart';
 import 'package:undersea/models/response/paged_result_of_world_winner_dto.dart';
@@ -31,10 +33,11 @@ class UserDataProvider extends NetworkProvider {
       });
 
   Future<Response<PagedResultOfWorldWinnerDto>> getWinners() =>
-      get("/api/User/ranklist",
+      get("/api/User/worldwinners",
           contentType: 'application/json',
-          query: {'PageSize': '1', 'PageNumber': '1', 'name': ''},
+          query: {'PageSize': '1', 'PageNumber': '1', 'name': ' '},
           decoder: (response) {
+        log('$response');
         return PagedResultOfWorldWinnerDto.fromJson(response);
       });
 }

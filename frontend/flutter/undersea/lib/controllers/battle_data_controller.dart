@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/attackable_user_dto.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
@@ -239,6 +240,7 @@ class BattleDataController extends GetxController {
         getAllUnits();
         getUnitTypes();
         getSpies();
+        Get.find<CountryDataController>().getCountryDetails();
         UnderseaStyles.snackbar(
             Strings.successful_purchase.tr, Strings.new_units.tr);
       }
