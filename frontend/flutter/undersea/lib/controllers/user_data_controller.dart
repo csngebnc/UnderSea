@@ -144,11 +144,17 @@ class UserDataController extends GetxController {
         winnerList = Rx(response.body!);
 
         int roundPersisted = storage.read(Constants.ROUND_NUM) ?? 0;
+        var winner = winnerList.value?.results?.first;
         var round = userInfoData.value?.round ?? roundPersisted + 1;
 
-        if (round <= roundPersisted &&
-            storage.read(Constants.WINNER_SHOWN) != true &&
-            winnerList.value?.allResultsCount != 0) {
+        var areDatesCorrect = winner?.date.toString() !=
+            storage.read(
+              Constants.WINNER_DATE + (userInfoData()?.name ?? 'name'),
+            );
+
+        if (round < roundPersisted &&
+            winnerList.value?.allResultsCount != 0 &&
+            areDatesCorrect) {
           Get.defaultDialog(
               title: "Új játék indult!",
               backgroundColor: UnderseaStyles.hintColor,
@@ -174,10 +180,9 @@ class UserDataController extends GetxController {
                           Text('Az előző játék győztese',
                               style: UnderseaStyles.listBold),
                           SizedBox(height: 5),
-                          Text(' ${winnerList.value?.results?.first.userName}',
+                          Text(' ${winner?.userName}',
                               style: UnderseaStyles.listRegular),
-                          Text(
-                              ' ${winnerList.value?.results?.first.countryName}',
+                          Text(' ${winner?.countryName}',
                               style: UnderseaStyles.listRegular),
                           Expanded(child: Container()),
                           UnderseaStyles.elevatedButton(
@@ -185,7 +190,14 @@ class UserDataController extends GetxController {
                               width: 100,
                               height: 40,
                               onPressed: () {
-                                storage.write(Constants.WINNER_SHOWN, true);
+                                storage.write(
+                                    Constants.WINNER_SHOWN +
+                                        (userInfoData()?.name ?? 'name'),
+                                    true);
+                                storage.write(
+                                    Constants.WINNER_DATE +
+                                        (userInfoData()?.name ?? 'name'),
+                                    winner?.date.toString());
                                 Get.back();
                               }),
                         ],

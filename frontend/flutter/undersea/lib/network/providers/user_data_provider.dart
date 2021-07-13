@@ -37,7 +37,6 @@ class UserDataProvider extends NetworkProvider {
           contentType: 'application/json',
           query: {'PageSize': '1', 'PageNumber': '1', 'name': ' '},
           decoder: (response) {
-        log('$response');
         return PagedResultOfWorldWinnerDto.fromJson(response);
       });
 }

@@ -92,7 +92,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: TextButton(
                         onPressed: () {
                           var storage = GetStorage();
-                          storage.read(Constants.TOKEN);
+                          storage.remove(Constants.TOKEN);
+
+                          storage.remove(Constants.WINNER_SHOWN);
                           Get.off(LoginPage());
                         },
                         child: Text(Strings.logout.tr,
