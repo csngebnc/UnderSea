@@ -1,5 +1,5 @@
 <input type="text" placeholder="Felhasználónév" [value]="defaultValue ? defaultValue : ''"
-  class="text-input m-0 mt-1 w-100" (keyup)="search($event.target.value)" />
+  class="text-input m-0 mt-1 w-100" (keyup)="search($event.target.value)" #search />
 <div class="divider mt-05"></div>
 <ul class="p-0 m-0">
   <li *ngFor="let item of list" class="non-styled-list-item">
