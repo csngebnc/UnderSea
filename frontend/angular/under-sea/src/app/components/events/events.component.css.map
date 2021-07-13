@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "ACAA,AAAA,WAAW,CAAC;EACV,MAAM,EAAE,iBAAiB;CAC1B",
+    "sources": [
+        "events.component.scss",
+        "../reports/reports.component.scss"
+    ],
+    "names": [],
+    "file": "events.component.css"
+}

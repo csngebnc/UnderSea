@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "upgrade-details.component.scss"
+    ],
+    "names": [],
+    "file": "upgrade-details.component.css"
+}

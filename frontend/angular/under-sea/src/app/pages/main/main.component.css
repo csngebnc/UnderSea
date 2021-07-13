@@ -1,0 +1,12 @@
+.building-container-link {
+  width: 100%;
+  height: 100%;
+  cursor: default;
+}
+
+.w-300px {
+  width: 300px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+/*# sourceMappingURL=main.component.css.map */

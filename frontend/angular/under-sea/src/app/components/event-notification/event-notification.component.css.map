@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,GAAG,CAAC;EACF,MAAM,EAAE,KAAK;CACd",
+    "sources": [
+        "event-notification.component.scss"
+    ],
+    "names": [],
+    "file": "event-notification.component.css"
+}
