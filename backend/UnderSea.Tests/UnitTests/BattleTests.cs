@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -8,6 +9,7 @@ using AutoMapper;
 using FluentAssertions;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using UnderSea.Api.Services;
@@ -17,62 +19,166 @@ using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Dal.Data;
+using UnderSea.Model.Models;
 using Xunit;
 
 namespace UnderSea.Tests.UnitTests
 {
-    public class BattleTests
+    public class BattleTests : UnitTest
     {
-        private UnderSeaDbContext _context;
+
         private IBattleService _service;
-        private IMapper _mapper;
-        private readonly IIdentityService identityService;
-        private readonly Mock<HttpContext> mockHttpContext;
 
-        private readonly string LoggedInUserId = "af378505-14cb-4f49-bb01-ba2c8fdef77d";
-        public BattleTests()
+        public BattleTests() : base()
         {
-            var mockMapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new AutoMapperProfiles());
-            });
-            _mapper = mockMapper.CreateMapper();
-
-            var options = new DbContextOptionsBuilder<UnderSeaDbContext>()
-                .UseInMemoryDatabase("TestDatabaseBattle")
-                .Options;
-
-            var mockAccessor = new Mock<IHttpContextAccessor>();
-            mockHttpContext = new Mock<HttpContext>();
-
-            mockHttpContext.Setup(x => x.User.Claims).Returns(new List<Claim>
-            {
-                new Claim(JwtClaimTypes.Subject, LoggedInUserId)
-            });
-
-            mockAccessor.Setup(x => x.HttpContext).Returns(mockHttpContext.Object);
-
-            identityService = new IdentityService(mockAccessor.Object);
-
-            _context = new UnderSeaDbContext(options);
-            _context.Database.EnsureCreated();
-
             _service = new BattleService(_context, _mapper, identityService);
         }
 
         [Fact]
         public async Task AttackableUsersTestWithoutFilter()
         {
+            var paginationData = new PaginationData();
+
             // Arrange
-            var expectedAttackableUsers = await _context.Users.Where(user => user.Id != LoggedInUserId).ToListAsync();
+            var expectedAttackableUsers = await _context.Users
+                .Where(user => user.Id != LoggedInUserId)
+                .ToListAsync();
 
             // Act
-            var actualAttackableUsers = await _service.GetAttackableUsersAsync(new PaginationData(), null);
+            var actualAttackableUsers = await _service.GetAttackableUsersAsync(paginationData, null);
+
+            // Assert
+            actualAttackableUsers.AllResultsCount.Should().Be(expectedAttackableUsers.Count);
+            actualAttackableUsers.Results
+                .Any(user => user.Id == "a63a97aa-4ae8-4185-8621-be02286b1542")
+                .Should().Be(expectedAttackableUsers.Any(user => user.Id == "a63a97aa-4ae8-4185-8621-be02286b1542"));
+            actualAttackableUsers.PageNumber.Should().Be(paginationData.PageNumber);
+            actualAttackableUsers.PageSize.Should().Be(paginationData.PageSize);
+        }
+
+        [Fact]
+        public async Task AttackableUsersTestWithFilter()
+        {
+            string filter = "bly";
+            var paginationData = new PaginationData();
+
+            // Arrange
+            var expectedAttackableUsers = await _context.Users
+                .Where(user => user.Id != LoggedInUserId && user.UserName
+                .Contains(filter))
+                .ToListAsync();
+
+            // Act
+            var actualAttackableUsers = await _service.GetAttackableUsersAsync(paginationData, filter);
 
             // Assert
             actualAttackableUsers.AllResultsCount.Should().Be(expectedAttackableUsers.Count);
             actualAttackableUsers.Results.Any(user => user.Id == "a63a97aa-4ae8-4185-8621-be02286b1542")
                 .Should().Be(expectedAttackableUsers.Any(user => user.Id == "a63a97aa-4ae8-4185-8621-be02286b1542"));
+            actualAttackableUsers.PageNumber.Should().Be(paginationData.PageNumber);
+            actualAttackableUsers.PageSize.Should().Be(paginationData.PageSize);
+        }
+
+        [Fact]
+        public async Task GetUserUnitsTest()
+        {
+            // Arrange
+            var countryUnit = new CountryUnit
+            {
+                CountryId = 1,
+                UnitId = 3,
+                Count = 20,
+                BattlesPlayed = 5
+            };
+
+            var countryUnit2 = new CountryUnit
+            {
+                CountryId = 1,
+                UnitId = 2,
+                Count = 40,
+                BattlesPlayed = 2
+            };
+
+            _context.CountryUnits.Add(countryUnit);
+            _context.CountryUnits.Add(countryUnit2);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var actualBattleUnits = await _service.GetUserUnitsAsync();
+
+            // Arrange
+            actualBattleUnits.Count.Should().Be(_context.CountryUnits.Count());
+            actualBattleUnits
+                .Any(bunit => bunit.Level == 3)
+                .Should().Be(countryUnit.GetLevel() == 3);
+            actualBattleUnits
+                .FirstOrDefault(bunit => bunit.Id == 2).Level
+                .Should().NotBe(3);
+            actualBattleUnits
+                .Sum(bunit => bunit.Count)
+                .Should().Be(countryUnit.Count + countryUnit2.Count);
+        }
+
+        [Fact]
+        public async Task GetUserAllUnitsTest()
+        {
+            // Arrange
+            var countryUnit = new CountryUnit
+            {
+                CountryId = 1,
+                UnitId = 1,
+                Count = 20,
+                BattlesPlayed = 5
+            };
+
+            var countryUnit2 = new CountryUnit
+            {
+                CountryId = 1,
+                UnitId = 3,
+                Count = 40,
+                BattlesPlayed = 2
+            };
+
+            var world = await _context.Worlds.FirstOrDefaultAsync();
+
+            var attack = new Attack
+            {
+                AttackerCountryId = 1,
+                DefenderCountryId = 3,
+                WinnerId = null,
+                AttackRound = world.Round
+            };
+
+            var attackUnits = new AttackUnit
+            {
+                BattlesPlayed = 2,
+                Count = 15,
+                UnitId = 3
+            };
+
+            attack.AttackUnits = new List<AttackUnit>() { attackUnits };
+
+            _context.CountryUnits.Add(countryUnit);
+            _context.CountryUnits.Add(countryUnit2);
+            _context.Attacks.Add(attack);
+
+            await _context.SaveChangesAsync();
+
+            // Act
+            var actualBattleUnits = await _service.GetUserAllUnitsAsync();
+
+            // Arrange
+            actualBattleUnits.Count().Should().Be(_context.CountryUnits.Count() + _context.AttackUnits.Count());
+            actualBattleUnits
+                .Any(bunit => bunit.Level == 3)
+                .Should().Be(countryUnit.GetLevel() == 3);
+            actualBattleUnits
+                .SingleOrDefault(bunit => bunit.Id == 2)?.Level
+                .Should().NotBe(3);
+            actualBattleUnits
+                .Sum(bunit => bunit.Count)
+                .Should().Be(countryUnit.Count + countryUnit2.Count + attackUnits.Count);
+
         }
 
 
