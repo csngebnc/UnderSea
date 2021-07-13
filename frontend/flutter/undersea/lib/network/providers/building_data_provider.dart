@@ -12,7 +12,7 @@ class BuildingDataProvider extends NetworkProvider {
           contentType: 'application/json',
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           decoder: (response) {
-        log(response.toString());
+        //log(response.toString());
         return (response as List)
             .map((e) => BuildingDetailsDto.fromJson(e))
             .toList();

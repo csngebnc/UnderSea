@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     userDataController.userInfo();
+    userDataController.getWinners();
     userDataController.searchText.value = '';
     userDataController.getRankList();
     countryDataController.getCountryDetails();
@@ -71,46 +72,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var event = countryDataController.countryDetailsData.value?.event;
-    if (event != null) {
-      Get.defaultDialog(
-          title: "Váratlan esemény",
-          backgroundColor: UnderseaStyles.hintColor,
-          titleStyle: UnderseaStyles.listBold.copyWith(fontSize: 16),
-          barrierDismissible: true,
-          radius: 20,
-          content: Padding(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Container(
-                  width: 300,
-                  height: 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        child: Image.asset(
-                          UnderseaStyles
-                              .randomEventImageMap[event.effects?[0].name]!,
-                          width: 150,
-                          height: 150,
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Text(event.name!, style: UnderseaStyles.listBold),
-                      SizedBox(height: 10),
-                      for (var effect in event.effects!)
-                        Text(effect.name!, style: UnderseaStyles.listRegular),
-                      Expanded(child: Container()),
-                      UnderseaStyles.elevatedButton(
-                          text: 'Ok',
-                          width: 100,
-                          height: 40,
-                          onPressed: () {
-                            Get.back();
-                          }),
-                    ],
-                  ))));
-    }
     return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -121,6 +82,7 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 10),
           GetBuilder<UserDataController>(builder: (controller) {
             final userInfoData = controller.userInfoData.value;
+
             if (userInfoData != null) {
               return UnderseaStyles.leaderboardButton(
                   roundNumber: userInfoData.round,

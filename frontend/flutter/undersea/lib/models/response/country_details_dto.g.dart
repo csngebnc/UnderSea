@@ -19,6 +19,9 @@ CountryDetailsDto _$CountryDetailsDtoFromJson(Map<String, dynamic> json) {
     units: (json['units'] as List<dynamic>?)
         ?.map((e) => BattleUnitDto.fromJson(e as Map<String, dynamic>))
         .toList(),
+    event: json['event'] == null
+        ? null
+        : EventDto.fromJson(json['event'] as Map<String, dynamic>),
     hasSonarCanon: json['hasSonarCanon'] as bool,
   );
 }
@@ -28,6 +31,7 @@ Map<String, dynamic> _$CountryDetailsDtoToJson(CountryDetailsDto instance) =>
       'maxUnitCount': instance.maxUnitCount,
       'units': instance.units,
       'materials': instance.materials,
+      'event': instance.event,
       'population': instance.population,
       'hasSonarCanon': instance.hasSonarCanon,
       'buildings': instance.buildings,

@@ -126,7 +126,7 @@ class BattleDataController extends GetxController {
         getUnitTypes();
         getHistory();
       } else {
-        log('$response');
+        log('NON-200 Code at attacking: $response');
       }
     } catch (error) {
       log('$error');

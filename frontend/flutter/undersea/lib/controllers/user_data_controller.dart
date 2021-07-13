@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/paged_result_of_user_rank_dto.dart';
+import 'package:undersea/models/response/paged_result_of_world_winner_dto.dart';
 import 'package:undersea/models/response/register_dto.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
 import 'package:undersea/models/response/user_rank_dto.dart';
@@ -23,6 +25,7 @@ class UserDataController extends GetxController {
   UserDataController(this._userDataProvider);
 
   Rx<PagedResultOfUserRankDto?> pagedRankList = Rx(null);
+  Rx<PagedResultOfWorldWinnerDto?> winnerList = Rx(null);
   var searchText = ''.obs;
   var pageNumber = 1.obs;
   var alreadyDownloadedPageNumber = 0.obs;
@@ -60,9 +63,9 @@ class UserDataController extends GetxController {
           countryName: countryName);
       final response =
           await _userDataProvider.register(registrationData.toJson());
-      if (response.statusCode == 200)
+      if (response.statusCode == 200) {
         onSuccess != null ? onSuccess() : {};
-      else if (response.statusCode == 400) {
+      } else if (response.statusCode == 400) {
         var errors = response.bodyString!.split('"errors":')[1];
         var start = errors.indexOf('[') + 2;
         var end_ = errors.indexOf('(') - 1;
@@ -89,7 +92,7 @@ class UserDataController extends GetxController {
       } else {
         UnderseaStyles.snackbar(
             Strings.error_occurred.tr, Strings.invalid_username_password.tr);
-        log('${response.bodyString}');
+        log('ERROR: ${response.bodyString}');
       }
     } catch (error) {
       log('$error');
@@ -104,6 +107,8 @@ class UserDataController extends GetxController {
       if (response.statusCode == 200) {
         userInfoData = Rx(response.body);
         update();
+
+        storage.write(Constants.ROUND_NUM, userInfoData.value?.round);
       }
     } catch (error) {
       userInfoData.addError(error);
@@ -126,6 +131,66 @@ class UserDataController extends GetxController {
           alreadyDownloadedPageNumber.value = pageNumber.value;
         }
         update();
+      }
+    } catch (error) {
+      log('$error');
+    }
+  }
+
+  getWinners() async {
+    try {
+      final response = await _userDataProvider.getWinners();
+      if (response.statusCode == 200) {
+        winnerList = Rx(response.body!);
+
+        int roundPersisted = storage.read(Constants.ROUND_NUM) ?? 0;
+        var round = userInfoData.value?.round ?? roundPersisted + 1;
+
+        if (round <= roundPersisted &&
+            storage.read(Constants.WINNER_SHOWN) != true &&
+            winnerList.value?.allResultsCount != 0) {
+          Get.defaultDialog(
+              title: "Új játék indult!",
+              backgroundColor: UnderseaStyles.hintColor,
+              titleStyle: UnderseaStyles.listBold.copyWith(fontSize: 16),
+              barrierDismissible: true,
+              radius: 20,
+              content: Padding(
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Container(
+                      width: 300,
+                      height: 320,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            child: Image.asset(
+                              'assets/buildings/happy_soldier.png',
+                              width: 130,
+                              height: 130,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text('Az előző játék győztese',
+                              style: UnderseaStyles.listBold),
+                          SizedBox(height: 5),
+                          Text(' ${winnerList.value?.results?.first.userName}',
+                              style: UnderseaStyles.listRegular),
+                          Text(
+                              ' ${winnerList.value?.results?.first.countryName}',
+                              style: UnderseaStyles.listRegular),
+                          Expanded(child: Container()),
+                          UnderseaStyles.elevatedButton(
+                              text: 'Ok',
+                              width: 100,
+                              height: 40,
+                              onPressed: () {
+                                storage.write(Constants.WINNER_SHOWN, true);
+                                Get.back();
+                              }),
+                        ],
+                      ))));
+        }
       }
     } catch (error) {
       log('$error');

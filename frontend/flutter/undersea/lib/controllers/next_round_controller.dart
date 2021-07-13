@@ -47,7 +47,7 @@ class RoundController extends GetxController {
 
     connection.on('SendMessage', (message) {
       refreshOnNextRound();
-      log(message.toString());
+      log('ROUND: ${message.toString()}');
     });
   }
 
@@ -57,6 +57,7 @@ class RoundController extends GetxController {
     userDataController.getRankList();
     userDataController.reset();
     Get.find<CountryDataController>().getCountryDetails();
+    Get.find<CountryDataController>().eventWindowShown = false;
     Get.find<BuildingDataController>().getBuildingDetails();
     Get.find<UpgradesController>().getUpgradeDetails();
     var battleController = Get.find<BattleDataController>();
