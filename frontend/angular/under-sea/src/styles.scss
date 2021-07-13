@@ -41,7 +41,7 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 
   .tooltiptext {
     visibility: hidden;
-    width: 150px;
+    min-width: 150px;
     background-color: $dark-navy;
     color: $white;
     text-align: center;
@@ -208,7 +208,7 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .list-modal {
-  height: 584px;
+  height: 630px;
 }
 
 .attack-modal {
@@ -403,6 +403,10 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
   width: 2rem;
 }
 
+.w-9r {
+  min-width: 9rem;
+}
+
 .w-4_5r {
   width: 4.5rem;
 }
@@ -446,7 +450,7 @@ $gradient: linear-gradient(258deg, #9ffff0 0%, #9ffff0 36%, #0fcfde 100%);
 }
 
 .h-list {
-  height: calc(100% - 51px);
+  height: calc(100% - 85px);
 }
 
 .h-100 {
@@ -542,7 +546,7 @@ body {
   background-repeat: no-repeat;
   overflow: hidden;
   animation-name: animatedBg;
-  animation-duration: 20s;
+  animation-duration: 30s;
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }

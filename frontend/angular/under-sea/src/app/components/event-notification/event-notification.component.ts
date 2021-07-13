@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Event } from './../../models/event.model';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'event-notification',
@@ -6,12 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./event-notification.component.scss'],
 })
 export class EventNotificationComponent implements OnInit {
-  event = { name: 'jajj', description: 'this happened' };
-  random: number;
+  @Input() event: Event;
+  @Output() notificationClosed = new EventEmitter<void>();
 
-  constructor() {
-    this.random = Math.ceil(Math.random() * 9);
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 }

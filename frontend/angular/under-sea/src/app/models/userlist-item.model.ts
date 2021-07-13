@@ -4,4 +4,7 @@ export type UserListItem = {
   placement?: number;
   name: string;
   score?: number;
+  countryName?: string;
+  worldRound?: number;
+  date?: Date;
 };
