@@ -25,7 +25,7 @@ jobs:
 
     - name: Build with dotnet
       run: dotnet build backend/UnderSea.sln --configuration Release
-
+      
     - name: dotnet publish
       run: dotnet publish backend/UnderSea.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
