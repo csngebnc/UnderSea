@@ -518,64 +518,6 @@ namespace UnderSea.Dal.Migrations
                     b.HasIndex("UnitId");
 
                     b.ToTable("CountryUnits");
-
-                    b.HasData(
-                        new
-                        {
-                            CountryId = 1,
-                            UnitId = 1,
-                            BattlesPlayed = 0,
-                            Count = 10
-                        },
-                        new
-                        {
-                            CountryId = 1,
-                            UnitId = 1,
-                            BattlesPlayed = 3,
-                            Count = 6
-                        },
-                        new
-                        {
-                            CountryId = 1,
-                            UnitId = 1,
-                            BattlesPlayed = 5,
-                            Count = 17
-                        },
-                        new
-                        {
-                            CountryId = 1,
-                            UnitId = 2,
-                            BattlesPlayed = 0,
-                            Count = 4
-                        },
-                        new
-                        {
-                            CountryId = 1,
-                            UnitId = 2,
-                            BattlesPlayed = 5,
-                            Count = 10
-                        },
-                        new
-                        {
-                            CountryId = 1,
-                            UnitId = 3,
-                            BattlesPlayed = 4,
-                            Count = 10
-                        },
-                        new
-                        {
-                            CountryId = 1,
-                            UnitId = 4,
-                            BattlesPlayed = 0,
-                            Count = 10
-                        },
-                        new
-                        {
-                            CountryId = 1,
-                            UnitId = 5,
-                            BattlesPlayed = 0,
-                            Count = 10
-                        });
                 });
 
             modelBuilder.Entity("UnderSea.Model.Models.CountryUpgrade", b =>
