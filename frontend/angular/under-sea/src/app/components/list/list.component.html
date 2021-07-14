@@ -1,14 +1,20 @@
 <input type="text" placeholder="Felhasználónév" [value]="defaultValue ? defaultValue : ''"
-  class="text-input m-0 mt-1 w-100" (keyup)="search($event.target.value)" />
+  class="text-input m-0 mt-1 w-100" (keyup)="search($event.target.value)" #search />
 <div class="divider mt-05"></div>
 <ul class="p-0 m-0">
   <li *ngFor="let item of list" class="non-styled-list-item">
-    <div class="list-item" [ngClass]="{ 'clickable-list-item': clickable }"
+    <div class="list-item" [ngClass]="{ 'clickable-list-item': clickable, 'tooltip': item.worldRound }"
       (click)="clickable && onSelect(item.countryId)">
       <div class="d-flex">
-        <div *ngIf="item.placement" class="w-2r">{{ item.placement }}.</div>
-        <span>{{ item.name }}</span>
+        <span *ngIf="item.placement" class="w-2r">{{ item.placement }}.</span>
+        <span class="w-9r">{{ item.name }}</span>
+        <span *ngIf="item.date">{{item.date.toLocaleString()}}</span>
       </div>
+      <span *ngIf="item.worldRound" class="tooltiptext">
+        <p class="modal-description"><strong>Országnév:</strong> {{item.countryName}}</p>
+        <p class="modal-description"><strong>Körök száma:</strong> {{item.worldRound}}</p>
+        <p class="modal-description"><strong>Pontszám:</strong> {{item.score | number: "1."}}</p>
+      </span>
       <span *ngIf="item.score || item.score === 0">{{
         item.score | number: "1."
       }}</span>

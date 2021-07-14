@@ -1,12 +1,12 @@
 <div class="modal-container">
   <div class="modal list-modal">
-    <h2 class="modal-title">Ranglista</h2>
-    <div *ngIf="!(loading$ | async)" class="to-sides h-list stack">
-      <list class="w-100" [list]="scoreboard.list" [clickable]="false" (filter)="onFilter($event)"
-        [defaultValue]="filter"></list>
-      <pager-buttons [pageSize]="scoreboard.pageSize" [pageNumber]="scoreboard.pageNumber"
-        [allResultsCount]="scoreboard.allResultsCount" (switchPage)="onSwitchPage($event)"
-        class="w-100 d-flex align-center to-center mt-1"></pager-buttons>
+    <div class="d-flex to-center">
+      <a class="text clickable-text pr-1" routerLink="/main/scoreboard/ranklist"
+        routerLinkActive="link-active">Ranglista</a>
+      <a class="text clickable-text pl-1" routerLink="/main/scoreboard/winners"
+        routerLinkActive="link-active">Győzelmek</a>
     </div>
+    <div class="divider"></div>
+    <router-outlet></router-outlet>
   </div>
 </div>

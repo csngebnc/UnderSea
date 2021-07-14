@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,WAAW,CAAC;EACV,MAAM,EAAE,iBAAiB;CAC1B",
+    "sources": [
+        "reports.component.scss"
+    ],
+    "names": [],
+    "file": "reports.component.css"
+}

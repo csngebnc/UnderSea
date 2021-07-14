@@ -1,3 +1,5 @@
+import { EventService } from './../../services/event/event.service';
+import { Event } from './../../models/event.model';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Resources } from 'src/app/models/resources.model';
 import { Injectable } from '@angular/core';
@@ -65,7 +67,10 @@ export class ResourcesState {
       tap((r) => {
         let sum = 0;
         r.units.forEach((u) => (sum += u.count));
-        setState({ resources: r, capacity: r.maxUnitCount - sum });
+        setState({
+          resources: r,
+          capacity: r.maxUnitCount - sum,
+        });
       })
     );
   }
