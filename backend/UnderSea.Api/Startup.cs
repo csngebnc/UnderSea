@@ -4,6 +4,7 @@ using FluentValidation.AspNetCore;
 using Hangfire;
 using Hangfire.SqlServer;
 using Hellang.Middleware.ProblemDetails;
+using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -83,8 +84,6 @@ namespace UnderSea.Api
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddSwaggerDocument();
-
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -99,7 +98,15 @@ namespace UnderSea.Api
             services.AddTransient<IHubService, RoundHubService>();
             services.AddTransient<IRoundService, RoundService>();
 
-            services.AddIdentityServer()
+            services.AddIdentityServer(options =>
+            {
+                options.UserInteraction = new UserInteractionOptions()
+                {
+                    LogoutUrl = "/",
+                    LoginUrl = "/",
+                    LoginReturnUrlParameter = "returnUrl"
+                };
+            })
                 .AddDeveloperSigningCredential()
                 .AddInMemoryPersistedGrants()
                 .AddInMemoryIdentityResources(Configuration.GetSection("IdentityServer:IdentityResources"))
@@ -130,9 +137,7 @@ namespace UnderSea.Api
                     .RequireClaim("scope", "api-openid")
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
 
-                options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .Build();
+                options.DefaultPolicy = options.GetPolicy("api-openid");
             });
 
             services.AddOpenApiDocument(config =>
@@ -233,11 +238,11 @@ namespace UnderSea.Api
             });
 
             app.UseRouting();
+            app.UseIdentityServer();
 
             app.UseProblemDetails();
 
             app.UseAuthentication();
-            app.UseIdentityServer();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

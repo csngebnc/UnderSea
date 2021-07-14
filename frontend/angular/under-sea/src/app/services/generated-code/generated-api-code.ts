@@ -223,7 +223,7 @@ export class BattleService {
         return _observableOf<BattleUnitDto>(<any>null);
     }
 
-    attack(sendAttack: SendAttackDto): Observable<FileResponse | null> {
+    attack(sendAttack: SendAttackDto): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/Battle/attack";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -246,14 +246,14 @@ export class BattleService {
                 try {
                     return this.processAttack(<any>response_);
                 } catch (e) {
-                    return <Observable<FileResponse | null>><any>_observableThrow(e);
+                    return <Observable<FileResponse>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<FileResponse | null>><any>_observableThrow(response_);
+                return <Observable<FileResponse>><any>_observableThrow(response_);
         }));
     }
 
-    protected processAttack(response: HttpResponseBase): Observable<FileResponse | null> {
+    protected processAttack(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -270,10 +270,10 @@ export class BattleService {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<FileResponse | null>(<any>null);
+        return _observableOf<FileResponse>(<any>null);
     }
 
-    spy(spies: SendSpyDto): Observable<FileResponse | null> {
+    spy(spies: SendSpyDto): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/Battle/spy";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -296,14 +296,14 @@ export class BattleService {
                 try {
                     return this.processSpy(<any>response_);
                 } catch (e) {
-                    return <Observable<FileResponse | null>><any>_observableThrow(e);
+                    return <Observable<FileResponse>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<FileResponse | null>><any>_observableThrow(response_);
+                return <Observable<FileResponse>><any>_observableThrow(response_);
         }));
     }
 
-    protected processSpy(response: HttpResponseBase): Observable<FileResponse | null> {
+    protected processSpy(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -320,7 +320,7 @@ export class BattleService {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<FileResponse | null>(<any>null);
+        return _observableOf<FileResponse>(<any>null);
     }
 
     history(pageSize: number | undefined, pageNumber: number | undefined): Observable<PagedResultOfLoggedAttackDto> {
@@ -480,7 +480,7 @@ export class BattleService {
         return _observableOf<UnitDto[]>(<any>null);
     }
 
-    buyUnit(unitsDto: BuyUnitDto): Observable<FileResponse | null> {
+    buyUnit(unitsDto: BuyUnitDto): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/Battle/buy-unit";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -503,14 +503,14 @@ export class BattleService {
                 try {
                     return this.processBuyUnit(<any>response_);
                 } catch (e) {
-                    return <Observable<FileResponse | null>><any>_observableThrow(e);
+                    return <Observable<FileResponse>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<FileResponse | null>><any>_observableThrow(response_);
+                return <Observable<FileResponse>><any>_observableThrow(response_);
         }));
     }
 
-    protected processBuyUnit(response: HttpResponseBase): Observable<FileResponse | null> {
+    protected processBuyUnit(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -527,7 +527,7 @@ export class BattleService {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<FileResponse | null>(<any>null);
+        return _observableOf<FileResponse>(<any>null);
     }
 }
 
@@ -589,7 +589,7 @@ export class BuildingService {
         return _observableOf<BuildingDetailsDto[]>(<any>null);
     }
 
-    buy(buildingDto: BuyBuildingDto): Observable<FileResponse | null> {
+    buy(buildingDto: BuyBuildingDto): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/Building/buy";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -612,14 +612,14 @@ export class BuildingService {
                 try {
                     return this.processBuy(<any>response_);
                 } catch (e) {
-                    return <Observable<FileResponse | null>><any>_observableThrow(e);
+                    return <Observable<FileResponse>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<FileResponse | null>><any>_observableThrow(response_);
+                return <Observable<FileResponse>><any>_observableThrow(response_);
         }));
     }
 
-    protected processBuy(response: HttpResponseBase): Observable<FileResponse | null> {
+    protected processBuy(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -636,7 +636,7 @@ export class BuildingService {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<FileResponse | null>(<any>null);
+        return _observableOf<FileResponse>(<any>null);
     }
 }
 
@@ -804,7 +804,7 @@ export class CountryService {
         return _observableOf<string>(<any>null);
     }
 
-    namePut(name: string | null | undefined): Observable<FileResponse | null> {
+    namePut(name: string | null | undefined): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/Country/name?";
         if (name !== undefined && name !== null)
             url_ += "name=" + encodeURIComponent("" + name) + "&";
@@ -825,14 +825,14 @@ export class CountryService {
                 try {
                     return this.processNamePut(<any>response_);
                 } catch (e) {
-                    return <Observable<FileResponse | null>><any>_observableThrow(e);
+                    return <Observable<FileResponse>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<FileResponse | null>><any>_observableThrow(response_);
+                return <Observable<FileResponse>><any>_observableThrow(response_);
         }));
     }
 
-    protected processNamePut(response: HttpResponseBase): Observable<FileResponse | null> {
+    protected processNamePut(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -849,7 +849,7 @@ export class CountryService {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<FileResponse | null>(<any>null);
+        return _observableOf<FileResponse>(<any>null);
     }
 }
 
@@ -1034,7 +1034,7 @@ export class UpgradeService {
         return _observableOf<UpgradeDto[]>(<any>null);
     }
 
-    buy(buyUpgradeDto: BuyUpgradeDto): Observable<FileResponse | null> {
+    buy(buyUpgradeDto: BuyUpgradeDto): Observable<FileResponse> {
         let url_ = this.baseUrl + "/api/Upgrade/buy";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1057,14 +1057,14 @@ export class UpgradeService {
                 try {
                     return this.processBuy(<any>response_);
                 } catch (e) {
-                    return <Observable<FileResponse | null>><any>_observableThrow(e);
+                    return <Observable<FileResponse>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<FileResponse | null>><any>_observableThrow(response_);
+                return <Observable<FileResponse>><any>_observableThrow(response_);
         }));
     }
 
-    protected processBuy(response: HttpResponseBase): Observable<FileResponse | null> {
+    protected processBuy(response: HttpResponseBase): Observable<FileResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1081,7 +1081,7 @@ export class UpgradeService {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<FileResponse | null>(<any>null);
+        return _observableOf<FileResponse>(<any>null);
     }
 }
 
@@ -1261,52 +1261,52 @@ export class UserService {
 
 export interface PagedResultOfAttackableUserDto {
     results?: AttackableUserDto[] | undefined;
-    allResultsCount: number;
-    pageNumber: number;
-    pageSize: number;
+    allResultsCount?: number;
+    pageNumber?: number;
+    pageSize?: number;
 }
 
 export interface AttackableUserDto {
     id?: string | undefined;
     userName?: string | undefined;
-    countryId: number;
+    countryId?: number;
 }
 
 export interface BattleUnitDto {
-    id: number;
+    id?: number;
     name?: string | undefined;
-    level: number;
-    count: number;
+    level?: number;
+    count?: number;
     imageUrl?: string | undefined;
 }
 
 export interface SendAttackDto {
-    attackedCountryId: number;
+    attackedCountryId?: number;
     units?: AttackUnitDto[] | undefined;
 }
 
 export interface AttackUnitDto {
-    unitId: number;
-    level: number;
-    count: number;
+    unitId?: number;
+    level?: number;
+    count?: number;
 }
 
 export interface SendSpyDto {
-    spiedCountryId: number;
-    spyCount: number;
+    spiedCountryId?: number;
+    spyCount?: number;
 }
 
 export interface PagedResultOfLoggedAttackDto {
     results?: LoggedAttackDto[] | undefined;
-    allResultsCount: number;
-    pageNumber: number;
-    pageSize: number;
+    allResultsCount?: number;
+    pageNumber?: number;
+    pageSize?: number;
 }
 
 export interface LoggedAttackDto {
     attackedCountryName?: string | undefined;
     units?: BattleUnitDto[] | undefined;
-    outcome: FightOutcome;
+    outcome?: FightOutcome;
 }
 
 export enum FightOutcome {
@@ -1317,40 +1317,40 @@ export enum FightOutcome {
 
 export interface PagedResultOfSpyReportDto {
     results?: SpyReportDto[] | undefined;
-    allResultsCount: number;
-    pageNumber: number;
-    pageSize: number;
+    allResultsCount?: number;
+    pageNumber?: number;
+    pageSize?: number;
 }
 
 export interface SpyReportDto {
-    spyReportId: number;
+    spyReportId?: number;
     spiedCountryName?: string | undefined;
-    outCome: FightOutcome;
+    outCome?: FightOutcome;
     defensePoints?: number | undefined;
 }
 
 export interface UnitDto {
-    id: number;
+    id?: number;
     name?: string | undefined;
     unitLevels?: UnitLevelDto[] | undefined;
-    mercenaryPerRound: number;
-    supplyPerRound: number;
+    mercenaryPerRound?: number;
+    supplyPerRound?: number;
     requiredMaterials?: MaterialDto[] | undefined;
-    currentCount: number;
+    currentCount?: number;
     imageUrl?: string | undefined;
 }
 
 export interface UnitLevelDto {
-    minimumBattles: number;
-    attackPoint: number;
-    defensePoint: number;
-    level: number;
+    minimumBattles?: number;
+    attackPoint?: number;
+    defensePoint?: number;
+    level?: number;
 }
 
 export interface MaterialDto {
-    id: number;
+    id?: number;
     name?: string | undefined;
-    amount: number;
+    amount?: number;
     imageUrl?: string | undefined;
 }
 
@@ -1359,81 +1359,81 @@ export interface BuyUnitDto {
 }
 
 export interface BuyUnitDetailsDto {
-    unitId: number;
-    count: number;
+    unitId?: number;
+    count?: number;
 }
 
 export interface BuildingDetailsDto {
-    id: number;
+    id?: number;
     name?: string | undefined;
-    count: number;
+    count?: number;
     requiredMaterials?: MaterialDto[] | undefined;
-    underConstruction: boolean;
+    underConstruction?: boolean;
     imageUrl?: string | undefined;
     effects?: EffectDto[] | undefined;
 }
 
 export interface EffectDto {
-    id: number;
+    id?: number;
     name?: string | undefined;
 }
 
 export interface BuyBuildingDto {
-    buildingId: number;
+    buildingId?: number;
 }
 
 export interface CountryDetailsDto {
-    maxUnitCount: number;
+    maxUnitCount?: number;
     materials?: MaterialDetailsDto[] | undefined;
-    population: number;
-    hasSonarCanon: boolean;
+    population?: number;
+    hasSonarCanon?: boolean;
     buildings?: BuildingInfoDto[] | undefined;
     units?: BattleUnitDto[] | undefined;
     event?: EventDto | undefined;
 }
 
 export interface MaterialDetailsDto {
-    id: number;
+    id?: number;
     name?: string | undefined;
-    production: number;
-    amount: number;
+    production?: number;
+    amount?: number;
     imageUrl?: string | undefined;
 }
 
 export interface BuildingInfoDto {
-    id: number;
+    id?: number;
     name?: string | undefined;
-    buildingsCount: number;
-    activeConstructionCount: number;
+    buildingsCount?: number;
+    activeConstructionCount?: number;
     iconImageUrl?: string | undefined;
 }
 
 export interface EventDto {
-    id: number;
+    id?: number;
     name?: string | undefined;
-    eventRound: number;
+    eventRound?: number;
     effects?: EffectDto[] | undefined;
 }
 
 export interface PagedResultOfEventDto {
     results?: EventDto[] | undefined;
-    allResultsCount: number;
-    pageNumber: number;
-    pageSize: number;
+    allResultsCount?: number;
+    pageNumber?: number;
+    pageSize?: number;
 }
 
 export interface UpgradeDto {
-    id: number;
+    id?: number;
     name?: string | undefined;
-    doesExist: boolean;
-    isUnderConstruction: boolean;
-    remainingTime: number;
+    doesExist?: boolean;
+    isUnderConstruction?: boolean;
+    remainingTime?: number;
     imageUrl?: string | undefined;
     effects?: EffectDto[] | undefined;
 }
 
 export interface BuyUpgradeDto {
-    upgradeId: number;
+    upgradeId?: number;
 }
 
 export interface RegisterDto {
@@ -1445,38 +1445,38 @@ export interface RegisterDto {
 
 export interface PagedResultOfUserRankDto {
     results?: UserRankDto[] | undefined;
-    allResultsCount: number;
-    pageNumber: number;
-    pageSize: number;
+    allResultsCount?: number;
+    pageNumber?: number;
+    pageSize?: number;
 }
 
 export interface UserRankDto {
     name?: string | undefined;
-    points: number;
-    placement: number;
+    points?: number;
+    placement?: number;
 }
 
 export interface PagedResultOfWorldWinnerDto {
     results?: WorldWinnerDto[] | undefined;
-    allResultsCount: number;
-    pageNumber: number;
-    pageSize: number;
+    allResultsCount?: number;
+    pageNumber?: number;
+    pageSize?: number;
 }
 
 export interface WorldWinnerDto {
-    id: number;
+    id?: number;
     userName?: string | undefined;
     countryName?: string | undefined;
-    points: number;
-    worldRound: number;
-    date: Date;
+    points?: number;
+    worldRound?: number;
+    date?: Date;
 }
 
 export interface UserInfoDto {
     id?: string | undefined;
     name?: string | undefined;
-    round: number;
-    placement: number;
+    round?: number;
+    placement?: number;
 }
 
 export interface FileResponse {

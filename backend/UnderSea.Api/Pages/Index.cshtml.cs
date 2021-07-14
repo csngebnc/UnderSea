@@ -1,25 +1,81 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper.Configuration;
+using IdentityServer4.Models;
+using IdentityServer4.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using UnderSea.Model.Models;
 
 namespace UnderSea.Api.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(
+            IUserClaimsPrincipalFactory<User> claimsPrincipalFactory,
+            UserManager<User> userManager)
         {
-            _logger = logger;
+            this.claimsPrincipalFactory = claimsPrincipalFactory;
+            this.userManager = userManager;
         }
 
-        public void OnGet()
-        {
+        private readonly IUserClaimsPrincipalFactory<User> claimsPrincipalFactory;
+        private readonly UserManager<User> userManager;
 
+        [Required(ErrorMessage = "Kötelező")]
+        [BindProperty]
+        public string Username { get; set; } = "";
+
+        [Required(ErrorMessage = "Kötelező")]
+        [BindProperty]
+        public string Password { get; set; } = "";
+
+        [BindProperty]
+        public string ReturnUrl { get; set; } = "/";
+
+        public List<string> Errors { get; set; } = new List<string>();
+
+        public void OnGet(string returnUrl)
+        {
+            ReturnUrl = returnUrl;
+        }
+
+        public async Task<IActionResult> OnPostAsync(string action)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.FindByNameAsync(Username);
+                if (user != null && (await userManager.CheckPasswordAsync(user, Password)))
+                {
+
+                    var signInProperties = new AuthenticationProperties
+                    {
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1),
+                        AllowRefresh = true,
+                        RedirectUri = ReturnUrl,
+                        IsPersistent = false
+                    };
+
+                    var claimsPrincipal = await claimsPrincipalFactory.CreateAsync(user);
+                    await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, claimsPrincipal, signInProperties);
+                    HttpContext.User = claimsPrincipal;
+                    ReturnUrl = "/main";
+
+
+                    return Redirect(ReturnUrl);
+                }
+
+            }
+            Errors.Add("Hibás felhasználónév vagy jelszó!");
+
+            return Page();
         }
     }
 }
