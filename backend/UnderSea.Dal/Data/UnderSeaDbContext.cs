@@ -161,7 +161,6 @@ namespace UnderSea.Dal.Data
             modelBuilder.ApplyConfiguration(new BuildingEffectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UpgradeEffectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new EventEffectEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new CountryUnitEntityConfiguration());
         }
 
 
