@@ -1,17 +1,11 @@
-﻿using AutoMapper.Configuration;
-using IdentityServer4.Models;
-using IdentityServer4.Services;
+﻿using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using UnderSea.Model.Models;
 
@@ -80,10 +74,6 @@ namespace UnderSea.Api.Pages
                         if (interactionService.IsValidReturnUrl(ReturnUrl))
                         {
                             return Redirect(ReturnUrl);
-                        }
-                        else
-                        {
-                            return Redirect("http://localhost:4200");
                         }
                     }
                 }
