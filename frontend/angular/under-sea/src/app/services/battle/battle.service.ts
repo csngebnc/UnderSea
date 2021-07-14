@@ -83,7 +83,6 @@ export class BattleService {
           });
 
           b.units.forEach((u) => {
-            console.log(u.name, u.count);
             const index = units.findIndex((unit) => unit.name === u.name);
             if (index !== -1) {
               units[index].count = u.count + units[index].count;
