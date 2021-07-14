@@ -24,6 +24,9 @@ class UserDataController extends GetxController {
   Rx<bool> userInfoLoading = false.obs;
   Rx<String?> userInfoError = Rx(null);
 
+  Rx<bool> loggingIn = false.obs;
+  Rx<bool> regging = false.obs;
+
   UserDataController(this._userDataProvider);
 
   Rx<PagedResultOfUserRankDto?> pagedRankList = Rx(null);
@@ -57,6 +60,8 @@ class UserDataController extends GetxController {
       required String confirmPassword,
       required String countryName,
       Function? onSuccess}) async {
+    regging = true.obs;
+    update();
     try {
       var registrationData = RegisterDto(
           userName: username,
@@ -76,17 +81,25 @@ class UserDataController extends GetxController {
 
         log(errorMessage);
         UnderseaStyles.snackbar(Strings.error_occurred.tr, errorMessage);
+      } else {
+        UnderseaStyles.snackbar(
+            Strings.error_occurred.tr, 'Sikertelen regisztráció :(');
       }
     } catch (error) {
       UnderseaStyles.snackbar(
           Strings.error.tr, Strings.something_went_wrong.tr);
+    } finally {
+      regging = false.obs;
+      update();
     }
   }
 
   login(String username, String password) async {
+    loggingIn = true.obs;
+    update();
     try {
       final body =
-          'username=$username&password=$password&grant_type=password&client_id=undersea-flutter&scope=openid+api-openid';
+          'username=$username&password=$password&grant_type=password&client_id=undersea-angular&scope=openid+api-openid';
       final response = await _userDataProvider.login(body);
       if (response.statusCode == 200) {
         storage.write(Constants.TOKEN, response.body!.token);
@@ -100,6 +113,9 @@ class UserDataController extends GetxController {
       log('$error');
       UnderseaStyles.snackbar(
           Strings.error.tr, Strings.something_went_wrong.tr);
+    } finally {
+      loggingIn = false.obs;
+      update();
     }
   }
 

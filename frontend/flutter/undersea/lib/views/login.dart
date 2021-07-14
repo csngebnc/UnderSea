@@ -97,10 +97,28 @@ class _LoginPageState extends State<LoginPage> {
                                     style: UnderseaStyles.buttonTextStyle
                                         .copyWith(fontSize: 24),
                                   )),
-                              SizedBox(height: 30.0),
-                              userField,
-                              SizedBox(height: 25.0),
-                              passwordField,
+                              GetBuilder<UserDataController>(
+                                  builder: (controller) {
+                                return controller.loggingIn.value
+                                    ? Center(
+                                        child: Column(
+                                        children: [
+                                          SizedBox(height: 30.0),
+                                          SizedBox(
+                                              height: 75,
+                                              width: 75,
+                                              child:
+                                                  CircularProgressIndicator()),
+                                          SizedBox(height: 50),
+                                        ],
+                                      ))
+                                    : Column(children: [
+                                        SizedBox(height: 30.0),
+                                        userField,
+                                        SizedBox(height: 25.0),
+                                        passwordField
+                                      ]);
+                              }),
                               SizedBox(
                                 height: 35.0,
                               ),

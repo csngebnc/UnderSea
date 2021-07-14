@@ -138,15 +138,33 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                         .copyWith(fontSize: 24),
                                   )),
                               SizedBox(height: 25.0),
-                              userField,
-                              SizedBox(height: 20.0),
-                              passwordField,
-                              SizedBox(
-                                height: 20.0,
-                              ),
-                              passwordValidationField,
-                              SizedBox(height: 20),
-                              cityNameField,
+                              GetBuilder<UserDataController>(
+                                  builder: (controller) {
+                                return controller.regging.value
+                                    ? Center(
+                                        child: Column(
+                                        children: [
+                                          SizedBox(height: 75.0),
+                                          SizedBox(
+                                              height: 75,
+                                              width: 75,
+                                              child:
+                                                  CircularProgressIndicator()),
+                                          SizedBox(height: 110),
+                                        ],
+                                      ))
+                                    : Column(children: [
+                                        userField,
+                                        SizedBox(height: 20.0),
+                                        passwordField,
+                                        SizedBox(
+                                          height: 20.0,
+                                        ),
+                                        passwordValidationField,
+                                        SizedBox(height: 20),
+                                        cityNameField,
+                                      ]);
+                              }),
                               SizedBox(height: 15),
                               ToggleableElevatedButton(
                                   text: Strings.registration.tr,

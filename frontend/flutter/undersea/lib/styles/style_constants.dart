@@ -76,6 +76,7 @@ class UnderseaStyles {
       ),
       TextFormField(
         validator: validator,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: controller,
         obscureText: isPassword,
         style: UnderseaStyles.inputTextStyle,
