@@ -107,6 +107,7 @@ namespace UnderSea.Api
 
                     LoginReturnUrlParameter = "returnUrl"
                 };
+                options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
             })
                 .AddDeveloperSigningCredential()
                 .AddInMemoryPersistedGrants()
@@ -174,10 +175,7 @@ namespace UnderSea.Api
 
             services.AddProblemDetails(ConfigureProblemDetails);
 
-            services.AddControllersWithViews().AddFluentValidation(fv =>
-            {
-                fv.DisableDataAnnotationsValidation = true;
-            });
+            services.AddControllersWithViews().AddFluentValidation();
             services.AddRazorPages();
             services.AddSignalR();
         }

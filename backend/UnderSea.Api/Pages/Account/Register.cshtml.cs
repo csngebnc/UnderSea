@@ -57,7 +57,7 @@ namespace UnderSea.Api.Pages.Account
         {
             if (action == "login")
             {
-                return Redirect("/");
+                return Redirect(ReturnUrl);
             }
 
             await ValidateFieldsAsync();
@@ -73,6 +73,8 @@ namespace UnderSea.Api.Pages.Account
                 if (createResult.Succeeded)
                 {
                     await userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Subject, user.Id.ToString()));
+                    await userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Name, user.UserName));
+                    await userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Id, user.Id.ToString()));
                     var materials = await _context.Materials.ToListAsync();
 
                     var country = new Country
@@ -99,7 +101,7 @@ namespace UnderSea.Api.Pages.Account
                     }
 
                     await _context.SaveChangesAsync();
-                    return Redirect("/");
+                    return Redirect(ReturnUrl);
                 }
                 else
                 {
