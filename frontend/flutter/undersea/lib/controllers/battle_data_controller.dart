@@ -272,5 +272,7 @@ class BattleDataController extends GetxController {
     alreadyDownloadedSpyLogPageNumber.value = 0;
     spyLogsList.clear();
     //spyLogsList.value.clear();
+
+    unitTypesInfo = Rx([]);
   }
 }

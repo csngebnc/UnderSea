@@ -51,4 +51,8 @@ class BuildingDataController extends GetxController {
     'Áramlásirányító': 'aramlasiranyito',
     'Kőbánya': 'stone_mine'
   };
+
+  void reset() {
+    buildingInfoData = Rx([]);
+  }
 }

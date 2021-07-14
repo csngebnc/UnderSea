@@ -48,4 +48,8 @@ class UpgradesController extends GetxController {
     'Vízalatti harcművészetek': 'vizicsillag',
     'Alkímia': 'alkimia',
   };
+
+  void reset() {
+    upgradeInfoData = Rx([]);
+  }
 }

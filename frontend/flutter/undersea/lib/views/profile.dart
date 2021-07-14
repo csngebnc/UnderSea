@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:undersea/controllers/battle_data_controller.dart';
+import 'package:undersea/controllers/building_data_controller.dart';
+import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
@@ -94,7 +97,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPressed: () {
                           var storage = GetStorage();
                           storage.remove(Constants.TOKEN);
-
+                          Get.find<BuildingDataController>().reset();
+                          Get.find<UpgradesController>().reset();
+                          Get.find<BattleDataController>().reset();
                           storage.remove(Constants.WINNER_SHOWN);
                           Get.off(LoginPage());
                         },

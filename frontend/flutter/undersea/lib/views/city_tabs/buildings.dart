@@ -43,14 +43,24 @@ class _BuildingsTabState extends State<Buildings> {
         list: ListView.builder(
             itemCount: buildingList.value.length + 2,
             itemBuilder: (BuildContext context, int i) {
-              if (i == 0) {
-                return UnderseaStyles.infoPanel(
-                    Strings.buildings_manual_title.tr,
-                    Strings.buildings_manual_hint.tr);
-              }
-              if (i > buildingList.value.length) return SizedBox(height: 100);
-
               return GetBuilder<BuildingDataController>(builder: (controller) {
+                if (i == 0) {
+                  return controller.buildingInfoData.value.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(30.0),
+                            child: const SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: CircularProgressIndicator()),
+                          ),
+                        )
+                      : UnderseaStyles.infoPanel(
+                          Strings.buildings_manual_title.tr,
+                          Strings.buildings_manual_hint.tr);
+                }
+                if (i > buildingList.value.length) return SizedBox(height: 100);
+
                 final buildingListValue = controller.buildingInfoData.value;
                 return _buildRow(i, buildingListValue);
               });

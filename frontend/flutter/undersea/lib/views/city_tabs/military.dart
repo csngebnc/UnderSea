@@ -48,23 +48,34 @@ class _MilitaryTabState extends State<Military> {
         list: ListView.builder(
             itemCount: count,
             itemBuilder: (BuildContext context, int i) {
-              if (i == 0) {
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      UnderseaStyles.infoPanel(Strings.military_manual_title.tr,
-                          Strings.military_manual_hint.tr),
-                      SizedBox(height: 25)
-                    ]);
-              }
-              if (i > soldierList.value.length * 2 - 1) {
-                return SizedBox(height: 100);
-              }
-              if (i.isEven && i < soldierList.value.length * 2) {
-                return UnderseaStyles.divider();
-              }
-
               return GetBuilder<BattleDataController>(builder: (controller) {
+                if (i == 0) {
+                  return controller.unitTypesInfo.value.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(30.0),
+                            child: const SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: CircularProgressIndicator()),
+                          ),
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                              UnderseaStyles.infoPanel(
+                                  Strings.military_manual_title.tr,
+                                  Strings.military_manual_hint.tr),
+                              SizedBox(height: 25)
+                            ]);
+                }
+                if (i > soldierList.value.length * 2 - 1) {
+                  return SizedBox(height: 100);
+                }
+                if (i.isEven && i < soldierList.value.length * 2) {
+                  return UnderseaStyles.divider();
+                }
+
                 final allUnits = controller.allUnitsInfo.value;
                 final spiesCount = controller.spiesInfo.value?.count;
                 return _buildRow(i, soldierList, allUnits, spiesCount);
@@ -125,11 +136,8 @@ class _MilitaryTabState extends State<Military> {
 
     var actualSoldierMax = totalUnits
         .firstWhere((element) => element.id == actualSoldier.id,
-            orElse: () => BattleUnitDto(
-                id: 0,
-                name: 'name',
-                count: 0,
-                level: 1)) // TODO: átírni nem beégetettre
+            orElse: () =>
+                BattleUnitDto(id: 0, name: 'name', count: 0, level: 1))
         .count;
 
     var isSpy = actualSoldier.name == 'Felfedező';

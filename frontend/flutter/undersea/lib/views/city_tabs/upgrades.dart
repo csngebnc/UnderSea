@@ -49,14 +49,24 @@ class _UpgradesTabState extends State<Upgrades> {
         list: ListView.builder(
             itemCount: 8,
             itemBuilder: (BuildContext context, int i) {
-              if (i == 0) {
-                return UnderseaStyles.infoPanel(
-                    Strings.upgrades_manual_title.tr,
-                    Strings.upgrades_manual_hint.tr);
-              }
-              if (i > upgradeList.value.length) return SizedBox(height: 100);
-
               return GetBuilder<UpgradesController>(builder: (controller) {
+                if (i == 0) {
+                  return controller.upgradeInfoData.value.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(30.0),
+                            child: const SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: CircularProgressIndicator()),
+                          ),
+                        )
+                      : UnderseaStyles.infoPanel(
+                          Strings.upgrades_manual_title.tr,
+                          Strings.upgrades_manual_hint.tr);
+                }
+                if (i > upgradeList.value.length) return SizedBox(height: 100);
+
                 final upgradeListValue = controller.upgradeInfoData.value;
                 return _buildRow(i, upgradeListValue);
               });
