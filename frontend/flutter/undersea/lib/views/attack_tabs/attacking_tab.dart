@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,15 +29,17 @@ class _AttackingTabState extends State<AttackingTab> {
   late Rx<List<UnitDto>> unitTypeList;
   Map<int, List<BattleUnitDto>> groupedUnits = {};
   var controller = Get.find<BattleDataController>();
+  Map<int, Map<int, int>> sliderValues = {};
+  late int generalIndex;
+  var mercenaryPrice = 0;
 
   @override
   void initState() {
     unitTypeList = controller.unitTypesInfo;
     soldierList = controller.availableUnitsInfo;
     for (int i = 0; i < unitTypeList.value.length; i++) {
-      if (unitTypeList.value[i].name == 'Hadvezér') generalIndex = i;
+      if (unitTypeList.value[i].name == 'Hadvezér') generalIndex = i + 1;
     }
-    //sliderValues = List<int>.generate(soldierList.value.length, (index) => 0);
     super.initState();
   }
 
@@ -49,10 +53,6 @@ class _AttackingTabState extends State<AttackingTab> {
     }
     return true;
   }
-
-  Map<int, Map<int, int>> sliderValues = {};
-  late int generalIndex;
-  var mercenaryPrice = 0;
 
   List<Row>? buildSliderRows(int id) {
     var unitList = groupedUnits[id];
@@ -69,18 +69,16 @@ class _AttackingTabState extends State<AttackingTab> {
                 Container(
                   height: 20,
                   child: Slider(
-                    value: sliderValues[id]?[e.level]?.toDouble() ??
-                        0, //sliderValues[sliderIndex].toDouble(),
+                    value: sliderValues[id]![e.level]!.toDouble(),
                     onChanged: (newValue) {
                       setState(() {
-                        var amountBeforeChange =
-                            sliderValues[id]?[e.level] ?? 0;
-                        sliderValues[id]?[e.level] = newValue.round();
-                        mercenaryPrice = (mercenaryPrice +
-                                newValue -
-                                amountBeforeChange * 1) //actualSoldier.price)
-                            .toInt();
+                        try {
+                          sliderValues[id]![e.level] = newValue.round();
+                        } catch (error) {
+                          log('$error');
+                        }
                       });
+                      log('${sliderValues[id]![e.level]}');
                     },
                     min: 0,
                     max: e.count.toDouble(),
@@ -104,8 +102,6 @@ class _AttackingTabState extends State<AttackingTab> {
   Widget build(BuildContext context) {
     return GetBuilder<BattleDataController>(builder: (controller) {
       var itemCount = unitTypeList.value.length + 2;
-      groupedUnits.clear();
-      sliderValues.clear();
 
       for (var soldier in soldierList()) {
         var keyExists = groupedUnits.containsKey(soldier.id);
@@ -113,16 +109,30 @@ class _AttackingTabState extends State<AttackingTab> {
           sliderValues.addIf(!keyExists, soldier.id, {soldier.level: 0});
           groupedUnits.addIf(!keyExists, soldier.id, [soldier]);
         } else {
-          sliderValues[soldier.id]?.addIf(true, soldier.level, 0);
-          groupedUnits[soldier.id]?.add(soldier);
+          sliderValues[soldier.id]?.addIf(
+              !(sliderValues[soldier.id]?.containsKey(soldier.level) ?? false),
+              soldier.level,
+              0);
+          groupedUnits[soldier.id]?.addIf(
+              !(groupedUnits[soldier.id]?.contains(soldier) ?? false), soldier);
         }
       }
+
+      log(sliderValues.toString());
 
       return UnderseaStyles.tabSkeleton(
           buttonText: Strings.lets_attack,
           isDisabled: !_canAttack(),
           onButtonPressed: () {
             var units = <AttackUnitDto>[];
+            for (var entry in groupedUnits.entries) {
+              for (var soldier in entry.value) {
+                units.add(AttackUnitDto(
+                    unitId: soldier.id,
+                    count: sliderValues[soldier.id]?[soldier.level] ?? 0,
+                    level: soldier.level));
+              }
+            }
             /*for (int i = 0; i < sliderValues.length; i++) {
               if (sliderValues[i] != 0) {
                 units.add(AttackUnitDto(
