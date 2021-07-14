@@ -57,6 +57,9 @@ namespace UnderSea.Tests.UnitTests
 
             _context = new UnderSeaDbContext(options);
             _context.Database.EnsureCreated();
+            var cunits = _context.CountryUnits.ToList();
+            _context.CountryUnits.RemoveRange(cunits);
+            _context.SaveChanges();
         }
 
         public void Dispose()
