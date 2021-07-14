@@ -62,11 +62,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               fontWeight: FontWeight.bold,
                               fontSize: 21));*/
                 else {
-                  return Text('default',
+                  return CircularProgressIndicator();
+                  /*Text('default',
                       style: UnderseaStyles.inputTextStyle.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 21));
+                          fontSize: 21));*/
                 }
               }),
               SizedBox(

@@ -15,13 +15,18 @@ class CountryDataController extends GetxController {
   CountryDataController(this._countryDataProvider);
 
   Rx<CountryDetailsDto?> countryDetailsData = Rx(null);
+  Rx<bool> countryDataLoading = false.obs;
   Rx<String?> countryName = Rx(null);
 
   void getCountryDetails() async {
+    countryDetailsData = null.obs;
+    countryDataLoading = true.obs;
+    update();
     try {
       final response = await _countryDataProvider.getCountryDetails();
       if (response.statusCode == 200) {
         countryDetailsData = Rx(response.body);
+        countryDataLoading = false.obs;
         update();
         log('EVENT: ${countryDetailsData.value?.event}');
 
@@ -79,6 +84,8 @@ class CountryDataController extends GetxController {
 
   void setCountryName(String newName) async {
     try {
+      countryName.value = null;
+      update();
       final response = await _countryDataProvider.setCountryName(newName);
       if (response.statusCode == 200) {
         countryName = Rx(newName);

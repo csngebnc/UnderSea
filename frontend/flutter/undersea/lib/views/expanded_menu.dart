@@ -60,6 +60,19 @@ class ExpandedMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<CountryDataController>(builder: (controller) {
       final countryData = controller.countryDetailsData.value;
+      if (controller.countryDataLoading.value) {
+        return Container(
+          decoration: BoxDecoration(color: Colors.transparent),
+          child: Center(
+              child: SizedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                  height: 100,
+                  width: 100)),
+        );
+      }
       if (countryData != null) {
         return Column(children: [
           _enumerateSoldiers(countryData.units!),

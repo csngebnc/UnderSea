@@ -263,22 +263,27 @@ class UnderseaStyles {
         ));
   }
 
-  static Widget leaderboardButton(
-      {required int roundNumber, required int placement}) {
+  static Widget leaderboardButton({int? roundNumber, int? placement}) {
     return ElevatedButton(
       onPressed: () {
         Get.to(Leaderboard());
       },
-      child: SizedBox(
-          width: 180,
-          child: Padding(
-              padding: EdgeInsets.fromLTRB(5, 7, 5, 5),
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(children: [
-                    _leaderboardText(roundNumber, Strings.round.tr),
-                    _leaderboardText(placement, Strings.placement.tr),
-                  ])))),
+      child: roundNumber == null && placement == null
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                  child: CircularProgressIndicator(), height: 30, width: 30),
+            )
+          : SizedBox(
+              width: 180,
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(5, 7, 5, 5),
+                  child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(children: [
+                        _leaderboardText(roundNumber!, Strings.round.tr),
+                        _leaderboardText(placement!, Strings.placement.tr),
+                      ])))),
       style: ElevatedButton.styleFrom(
           primary: Colors.white,
           padding: EdgeInsets.all(5),

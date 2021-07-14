@@ -113,10 +113,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
                     style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 17),
                   );
                 } else {
-                  return Text(
-                    'default',
-                    style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 21),
-                  );
+                  return CircularProgressIndicator();
                 }
               })));
     }

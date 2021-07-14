@@ -21,6 +21,8 @@ class UserDataController extends GetxController {
   var storage = GetStorage();
 
   Rx<UserInfoDto?> userInfoData = Rx(null);
+  Rx<bool> userInfoLoading = false.obs;
+  Rx<String?> userInfoError = Rx(null);
 
   UserDataController(this._userDataProvider);
 
@@ -102,16 +104,21 @@ class UserDataController extends GetxController {
   }
 
   void userInfo() async {
+    userInfoError = null.obs;
+    userInfoLoading = true.obs;
+    userInfoData = null.obs;
+    update();
     try {
       final response = await _userDataProvider.getUserInfo();
       if (response.statusCode == 200) {
         userInfoData = Rx(response.body);
+        userInfoLoading = false.obs;
         update();
 
         storage.write(Constants.ROUND_NUM, userInfoData.value?.round);
       }
     } catch (error) {
-      userInfoData.addError(error);
+      userInfoError = error.toString().obs;
       log('$error');
     }
   }
