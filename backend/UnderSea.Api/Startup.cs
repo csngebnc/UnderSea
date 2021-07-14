@@ -104,6 +104,7 @@ namespace UnderSea.Api
                 {
                     LogoutUrl = "/",
                     LoginUrl = "/",
+
                     LoginReturnUrlParameter = "returnUrl"
                 };
             })
