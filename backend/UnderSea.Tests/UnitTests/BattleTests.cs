@@ -14,11 +14,14 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using UnderSea.Api.Services;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.Spy;
 using UnderSea.Bll.Mapper;
 using UnderSea.Bll.Paging;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
+using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
+using UnderSea.Model.Constants;
 using UnderSea.Model.Enums;
 using UnderSea.Model.Models;
 using Xunit;
@@ -28,11 +31,15 @@ namespace UnderSea.Tests.UnitTests
     public class BattleTests : UnitTest
     {
 
-        private IBattleService _service;
+        private readonly IBattleService _service;
+        private readonly IRoundService _roundService;
 
         public BattleTests() : base()
         {
             _service = new BattleService(_context, _mapper, identityService);
+
+            Mock<IHubService> hubServiceMock = new Mock<IHubService>();
+            _roundService = new RoundService(_context, hubServiceMock.Object);
         }
 
         [Fact]
@@ -297,7 +304,353 @@ namespace UnderSea.Tests.UnitTests
         public async Task GetSpiesTest()
         {
             // Arrange
-            //var spy = await 
+            var countryUnit = new CountryUnit
+            {
+                UnitId = 4,
+                CountryId = 1,
+                BattlesPlayed = 10,
+                Count = 30
+            };
+
+            _context.CountryUnits.Add(
+                countryUnit
+            );
+
+            // Act
+            var actualSpy = await _service.GetSpies();
+
+            // Assert
+            actualSpy.Count.Should().Be(countryUnit.Count);
+        }
+
+        [Fact]
+        public void Attack_AttackedCountryNotExistsTest()
+        {
+            // Arrange
+            var sendAttack = new SendAttackDto
+            {
+                AttackedCountryId = 44,
+                Units = new List<AttackUnitDto>()
+            };
+
+            // Act
+            Func<Task> action = async () => await _service.AttackAsync(sendAttack);
+
+            // Assert
+            action.Should().Throw<NotExistsException>().WithMessage(ExceptionMessageConstants.Attack_AttackedCountryNotExists);
+        }
+
+        [Fact]
+        public void Attack_SendAttackSpyTest()
+        {
+            // Arrange
+            var sendAttack = new SendAttackDto
+            {
+                AttackedCountryId = 4,
+                Units = new List<AttackUnitDto>()
+                {
+                    new AttackUnitDto
+                    {
+                        UnitId = 4,
+                        Level = 1,
+                        Count = 20
+                    }
+                }
+            };
+
+            // Act
+            Func<Task> action = async () => await _service.AttackAsync(sendAttack);
+
+            // Assert
+            action.Should().Throw<InvalidParameterException>().WithMessage(ExceptionMessageConstants.Attack_CanNotSendSpy);
+        }
+
+        [Fact]
+        public async Task Attack_SendSecondAttackTest()
+        {
+            // Arrange
+            var countryUnit = new CountryUnit
+            {
+                UnitId = 2,
+                BattlesPlayed = 0,
+                Count = 30,
+                CountryId = 1
+            };
+            var countryUnit2 = new CountryUnit
+            {
+                UnitId = 5,
+                BattlesPlayed = 0,
+                Count = 30,
+                CountryId = 1
+            };
+            _context.CountryUnits.Add(countryUnit);
+            _context.CountryUnits.Add(countryUnit2);
+            await _context.SaveChangesAsync();
+
+            var sendAttack = new SendAttackDto
+            {
+                AttackedCountryId = 4,
+                Units = new List<AttackUnitDto>()
+                {
+                    new AttackUnitDto
+                    {
+                        UnitId = 2,
+                        Level = 1,
+                        Count = 20
+                    },
+                    new AttackUnitDto
+                    {
+                        UnitId = 5,
+                        Level = 1,
+                        Count = 10
+                    }
+                }
+            };
+
+            // Act
+            await _service.AttackAsync(sendAttack);
+            Func<Task> action = async () => await _service.AttackAsync(sendAttack);
+
+            // Assert
+            action.Should().Throw<InvalidParameterException>().WithMessage(ExceptionMessageConstants.Attack_CanNotSendSecondAttack);
+        }
+
+        [Fact]
+        public void Attack_AttackYourselfTest()
+        {
+            // Arrange
+            var sendAttack = new SendAttackDto
+            {
+                AttackedCountryId = LoggedInCountryId,
+                Units = new List<AttackUnitDto>()
+                {
+                    new AttackUnitDto
+                    {
+                        UnitId = 1,
+                        Level = 1,
+                        Count = 20
+                    }
+                }
+            };
+
+            // Act
+            Func<Task> action = async () => await _service.AttackAsync(sendAttack);
+
+            // Assert
+            action.Should().Throw<InvalidParameterException>().WithMessage(ExceptionMessageConstants.Attack_CanNotAttackYourself);
+        }
+
+        [Fact]
+        public void Attack_AttackWithoutGeneralTest()
+        {
+            // Arrange
+            var sendAttack = new SendAttackDto
+            {
+                AttackedCountryId = 4,
+                Units = new List<AttackUnitDto>()
+                {
+                    new AttackUnitDto
+                    {
+                        UnitId = 1,
+                        Level = 1,
+                        Count = 20
+                    }
+                }
+            };
+
+            // Act
+            Func<Task> action = async () => await _service.AttackAsync(sendAttack);
+
+            // Assert
+            action.Should().Throw<InvalidParameterException>().WithMessage(ExceptionMessageConstants.Attack_NeedGeneral);
+        }
+
+        [Fact]
+        public void Attack_AttackNotEnoughUnitTest()
+        {
+            // Arrange
+            var sendAttack = new SendAttackDto
+            {
+                AttackedCountryId = 4,
+                Units = new List<AttackUnitDto>()
+                {
+                    new AttackUnitDto
+                    {
+                        UnitId = 1,
+                        Level = 1,
+                        Count = 20
+                    },
+                    new AttackUnitDto
+                    {
+                        UnitId = 5,
+                        Level = 1,
+                        Count = 20
+                    }
+                }
+            };
+
+            // Act
+            Func<Task> action = async () => await _service.AttackAsync(sendAttack);
+
+            // Assert
+            action.Should().Throw<InvalidParameterException>().WithMessage(ExceptionMessageConstants.Attack_NotEnoughUnits);
+        }
+
+        [Fact]
+        public async Task Attack_SuccesfulAttackTest()
+        {
+            // Arrange
+            var countryUnit = new CountryUnit
+            {
+                UnitId = 2,
+                BattlesPlayed = 0,
+                Count = 30,
+                CountryId = 1
+            };
+            var countryUnit2 = new CountryUnit
+            {
+                UnitId = 5,
+                BattlesPlayed = 0,
+                Count = 30,
+                CountryId = 1
+            };
+            _context.CountryUnits.Add(countryUnit);
+            _context.CountryUnits.Add(countryUnit2);
+            await _context.SaveChangesAsync();
+
+            var sendAttack = new SendAttackDto
+            {
+                AttackedCountryId = 4,
+                Units = new List<AttackUnitDto>()
+                {
+                    new AttackUnitDto
+                    {
+                        UnitId = 2,
+                        Level = 1,
+                        Count = 20
+                    },
+                    new AttackUnitDto
+                    {
+                        UnitId = 5,
+                        Level = 1,
+                        Count = 20
+                    }
+                }
+            };
+
+            // Act
+            await _service.AttackAsync(sendAttack);
+
+            var attack = await _context.Attacks
+                .Include(a => a.AttackUnits)
+                .FirstOrDefaultAsync(a => a.AttackerCountryId == LoggedInCountryId);
+
+            // Assert
+            attack.DefenderCountryId.Should().Be(sendAttack.AttackedCountryId);
+            attack.AttackerCountryId.Should().Be(LoggedInCountryId);
+            attack.WinnerId.Should().BeNull();
+            attack.AttackUnits.Count.Should().Be(2);
+        }
+
+        [Fact]
+        public async Task Attack_SuccesfulAttackWithRoundTurnTest()
+        {
+            // Arrange
+            var countryUnit = new CountryUnit
+            {
+                UnitId = 2,
+                BattlesPlayed = 0,
+                Count = 30,
+                CountryId = 1
+            };
+            var countryUnit2 = new CountryUnit
+            {
+                UnitId = 5,
+                BattlesPlayed = 0,
+                Count = 30,
+                CountryId = 1
+            };
+            _context.CountryUnits.Add(countryUnit);
+            _context.CountryUnits.Add(countryUnit2);
+            await _context.SaveChangesAsync();
+
+            var attackedCountry = await _context.Countries
+                .Include(country => country.CountryMaterials)
+                .SingleOrDefaultAsync(country => country.Id == 4);
+
+            int amountPearl = attackedCountry.CountryMaterials.SingleOrDefault(c => c.MaterialId == 1).Amount;
+
+            var sendAttack = new SendAttackDto
+            {
+                AttackedCountryId = attackedCountry.Id,
+                Units = new List<AttackUnitDto>()
+                {
+                    new AttackUnitDto
+                    {
+                        UnitId = 2,
+                        Level = 1,
+                        Count = 20
+                    },
+                    new AttackUnitDto
+                    {
+                        UnitId = 5,
+                        Level = 1,
+                        Count = 20
+                    }
+                }
+            };
+
+            // Act
+            await _service.AttackAsync(sendAttack);
+
+            var attack = await _context.Attacks
+                .Include(a => a.AttackUnits)
+                .FirstOrDefaultAsync(a => a.AttackerCountryId == LoggedInCountryId);
+
+            await _roundService.NextRound();
+
+            // Assert
+            attack.DefenderCountryId.Should().Be(sendAttack.AttackedCountryId);
+            attack.AttackerCountryId.Should().Be(LoggedInCountryId);
+            attack.WinnerId.Should().Be(LoggedInUserId);
+            attack.AttackUnits.Count.Should().Be(2);
+
+            attackedCountry.CountryMaterials
+                .FirstOrDefault(c => c.CountryId == attackedCountry.Id && c.MaterialId == 1).Amount = amountPearl / 2;
+        }
+
+        [Fact]
+        public void Spy_SpyingYourselfTest()
+        {
+            // Arrange
+            var sendSpy = new SendSpyDto
+            {
+                SpiedCountryId = LoggedInCountryId,
+                SpyCount = 20
+            };
+
+            // Act
+            Func<Task> action = async () => await _service.SpyAsync(sendSpy);
+
+            // Assert
+            action.Should().Throw<InvalidParameterException>().WithMessage(ExceptionMessageConstants.Spy_CanNotSpyingYourself);
+        }
+
+        [Fact]
+        public void Spy_NotEnoughSpiesTest()
+        {
+            // Arrange
+            var sendSpy = new SendSpyDto
+            {
+                SpiedCountryId = 4,
+                SpyCount = 20
+            };
+
+            // Act
+            Func<Task> action = async () => await _service.SpyAsync(sendSpy);
+
+            // Assert
+            action.Should().Throw<NotExistsException>().WithMessage(ExceptionMessageConstants.Spy_NotEnoughSpies);
         }
     }
 }
