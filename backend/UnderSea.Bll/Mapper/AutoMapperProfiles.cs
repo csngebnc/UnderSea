@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnderSea.Bll.Dtos;
+using UnderSea.Bll.Dtos.User;
 using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Mapper
@@ -13,6 +14,8 @@ namespace UnderSea.Bll.Mapper
     {
         public AutoMapperProfiles()
         {
+            CreateMap<WorldWinner, WorldWinnerDto>();
+
             CreateMap<User, UserRankDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.UserName));
 
