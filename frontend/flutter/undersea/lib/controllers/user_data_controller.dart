@@ -86,7 +86,7 @@ class UserDataController extends GetxController {
   login(String username, String password) async {
     try {
       final body =
-          'username=$username&password=$password&grant_type=password&client_id=undersea-angular&scope=openid+api-openid';
+          'username=$username&password=$password&grant_type=password&client_id=undersea-flutter&scope=openid+api-openid';
       final response = await _userDataProvider.login(body);
       if (response.statusCode == 200) {
         storage.write(Constants.TOKEN, response.body!.token);
