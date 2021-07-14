@@ -1,3 +1,4 @@
+import { Event } from './event.model';
 import { Material } from './material.model';
 import { Unit } from './unit.model';
 import { Building } from './building.model';
@@ -8,4 +9,5 @@ export type Resources = {
   materials: Array<Material>;
   hasSonar: boolean;
   maxUnitCount: number;
+  event?: Event;
 };

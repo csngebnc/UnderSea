@@ -15,7 +15,7 @@ export class AuthenticationService {
     private userService: UserService,
     private router: Router,
     private tokenService: TokenService
-  ) { }
+  ) {}
 
   login(userName: string, password: string): Observable<any> {
     const body = new URLSearchParams();
@@ -35,7 +35,7 @@ export class AuthenticationService {
     return this.http.post(`${apiUrl}/connect/token`, body.toString(), options);
   }
 
-  register(data: RegisterDto): Observable<string> {
+  register(data: RegisterDto): Observable<void> {
     return this.userService.register(data);
   }
 

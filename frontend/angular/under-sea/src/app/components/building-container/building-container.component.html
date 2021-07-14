@@ -1,4 +1,4 @@
-<button type="button" (click)="nextRound()">Következő kör</button>
+<button *ngIf="!production" type="button" (click)="nextRound()">Következő kör</button>
 
 <img *ngIf="buildings | hasbuilding: 2" [src]="castle" class="img castle" />
 

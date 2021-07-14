@@ -1,3 +1,5 @@
+import { WinnersComponent } from './components/winners/winners.component';
+import { RanklistComponent } from './components/ranklist/ranklist.component';
 import { EventsComponent } from './components/events/events.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -65,6 +67,16 @@ const routes: Routes = [
       {
         path: 'scoreboard',
         component: ScoreboardComponent,
+        children: [
+          {
+            path: 'ranklist',
+            component: RanklistComponent,
+          },
+          {
+            path: 'winners',
+            component: WinnersComponent,
+          },
+        ],
       },
       {
         path: 'units',

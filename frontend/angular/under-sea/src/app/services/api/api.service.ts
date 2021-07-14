@@ -11,12 +11,13 @@ import { Resources } from 'src/app/models/resources.model';
 import { Unit } from 'src/app/models/unit.model';
 import { Building } from 'src/app/models/building.model';
 import { Material } from 'src/app/models/material.model';
+import { Event } from 'src/app/models/event.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private apiService: aService) { }
+  constructor(private apiService: aService) {}
 
   getUser(): Observable<UserData> {
     return this.apiService.user().pipe(
@@ -63,6 +64,7 @@ export class ApiService {
           materials,
           hasSonar: cd.hasSonarCanon,
           maxUnitCount: cd.maxUnitCount,
+          event: cd.event as Event,
         };
       })
     );

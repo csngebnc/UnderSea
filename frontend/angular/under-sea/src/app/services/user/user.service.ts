@@ -11,13 +11,12 @@ import { PagedList } from 'src/app/models/paged-list.model';
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private userService: uService) { }
+  constructor(private userService: uService) {}
 
   getScoreBoard(
     pageNumber: number,
     filter: string | undefined
   ): Observable<PagedList> {
-    if (!filter) filter = undefined;
     return this.userService.ranklist(10, pageNumber, filter).pipe(
       map((r) => {
         const result: PagedList = {
@@ -40,6 +39,34 @@ export class UserService {
             })
           );
         }
+
+        return result;
+      })
+    );
+  }
+
+  getWinners(
+    pageNumber: number,
+    filter: string | undefined
+  ): Observable<PagedList> {
+    return this.userService.worldwinners(10, pageNumber, filter).pipe(
+      map((w) => {
+        const result: PagedList = {
+          pageSize: w.pageSize,
+          pageNumber: w.pageNumber,
+          allResultsCount: w.allResultsCount,
+          list: [],
+        };
+
+        w.results.forEach((r) => {
+          result.list.push({
+            name: r.userName,
+            countryName: r.countryName,
+            score: r.points,
+            worldRound: r.worldRound,
+            date: new Date(r.date),
+          });
+        });
 
         return result;
       })
