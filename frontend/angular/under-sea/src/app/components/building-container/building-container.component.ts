@@ -3,6 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Building } from 'src/app/models/building.model';
 import { RoundService } from 'src/app/services/round/round.service';
 import { imageUrl, images } from 'src/assets/config.json';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'building-container',
@@ -17,6 +18,8 @@ export class BuildingContainerComponent implements OnInit {
   castle: string = imageUrl + images.castle;
   flowcontrol: string = imageUrl + images.flowcontrol;
   stonemine: string = imageUrl + images.stonemine;
+
+  production = environment.production;
 
   constructor(
     private roundService: RoundService,
