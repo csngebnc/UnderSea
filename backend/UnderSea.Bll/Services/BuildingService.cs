@@ -8,6 +8,7 @@ using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
+using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Services
@@ -81,7 +82,7 @@ namespace UnderSea.Bll.Services
 
             if (country == null)
             {
-                throw new NotExistsException("Nem létezik ilyen ország.");
+                throw new NotExistsException(ExceptionMessageConstants.BuyBuilding_CountryNotExists);
             }
 
             var building = await _context.Buildings
@@ -92,13 +93,13 @@ namespace UnderSea.Bll.Services
 
             if (building == null)
             {
-                throw new NotExistsException("Nem létezik ilyen épület.");
+                throw new NotExistsException(ExceptionMessageConstants.BuyBuilding_BuildingNotExists);
             }
 
             var activebuilding = await _context.ActiveConstructions.FirstOrDefaultAsync(ac => ac.CountryId == country.Id);
             if (activebuilding != null)
             {
-                throw new InvalidParameterException("building", "Már folyamatban van egy építés.");
+                throw new InvalidParameterException("building", ExceptionMessageConstants.BuyBuilding_ActiveBuildingConstruction);
             }
 
 
