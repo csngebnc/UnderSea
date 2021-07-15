@@ -265,33 +265,41 @@ class UnderseaStyles {
   }
 
   static Widget leaderboardButton({int? roundNumber, int? placement}) {
-    return ElevatedButton(
-      onPressed: () {
-        Get.to(Leaderboard());
-      },
-      child: roundNumber == null && placement == null
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                  child: CircularProgressIndicator(), height: 30, width: 30),
-            )
-          : SizedBox(
-              width: 180,
-              child: Padding(
+    return Center(
+      child: SizedBox(
+        height: 50,
+        width: 180,
+        child: ElevatedButton(
+          onPressed: () {
+            Get.to(Leaderboard());
+          },
+          child: roundNumber == null && placement == null
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 30,
+                        width: 30),
+                  ),
+                )
+              : Padding(
                   padding: EdgeInsets.fromLTRB(5, 7, 5, 5),
                   child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Row(children: [
                         _leaderboardText(roundNumber!, Strings.round.tr),
                         _leaderboardText(placement!, Strings.placement.tr),
-                      ])))),
-      style: ElevatedButton.styleFrom(
-          primary: Colors.white,
-          padding: EdgeInsets.all(5),
-          elevation: 10,
-          shadowColor: UnderseaStyles.shadowColor,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+                      ]))),
+          style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+              padding: EdgeInsets.all(5),
+              elevation: 10,
+              shadowColor: UnderseaStyles.shadowColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15))),
+        ),
+      ),
     );
   }
 
