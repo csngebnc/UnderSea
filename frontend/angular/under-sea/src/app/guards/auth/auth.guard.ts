@@ -14,7 +14,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(private authService: OAuthService) {}
 
   canActivate(): boolean {
-    console.log(this.authService.hasValidAccessToken());
     if (!this.authService.hasValidAccessToken()) {
       this.authService.initCodeFlow();
       return false;

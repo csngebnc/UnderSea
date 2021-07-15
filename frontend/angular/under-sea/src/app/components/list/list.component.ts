@@ -24,7 +24,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   @Output() filter = new EventEmitter<string>();
   selectedTargetId: number | null = null;
 
-  @ViewChild('search') searchInput: ElementRef;
+  @ViewChild('searchbar') searchInput: ElementRef;
 
   constructor() {
     this.search = debounce(this.search, 1000);

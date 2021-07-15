@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
   constructor(private authService: OAuthService) {}
 
   async ngOnInit(): Promise<void> {
-    console.log('asd');
     if (!this.authService.hasValidAccessToken()) {
       this.authService.initCodeFlow();
     }
