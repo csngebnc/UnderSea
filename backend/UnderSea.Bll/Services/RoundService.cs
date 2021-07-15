@@ -1,18 +1,13 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using UnderSea.Bll.Extensions;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
-using UnderSea.Model.Models.Materials;
 
 namespace UnderSea.Bll.Services
 {

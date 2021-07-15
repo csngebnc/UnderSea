@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnderSea.Bll.Extensions
+namespace UnderSea.Api.Extensions
 {
     public static class HttpContextAccessorExtension
     {
