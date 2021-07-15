@@ -347,13 +347,13 @@ namespace UnderSea.Bll.Services
             var attackedCountry = await _context.Countries.Where(c => c.Id == attackDto.AttackedCountryId).FirstOrDefaultAsync();
             if (attackedCountry == null)
             {
-                throw new NotExistsException(ExceptionMessageConstants.Attack_AttackedCountryNotExists);
+                throw new NotExistsException("Nem létezik ilyen ország, ami megtámadható lenne.");
             }
 
             var world = await _context.Worlds.FirstOrDefaultAsync();
             if (world == null)
             {
-                throw new NotExistsException(ExceptionMessageConstants.Attack_WorldNotExists);
+                throw new NotExistsException("Nem létezik ilyen világ, ahol támadni lehet.");
             }
 
             var spyId = (await _context.Units
@@ -362,7 +362,7 @@ namespace UnderSea.Bll.Services
 
             if (attackDto.Units.Any(au => au.UnitId == spyId))
             {
-                throw new InvalidParameterException("unit", ExceptionMessageConstants.Attack_CanNotSendSpy);
+                throw new InvalidParameterException("unit", "Kémet nem küldhetsz támadni.");
             }
 
             var secondAttack = await _context.Attacks
@@ -372,12 +372,12 @@ namespace UnderSea.Bll.Services
 
             if (secondAttack)
             {
-                throw new InvalidParameterException("country", ExceptionMessageConstants.Attack_CanNotSendSecondAttack);
+                throw new InvalidParameterException("country", "Nem támadható ugyanaz az ország egy körben!");
             }
 
             if (attackerCountry.Id == attackDto.AttackedCountryId)
             {
-                throw new InvalidParameterException("country", ExceptionMessageConstants.Attack_CanNotAttackYourself);
+                throw new InvalidParameterException("country", "Nem támadhatja meg saját magát az ország.");
             }
 
             attackDto.Units = attackDto.Units.GroupBy(u => new { u.UnitId, u.Level })
@@ -396,7 +396,7 @@ namespace UnderSea.Bll.Services
             var generalId = (await _context.Units.SingleOrDefaultAsync(u => u.Name == UnitNameConstants.Hadvezer)).Id;
             if (!attackDto.Units.Any(u => u.UnitId == generalId))
             {
-                throw new InvalidParameterException("unit", ExceptionMessageConstants.Attack_NeedGeneral);
+                throw new InvalidParameterException("unit", "A támadáshoz legalább egy hadvezért is küldeni kell.");
             }
 
             var attack = new Attack()
@@ -440,7 +440,7 @@ namespace UnderSea.Bll.Services
 
                     if((unit.Count != attackUnits.Sum(a => a.Count)))
                     {
-                        throw new InvalidParameterException("unit", ExceptionMessageConstants.Attack_NotEnoughUnits);
+                        throw new InvalidParameterException("unit","Nem áll rendelkezésre elég egység.");
                     }
 
                     return attackUnits;
@@ -464,14 +464,14 @@ namespace UnderSea.Bll.Services
 
             if (spies.SpiedCountryId == country.Id)
             {
-                throw new InvalidParameterException("country", ExceptionMessageConstants.Spy_CanNotSpyingYourself);
+                throw new InvalidParameterException("country", "Nem kémlelheti saját magát az ország.");
             }
 
             var attackerSpyUnits = country.CountryUnits
                 .FirstOrDefault(cu => cu.Unit.Name == UnitNameConstants.Felfedezo);
 
             if (attackerSpyUnits == null)
-                throw new NotExistsException(ExceptionMessageConstants.Spy_NotEnoughSpies);
+                throw new NotExistsException("Nincsenek kém egységek, amiket el lehetne küldeni!");
 
             attackerSpyUnits.Count -= spies.SpyCount;
 

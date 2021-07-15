@@ -26,7 +26,6 @@ namespace UnderSea.Tests.UnitTests
         protected readonly Mock<HttpContext> mockHttpContext;
 
         protected readonly string LoggedInUserId = "af378505-14cb-4f49-bb01-ba2c8fdef77d";
-        protected readonly int LoggedInCountryId = 1;
 
         public UnitTest()
         {
@@ -57,6 +56,9 @@ namespace UnderSea.Tests.UnitTests
 
             _context = new UnderSeaDbContext(options);
             _context.Database.EnsureCreated();
+            var cunits = _context.CountryUnits.ToList();
+            _context.CountryUnits.RemoveRange(cunits);
+            _context.SaveChanges();
         }
 
         public void Dispose()
