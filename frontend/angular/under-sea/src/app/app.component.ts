@@ -14,4 +14,12 @@ export class AppComponent {
 
   constructor() {}
   title = 'under-sea';
+
+  constructor(private authService: OAuthService) {}
+
+  async ngOnInit(): Promise<void> {
+    if (!this.authService.hasValidAccessToken()) {
+      this.authService.initCodeFlow();
+    }
+  }
 }

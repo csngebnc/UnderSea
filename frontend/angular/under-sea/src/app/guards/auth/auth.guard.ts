@@ -15,21 +15,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(
     private tokenService: TokenService,
     private autService: AuthenticationService
-  ) { }
+  ) {}
 
-  canActivate(
-  ): boolean {
-    return this.validate();
-  }
-
-  canActivateChild(
-  ): boolean {
-    return this.validate();
-  }
-
-  private validate(): boolean {
-    if (!this.tokenService.isTokenValid()) {
-      this.autService.logout();
+  canActivate(): boolean {
+    if (!this.authService.hasValidAccessToken()) {
+      this.authService.initCodeFlow();
       return false;
     } else {
       return true;
