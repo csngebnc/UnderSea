@@ -57,49 +57,51 @@ class _AttackingTabState extends State<AttackingTab> {
   List<Widget>? buildSliderRows(int id) {
     var unitList = groupedUnits[id];
     return unitList
-        ?.map((e) => Padding(
-              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: 25,
+        ?.map((e) => e.count == 0
+            ? Container()
+            : Padding(
+                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 25,
+                      ),
+                      child: Text(e.level.toString(),
+                          style:
+                              UnderseaStyles.listRegular.copyWith(height: 1.2)),
                     ),
-                    child: Text(e.level.toString(),
-                        style:
-                            UnderseaStyles.listRegular.copyWith(height: 1.2)),
-                  ),
-                  Container(
-                    height: 20,
-                    child: Slider(
-                      value: sliderValues[id]![e.level]!.toDouble(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          try {
-                            sliderValues[id]![e.level] = newValue.round();
-                          } catch (error) {
-                            log('$error');
-                          }
-                        });
-                        log('${sliderValues[id]![e.level]}');
-                      },
-                      min: 0,
-                      max: e.count.toDouble(),
-                      activeColor: UnderseaStyles.underseaLogoColor,
-                      inactiveColor: Color(0x883B7DBD),
+                    Container(
+                      height: 20,
+                      child: Slider(
+                        value: sliderValues[id]![e.level]!.toDouble(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            try {
+                              sliderValues[id]![e.level] = newValue.round();
+                            } catch (error) {
+                              log('$error');
+                            }
+                          });
+                          log('${sliderValues[id]![e.level]}');
+                        },
+                        min: 0,
+                        max: e.count.toDouble(),
+                        activeColor: UnderseaStyles.underseaLogoColor,
+                        inactiveColor: Color(0x883B7DBD),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: 15,
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 15,
+                      ),
+                      child: Text('${sliderValues[id]?[e.level]}/${e.count}',
+                          style:
+                              UnderseaStyles.listRegular.copyWith(height: 1.2)),
                     ),
-                    child: Text('${sliderValues[id]?[e.level]}/${e.count}',
-                        style:
-                            UnderseaStyles.listRegular.copyWith(height: 1.2)),
-                  ),
-                ],
-              ),
-            ))
+                  ],
+                ),
+              ))
         .toList();
   }
 
@@ -122,9 +124,6 @@ class _AttackingTabState extends State<AttackingTab> {
               !(groupedUnits[soldier.id]?.contains(soldier) ?? false), soldier);
         }
       }
-
-      log(sliderValues.toString());
-      log(groupedUnits.toString());
 
       return UnderseaStyles.tabSkeleton(
           buttonText: Strings.lets_attack,
