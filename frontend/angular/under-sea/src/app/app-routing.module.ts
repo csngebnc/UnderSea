@@ -3,8 +3,6 @@ import { RanklistComponent } from './components/ranklist/ranklist.component';
 import { EventsComponent } from './components/events/events.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './pages/authentication/login/login.component';
-import { RegisterComponent } from './pages/authentication/register/register.component';
 import { MainComponent } from './pages/main/main.component';
 import { BuildingsComponent } from './components/buildings/buildings.component';
 import { AttackComponent } from './components/attack/attack.component';
@@ -20,14 +18,6 @@ import { BattleComponent } from './components/battle/battle.component';
 import { ExploreListComponent } from './components/explore-list/explore-list.component';
 
 const routes: Routes = [
-  {
-    path: 'login',
-    component: LoginComponent,
-  },
-  {
-    path: 'register',
-    component: RegisterComponent,
-  },
   {
     path: 'main',
     component: MainComponent,

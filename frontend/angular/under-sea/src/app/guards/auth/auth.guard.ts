@@ -1,3 +1,4 @@
+import { OAuthService } from 'angular-oauth2-oidc';
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
@@ -5,34 +6,24 @@ import {
   RouterStateSnapshot,
   CanActivateChild,
 } from '@angular/router';
-import { TokenService } from '../../services/token/token.service';
-import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate, CanActivateChild {
-  constructor(
-    private tokenService: TokenService,
-    private autService: AuthenticationService
-  ) { }
+  constructor(private authService: OAuthService) {}
 
-  canActivate(
-  ): boolean {
-    return this.validate();
-  }
-
-  canActivateChild(
-  ): boolean {
-    return this.validate();
-  }
-
-  private validate(): boolean {
-    if (!this.tokenService.isTokenValid()) {
-      this.autService.logout();
+  canActivate(): boolean {
+    console.log(this.authService.hasValidAccessToken());
+    if (!this.authService.hasValidAccessToken()) {
+      this.authService.initCodeFlow();
       return false;
     } else {
       return true;
     }
+  }
+
+  canActivateChild(): boolean {
+    return this.canActivate();
   }
 }
