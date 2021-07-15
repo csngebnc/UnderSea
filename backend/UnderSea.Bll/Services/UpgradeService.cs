@@ -8,6 +8,7 @@ using UnderSea.Bll.Dtos;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
+using UnderSea.Model.Constants;
 
 namespace UnderSea.Bll.Services
 {
@@ -86,20 +87,20 @@ namespace UnderSea.Bll.Services
             var activeupgrade = await _context.ActiveUpgradings.Where(c => c.CountryId == country.Id).FirstOrDefaultAsync();
             if (activeupgrade != null)
             {
-                throw new InvalidParameterException("upgrade", "Már folyamatban van egy fejlesztés.");
+                throw new InvalidParameterException("upgrade", ExceptionMessageConstants.BuyUpgrade_ActiveUpgrading);
             }
 
             if (await _context.CountryUpgrades.AnyAsync(c => c.CountryId == country.Id && c.UpgradeId == buyUpgradeDto.UpgradeId)  ||
                 await _context.ActiveUpgradings.AnyAsync(au => au.CountryId == country.Id && au.UpgradeId == buyUpgradeDto.UpgradeId))
             {
-                throw new InvalidParameterException("upgrade", "Már folyamatban van / megépítetted az adott fejlesztés.");
+                throw new InvalidParameterException("upgrade", ExceptionMessageConstants.BuyUpgrade_AlreadyUpgraded);
             }
 
             var upgrade = await _context.Upgrades.FindAsync(buyUpgradeDto.UpgradeId);
 
             if (upgrade == null)
             {
-                throw new NotExistsException("Nincs ilyen fejlesztés.");
+                throw new NotExistsException(ExceptionMessageConstants.BuyUpgrade_NotExistUpgrade);
             }
 
             _context.ActiveUpgradings.Add(new Model.Models.ActiveUpgrading

@@ -24,5 +24,9 @@ namespace UnderSea.Model.Constants
         public static string BuyBuilding_ActiveBuildingConstruction = "Már folyamatban van egy építés.";
 
         public static string ChangeCountryName_Required = "Az ország nevének megadása kötelező.";
+
+        public static string BuyUpgrade_ActiveUpgrading = "Már folyamatban van egy fejlesztés.";
+        public static string BuyUpgrade_AlreadyUpgraded = "Már folyamatban van / megépítetted az adott fejlesztés.";
+        public static string BuyUpgrade_NotExistUpgrade = "Nincs ilyen fejlesztés.";
     }
 }
