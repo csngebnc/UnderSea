@@ -6,7 +6,7 @@ import 'package:undersea/controllers/country_data_controller.dart';
 import 'package:undersea/controllers/event_data_controller.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
 import 'package:undersea/controllers/next_round_controller.dart';
-
+import 'package:flutter/services.dart';
 import 'package:undersea/lang/app_translations.dart';
 import 'package:undersea/network/providers/country_data_provider.dart';
 import 'package:undersea/network/providers/event_provider.dart';
@@ -49,6 +49,7 @@ Future<void> initServices() async {
   Get.put(BattleDataController(Get.find()));
   Get.put(EventProvider());
   Get.put(EventDataController(Get.find()));
+
   roundController.initPlatformState();
 }
 
@@ -59,6 +60,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return GetMaterialApp(
       locale: AppTranslations.locale,
       fallbackLocale: AppTranslations.fallbackLocale,
