@@ -1,5 +1,5 @@
+import { OAuthService } from 'angular-oauth2-oidc';
 import { Component, OnInit, Input } from '@angular/core';
-import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { imageUrl, images } from 'src/assets/config.json';
 
 @Component({
@@ -11,11 +11,11 @@ export class ProfilecardComponent implements OnInit {
   @Input() name: string;
 
   img: string = imageUrl + images.profile;
-  constructor(private authService: AuthenticationService) { }
+  constructor(private authService: OAuthService) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onLogout(): void {
-    this.authService.logout();
+    this.authService.logOut();
   }
 }

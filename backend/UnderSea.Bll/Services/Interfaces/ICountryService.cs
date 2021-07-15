@@ -9,6 +9,7 @@ namespace UnderSea.Bll.Services.Interfaces
 {
     public interface ICountryService
     {
+        Task CreateCountryWithMaterials(string countryName, string ownerId);
         Task<CountryDetailsDto> GetUserCountryDetails();
         Task<string> GetUserCountryName();
         Task ChangeUserCountryName(string name);

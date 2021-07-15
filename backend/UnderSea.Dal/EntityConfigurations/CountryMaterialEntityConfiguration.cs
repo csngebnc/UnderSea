@@ -25,8 +25,8 @@ namespace UnderSea.Dal.EntityConfigurations
                 new CountryMaterial()
                 {
                     MaterialId = 2,
-                    Amount = 0,
-                    BaseProduction = 0,
+                    Amount = 1000,
+                    BaseProduction = 200,
                     CountryId = 1,
                     Multiplier = 1
                 },

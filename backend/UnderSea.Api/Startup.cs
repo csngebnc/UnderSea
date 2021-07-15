@@ -4,7 +4,9 @@ using FluentValidation.AspNetCore;
 using Hangfire;
 using Hangfire.SqlServer;
 using Hellang.Middleware.ProblemDetails;
+using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,19 +15,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NSwag;
+using NSwag.AspNetCore;
+using NSwag.Generation.Processors.Security;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
 using UnderSea.Api.AuthFilter;
+using UnderSea.Api.ProblemDetails;
 using UnderSea.Api.Services;
 using UnderSea.Api.SignalR;
 using UnderSea.Bll.Mapper;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
-using UnderSea.Bll.Validation.ProblemDetails;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 
@@ -79,8 +84,6 @@ namespace UnderSea.Api
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddSwaggerDocument();
-
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -95,7 +98,17 @@ namespace UnderSea.Api
             services.AddTransient<IHubService, RoundHubService>();
             services.AddTransient<IRoundService, RoundService>();
 
-            services.AddIdentityServer()
+            services.AddIdentityServer(options =>
+            {
+                options.UserInteraction = new UserInteractionOptions()
+                {
+                    LogoutUrl = "/Account/Logout",
+                    LoginUrl = "/Account/Login",
+
+                    LoginReturnUrlParameter = "returnUrl"
+                };
+                options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
+            })
                 .AddDeveloperSigningCredential()
                 .AddInMemoryPersistedGrants()
                 .AddInMemoryIdentityResources(Configuration.GetSection("IdentityServer:IdentityResources"))
@@ -117,12 +130,52 @@ namespace UnderSea.Api
                 }
                 );
 
+            services.AddAuthorization(options =>
+            {
+                // There is no role based authorization in the app, as all users are in the same role
+                // But there is a scope based authorization for the clients.
+                // The client app can only execute the request if it has the required scope
+                options.AddPolicy("api-openid", policy => policy.RequireAuthenticatedUser()
+                    .RequireClaim("scope", "api-openid")
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme));
+
+                options.DefaultPolicy = options.GetPolicy("api-openid");
+            });
+
+            services.AddOpenApiDocument(config =>
+            {
+                config.Title = "UnderSea API";
+                config.Description = "Strategy game api";
+                config.DocumentName = "UnderSea";
+
+                config.AddSecurity("OAuth2", new OpenApiSecurityScheme
+                {
+                    OpenIdConnectUrl =
+                        $"{Configuration.GetValue<string>("Authentication:Authority")}/.well-known/openid-configuration",
+                    Scheme = "Bearer",
+                    Type = OpenApiSecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl =
+                                $"{Configuration.GetValue<string>("Authentication:Authority")}/connect/authorize",
+                            TokenUrl = $"{Configuration.GetValue<string>("Authentication:Authority")}/connect/token",
+                            Scopes = new Dictionary<string, string>
+                            {
+                                { "openid", "OpenId" },
+                                { "api-openid", "all" }
+                            }
+                        }
+                    }
+                });
+
+                config.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("OAuth2"));
+            });
+
             services.AddProblemDetails(ConfigureProblemDetails);
 
-            services.AddControllersWithViews().AddFluentValidation(fv =>
-            {
-                fv.DisableDataAnnotationsValidation = true;
-            });
+            services.AddControllers().AddFluentValidation();
             services.AddRazorPages();
             services.AddSignalR();
         }
@@ -170,14 +223,25 @@ namespace UnderSea.Api
             manager.AddOrUpdate<IRoundService>("Next round", (roundService) => roundService.NextRound(), Cron.Hourly());
 
             app.UseOpenApi();
-            app.UseSwaggerUi3();
+            app.UseSwaggerUi3(config =>
+            {
+                config.OAuth2Client = new OAuth2ClientSettings
+                {
+                    ClientId = "undersea-swagger",
+                    ClientSecret = null,
+                    UsePkceWithAuthorizationCodeGrant = true,
+                    ScopeSeparator = " ",
+                    Realm = null,
+                    AppName = "UnderSea Swagger Client"
+                };
+            });
 
             app.UseRouting();
+            app.UseIdentityServer();
 
             app.UseProblemDetails();
 
             app.UseAuthentication();
-            app.UseIdentityServer();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

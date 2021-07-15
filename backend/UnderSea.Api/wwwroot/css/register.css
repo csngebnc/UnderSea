@@ -1,11 +1,11 @@
 @font-face {
   font-family: "Baloo";
-  src: url("./assets/fonts/Baloo-Regular.ttf") format("truetype");
+  src: url("./fonts/Baloo-Regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "OpenSans";
-  src: url("./assets/fonts/OpenSans-Regular.ttf") format("truetype");
+  src: url("./fonts/OpenSans-Regular.ttf") format("truetype");
 }
 
 .tooltip {
@@ -584,11 +584,6 @@ body {
   margin-bottom: 0.3rem;
   padding: 0.3rem;
   text-align: center;
-  border: 1px solid red;
-  border-radius: 10px;
-  -webkit-backdrop-filter: blur(8px);
-          backdrop-filter: blur(8px);
-  background-color: rgba(173, 15, 15, 0.2);
 }
 
 .container {
@@ -607,8 +602,9 @@ body {
 
 .link {
   color: #9ffff0;
+  background: none;
+  border: transparent;
   font-family: "Baloo";
   font-size: 1rem;
   text-decoration: none;
 }
-/*# sourceMappingURL=authentication.css.map */

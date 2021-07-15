@@ -1,18 +1,13 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using UnderSea.Bll.Extensions;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
-using UnderSea.Model.Models.Materials;
 
 namespace UnderSea.Bll.Services
 {
@@ -451,8 +446,12 @@ namespace UnderSea.Bll.Services
                                                             .ThenInclude(e => e.CountryUnits)
                                                     .Include(e => e.CountryBuildings)
                                                         .ThenInclude(e => e.Building)
+                                                            .ThenInclude(b => b.BuildingEffects)
+                                                                .ThenInclude(be => be.Effect)
                                                     .Include(e => e.CountryUpgrades)
                                                         .ThenInclude(e => e.Upgrade)
+                                                            .ThenInclude(u => u.UpgradeEffects)
+                                                                .ThenInclude(ue => ue.Effect)
                                                     .Include(e => e.ActiveUpgradings)
                                                         .ThenInclude(e => e.Upgrade)
                                                             .ThenInclude(e => e.UpgradeEffects)
