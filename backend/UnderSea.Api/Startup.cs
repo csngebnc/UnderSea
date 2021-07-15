@@ -24,13 +24,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
 using UnderSea.Api.AuthFilter;
+using UnderSea.Api.ProblemDetails;
 using UnderSea.Api.Services;
 using UnderSea.Api.SignalR;
 using UnderSea.Bll.Mapper;
 using UnderSea.Bll.Services;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
-using UnderSea.Bll.Validation.ProblemDetails;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Models;
 

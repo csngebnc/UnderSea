@@ -42,7 +42,7 @@ namespace UnderSea.Api.Pages.Account
             {
                 var context = await interactionService.GetLogoutContextAsync(LogoutId);
                 await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-                return Redirect(configuration.GetValue<string>("Redirects:AfterSuccessfulLogout"));
+                return Redirect(context.PostLogoutRedirectUri);
             }
         }
     }

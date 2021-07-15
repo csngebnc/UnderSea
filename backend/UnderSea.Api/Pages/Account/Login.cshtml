@@ -13,9 +13,9 @@
 
             <h2 class="login-title">Belépés</h2>
 
-            <input type="text" placeholder="Felhasználónév" class="text-input" asp-for="Username"
+            <input type="text" placeholder="Felhasználónév" class="text-input" asp-for="Username" required minlength="3"
                     />
-            <input type="password" placeholder="Jelszó" class="text-input" asp-for="Password"
+            <input type="password" placeholder="Jelszó" class="text-input" asp-for="Password" required minlength="6"
                    />
             @if (Model.Errors.Count > 0)
             {

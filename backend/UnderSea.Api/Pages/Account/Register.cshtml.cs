@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Dal.Data;
 using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
@@ -19,6 +20,7 @@ namespace UnderSea.Api.Pages.Account
     {
         private readonly UserManager<User> userManager;
         private readonly UnderSeaDbContext _context;
+        private readonly ICountryService countryService;
 
         [Required(ErrorMessage = "Kötelezõ")]
         [BindProperty]
@@ -41,10 +43,11 @@ namespace UnderSea.Api.Pages.Account
         [BindProperty]
         public string ReturnUrl { get; set; } = "";
 
-        public RegisterModel(UserManager<User> userManager, UnderSeaDbContext context)
+        public RegisterModel(UserManager<User> userManager, UnderSeaDbContext context, ICountryService countryService)
         {
             this.userManager = userManager;
             this._context = context;
+            this.countryService = countryService;
         }
 
         public void OnGet(string returnUrl)
@@ -74,32 +77,7 @@ namespace UnderSea.Api.Pages.Account
                     await userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Subject, user.Id.ToString()));
                     await userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Name, user.UserName));
                     await userManager.AddClaimAsync(user, new Claim(JwtClaimTypes.Id, user.Id.ToString()));
-                    var materials = await _context.Materials.ToListAsync();
-
-                    var country = new Country
-                    {
-                        Name = CountryName,
-                        OwnerId = user.Id,
-                        FightPoint = new FightPoint(),
-                        WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id,
-                        CountryMaterials = new List<CountryMaterial>()
-
-                    };
-                    _context.Countries.Add(country);
-
-                    foreach (var material in materials)
-                    {
-                        country.CountryMaterials.Add(new CountryMaterial
-                        {
-                            MaterialId = material.Id,
-                            CountryId = country.Id,
-                            Multiplier = 1,
-                            BaseProduction = material.MaterialType == MaterialTypeConstants.Pearl ? country.Population * EffectConstants.PopulationPearlMultiplier : 0,
-                            Amount = material.MaterialType == MaterialTypeConstants.Pearl ? 5000 : 0,
-                        });
-                    }
-
-                    await _context.SaveChangesAsync();
+                    await countryService.CreateCountryWithMaterials(CountryName, user.Id);
                     return Redirect(ReturnUrl);
                 }
                 else

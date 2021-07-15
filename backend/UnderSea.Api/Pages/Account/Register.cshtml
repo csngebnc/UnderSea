@@ -12,30 +12,30 @@
         <form method="post" class="blurry-panel stack align-center w-461px">
             <input type="hidden" asp-for="ReturnUrl" />
             <h2 class="login-title">Regisztráció</h2>
-            <input class="text-input" type="text" placeholder="Felhasználónév" asp-for="Username" />
+            <input class="text-input" type="text" placeholder="Felhasználónév" asp-for="Username" required minlength="3"/>
             @if (ViewData.ModelState.ContainsKey("Username"))
             {
                 <span asp-validation-for="Username" class="error-text"></span>
             }
 
 
-            <input class="text-input" type="password" placeholder="Jelszó" asp-for="Password" />
+            <input class="text-input" type="password" placeholder="Jelszó" asp-for="Password" required minlength="6"/>
             @if (ViewData.ModelState.ContainsKey("Password"))
             {
                 <span asp-validation-for="Password" class="error-text"></span>
             }
-            <input class="text-input" type="password" placeholder="Jelszó megerősítése" asp-for="ConfirmPassword" />
+            <input class="text-input" type="password" placeholder="Jelszó megerősítése" asp-for="ConfirmPassword" required minlength="6"/>
             @if (ViewData.ModelState.ContainsKey("ConfirmPassword"))
             {
                 <span asp-validation-for="ConfirmPassword" class="error-text"></span>
             }
-            <input class="text-input" type="text" placeholder="Az országod neve, amit építesz" asp-for="CountryName" />
+            <input class="text-input" type="text" placeholder="Az országod neve, amit építesz" asp-for="CountryName" required minlength="3"/>
             @if (ViewData.ModelState.ContainsKey("CountryName"))
             {
                 <span asp-validation-for="CountryName" class="error-text"></span>
             }
             <button name="action" value="register" class="gradient-button mt-05">Regisztráció</button>
-            <button name="action" value="login" class="link mt-2">Bejelentkezés</button>
+            <a href="@Model.ReturnUrl" class="link mt-2">Bejelentkezés</a>
 
         </form>
     </div>

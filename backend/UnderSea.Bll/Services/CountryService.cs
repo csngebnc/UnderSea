@@ -10,7 +10,9 @@ using UnderSea.Bll.Dtos.Event;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
+using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
+using UnderSea.Model.Models.Joins;
 
 namespace UnderSea.Bll.Services
 {
@@ -25,6 +27,36 @@ namespace UnderSea.Bll.Services
             _context = context;
             _mapper = mapper;
             _identityService = identityService;
+        }
+
+        public async Task CreateCountryWithMaterials(string countryName, string ownerId)
+        {
+            var materials = await _context.Materials.ToListAsync();
+
+            var country = new Country
+            {
+                Name = countryName,
+                OwnerId = ownerId,
+                FightPoint = new FightPoint(),
+                WorldId = (await _context.Worlds.OrderByDescending(w => w.Id).FirstOrDefaultAsync()).Id,
+                CountryMaterials = new List<CountryMaterial>()
+
+            };
+            _context.Countries.Add(country);
+
+            foreach (var material in materials)
+            {
+                country.CountryMaterials.Add(new CountryMaterial
+                {
+                    MaterialId = material.Id,
+                    CountryId = country.Id,
+                    Multiplier = 1,
+                    BaseProduction = material.MaterialType == MaterialTypeConstants.Pearl ? country.Population * EffectConstants.PopulationPearlMultiplier : 0,
+                    Amount = material.MaterialType == MaterialTypeConstants.Pearl ? 5000 : 0,
+                });
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<CountryDetailsDto> GetUserCountryDetails()
