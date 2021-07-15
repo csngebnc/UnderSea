@@ -42,6 +42,9 @@ class _AttackPageState extends State<AttackPage> {
         controller.getAttackableUsers();
       }
     });
+    controller.getAvailableUnits();
+    controller.getUnitTypes();
+    controller.getAllUnits();
     super.initState();
   }
 

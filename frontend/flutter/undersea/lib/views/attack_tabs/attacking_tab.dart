@@ -124,6 +124,7 @@ class _AttackingTabState extends State<AttackingTab> {
       }
 
       log(sliderValues.toString());
+      log(groupedUnits.toString());
 
       return UnderseaStyles.tabSkeleton(
           buttonText: Strings.lets_attack,

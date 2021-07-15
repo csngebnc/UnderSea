@@ -52,7 +52,7 @@ class UserDataController extends GetxController {
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
 
-    //rankList.value.clear();
+    rankList.clear();
   }
 
   register(
