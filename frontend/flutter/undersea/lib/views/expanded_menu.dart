@@ -13,47 +13,38 @@ import 'package:undersea/styles/style_constants.dart';
 class ExpandedMenu extends StatelessWidget {
   ExpandedMenu();
 
-  Widget _enumerateSoldiers(List<BattleUnitDto> units) {
+  List<Widget> _enumerateSoldiers(List<BattleUnitDto> units) {
     final allUnits = Get.find<BattleDataController>().allUnitsInfo.value;
     final spiesCount = Get.find<BattleDataController>().spiesInfo.value?.count;
 
-    List<Widget> list = <Widget>[];
-    units.forEach((element) {
-      var isSpy = element.name == 'Felfedező';
-      var actualSoldierMax = allUnits
-          .firstWhere(
-            (a) => a.id == element.id,
-            orElse: () =>
-                BattleUnitDto(id: 0, name: 'name', count: 0, level: 1),
-          )
-          .count;
-      list.add(UnderseaStyles.militaryIcon(
-          BattleDataController.imageNameMap[element.name] ?? 'shark',
-          element.count,
-          isSpy ? (spiesCount ?? 0) : actualSoldierMax));
-    });
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: list);
+    return units
+        .map((e) => UnderseaStyles.militaryIcon(
+            BattleDataController.imageNameMap[e.name] ?? 'shark',
+            e.count,
+            e.name == 'Felfedező'
+                ? (spiesCount ?? 0)
+                : allUnits
+                    .where((a) => a.id == e.id)
+                    .fold(0, (prev, cur) => prev += cur.count)))
+        .toList();
   }
 
   List<Widget> _enumerateBuildings(List<BuildingInfoDto> buildingDtos) {
-    List<Widget> buildings = <Widget>[];
-    buildingDtos.forEach((element) {
-      buildings.add(UnderseaStyles.buildingIcon(
-          BuildingDataController.imageNameMap[element.name] ?? 'zatonyvar',
-          element.buildingsCount));
-    });
-    return buildings;
+    return buildingDtos
+        .map((e) => UnderseaStyles.buildingIcon(
+            BuildingDataController.imageNameMap[e.name] ?? 'zatonyvar',
+            e.buildingsCount))
+        .toList();
   }
 
   List<Widget> _enumerateResources(CountryDetailsDto? countryDetails) {
-    List<Widget> resources = <Widget>[];
-    countryDetails!.materials!.forEach((element) {
-      resources.add(UnderseaStyles.resourceIcon(
-          UnderseaStyles.resourceNamesMap[element.name] ?? 'stone',
-          element.amount,
-          element.production));
-    });
-    return resources;
+    return countryDetails?.materials
+            ?.map((e) => UnderseaStyles.resourceIcon(
+                UnderseaStyles.resourceNamesMap[e.name] ?? 'stone',
+                e.amount,
+                e.production))
+            .toList() ??
+        [];
   }
 
   @override
@@ -75,7 +66,12 @@ class ExpandedMenu extends StatelessWidget {
       }
       if (countryData != null) {
         return Column(children: [
-          _enumerateSoldiers(countryData.units!),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ..._enumerateSoldiers(countryData.units!),
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,

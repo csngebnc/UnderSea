@@ -325,6 +325,13 @@ class UnderseaStyles {
         height: 32);
   }
 
+  static Widget listProgressIndicator() => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: const SizedBox(
+              height: 50, width: 50, child: CircularProgressIndicator()),
+        ),
+      );
   static Widget elevatedButton(
       {required String text,
       required Function onPressed,

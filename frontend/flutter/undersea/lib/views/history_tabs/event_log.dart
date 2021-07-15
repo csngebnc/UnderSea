@@ -17,7 +17,11 @@ class _EventLogPageState extends State<EventLogPage> {
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
-    //controller.alreadyDownloadedPageNumber.value = 0;
+    controller.loadingList = false.obs;
+    controller.pageNumber.value = 1;
+    controller.alreadyDownloadedPageNumber.value = 0;
+    controller.eventList.clear();
+
     controller.getEventList();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -45,16 +49,17 @@ class _EventLogPageState extends State<EventLogPage> {
                   itemBuilder: (BuildContext context, int i) {
                     if (i == 0) {
                       return controller.loadingList.value
-                          ? Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(30.0),
-                                child: const SizedBox(
-                                    height: 50,
-                                    width: 50,
-                                    child: CircularProgressIndicator()),
-                              ),
-                            )
-                          : SizedBox(height: 10);
+                          ? UnderseaStyles.listProgressIndicator()
+                          : results.isEmpty
+                              ? Column(
+                                  children: [
+                                    SizedBox(height: 10),
+                                    Text('Nincs megjeleníthető elem',
+                                        style: UnderseaStyles.listBold
+                                            .copyWith(fontSize: 13)),
+                                  ],
+                                )
+                              : SizedBox(height: 10);
                     }
                     if (i.isEven) {
                       return UnderseaStyles.divider();

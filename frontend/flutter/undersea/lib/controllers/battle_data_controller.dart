@@ -73,6 +73,7 @@ class BattleDataController extends GetxController {
     searchText.value = value;
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
+    attackableUserList.clear();
 
     //attackableUserList.value.clear();
   }
@@ -125,9 +126,7 @@ class BattleDataController extends GetxController {
         //attackLogsList.value.clear();
         attackLogsList.clear();
         getAllUnits();
-        getAttackableUsers();
         getUnitTypes();
-        getHistory();
       } else {
         log('NON-200 Code at attacking: $response');
       }
@@ -156,6 +155,12 @@ class BattleDataController extends GetxController {
   }
 
   getHistory() async {
+    await Future.delayed(const Duration(milliseconds: 10), () {
+      update();
+
+      loadingList = true.obs;
+    });
+    update();
     try {
       if (loggedAttacks.value != null &&
           loggedAttacks.value!.allResultsCount <=
@@ -176,13 +181,21 @@ class BattleDataController extends GetxController {
       }
     } catch (error) {
       log('$error');
+    } finally {
+      await Future.delayed(const Duration(milliseconds: 10), () {
+        update();
+
+        loadingList = false.obs;
+      });
     }
   }
 
   getAttackableUsers() async {
-    loadingList = true.obs;
-    attackableUserList.clear();
-    update();
+    await Future.delayed(const Duration(milliseconds: 10), () {
+      update();
+
+      loadingList = true.obs;
+    });
     try {
       if (attackableUsers.value != null &&
           attackableUsers.value!.allResultsCount <
@@ -198,17 +211,25 @@ class BattleDataController extends GetxController {
           attackableUserList.value += attackableUsers.value?.results ?? [];
           alreadyDownloadedPageNumber.value = pageNumber.value;
         }
-        update();
+        // update();
       }
     } catch (error) {
       log('$error');
     } finally {
-      loadingList = false.obs;
-      update();
+      await Future.delayed(const Duration(milliseconds: 10), () {
+        update();
+
+        loadingList = false.obs;
+      });
     }
   }
 
   getSpyingHistory() async {
+    await Future.delayed(const Duration(milliseconds: 10), () {
+      update();
+
+      loadingList = true.obs;
+    });
     try {
       if (spyingHistory.value != null &&
           spyingHistory.value!.allResultsCount <
@@ -226,6 +247,12 @@ class BattleDataController extends GetxController {
       }
     } catch (error) {
       log('$error');
+    } finally {
+      await Future.delayed(const Duration(milliseconds: 10), () {
+        update();
+
+        loadingList = false.obs;
+      });
     }
   }
 

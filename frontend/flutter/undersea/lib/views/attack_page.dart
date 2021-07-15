@@ -29,6 +29,8 @@ class _AttackPageState extends State<AttackPage> {
   void initState() {
     controller.searchText.value = '';
     controller.alreadyDownloadedPageNumber.value = 0;
+    controller.pageNumber.value = 1;
+    controller.attackableUserList.clear();
     controller.getAttackableUsers();
     firstPage = true;
     _scrollController.addListener(() {
@@ -100,7 +102,9 @@ class _AttackPageState extends State<AttackPage> {
                                   ),
                                 )
                               : Container(),
-                          results.isEmpty && !controller.loadingList.value
+                          controller.attackableUsers.value?.allResultsCount ==
+                                      0 &&
+                                  !controller.loadingList.value
                               ? Center(
                                   child: Column(
                                     children: [

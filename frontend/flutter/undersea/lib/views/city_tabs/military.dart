@@ -87,10 +87,9 @@ class _MilitaryTabState extends State<Military> {
   bool _canHireSoldiers() {
     if (buyList.every((element) => element == 0)) return false;
 
-    Map<int, int> materialIdToAmount = {};
-    countryData!.materials!.forEach((element) {
-      materialIdToAmount.addIf(true, element.id, element.amount);
-    });
+    Map<int, int> materialIdToAmount = {
+      for (var item in countryData!.materials!) item.id: item.amount
+    };
     bool areResourcesEnough = true;
     var unitsToBeBought = 0;
 
@@ -111,6 +110,7 @@ class _MilitaryTabState extends State<Military> {
     controller.allUnitsInfo.value.forEach((element) {
       allUnitsCount += element.count;
     });
+
     if (countryData!.maxUnitCount < allUnitsCount + unitsToBeBought) {
       return false;
     }
@@ -118,17 +118,13 @@ class _MilitaryTabState extends State<Military> {
     return areResourcesEnough;
   }
 
-  List<Widget> _listResourceCost(UnitDto unit) {
-    var costs = <Widget>[];
-    bool isFirst = true;
-    unit.requiredMaterials?.forEach((element) {
-      costs.add(UnderseaStyles.text(
-        (isFirst ? '' : ', ') + '${element.amount} ${element.name}',
-      ));
-      isFirst = false;
-    });
-    return costs;
-  }
+  List<Widget> _listResourceCost(UnitDto unit) =>
+      unit.requiredMaterials
+          ?.map((e) => UnderseaStyles.text(
+                '  ${e.amount} ${e.name}',
+              ))
+          .toList() ??
+      [];
 
   Widget _buildRow(int index, Rx<List<UnitDto>> list,
       List<BattleUnitDto> totalUnits, int? spiesCount) {
@@ -179,7 +175,7 @@ class _MilitaryTabState extends State<Military> {
                   UnderseaStyles.text(Strings.attack_defence.tr),
                   Expanded(child: Container()),
                   UnderseaStyles.text(
-                      '${/*actualSoldier.attackPoint*/ 6}/${/*actualSoldier.defensePoint*/ 6}'), // TODO: átírni nem beégetettre
+                      '${actualSoldier.unitLevels?.first.attackPoint}/${actualSoldier.unitLevels?.first.defensePoint}'),
                 ],
               ),
               Row(
@@ -204,7 +200,7 @@ class _MilitaryTabState extends State<Military> {
                   UnderseaStyles.text(Strings.price.tr),
                   Expanded(child: Container()),
                   Row(
-                    children: [..._listResourceCost(actualSoldier)],
+                    children: _listResourceCost(actualSoldier),
                   )
                 ],
               ),

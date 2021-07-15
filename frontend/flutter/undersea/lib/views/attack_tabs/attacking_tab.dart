@@ -54,46 +54,51 @@ class _AttackingTabState extends State<AttackingTab> {
     return true;
   }
 
-  List<Row>? buildSliderRows(int id) {
+  List<Widget>? buildSliderRows(int id) {
     var unitList = groupedUnits[id];
     return unitList
-        ?.map((e) => Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 25,
+        ?.map((e) => Padding(
+              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 25,
+                    ),
+                    child: Text(e.level.toString(),
+                        style:
+                            UnderseaStyles.listRegular.copyWith(height: 1.2)),
                   ),
-                  child: Text(e.level.toString(),
-                      style: UnderseaStyles.listRegular.copyWith(height: 1.2)),
-                ),
-                Container(
-                  height: 20,
-                  child: Slider(
-                    value: sliderValues[id]![e.level]!.toDouble(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        try {
-                          sliderValues[id]![e.level] = newValue.round();
-                        } catch (error) {
-                          log('$error');
-                        }
-                      });
-                      log('${sliderValues[id]![e.level]}');
-                    },
-                    min: 0,
-                    max: e.count.toDouble(),
-                    activeColor: UnderseaStyles.underseaLogoColor,
-                    inactiveColor: Color(0x883B7DBD),
+                  Container(
+                    height: 20,
+                    child: Slider(
+                      value: sliderValues[id]![e.level]!.toDouble(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          try {
+                            sliderValues[id]![e.level] = newValue.round();
+                          } catch (error) {
+                            log('$error');
+                          }
+                        });
+                        log('${sliderValues[id]![e.level]}');
+                      },
+                      min: 0,
+                      max: e.count.toDouble(),
+                      activeColor: UnderseaStyles.underseaLogoColor,
+                      inactiveColor: Color(0x883B7DBD),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 15,
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 15,
+                    ),
+                    child: Text('${sliderValues[id]?[e.level]}/${e.count}',
+                        style:
+                            UnderseaStyles.listRegular.copyWith(height: 1.2)),
                   ),
-                  child: Text('${sliderValues[id]?[e.level]}/${e.count}',
-                      style: UnderseaStyles.listRegular.copyWith(height: 1.2)),
-                ),
-              ],
+                ],
+              ),
             ))
         .toList();
   }
@@ -127,20 +132,16 @@ class _AttackingTabState extends State<AttackingTab> {
             var units = <AttackUnitDto>[];
             for (var entry in groupedUnits.entries) {
               for (var soldier in entry.value) {
-                units.add(AttackUnitDto(
-                    unitId: soldier.id,
-                    count: sliderValues[soldier.id]?[soldier.level] ?? 0,
-                    level: soldier.level));
+                var count = sliderValues[soldier.id]?[soldier.level] ?? 0;
+                units.addIf(
+                    count.isGreaterThan(0),
+                    AttackUnitDto(
+                        unitId: soldier.id,
+                        count: count,
+                        level: soldier.level));
               }
             }
-            /*for (int i = 0; i < sliderValues.length; i++) {
-              if (sliderValues[i] != 0) {
-                units.add(AttackUnitDto(
-                    unitId: soldierList.value[i].id,
-                    count: sliderValues[i],
-                    level: soldierList.value[i].level));
-              }
-            }*/
+
             controller.attack(SendAttackDto(
                 attackedCountryId: controller.countryToBeAttacked!,
                 units: units));
