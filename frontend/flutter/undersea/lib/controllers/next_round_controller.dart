@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:undersea/controllers/event_data_controller.dart';
 import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/network/providers/next_round_provider.dart';
@@ -47,7 +48,7 @@ class RoundController extends GetxController {
 
     connection.on('SendMessage', (message) {
       refreshOnNextRound();
-      log(message.toString());
+      log('ROUND: ${message.toString()}');
     });
   }
 
@@ -57,6 +58,7 @@ class RoundController extends GetxController {
     userDataController.getRankList();
     userDataController.reset();
     Get.find<CountryDataController>().getCountryDetails();
+    Get.find<CountryDataController>().eventWindowShown = false;
     Get.find<BuildingDataController>().getBuildingDetails();
     Get.find<UpgradesController>().getUpgradeDetails();
     var battleController = Get.find<BattleDataController>();
@@ -64,9 +66,7 @@ class RoundController extends GetxController {
     battleController.getUnitTypes();
     battleController.getAllUnits();
     battleController.getSpies();
-    battleController.getAttackableUsers();
-    battleController.getHistory();
     battleController.getAvailableUnits();
-    battleController.getSpyingHistory();
+    Get.find<EventDataController>().reset();
   }
 }

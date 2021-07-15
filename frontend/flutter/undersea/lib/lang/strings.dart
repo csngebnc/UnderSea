@@ -55,4 +55,29 @@ class Strings {
   static const first_step = 'first_step';
   static const back = 'back';
   static const leaderboard = 'leaderboard';
+
+  static const battle = 'battle';
+  static const spying = 'spying';
+  static const spying_second_step = 'spying_second_step';
+  static const spy = 'spy';
+  static const send = 'send';
+  static const in_progress = 'in_progress';
+  static const victory = 'victory';
+  static const defeat = 'defeat';
+  static const defense_points = 'defense_points';
+  static const send_spies_title = 'send_spies_title';
+
+  static const send_spies_body = 'send_spies_body';
+  static const successful_purchase = 'successful_purchase';
+  static const new_units = 'new_units';
+  static const new_building = 'new_building';
+  static const new_upgrade = 'new_upgrade';
+  static const error = 'error';
+  static const invalid_username_password = 'invalid_username_password';
+  static const something_went_wrong = 'something_went_wrong';
+  static const error_occurred = 'error_occurred';
+  static const passwords_differ = 'passwords_differ';
+  static const invalid_username = 'invalid_username';
+  static const empty_field = 'empty_field';
+  static const events = 'events';
 }

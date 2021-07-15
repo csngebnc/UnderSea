@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:undersea/models/response/battle_unit_dto.dart';
 
 part 'material_dto.g.dart';
 

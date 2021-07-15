@@ -20,9 +20,11 @@ class _HomePageState extends State<HomePage> {
   final userDataController = Get.find<UserDataController>();
   final countryDataController = Get.find<CountryDataController>();
   final battleDatacontroller = Get.find<BattleDataController>();
+  var rng = Random();
   @override
   void initState() {
     userDataController.userInfo();
+    userDataController.getWinners();
     userDataController.searchText.value = '';
     userDataController.getRankList();
     countryDataController.getCountryDetails();
@@ -43,14 +45,16 @@ class _HomePageState extends State<HomePage> {
     var buildingList =
         countryDataController.countryDetailsData.value?.buildings;
     bool hasCannon = false;
-    if (countryDataController.countryDetailsData.value?.hasSonarCanon != null)
+    if (countryDataController.countryDetailsData.value?.hasSonarCanon != null) {
       hasCannon = countryDataController.countryDetailsData.value!.hasSonarCanon;
+    }
 
-    if (hasCannon)
+    if (hasCannon) {
       buildings.add(UnderseaStyles.building(
           BuildingDataController.imageNameMap['Szonárágyú']!,
           top: tops.last,
           left: lefts.last));
+    }
 
     if (buildingList != null) {
       for (int i = 0; i < buildingList.length; i++) {
@@ -78,13 +82,20 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 10),
           GetBuilder<UserDataController>(builder: (controller) {
             final userInfoData = controller.userInfoData.value;
-            if (userInfoData != null)
+
+            if (userInfoData != null) {
               return UnderseaStyles.leaderboardButton(
                   roundNumber: userInfoData.round,
                   placement: userInfoData.placement);
-            else
+            } else if (controller.userInfoLoading.value) {
+              return UnderseaStyles.leaderboardButton();
+            } else {
+              return CircularProgressIndicator();
+              /* } else {
               return UnderseaStyles.leaderboardButton(
                   roundNumber: 4, placement: 23);
+            }*/
+            }
           }),
           SizedBox(
             height: 20,

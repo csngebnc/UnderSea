@@ -1,8 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:undersea/models/response/buy_unit_details_dto.dart';
 
-import 'attackable_user_dto.dart';
-
 part 'buy_unit_dto.g.dart';
 
 @JsonSerializable()

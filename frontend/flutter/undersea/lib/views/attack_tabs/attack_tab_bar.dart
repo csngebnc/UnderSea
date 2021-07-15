@@ -32,8 +32,8 @@ class AttackTabBar extends StatelessWidget {
                   indicatorSize: TabBarIndicatorSize.label,
                   indicatorWeight: 3,
                   tabs: [
-                    UnderseaStyles.tab('Harc'),
-                    UnderseaStyles.tab('Felfedezés'),
+                    UnderseaStyles.tab(Strings.battle.tr),
+                    UnderseaStyles.tab(Strings.spying.tr),
                   ],
                 ),
               ),
@@ -42,7 +42,7 @@ class AttackTabBar extends StatelessWidget {
           body: TabBarView(
             children: [
               AttackingTab(onButtonPressed: onButtonPressed),
-              SpyingTab(onButtonPressed: onButtonPressed)
+              SpyingTab(onButtonPressed: onButtonPressed),
             ],
           ),
         ),

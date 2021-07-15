@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/buy_upgrade_dto.dart';
 import 'package:undersea/models/response/upgrade_dto.dart';
 import 'package:undersea/network/providers/upgrade_data_provider.dart';
@@ -18,7 +19,8 @@ class UpgradesController extends GetxController {
           .buyUpgrade(BuyUpgradeDto(upgradeId: id).toJson());
 
       if (response.statusCode == 200) {
-        UnderseaStyles.snackbar('Sikeres vásárlás!', '');
+        UnderseaStyles.snackbar(
+            Strings.successful_purchase.tr, Strings.new_upgrade.tr);
         getUpgradeDetails();
       }
     } catch (error) {
@@ -46,4 +48,8 @@ class UpgradesController extends GetxController {
     'Vízalatti harcművészetek': 'vizicsillag',
     'Alkímia': 'alkimia',
   };
+
+  void reset() {
+    upgradeInfoData = Rx([]);
+  }
 }

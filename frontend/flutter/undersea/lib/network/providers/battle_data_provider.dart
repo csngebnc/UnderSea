@@ -2,9 +2,6 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
-import 'package:undersea/models/response/building_details_dto.dart';
-import 'package:undersea/models/response/building_details_list.dart';
-import 'package:undersea/models/response/country_details_dto.dart';
 import 'package:undersea/models/response/paged_result_of_attackable_user_dto.dart';
 import 'package:undersea/models/response/paged_result_of_logged_attack_dto.dart';
 import 'package:undersea/models/response/paged_result_of_spy_report_dto.dart';
@@ -19,7 +16,7 @@ class BattleDataProvider extends NetworkProvider {
           contentType: 'application/json',
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           decoder: (response) {
-        log(response.toString());
+        //log(response.toString());
         return (response as List)
             .map((e) => BattleUnitDto.fromJson(e))
             .toList();
@@ -30,7 +27,7 @@ class BattleDataProvider extends NetworkProvider {
           contentType: 'application/json',
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           decoder: (response) {
-        log(response.toString());
+        //log(response.toString());
         return (response as List)
             .map((e) => BattleUnitDto.fromJson(e))
             .toList();
@@ -40,7 +37,7 @@ class BattleDataProvider extends NetworkProvider {
           contentType: 'application/json',
           headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
           decoder: (response) {
-        log(response.toString());
+        //log(response.toString());
         return BattleUnitDto.fromJson(response);
       });
 

@@ -5,7 +5,6 @@ import 'package:undersea/controllers/battle_data_controller.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/send_spy_dto.dart';
-import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class SpyingTab extends StatefulWidget {
@@ -29,7 +28,7 @@ class _SpyingTabState extends State<SpyingTab> {
   Widget build(BuildContext context) {
     return GetBuilder<BattleDataController>(builder: (controller) {
       return UnderseaStyles.tabSkeleton(
-          buttonText: 'Küldés!',
+          buttonText: Strings.send.tr,
           isDisabled: !_canAttack(),
           onButtonPressed: () {
             controller.sendSpies(SendSpyDto(
@@ -38,7 +37,6 @@ class _SpyingTabState extends State<SpyingTab> {
             Get.find<BottomNavBarController>().selectedTab.value = 0;
           },
           list: Column(
-            //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
@@ -63,16 +61,16 @@ class _SpyingTabState extends State<SpyingTab> {
               ),
               Align(
                 alignment: Alignment.centerLeft,
-                child: UnderseaStyles.infoPanel(Strings.second_step.tr,
-                    'Állítsd be, hány felfedezőt szeretnél küldeni:',
+                child: UnderseaStyles.infoPanel(
+                    Strings.second_step.tr, Strings.spying_second_step.tr,
                     padding: EdgeInsets.fromLTRB(20, 10, 0, 0)),
               ),
               SizedBox(
                 height: 20,
               ),
               SizedBox(
-                height: 100,
-                width: 100,
+                height: 70,
+                width: 70,
                 child: UnderseaStyles.assetIcon('dora'),
               ),
               SizedBox(
@@ -82,13 +80,13 @@ class _SpyingTabState extends State<SpyingTab> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Felfedező',
+                    Text(Strings.spy.tr,
                         style: UnderseaStyles.listBold
-                            .copyWith(height: 1.2, fontSize: 22)),
+                            .copyWith(height: 1.2, fontSize: 16)),
                     SizedBox(height: 5),
                     Text('$spyNumber/${controller.spiesInfo.value!.count}',
                         style: UnderseaStyles.listRegular
-                            .copyWith(height: 1.2, fontSize: 20)),
+                            .copyWith(height: 1.2, fontSize: 15)),
                     SizedBox(height: 8),
                     Container(
                       height: 20,
@@ -97,12 +95,7 @@ class _SpyingTabState extends State<SpyingTab> {
                         value: spyNumber.toDouble(),
                         onChanged: (newValue) {
                           setState(() {
-                            //var amountBeforeChange = spyNumber;
                             spyNumber = newValue.round();
-                            /*mercenaryPrice = (mercenaryPrice +
-                                  newValue -
-                                  amountBeforeChange * spyPrice)
-                              .toInt();*/
                           });
                         },
                         min: 0,

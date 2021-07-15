@@ -1,15 +1,15 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:undersea/controllers/battle_data_controller.dart';
 import 'package:undersea/controllers/country_data_controller.dart';
+import 'package:undersea/controllers/event_data_controller.dart';
 import 'package:undersea/controllers/navbar_controller.dart';
 import 'package:undersea/controllers/next_round_controller.dart';
-
+import 'package:flutter/services.dart';
 import 'package:undersea/lang/app_translations.dart';
 import 'package:undersea/network/providers/country_data_provider.dart';
+import 'package:undersea/network/providers/event_provider.dart';
 import 'package:undersea/network/providers/next_round_provider.dart';
 import 'package:undersea/network/providers/upgrade_data_provider.dart';
 
@@ -47,17 +47,23 @@ Future<void> initServices() async {
   Get.put(UpgradesController(Get.find()));
   Get.put(BattleDataProvider());
   Get.put(BattleDataController(Get.find()));
+  Get.put(EventProvider());
+  Get.put(EventDataController(Get.find()));
+
   roundController.initPlatformState();
-  //log((await roundController.signalR.isConnected).toString());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  static String _title = Strings.undersea.tr;
+  static final String _title = Strings.undersea.tr;
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return GetMaterialApp(
       locale: AppTranslations.locale,
       fallbackLocale: AppTranslations.fallbackLocale,

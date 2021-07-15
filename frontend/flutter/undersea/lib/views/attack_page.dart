@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/battle_data_controller.dart';
@@ -8,7 +6,8 @@ import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/attackable_user_dto.dart';
 
 import 'package:undersea/styles/style_constants.dart';
-import 'package:undersea/views/attack_tabs/attack_tab_bar.dart';
+
+import 'attack_tabs/attack_tab_bar.dart';
 
 class AttackPage extends StatefulWidget {
   @override
@@ -18,8 +17,6 @@ class AttackPage extends StatefulWidget {
 class _AttackPageState extends State<AttackPage> {
   var controller = Get.find<BattleDataController>();
   final ScrollController _scrollController = ScrollController();
-
-  //late Rx<PagedResultOfAttackableUserDto?> attackableUsersList;
 
   int? _selectedIndex;
   var sliderValues = List<int>.generate(3, (index) => 0);
@@ -31,6 +28,9 @@ class _AttackPageState extends State<AttackPage> {
   @override
   void initState() {
     controller.searchText.value = '';
+    controller.alreadyDownloadedPageNumber.value = 0;
+    controller.pageNumber.value = 1;
+    controller.attackableUserList.clear();
     controller.getAttackableUsers();
     firstPage = true;
     _scrollController.addListener(() {
@@ -42,12 +42,15 @@ class _AttackPageState extends State<AttackPage> {
         controller.getAttackableUsers();
       }
     });
+    controller.getAvailableUnits();
+    controller.getUnitTypes();
+    controller.getAllUnits();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (firstPage)
+    if (firstPage) {
       return UnderseaStyles.tabSkeleton(
         buttonText: Strings.proceed,
         isDisabled: _selectedIndex == null ? true : false,
@@ -57,11 +60,13 @@ class _AttackPageState extends State<AttackPage> {
           });
         },
         list: GetBuilder<BattleDataController>(builder: (controller) {
-          results = controller.attackableUserList.value;
+          results = controller.attackableUserList.toList();
           itemCount = results.length * 2 + 2;
           return ListView.builder(
               controller: _scrollController,
-              itemCount: itemCount,
+              itemCount: controller.loadingList.value || results.isEmpty
+                  ? 1
+                  : itemCount,
               itemBuilder: (BuildContext context, int i) {
                 if (i == itemCount - 1) return SizedBox(height: 130);
                 if (i.isOdd) return UnderseaStyles.divider();
@@ -79,16 +84,47 @@ class _AttackPageState extends State<AttackPage> {
                                   .copyWith(fontSize: 18)),
                           SizedBox(height: 20),
                           UnderseaStyles.inputField(
-                            hint: Strings.username.tr,
-                            color: Color(0xFF657A9D),
-                            hintColor: UnderseaStyles.alternativeHintColor,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedIndex = null;
-                              });
-                              controller.onSearchChanged(value);
-                            },
-                          )
+                              hint: Strings.username.tr,
+                              color: Color(0xFF657A9D),
+                              hintColor: UnderseaStyles.alternativeHintColor,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedIndex = null;
+                                });
+                                controller.onSearchChanged(value);
+                              },
+                              validator: (string) {}),
+                          controller.loadingList.value
+                              ? Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(30.0),
+                                    child: const SizedBox(
+                                        height: 50,
+                                        width: 50,
+                                        child: CircularProgressIndicator()),
+                                  ),
+                                )
+                              : Container(),
+                          controller.attackableUsers.value?.allResultsCount ==
+                                      0 &&
+                                  !controller.loadingList.value
+                              ? Center(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 50,
+                                      ),
+                                      Text('Nincs ilyen nevű felhasználó',
+                                          style: UnderseaStyles.listRegular
+                                              .copyWith(
+                                                  fontSize: 15,
+                                                  color: UnderseaStyles
+                                                      .underseaLogoColor)),
+                                      SizedBox(height: 20),
+                                    ],
+                                  ),
+                                )
+                              : Container()
                         ]),
                   );
                 }
@@ -96,6 +132,7 @@ class _AttackPageState extends State<AttackPage> {
                 var user = results[i ~/ 2 - 1];
 
                 return ListTile(
+                    visualDensity: VisualDensity(vertical: -4),
                     onTap: () {
                       setState(() {
                         i != _selectedIndex
@@ -128,11 +165,12 @@ class _AttackPageState extends State<AttackPage> {
               });
         }),
       );
-    else
+    } else {
       return AttackTabBar(() {
         setState(() {
           firstPage = true;
         });
       });
+    }
   }
 }

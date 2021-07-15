@@ -1,11 +1,8 @@
 import 'package:get/get.dart';
 import 'package:undersea/models/response/paged_result_of_user_rank_dto.dart';
+import 'package:undersea/models/response/paged_result_of_world_winner_dto.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
-import 'package:undersea/network/response/login_response.dart';
-import 'package:flutter/foundation.dart';
-import 'dart:developer';
-
-import '../../constants.dart';
+import 'package:undersea/models/response/login_response.dart';
 import 'network_provider.dart';
 
 class UserDataProvider extends NetworkProvider {
@@ -31,5 +28,13 @@ class UserDataProvider extends NetworkProvider {
         'name': name
       }, decoder: (response) {
         return PagedResultOfUserRankDto.fromJson(response);
+      });
+
+  Future<Response<PagedResultOfWorldWinnerDto>> getWinners() =>
+      get("/api/User/worldwinners",
+          contentType: 'application/json',
+          query: {'PageSize': '1', 'PageNumber': '1', 'name': ' '},
+          decoder: (response) {
+        return PagedResultOfWorldWinnerDto.fromJson(response);
       });
 }

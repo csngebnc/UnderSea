@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:undersea/lang/strings.dart';
 
 import 'package:undersea/models/response/building_details_dto.dart';
 
@@ -23,7 +24,8 @@ class BuildingDataController extends GetxController {
           .buyBuilding(BuyBuildingDto(buildingId: id).toJson());
 
       if (response.statusCode == 200) {
-        UnderseaStyles.snackbar('Sikeres vásárlás!', '');
+        UnderseaStyles.snackbar(
+            Strings.successful_purchase.tr, Strings.new_building.tr);
         getBuildingDetails();
       }
     } catch (error) {
@@ -49,4 +51,8 @@ class BuildingDataController extends GetxController {
     'Áramlásirányító': 'aramlasiranyito',
     'Kőbánya': 'stone_mine'
   };
+
+  void reset() {
+    buildingInfoData = Rx([]);
+  }
 }

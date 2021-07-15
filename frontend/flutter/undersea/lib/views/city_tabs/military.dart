@@ -8,7 +8,6 @@ import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/buy_unit_details_dto.dart';
 import 'package:undersea/models/response/buy_unit_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
-import 'package:undersea/models/soldier.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class Military extends StatefulWidget {
@@ -39,29 +38,45 @@ class _MilitaryTabState extends State<Military> {
           var list = <BuyUnitDetailsDto>[];
 
           for (int i = 0; i < soldierList.value.length; i++) {
-            if (buyList[i] != 0)
+            if (buyList[i] != 0) {
               list.add(BuyUnitDetailsDto(
                   unitId: soldierList.value[i].id, count: buyList[i]));
+            }
           }
           controller.buyUnits(BuyUnitDto(units: list));
         },
         list: ListView.builder(
             itemCount: count,
             itemBuilder: (BuildContext context, int i) {
-              if (i == 0)
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      UnderseaStyles.infoPanel(Strings.military_manual_title.tr,
-                          Strings.military_manual_hint.tr),
-                      SizedBox(height: 25)
-                    ]);
-              if (i > soldierList.value.length * 2 - 1)
-                return SizedBox(height: 100);
-              if (i.isEven && i < soldierList.value.length * 2)
-                return UnderseaStyles.divider();
-
               return GetBuilder<BattleDataController>(builder: (controller) {
+                if (i == 0) {
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        UnderseaStyles.infoPanel(
+                            Strings.military_manual_title.tr,
+                            Strings.military_manual_hint.tr),
+                        SizedBox(height: 25),
+                        controller.unitTypesInfo.value.isEmpty
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(30.0),
+                                  child: const SizedBox(
+                                      height: 50,
+                                      width: 50,
+                                      child: CircularProgressIndicator()),
+                                ),
+                              )
+                            : Container()
+                      ]);
+                }
+                if (i > soldierList.value.length * 2 - 1) {
+                  return SizedBox(height: 100);
+                }
+                if (i.isEven && i < soldierList.value.length * 2) {
+                  return UnderseaStyles.divider();
+                }
+
                 final allUnits = controller.allUnitsInfo.value;
                 final spiesCount = controller.spiesInfo.value?.count;
                 return _buildRow(i, soldierList, allUnits, spiesCount);
@@ -72,10 +87,9 @@ class _MilitaryTabState extends State<Military> {
   bool _canHireSoldiers() {
     if (buyList.every((element) => element == 0)) return false;
 
-    Map<int, int> materialIdToAmount = {};
-    countryData!.materials!.forEach((element) {
-      materialIdToAmount.addIf(true, element.id, element.amount);
-    });
+    Map<int, int> materialIdToAmount = {
+      for (var item in countryData!.materials!) item.id: item.amount
+    };
     bool areResourcesEnough = true;
     var unitsToBeBought = 0;
 
@@ -96,23 +110,21 @@ class _MilitaryTabState extends State<Military> {
     controller.allUnitsInfo.value.forEach((element) {
       allUnitsCount += element.count;
     });
-    if (countryData!.maxUnitCount < allUnitsCount + unitsToBeBought)
+
+    if (countryData!.maxUnitCount < allUnitsCount + unitsToBeBought) {
       return false;
+    }
 
     return areResourcesEnough;
   }
 
-  List<Widget> _listResourceCost(UnitDto unit) {
-    var costs = <Widget>[];
-    bool isFirst = true;
-    unit.requiredMaterials?.forEach((element) {
-      costs.add(UnderseaStyles.text(
-        (isFirst ? '' : ', ') + '${element.amount} ${element.name}',
-      ));
-      isFirst = false;
-    });
-    return costs;
-  }
+  List<Widget> _listResourceCost(UnitDto unit) =>
+      unit.requiredMaterials
+          ?.map((e) => UnderseaStyles.text(
+                '  ${e.amount} ${e.name}',
+              ))
+          .toList() ??
+      [];
 
   Widget _buildRow(int index, Rx<List<UnitDto>> list,
       List<BattleUnitDto> totalUnits, int? spiesCount) {
@@ -121,7 +133,8 @@ class _MilitaryTabState extends State<Military> {
 
     var actualSoldierMax = totalUnits
         .firstWhere((element) => element.id == actualSoldier.id,
-            orElse: () => BattleUnitDto(id: 0, name: 'name', count: 0))
+            orElse: () =>
+                BattleUnitDto(id: 0, name: 'name', count: 0, level: 1))
         .count;
 
     var isSpy = actualSoldier.name == 'Felfedező';
@@ -162,7 +175,7 @@ class _MilitaryTabState extends State<Military> {
                   UnderseaStyles.text(Strings.attack_defence.tr),
                   Expanded(child: Container()),
                   UnderseaStyles.text(
-                      '${actualSoldier.attackPoint}/${actualSoldier.defensePoint}'),
+                      '${actualSoldier.unitLevels?.first.attackPoint}/${actualSoldier.unitLevels?.first.defensePoint}'),
                 ],
               ),
               Row(
@@ -187,7 +200,7 @@ class _MilitaryTabState extends State<Military> {
                   UnderseaStyles.text(Strings.price.tr),
                   Expanded(child: Container()),
                   Row(
-                    children: [..._listResourceCost(actualSoldier)],
+                    children: _listResourceCost(actualSoldier),
                   )
                 ],
               ),

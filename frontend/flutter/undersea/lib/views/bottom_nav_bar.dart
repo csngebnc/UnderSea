@@ -12,7 +12,7 @@ import 'home_page.dart';
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({Key? key}) : super(key: key);
   final BottomNavBarController controller = Get.find<BottomNavBarController>();
-  static List<Widget> _appbarTitleOptions = <Widget>[
+  static final List<Widget> _appbarTitleOptions = <Widget>[
     SizedBox(
       height: 35,
       width: 100,
@@ -23,7 +23,7 @@ class BottomNavBar extends StatelessWidget {
     UnderseaStyles.appBarTitle(Strings.attack.tr),
     UnderseaStyles.appBarTitle(Strings.my_forces.tr),
   ];
-  static List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     CityTabBar(),
     AttackPage(),

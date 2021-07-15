@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:undersea/lang/strings.dart';
+import 'package:get/get.dart';
 import 'package:undersea/styles/style_constants.dart';
-import 'package:undersea/views/attack_tabs/attacking_tab.dart';
-import 'package:undersea/views/attack_tabs/spying_tab.dart';
+
 import 'package:undersea/views/history_tabs/attack_history.dart';
+import 'package:undersea/views/history_tabs/event_log.dart';
 import 'package:undersea/views/history_tabs/spy_history.dart';
 
 class HistoryTabBar extends StatelessWidget {
@@ -14,7 +15,7 @@ class HistoryTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: Size(60.0, 60.0),
@@ -28,15 +29,20 @@ class HistoryTabBar extends StatelessWidget {
                   indicatorSize: TabBarIndicatorSize.label,
                   indicatorWeight: 3,
                   tabs: [
-                    UnderseaStyles.tab('Csata'),
-                    UnderseaStyles.tab('Felfedezés'),
+                    UnderseaStyles.tab(Strings.battle.tr),
+                    UnderseaStyles.tab(Strings.spying.tr),
+                    UnderseaStyles.tab(Strings.events.tr)
                   ],
                 ),
               ),
             ),
           ),
           body: TabBarView(
-            children: [AttackHistoryPage(), SpyingHistoryPage()],
+            children: [
+              AttackHistoryPage(),
+              SpyingHistoryPage(),
+              EventLogPage()
+            ],
           ),
         ),
       ),

@@ -13,53 +13,65 @@ import 'package:undersea/styles/style_constants.dart';
 class ExpandedMenu extends StatelessWidget {
   ExpandedMenu();
 
-  Widget _enumerateSoldiers(List<BattleUnitDto> units) {
+  List<Widget> _enumerateSoldiers(List<BattleUnitDto> units) {
     final allUnits = Get.find<BattleDataController>().allUnitsInfo.value;
     final spiesCount = Get.find<BattleDataController>().spiesInfo.value?.count;
 
-    List<Widget> list = <Widget>[];
-    units.forEach((element) {
-      var isSpy = element.name == 'Felfedező';
-      var actualSoldierMax = allUnits
-          .firstWhere((a) => a.id == element.id,
-              orElse: () => BattleUnitDto(id: 0, name: 'name', count: 0))
-          .count;
-      list.add(UnderseaStyles.militaryIcon(
-          BattleDataController.imageNameMap[element.name] ?? 'shark',
-          element.count,
-          isSpy ? spiesCount! : actualSoldierMax));
-    });
-    return new Row(mainAxisAlignment: MainAxisAlignment.center, children: list);
+    return units
+        .map((e) => UnderseaStyles.militaryIcon(
+            BattleDataController.imageNameMap[e.name] ?? 'shark',
+            e.count,
+            e.name == 'Felfedező'
+                ? (spiesCount ?? 0)
+                : allUnits
+                    .where((a) => a.id == e.id)
+                    .fold(0, (prev, cur) => prev += cur.count)))
+        .toList();
   }
 
   List<Widget> _enumerateBuildings(List<BuildingInfoDto> buildingDtos) {
-    List<Widget> buildings = <Widget>[];
-    buildingDtos.forEach((element) {
-      buildings.add(UnderseaStyles.buildingIcon(
-          BuildingDataController.imageNameMap[element.name] ?? 'zatonyvar',
-          element.buildingsCount));
-    });
-    return buildings;
+    return buildingDtos
+        .map((e) => UnderseaStyles.buildingIcon(
+            BuildingDataController.imageNameMap[e.name] ?? 'zatonyvar',
+            e.buildingsCount))
+        .toList();
   }
 
   List<Widget> _enumerateResources(CountryDetailsDto? countryDetails) {
-    List<Widget> resources = <Widget>[];
-    countryDetails!.materials!.forEach((element) {
-      resources.add(UnderseaStyles.resourceIcon(
-          UnderseaStyles.resourceNamesMap[element.name] ?? 'stone',
-          element.amount,
-          element.production));
-    });
-    return resources;
+    return countryDetails?.materials
+            ?.map((e) => UnderseaStyles.resourceIcon(
+                UnderseaStyles.resourceNamesMap[e.name] ?? 'stone',
+                e.amount,
+                e.production))
+            .toList() ??
+        [];
   }
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CountryDataController>(builder: (controller) {
       final countryData = controller.countryDetailsData.value;
+      if (controller.countryDataLoading.value) {
+        return Container(
+          decoration: BoxDecoration(color: Colors.transparent),
+          child: Center(
+              child: SizedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                  height: 100,
+                  width: 100)),
+        );
+      }
       if (countryData != null) {
         return Column(children: [
-          _enumerateSoldiers(countryData.units!),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ..._enumerateSoldiers(countryData.units!),
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,8 +85,9 @@ class ExpandedMenu extends StatelessWidget {
             children: [..._enumerateBuildings(countryData.buildings!)],
           )
         ]);
-      } else
+      } else {
         return Expanded(child: Container());
+      }
     });
   }
 }

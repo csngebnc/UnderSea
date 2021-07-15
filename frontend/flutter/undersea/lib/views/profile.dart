@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:undersea/controllers/battle_data_controller.dart';
+import 'package:undersea/controllers/building_data_controller.dart';
+import 'package:undersea/controllers/event_data_controller.dart';
+import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
@@ -48,24 +52,27 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               GetBuilder<UserDataController>(builder: (controller) {
                 final userInfoData = controller.userInfoData.value;
-                if (userInfoData != null)
+                if (userInfoData != null) {
                   return Text(userInfoData.name!,
                       style: UnderseaStyles.inputTextStyle.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 17));
+                }
                 /*else if (snapshot.hasError)
                       return Text('error',
                           style: UnderseaStyles.inputTextStyle.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 21));*/
-                else
-                  return Text('default',
+                else {
+                  return CircularProgressIndicator();
+                  /*Text('default',
                       style: UnderseaStyles.inputTextStyle.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 21));
+                          fontSize: 21));*/
+                }
               }),
               SizedBox(
                 height: 10,
@@ -90,7 +97,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: TextButton(
                         onPressed: () {
                           var storage = GetStorage();
-                          storage.read(Constants.TOKEN);
+                          storage.remove(Constants.TOKEN);
+                          Get.find<BuildingDataController>().reset();
+                          Get.find<UpgradesController>().reset();
+                          Get.find<BattleDataController>().reset();
+                          Get.find<EventDataController>().reset();
+                          storage.remove(Constants.WINNER_SHOWN);
                           Get.off(LoginPage());
                         },
                         child: Text(Strings.logout.tr,

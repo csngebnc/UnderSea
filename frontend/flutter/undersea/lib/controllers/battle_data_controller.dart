@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:undersea/controllers/country_data_controller.dart';
+import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/attackable_user_dto.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/buy_unit_dto.dart';
@@ -13,7 +15,6 @@ import 'package:undersea/models/response/send_attack_dto.dart';
 import 'package:undersea/models/response/send_spy_dto.dart';
 import 'package:undersea/models/response/spy_report_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
-import 'package:undersea/models/soldier.dart';
 
 import 'package:undersea/network/providers/battle_data_provider.dart';
 
@@ -23,6 +24,8 @@ class BattleDataController extends GetxController {
   final BattleDataProvider _battleDataProvider;
   int? countryToBeAttacked;
   BattleDataController(this._battleDataProvider);
+
+  Rx<bool> loadingList = false.obs;
 
   //AttackableUser stuff
   Rx<PagedResultOfAttackableUserDto?> attackableUsers = Rx(null);
@@ -70,7 +73,9 @@ class BattleDataController extends GetxController {
     searchText.value = value;
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
-    attackableUserList.value.clear();
+    attackableUserList.clear();
+
+    //attackableUserList.value.clear();
   }
 
   getAvailableUnits() async {
@@ -118,13 +123,13 @@ class BattleDataController extends GetxController {
         loggedAttacks = Rx(null);
         attackLogPageNumber.value = 1;
         alreadyDownloadedAttackLogPageNumber.value = 0;
-        attackLogsList.value.clear();
+        //attackLogsList.value.clear();
+        attackLogsList.clear();
         getAllUnits();
-        getAttackableUsers();
         getUnitTypes();
-        getHistory();
-      } else
-        log('$response');
+      } else {
+        log('NON-200 Code at attacking: $response');
+      }
     } catch (error) {
       log('$error');
     }
@@ -134,12 +139,12 @@ class BattleDataController extends GetxController {
     try {
       final response = await _battleDataProvider.sendSpies(spyData.toJson());
       if (response.statusCode == 200) {
-        UnderseaStyles.snackbar('Sikeresen elküldted a felfedezőid!',
-            'Az egységeidet elküldted felfedezésre');
+        UnderseaStyles.snackbar(
+            Strings.send_spies_title.tr, Strings.send_spies_body.tr);
         spyingHistory = Rx(null);
         spyLogPageNumber.value = 1;
         alreadyDownloadedSpyLogPageNumber.value = 0;
-        spyLogsList.value.clear();
+        spyLogsList.clear();
         getAllUnits();
         getSpies();
         getSpyingHistory();
@@ -150,11 +155,18 @@ class BattleDataController extends GetxController {
   }
 
   getHistory() async {
+    await Future.delayed(const Duration(milliseconds: 10), () {
+      update();
+
+      loadingList = true.obs;
+    });
+    update();
     try {
       if (loggedAttacks.value != null &&
           loggedAttacks.value!.allResultsCount <=
-              alreadyDownloadedAttackLogPageNumber.value * pageSize.value)
+              alreadyDownloadedAttackLogPageNumber.value * pageSize.value) {
         return;
+      }
       final response = await _battleDataProvider.getHistory(
           pageSize.value, attackLogPageNumber.value);
       if (response.statusCode == 200) {
@@ -169,13 +181,24 @@ class BattleDataController extends GetxController {
       }
     } catch (error) {
       log('$error');
+    } finally {
+      await Future.delayed(const Duration(milliseconds: 10), () {
+        update();
+
+        loadingList = false.obs;
+      });
     }
   }
 
   getAttackableUsers() async {
+    await Future.delayed(const Duration(milliseconds: 10), () {
+      update();
+
+      loadingList = true.obs;
+    });
     try {
       if (attackableUsers.value != null &&
-          attackableUsers.value!.allResultsCount <=
+          attackableUsers.value!.allResultsCount <
               alreadyDownloadedPageNumber.value * pageSize.value) return;
       final response = await _battleDataProvider.getAttackableUsers(
           pageSize.value,
@@ -188,17 +211,28 @@ class BattleDataController extends GetxController {
           attackableUserList.value += attackableUsers.value?.results ?? [];
           alreadyDownloadedPageNumber.value = pageNumber.value;
         }
-        update();
+        // update();
       }
     } catch (error) {
       log('$error');
+    } finally {
+      await Future.delayed(const Duration(milliseconds: 10), () {
+        update();
+
+        loadingList = false.obs;
+      });
     }
   }
 
   getSpyingHistory() async {
+    await Future.delayed(const Duration(milliseconds: 10), () {
+      update();
+
+      loadingList = true.obs;
+    });
     try {
       if (spyingHistory.value != null &&
-          spyingHistory.value!.allResultsCount <=
+          spyingHistory.value!.allResultsCount <
               alreadyDownloadedSpyLogPageNumber.value * pageSize.value) return;
       final response = await _battleDataProvider.getSpyingHistory(
           pageSize.value, spyLogPageNumber.value, 'name');
@@ -213,6 +247,12 @@ class BattleDataController extends GetxController {
       }
     } catch (error) {
       log('$error');
+    } finally {
+      await Future.delayed(const Duration(milliseconds: 10), () {
+        update();
+
+        loadingList = false.obs;
+      });
     }
   }
 
@@ -235,8 +275,9 @@ class BattleDataController extends GetxController {
         getAllUnits();
         getUnitTypes();
         getSpies();
+        Get.find<CountryDataController>().getCountryDetails();
         UnderseaStyles.snackbar(
-            'Sikeres vásárlás', 'Új egységeid besorolásra kerültek');
+            Strings.successful_purchase.tr, Strings.new_units.tr);
       }
     } catch (error) {
       log('$error');
@@ -248,20 +289,25 @@ class BattleDataController extends GetxController {
     searchText.value = '';
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
-    pageSize.value = 5;
-    attackableUserList.value.clear();
+    pageSize.value = 10;
+    attackableUserList.clear();
+    //attackableUserList.value.clear();
 
     //AttackLogStuff
     loggedAttacks = Rx(null);
     attackLogPageNumber.value = 1;
     alreadyDownloadedAttackLogPageNumber.value = 0;
-    attackLogsList.value.clear();
+    //attackLogsList.value.clear();
+    attackLogsList.clear();
 
     //SpyLogStuff
 
     spyingHistory = Rx(null);
     spyLogPageNumber.value = 1;
     alreadyDownloadedSpyLogPageNumber.value = 0;
-    spyLogsList.value.clear();
+    spyLogsList.clear();
+    //spyLogsList.value.clear();
+
+    unitTypesInfo = Rx([]);
   }
 }

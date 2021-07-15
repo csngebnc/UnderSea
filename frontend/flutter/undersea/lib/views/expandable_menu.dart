@@ -46,7 +46,6 @@ class _ExpandableMenuState extends State<ExpandableMenu> {
                 decoration: BoxDecoration(color: Colors.white54),
                 child: ExpandedMenu(),
               )),
-              //SizedBox(height: 10)
             ]),
           ),
         ],

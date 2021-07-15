@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/upgrade_dto.dart';
-import 'package:undersea/models/upgrade.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:get/get.dart';
 
@@ -25,8 +24,9 @@ class _UpgradesTabState extends State<Upgrades> {
 
   bool _canStartUpgrade() {
     if (_selectedIndex == null) return false;
-    if (upgradeList.value.any((element) => element.isUnderConstruction))
+    if (upgradeList.value.any((element) => element.isUnderConstruction)) {
       return false;
+    }
     if (upgradeList.value[_selectedIndex!].doesExist) return false;
     return true;
   }
@@ -49,13 +49,30 @@ class _UpgradesTabState extends State<Upgrades> {
         list: ListView.builder(
             itemCount: 8,
             itemBuilder: (BuildContext context, int i) {
-              if (i == 0)
-                return UnderseaStyles.infoPanel(
-                    Strings.upgrades_manual_title.tr,
-                    Strings.upgrades_manual_hint.tr);
-              if (i > upgradeList.value.length) return SizedBox(height: 100);
-
               return GetBuilder<UpgradesController>(builder: (controller) {
+                if (i == 0) {
+                  return Column(
+                    children: [
+                      UnderseaStyles.infoPanel(Strings.upgrades_manual_title.tr,
+                          Strings.upgrades_manual_hint.tr),
+                      controller.upgradeInfoData.value.isEmpty
+                          ? Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(30.0),
+                                child: const SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: CircularProgressIndicator()),
+                              ),
+                            )
+                          : Container()
+                    ],
+                  );
+                }
+                if (i > upgradeList.value.length) {
+                  return SizedBox(height: 100);
+                }
+
                 final upgradeListValue = controller.upgradeInfoData.value;
                 return _buildRow(i, upgradeListValue);
               });
@@ -67,10 +84,11 @@ class _UpgradesTabState extends State<Upgrades> {
     return ListTile(
         onTap: () {
           setState(() {
-            if ((index - 1) != _selectedIndex)
+            if ((index - 1) != _selectedIndex) {
               _selectedIndex = index - 1;
-            else
+            } else {
               _selectedIndex = null;
+            }
           });
         },
         title: Padding(

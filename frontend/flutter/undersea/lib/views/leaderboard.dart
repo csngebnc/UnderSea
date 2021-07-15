@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,6 +26,9 @@ class _LeaderboardState extends State<Leaderboard> {
   @override
   void initState() {
     controller.searchText.value = '';
+    controller.alreadyDownloadedPageNumber.value = 0;
+    controller.pageNumber.value = 1;
+    controller.rankList.clear();
     controller.getRankList();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -41,6 +44,7 @@ class _LeaderboardState extends State<Leaderboard> {
 
   @override
   Widget build(BuildContext context) {
+    //results = [];
     return Scaffold(
         backgroundColor: UnderseaStyles.menuDarkBlue,
         appBar: AppBar(
@@ -73,22 +77,57 @@ class _LeaderboardState extends State<Leaderboard> {
           ],
         ),
         body: GetBuilder<UserDataController>(builder: (controller) {
-          results = controller.rankList.value;
+          results = controller.rankList.toList();
           itemCount = results.length * 2 + 2;
-
           return ListView.builder(
-              itemCount: itemCount,
+              itemCount: controller.loadingList.value || results.isEmpty
+                  ? 1
+                  : itemCount,
               controller: _scrollController,
               itemBuilder: (BuildContext context, int i) {
                 if (i.isOdd) return UnderseaStyles.divider();
                 if (i == 0) {
-                  return Padding(
-                    padding: EdgeInsets.fromLTRB(15, 30, 15, 0),
-                    child: UnderseaStyles.inputField(
-                        hint: Strings.username.tr,
-                        color: Color(0xFF657A9D),
-                        hintColor: UnderseaStyles.alternativeHintColor,
-                        onChanged: controller.onSearchChanged),
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(15, 30, 15, 0),
+                        child: UnderseaStyles.inputField(
+                            hint: Strings.username.tr,
+                            color: Color(0xFF657A9D),
+                            hintColor: UnderseaStyles.alternativeHintColor,
+                            onChanged: controller.onSearchChanged,
+                            validator: (string) {}),
+                      ),
+                      controller.loadingList.value
+                          ? Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(30.0),
+                                child: const SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: CircularProgressIndicator()),
+                              ),
+                            )
+                          : Container(),
+                      results.isEmpty
+                          ? Center(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 100,
+                                  ),
+                                  Text('Nincs ilyen nevű felhasználó',
+                                      style: UnderseaStyles.listRegular
+                                          .copyWith(
+                                              fontSize: 15,
+                                              color: UnderseaStyles
+                                                  .underseaLogoColor)),
+                                  SizedBox(height: 20),
+                                ],
+                              ),
+                            )
+                          : Container()
+                    ],
                   );
                 }
                 var user = results[i ~/ 2 - 1];

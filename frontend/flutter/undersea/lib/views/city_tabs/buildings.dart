@@ -43,13 +43,26 @@ class _BuildingsTabState extends State<Buildings> {
         list: ListView.builder(
             itemCount: buildingList.value.length + 2,
             itemBuilder: (BuildContext context, int i) {
-              if (i == 0)
-                return UnderseaStyles.infoPanel(
-                    Strings.buildings_manual_title.tr,
-                    Strings.buildings_manual_hint.tr);
-              if (i > buildingList.value.length) return SizedBox(height: 100);
-
               return GetBuilder<BuildingDataController>(builder: (controller) {
+                if (i == 0) {
+                  return UnderseaStyles.infoPanel(
+                      Strings.buildings_manual_title.tr,
+                      Strings.buildings_manual_hint.tr);
+                }
+                if (i > buildingList.value.length) {
+                  return controller.buildingInfoData.value.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(30.0),
+                            child: const SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: CircularProgressIndicator()),
+                          ),
+                        )
+                      : SizedBox(height: 100);
+                }
+
                 final buildingListValue = controller.buildingInfoData.value;
                 return _buildRow(i, buildingListValue);
               });
@@ -58,8 +71,9 @@ class _BuildingsTabState extends State<Buildings> {
 
   bool _canStartBuilding() {
     if (_selectedIndex == null) return false;
-    if (buildingList.value.any((element) => element.underConstruction))
+    if (buildingList.value.any((element) => element.underConstruction)) {
       return false;
+    }
     var materials = buildingList.value[_selectedIndex!].requiredMaterials ??
         <MaterialDto>[];
     for (int i = 0; i < materials.length; i++) {
@@ -72,26 +86,18 @@ class _BuildingsTabState extends State<Buildings> {
     return true;
   }
 
-  List<Widget> _listEffects(BuildingDetailsDto building) {
-    var effects = <Widget>[];
-    building.effects?.forEach((element) {
-      effects
-          .add(Text(element.name ?? 'effect', style: UnderseaStyles.listBold));
-    });
-    return effects;
-  }
+  List<Widget> _listEffects(BuildingDetailsDto building) =>
+      building.effects
+          ?.map((e) => Text(e.name ?? 'effect', style: UnderseaStyles.listBold))
+          .toList() ??
+      [];
 
   List<Widget> _listResourceCost(BuildingDetailsDto building) {
-    var costs = <Widget>[];
-    bool isFirst = true;
-    building.requiredMaterials?.forEach((element) {
-      costs.add(Text(
-          (isFirst ? '' : ', ') + '${element.amount} ${element.name}',
-          style: UnderseaStyles.listRegular));
-      isFirst = false;
-    });
-
-    return costs;
+    return building.requiredMaterials
+            ?.map((e) => Text('${e.amount} ${e.name}  ',
+                style: UnderseaStyles.listRegular))
+            .toList() ??
+        [];
   }
 
   Widget _buildRow(int index, List<BuildingDetailsDto> list) {
@@ -99,10 +105,11 @@ class _BuildingsTabState extends State<Buildings> {
     return ListTile(
         onTap: () {
           setState(() {
-            if ((index - 1) != _selectedIndex)
+            if ((index - 1) != _selectedIndex) {
               _selectedIndex = index - 1;
-            else
+            } else {
               _selectedIndex = null;
+            }
           });
         },
         title: Padding(
@@ -143,8 +150,7 @@ class _BuildingsTabState extends State<Buildings> {
                           ? Padding(
                               padding: EdgeInsets.all(10),
                               child: Text(
-                                'épül',
-                                //Strings.under_construction.tr,
+                                Strings.under_construction.tr,
                                 style: TextStyle(
                                     color: UnderseaStyles.underseaLogoColor,
                                     fontSize: 12),

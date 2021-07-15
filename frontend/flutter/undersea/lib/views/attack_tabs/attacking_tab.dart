@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +8,7 @@ import 'package:undersea/controllers/navbar_controller.dart';
 
 import 'package:undersea/lang/strings.dart';
 import 'package:undersea/models/response/attack_unit_dto.dart';
+import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/send_attack_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
 
@@ -22,44 +25,124 @@ class AttackingTab extends StatefulWidget {
 }
 
 class _AttackingTabState extends State<AttackingTab> {
-  late Rx<List<UnitDto>> soldierList;
+  late Rx<List<BattleUnitDto>> soldierList;
+  late Rx<List<UnitDto>> unitTypeList;
+  Map<int, List<BattleUnitDto>> groupedUnits = {};
   var controller = Get.find<BattleDataController>();
+  Map<int, Map<int, int>> sliderValues = {};
+  late int generalIndex;
+  var mercenaryPrice = 0;
 
   @override
   void initState() {
-    soldierList = controller.unitTypesInfo;
-    for (int i = 0; i < soldierList.value.length; i++) {
-      if (soldierList.value[i].name == 'Hadvezér') generalIndex = i;
+    unitTypeList = controller.unitTypesInfo;
+    soldierList = controller.availableUnitsInfo;
+    for (int i = 0; i < unitTypeList.value.length; i++) {
+      if (unitTypeList.value[i].name == 'Hadvezér') generalIndex = i + 1;
     }
-    sliderValues = List<int>.generate(soldierList.value.length, (index) => 0);
     super.initState();
   }
 
   bool _canAttack() {
-    if (sliderValues.every((element) => element == 0)) return false;
-    if (sliderValues[generalIndex] == 0) return false;
+    if (sliderValues.entries.every((element) =>
+        element.value.entries.every((element) => element.value == 0))) {
+      return false;
+    }
+    if (sliderValues[generalIndex]?[1] == 0) {
+      return false;
+    }
     return true;
   }
 
-  var sliderValues = List<int>.generate(3, (index) => 0);
-  late int generalIndex;
-  var mercenaryPrice = 0;
+  List<Widget>? buildSliderRows(int id) {
+    var unitList = groupedUnits[id];
+    return unitList
+        ?.map((e) => Padding(
+              padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 25,
+                    ),
+                    child: Text(e.level.toString(),
+                        style:
+                            UnderseaStyles.listRegular.copyWith(height: 1.2)),
+                  ),
+                  Container(
+                    height: 20,
+                    child: Slider(
+                      value: sliderValues[id]![e.level]!.toDouble(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          try {
+                            sliderValues[id]![e.level] = newValue.round();
+                          } catch (error) {
+                            log('$error');
+                          }
+                        });
+                        log('${sliderValues[id]![e.level]}');
+                      },
+                      min: 0,
+                      max: e.count.toDouble(),
+                      activeColor: UnderseaStyles.underseaLogoColor,
+                      inactiveColor: Color(0x883B7DBD),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 15,
+                    ),
+                    child: Text('${sliderValues[id]?[e.level]}/${e.count}',
+                        style:
+                            UnderseaStyles.listRegular.copyWith(height: 1.2)),
+                  ),
+                ],
+              ),
+            ))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<BattleDataController>(builder: (controller) {
-      var itemCount = controller.unitTypesInfo.value.length + 2;
+      var itemCount = unitTypeList.value.length + 2;
+
+      for (var soldier in soldierList()) {
+        var keyExists = groupedUnits.containsKey(soldier.id);
+        if (!keyExists) {
+          sliderValues.addIf(!keyExists, soldier.id, {soldier.level: 0});
+          groupedUnits.addIf(!keyExists, soldier.id, [soldier]);
+        } else {
+          sliderValues[soldier.id]?.addIf(
+              !(sliderValues[soldier.id]?.containsKey(soldier.level) ?? false),
+              soldier.level,
+              0);
+          groupedUnits[soldier.id]?.addIf(
+              !(groupedUnits[soldier.id]?.contains(soldier) ?? false), soldier);
+        }
+      }
+
+      log(sliderValues.toString());
+      log(groupedUnits.toString());
 
       return UnderseaStyles.tabSkeleton(
           buttonText: Strings.lets_attack,
           isDisabled: !_canAttack(),
           onButtonPressed: () {
             var units = <AttackUnitDto>[];
-            for (int i = 0; i < sliderValues.length; i++) {
-              if (sliderValues[i] != 0) {
-                units.add(AttackUnitDto(
-                    unitId: soldierList.value[i].id, count: sliderValues[i]));
+            for (var entry in groupedUnits.entries) {
+              for (var soldier in entry.value) {
+                var count = sliderValues[soldier.id]?[soldier.level] ?? 0;
+                units.addIf(
+                    count.isGreaterThan(0),
+                    AttackUnitDto(
+                        unitId: soldier.id,
+                        count: count,
+                        level: soldier.level));
               }
             }
+
             controller.attack(SendAttackDto(
                 attackedCountryId: controller.countryToBeAttacked!,
                 units: units));
@@ -105,61 +188,42 @@ class _AttackingTabState extends State<AttackingTab> {
                   );
                 }
                 if (i == itemCount - 1) return SizedBox(height: 130);
-                var actualSoldier = soldierList.value.elementAt(i - 1);
+                var actualSoldier = unitTypeList.value.elementAt(i - 1);
 
-                if (actualSoldier.name == 'Felfedező') return Container();
+                if (actualSoldier.currentCount == 0 ||
+                    actualSoldier.name == 'Felfedező') return Container();
 
                 return Padding(
                     padding: EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 70,
-                          width: 70,
-                          child: UnderseaStyles.assetIcon(BattleDataController
-                              .imageNameMap[actualSoldier.name]!),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  left: 25,
-                                ),
-                                child: Text(
-                                    '${soldierList.value[i - 1].name} ${sliderValues[i - 1]}/${actualSoldier.currentCount}',
-                                    style: UnderseaStyles.listRegular
-                                        .copyWith(height: 1.2)),
-                              ),
-                              SizedBox(height: 8),
-                              Container(
-                                height: 20,
-                                child: Slider(
-                                  value: sliderValues[i - 1].toDouble(),
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      var amountBeforeChange =
-                                          sliderValues[i - 1];
-                                      sliderValues[i - 1] = newValue.round();
-                                      mercenaryPrice = (mercenaryPrice +
-                                              newValue -
-                                              amountBeforeChange *
-                                                  1) //actualSoldier.price)
-                                          .toInt();
-                                    });
-                                  },
-                                  min: 0,
-                                  max: actualSoldier.currentCount.toDouble(),
-                                  activeColor: UnderseaStyles.underseaLogoColor,
-                                  inactiveColor: Color(0x883B7DBD),
-                                ),
-                              ),
-                            ],
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(actualSoldier.name,
+                              style: UnderseaStyles.listBold
+                                  .copyWith(height: 1.2, fontSize: 16)),
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                      ],
-                    ));
+                          Row(
+                            children: [
+                              SizedBox(
+                                height: 70,
+                                width: 70,
+                                child: UnderseaStyles.assetIcon(
+                                    BattleDataController
+                                        .imageNameMap[actualSoldier.name]!),
+                              ),
+                              /*Expanded(
+                                child: */
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ...?buildSliderRows(actualSoldier.id)
+                                  ]),
+                              //)
+                            ],
+                          )
+                        ]));
               }));
     });
   }

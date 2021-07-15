@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/controllers/battle_data_controller.dart';
-
-import 'package:undersea/models/fight_outcome.dart';
 import 'package:undersea/models/response/logged_attack_dto.dart';
 import 'package:undersea/styles/style_constants.dart';
 
@@ -14,16 +12,14 @@ class AttackHistoryPage extends StatefulWidget {
 class _AttackHistoryPageState extends State<AttackHistoryPage> {
   var controller = Get.find<BattleDataController>();
 
-  var outcomeMap = {
-    FightOutcome.NotPlayedYet: 'Folyamatban',
-    FightOutcome.CurrentUser: 'Győzelem',
-    FightOutcome.OtherUser: 'Vereség'
-  };
   final ScrollController _scrollController = ScrollController();
   List<LoggedAttackDto?> results = [];
   late int itemCount;
   @override
   void initState() {
+    controller.attackLogPageNumber.value = 1;
+    controller.alreadyDownloadedAttackLogPageNumber.value = 0;
+    controller.attackLogsList.clear();
     controller.getHistory();
 
     _scrollController.addListener(() {
@@ -44,17 +40,23 @@ class _AttackHistoryPageState extends State<AttackHistoryPage> {
         child: Container(
             decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
             child: GetBuilder<BattleDataController>(builder: (controller) {
-              results = controller.attackLogsList.value;
-              itemCount = results.length * 2 + 1;
+              results = controller.attackLogsList.toList();
+              itemCount =
+                  controller.loadingList.value ? 1 : results.length * 2 + 1;
               return ListView.builder(
                   controller: _scrollController,
                   itemCount: itemCount,
                   itemBuilder: (BuildContext context, int i) {
-                    if (i == 0) return SizedBox(height: 20);
-                    if (i.isEven)
+                    if (i == 0) {
+                      return controller.loadingList.value
+                          ? UnderseaStyles.listProgressIndicator()
+                          : SizedBox(height: 10);
+                    }
+                    if (i.isEven) {
                       return UnderseaStyles.divider();
-                    else
+                    } else {
                       return _buildRow(i, results);
+                    }
                   });
             })));
   }
@@ -66,16 +68,17 @@ class _AttackHistoryPageState extends State<AttackHistoryPage> {
       children: [
         Text(
             (actualAttack?.attackedCountryName ?? '') +
-                ' - ${outcomeMap[actualAttack?.outcome]}',
+                ' - ${UnderseaStyles.outcomeMap[actualAttack?.outcome]}',
             style: UnderseaStyles.listBold),
+        ...actualAttack?.units
+                ?.map((e) => Text(
+                      '${e.name} (${e.level}): ${e.count}',
+                      style: UnderseaStyles.listRegular.copyWith(height: 2),
+                    ))
+                .toList() ??
+            [],
       ],
     );
-    actualAttack?.units?.forEach((element) {
-      column.children.add(Text(
-        '${element.name} ${element.count}',
-        style: UnderseaStyles.listRegular.copyWith(height: 2),
-      ));
-    });
 
     return Padding(padding: EdgeInsets.only(left: 20), child: column);
   }

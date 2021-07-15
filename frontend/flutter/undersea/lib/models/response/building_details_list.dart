@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:undersea/models/response/building_details_dto.dart';
-import 'effect_dto.dart';
 
 part 'building_details_list.g.dart';
 

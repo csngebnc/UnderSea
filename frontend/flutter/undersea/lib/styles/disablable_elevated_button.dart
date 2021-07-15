@@ -12,10 +12,11 @@ class ToggleableElevatedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        if (isDisabled)
+        if (isDisabled) {
           () {};
-        else
+        } else {
           onPressed();
+        }
       },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,

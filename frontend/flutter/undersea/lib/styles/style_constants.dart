@@ -1,8 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:undersea/lang/strings.dart';
+import 'package:undersea/models/fight_outcome.dart';
 import 'package:undersea/views/leaderboard.dart';
 
 import 'disablable_elevated_button.dart';
@@ -45,6 +45,12 @@ class UnderseaStyles {
       TextStyle(color: UnderseaStyles.hintColor, fontSize: 15);
 
   static void _defaultOnChanged(String s) {}
+  static String? _defaultValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return Strings.empty_field.tr;
+    }
+    if (value.removeAllWhitespace != value) return Strings.invalid_username.tr;
+  }
 
   static const resourceNamesMap = {
     'korall': 'coral',
@@ -59,22 +65,56 @@ class UnderseaStyles {
     Color color = Colors.white,
     Color hintColor = hintColor,
     void Function(String) onChanged = _defaultOnChanged,
+    String? Function(String?) validator = _defaultValidator,
   }) {
-    return Container(
+    return Stack(children: [
+      Container(
+        height: 50,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(32.0), color: color),
-        child: TextField(
-          controller: controller,
-          obscureText: isPassword,
-          style: UnderseaStyles.inputTextStyle,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              hintText: hint,
-              hintStyle: UnderseaStyles.hintStyle.copyWith(color: hintColor),
-              border: InputBorder.none),
-        ));
+        //child:
+      ),
+      TextFormField(
+        validator: validator,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        controller: controller,
+        obscureText: isPassword,
+        style: UnderseaStyles.inputTextStyle,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+            focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32.0),
+                borderSide: BorderSide(
+                    color: UnderseaStyles.navbarIconColor, width: 2)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32.0),
+                borderSide: BorderSide(
+                    color: UnderseaStyles.underseaLogoColor, width: 2)),
+            errorStyle:
+                TextStyle(color: UnderseaStyles.navbarIconColor, fontSize: 14),
+            errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(32.0),
+                borderSide:
+                    BorderSide(color: UnderseaStyles.menuDarkBlue, width: 2)),
+            contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            hintText: hint,
+            hintStyle: UnderseaStyles.hintStyle.copyWith(color: hintColor),
+            border: InputBorder.none),
+      )
+    ]);
   }
+
+  static const randomEventImageMap = {
+    'Víz alatti tűz': 'assets/buildings/underwater_fire.jpg',
+    'Aranybánya': 'assets/buildings/goldmine.png',
+    'Rossz termés': 'assets/buildings/bad_harvest.png',
+    'Elégedett emberek': 'assets/buildings/happy_people.jpg',
+    'Elégedetlen emberek': 'assets/buildings/sad_people.jpg',
+    'Jó termés': 'assets/buildings/happy_harvest.jpg',
+    'Elégedett katonák': 'assets/buildings/happy_soldier.png',
+    'Elégedetlen katonák': 'assets/buildings/angry_soldier.png',
+    'Pestis': 'assets/buildings/plague.png',
+  };
 
   static Widget infoPanel(
     String title,
@@ -224,29 +264,42 @@ class UnderseaStyles {
         ));
   }
 
-  static Widget leaderboardButton(
-      {required int roundNumber, required int placement}) {
-    return ElevatedButton(
-      onPressed: () {
-        Get.to(Leaderboard());
-      },
+  static Widget leaderboardButton({int? roundNumber, int? placement}) {
+    return Center(
       child: SizedBox(
-          width: 180,
-          child: Padding(
-              padding: EdgeInsets.fromLTRB(5, 7, 5, 5),
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(children: [
-                    _leaderboardText(roundNumber, Strings.round.tr),
-                    _leaderboardText(placement, Strings.placement.tr),
-                  ])))),
-      style: ElevatedButton.styleFrom(
-          primary: Colors.white,
-          padding: EdgeInsets.all(5),
-          elevation: 10,
-          shadowColor: UnderseaStyles.shadowColor,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+        height: 50,
+        width: 180,
+        child: ElevatedButton(
+          onPressed: () {
+            Get.to(Leaderboard());
+          },
+          child: roundNumber == null && placement == null
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 30,
+                        width: 30),
+                  ),
+                )
+              : Padding(
+                  padding: EdgeInsets.fromLTRB(5, 7, 5, 5),
+                  child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(children: [
+                        _leaderboardText(roundNumber!, Strings.round.tr),
+                        _leaderboardText(placement!, Strings.placement.tr),
+                      ]))),
+          style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+              padding: EdgeInsets.all(5),
+              elevation: 10,
+              shadowColor: UnderseaStyles.shadowColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15))),
+        ),
+      ),
     );
   }
 
@@ -272,6 +325,13 @@ class UnderseaStyles {
         height: 32);
   }
 
+  static Widget listProgressIndicator() => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: const SizedBox(
+              height: 50, width: 50, child: CircularProgressIndicator()),
+        ),
+      );
   static Widget elevatedButton(
       {required String text,
       required Function onPressed,
@@ -337,7 +397,11 @@ class UnderseaStyles {
     );
   }
 
-  static const outcomes = {0: 'Még nem ismert', 1: 'Sikeres', 2: 'Sikertelen'};
+  static var outcomeMap = {
+    FightOutcome.NotPlayedYet: Strings.in_progress.tr,
+    FightOutcome.CurrentUser: Strings.victory.tr,
+    FightOutcome.OtherUser: Strings.defeat.tr
+  };
 
   static Widget imageIcon(String name,
       {String additional = '@3x', Color? color, double? size}) {
