@@ -18,6 +18,10 @@ class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
   late int itemCount;
   @override
   void initState() {
+    controller.loadingList = false.obs;
+    controller.spyLogPageNumber.value = 1;
+    controller.alreadyDownloadedSpyLogPageNumber.value = 0;
+    controller.spyLogsList.clear();
     controller.getSpyingHistory();
 
     _scrollController.addListener(() {
@@ -43,7 +47,20 @@ class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
                   controller: _scrollController,
                   itemCount: results.length * 2 + 1,
                   itemBuilder: (BuildContext context, int i) {
-                    if (i == 0) return SizedBox(height: 20);
+                    if (i == 0) {
+                      return controller.loadingList.value
+                          ? UnderseaStyles.listProgressIndicator()
+                          : results.isEmpty
+                              ? Column(
+                                  children: [
+                                    SizedBox(height: 10),
+                                    Text('Nincs megjeleníthető elem',
+                                        style: UnderseaStyles.listBold
+                                            .copyWith(fontSize: 13)),
+                                  ],
+                                )
+                              : SizedBox(height: 10);
+                    }
                     if (i.isEven) {
                       return UnderseaStyles.divider();
                     } else {

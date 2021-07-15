@@ -86,26 +86,18 @@ class _BuildingsTabState extends State<Buildings> {
     return true;
   }
 
-  List<Widget> _listEffects(BuildingDetailsDto building) {
-    var effects = <Widget>[];
-    building.effects?.forEach((element) {
-      effects
-          .add(Text(element.name ?? 'effect', style: UnderseaStyles.listBold));
-    });
-    return effects;
-  }
+  List<Widget> _listEffects(BuildingDetailsDto building) =>
+      building.effects
+          ?.map((e) => Text(e.name ?? 'effect', style: UnderseaStyles.listBold))
+          .toList() ??
+      [];
 
   List<Widget> _listResourceCost(BuildingDetailsDto building) {
-    var costs = <Widget>[];
-    bool isFirst = true;
-    building.requiredMaterials?.forEach((element) {
-      costs.add(Text(
-          (isFirst ? '' : ', ') + '${element.amount} ${element.name}',
-          style: UnderseaStyles.listRegular));
-      isFirst = false;
-    });
-
-    return costs;
+    return building.requiredMaterials
+            ?.map((e) => Text('${e.amount} ${e.name}  ',
+                style: UnderseaStyles.listRegular))
+            .toList() ??
+        [];
   }
 
   Widget _buildRow(int index, List<BuildingDetailsDto> list) {

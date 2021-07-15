@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:undersea/models/response/paged_result_of_user_rank_dto.dart';
 import 'package:undersea/models/response/paged_result_of_world_winner_dto.dart';
