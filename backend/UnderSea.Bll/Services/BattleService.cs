@@ -225,10 +225,7 @@ namespace UnderSea.Bll.Services
                 .ToListAsync())
                 .Select(unit =>
                 {
-                    var unitCount = country.CountryUnits.Where(cu => cu.UnitId == unit.Id).FirstOrDefault();
-                    var count = 0;
-                    if (unitCount != null)
-                        count = unitCount.Count;
+                    var unitCount = country.CountryUnits.Where(cu => cu.UnitId == unit.Id).Sum(cu => cu.Count);
 
                     return new UnitDto
                     {
@@ -255,7 +252,7 @@ namespace UnderSea.Bll.Services
                                         ImageUrl = c.Material.ImageUrl
                                     })
                                     .ToList(),
-                        CurrentCount = count,
+                        CurrentCount = unitCount,
                         ImageUrl = unit.ImageUrl
                     };
                 });
