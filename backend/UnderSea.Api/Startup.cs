@@ -102,8 +102,8 @@ namespace UnderSea.Api
             {
                 options.UserInteraction = new UserInteractionOptions()
                 {
-                    LogoutUrl = "/",
-                    LoginUrl = "/",
+                    LogoutUrl = "/Account/Logout",
+                    LoginUrl = "/Account/Login",
 
                     LoginReturnUrlParameter = "returnUrl"
                 };
@@ -175,7 +175,7 @@ namespace UnderSea.Api
 
             services.AddProblemDetails(ConfigureProblemDetails);
 
-            services.AddControllersWithViews().AddFluentValidation();
+            services.AddControllers().AddFluentValidation();
             services.AddRazorPages();
             services.AddSignalR();
         }

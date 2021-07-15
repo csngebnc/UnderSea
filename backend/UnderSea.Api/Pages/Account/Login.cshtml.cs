@@ -11,9 +11,9 @@ using UnderSea.Model.Models;
 
 namespace UnderSea.Api.Pages
 {
-    public class IndexModel : PageModel
+    public class LoginModel : PageModel
     {
-        public IndexModel(
+        public LoginModel(
             IIdentityServerInteractionService interactionService,
             IUserClaimsPrincipalFactory<User> claimsPrincipalFactory,
             UserManager<User> userManager)
@@ -54,11 +54,6 @@ namespace UnderSea.Api.Pages
                 {
                     if((await userManager.CheckPasswordAsync(user, Password)))
                     {
-                        foreach (var cookie in Request.Cookies.Keys)
-                        {
-                            Response.Cookies.Delete(cookie);
-                        }
-
                         var signInProperties = new AuthenticationProperties
                         {
                             ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1),
