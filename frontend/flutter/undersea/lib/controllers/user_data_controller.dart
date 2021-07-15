@@ -114,7 +114,7 @@ class UserDataController extends GetxController {
       UnderseaStyles.snackbar(
           Strings.error.tr, Strings.something_went_wrong.tr);
     } finally {
-      Get.off(BottomNavBar());
+      //Get.off(BottomNavBar());
       loggingIn = false.obs;
       update();
     }

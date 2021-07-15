@@ -83,13 +83,12 @@ class _HomePageState extends State<HomePage> {
           GetBuilder<UserDataController>(builder: (controller) {
             final userInfoData = controller.userInfoData.value;
 
-            if (controller.userInfoLoading.value) {
-              return UnderseaStyles.leaderboardButton();
-            }
             if (userInfoData != null) {
               return UnderseaStyles.leaderboardButton(
                   roundNumber: userInfoData.round,
                   placement: userInfoData.placement);
+            } else if (controller.userInfoLoading.value) {
+              return UnderseaStyles.leaderboardButton();
             } else {
               return CircularProgressIndicator();
               /* } else {
