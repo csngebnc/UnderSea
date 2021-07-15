@@ -23,9 +23,11 @@
             Legalább 1 hadvezért kötelező küldened!
           </p>
           <div class="stack align-center mt-2 scrollable">
-            <unit-slider *ngFor=" let unit of units" [unit]="unit" class="d-flex w-100 p-1 to-center"
-              (setUnit)="onSetUnit($event)">
-            </unit-slider>
+            <ng-container *ngFor=" let unit of units">
+              <unit-slider *ngIf="unit.count" [unit]="unit" class="d-flex w-100 p-1 to-center"
+                (setUnit)="onSetUnit($event)">
+              </unit-slider>
+            </ng-container>
           </div>
         </div>
       </div>
