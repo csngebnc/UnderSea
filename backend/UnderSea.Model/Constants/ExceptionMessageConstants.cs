@@ -22,5 +22,7 @@ namespace UnderSea.Model.Constants
         public static string BuyBuilding_BuildingNotExists = "Nem létezik ilyen épület.";
         public static string BuyBuilding_CountryNotExists = "Nem létezik ilyen ország.";
         public static string BuyBuilding_ActiveBuildingConstruction = "Már folyamatban van egy építés.";
+
+        public static string ChangeCountryName_Required = "Az ország nevének megadása kötelező.";
     }
 }

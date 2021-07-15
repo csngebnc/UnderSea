@@ -10,6 +10,7 @@ using UnderSea.Bll.Dtos.Event;
 using UnderSea.Bll.Services.Interfaces;
 using UnderSea.Bll.Validation.Exceptions;
 using UnderSea.Dal.Data;
+using UnderSea.Model.Constants;
 using UnderSea.Model.Models;
 
 namespace UnderSea.Bll.Services
@@ -139,7 +140,7 @@ namespace UnderSea.Bll.Services
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
             {
-                throw new InvalidParameterException("country", "Az ország nevének megadása kötelező.");
+                throw new InvalidParameterException("country", ExceptionMessageConstants.ChangeCountryName_Required);
             }
 
             var country = await _context.Countries
