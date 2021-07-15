@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:undersea/controllers/event_data_controller.dart';
 import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/network/providers/next_round_provider.dart';
@@ -69,5 +70,6 @@ class RoundController extends GetxController {
     battleController.getHistory();
     battleController.getAvailableUnits();
     battleController.getSpyingHistory();
+    Get.find<EventDataController>().reset();
   }
 }

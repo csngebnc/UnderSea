@@ -59,7 +59,9 @@ class _AttackPageState extends State<AttackPage> {
           itemCount = results.length * 2 + 2;
           return ListView.builder(
               controller: _scrollController,
-              itemCount: itemCount,
+              itemCount: controller.loadingList.value || results.isEmpty
+                  ? 1
+                  : itemCount,
               itemBuilder: (BuildContext context, int i) {
                 if (i == itemCount - 1) return SizedBox(height: 130);
                 if (i.isOdd) return UnderseaStyles.divider();
@@ -77,16 +79,45 @@ class _AttackPageState extends State<AttackPage> {
                                   .copyWith(fontSize: 18)),
                           SizedBox(height: 20),
                           UnderseaStyles.inputField(
-                            hint: Strings.username.tr,
-                            color: Color(0xFF657A9D),
-                            hintColor: UnderseaStyles.alternativeHintColor,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedIndex = null;
-                              });
-                              controller.onSearchChanged(value);
-                            },
-                          )
+                              hint: Strings.username.tr,
+                              color: Color(0xFF657A9D),
+                              hintColor: UnderseaStyles.alternativeHintColor,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedIndex = null;
+                                });
+                                controller.onSearchChanged(value);
+                              },
+                              validator: (string) {}),
+                          controller.loadingList.value
+                              ? Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(30.0),
+                                    child: const SizedBox(
+                                        height: 50,
+                                        width: 50,
+                                        child: CircularProgressIndicator()),
+                                  ),
+                                )
+                              : Container(),
+                          results.isEmpty && !controller.loadingList.value
+                              ? Center(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 50,
+                                      ),
+                                      Text('Nincs ilyen nevű felhasználó',
+                                          style: UnderseaStyles.listRegular
+                                              .copyWith(
+                                                  fontSize: 15,
+                                                  color: UnderseaStyles
+                                                      .underseaLogoColor)),
+                                      SizedBox(height: 20),
+                                    ],
+                                  ),
+                                )
+                              : Container()
                         ]),
                   );
                 }
@@ -94,6 +125,7 @@ class _AttackPageState extends State<AttackPage> {
                 var user = results[i ~/ 2 - 1];
 
                 return ListTile(
+                    visualDensity: VisualDensity(vertical: -4),
                     onTap: () {
                       setState(() {
                         i != _selectedIndex

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:undersea/controllers/battle_data_controller.dart';
 import 'package:undersea/controllers/building_data_controller.dart';
+import 'package:undersea/controllers/event_data_controller.dart';
 import 'package:undersea/controllers/upgrades_controller.dart';
 import 'package:undersea/controllers/user_data_controller.dart';
 import 'package:undersea/lang/strings.dart';
@@ -100,6 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Get.find<BuildingDataController>().reset();
                           Get.find<UpgradesController>().reset();
                           Get.find<BattleDataController>().reset();
+                          Get.find<EventDataController>().reset();
                           storage.remove(Constants.WINNER_SHOWN);
                           Get.off(LoginPage());
                         },

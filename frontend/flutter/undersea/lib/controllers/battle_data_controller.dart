@@ -25,6 +25,8 @@ class BattleDataController extends GetxController {
   int? countryToBeAttacked;
   BattleDataController(this._battleDataProvider);
 
+  Rx<bool> loadingList = false.obs;
+
   //AttackableUser stuff
   Rx<PagedResultOfAttackableUserDto?> attackableUsers = Rx(null);
   var searchText = ''.obs;
@@ -71,7 +73,7 @@ class BattleDataController extends GetxController {
     searchText.value = value;
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
-    attackableUserList.clear();
+
     //attackableUserList.value.clear();
   }
 
@@ -178,6 +180,9 @@ class BattleDataController extends GetxController {
   }
 
   getAttackableUsers() async {
+    loadingList = true.obs;
+    attackableUserList.clear();
+    update();
     try {
       if (attackableUsers.value != null &&
           attackableUsers.value!.allResultsCount <
@@ -197,6 +202,9 @@ class BattleDataController extends GetxController {
       }
     } catch (error) {
       log('$error');
+    } finally {
+      loadingList = false.obs;
+      update();
     }
   }
 

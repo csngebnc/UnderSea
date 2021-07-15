@@ -27,6 +27,8 @@ class UserDataController extends GetxController {
   Rx<bool> loggingIn = false.obs;
   Rx<bool> regging = false.obs;
 
+  Rx<bool> loadingList = false.obs;
+
   UserDataController(this._userDataProvider);
 
   Rx<PagedResultOfUserRankDto?> pagedRankList = Rx(null);
@@ -50,7 +52,6 @@ class UserDataController extends GetxController {
     pageNumber.value = 1;
     alreadyDownloadedPageNumber.value = 0;
 
-    rankList.clear();
     //rankList.value.clear();
   }
 
@@ -99,7 +100,7 @@ class UserDataController extends GetxController {
     update();
     try {
       final body =
-          'username=$username&password=$password&grant_type=password&client_id=undersea-angular&scope=openid+api-openid';
+          'username=$username&password=$password&grant_type=password&client_id=undersea-flutter&scope=openid+api-openid';
       final response = await _userDataProvider.login(body);
       if (response.statusCode == 200) {
         storage.write(Constants.TOKEN, response.body!.token);
@@ -124,27 +125,37 @@ class UserDataController extends GetxController {
     userInfoError = null.obs;
     userInfoLoading = true.obs;
     userInfoData = null.obs;
-    update();
+    await Future.delayed(const Duration(milliseconds: 10), () {
+      update();
+    });
     try {
       final response = await _userDataProvider.getUserInfo();
       if (response.statusCode == 200) {
         userInfoData = Rx(response.body);
-        userInfoLoading = false.obs;
-        update();
 
         storage.write(Constants.ROUND_NUM, userInfoData.value?.round);
       }
     } catch (error) {
       userInfoError = error.toString().obs;
       log('$error');
+    } finally {
+      userInfoLoading = false.obs;
+      await Future.delayed(const Duration(milliseconds: 10), () {
+        update();
+      });
     }
   }
 
   getRankList() async {
+    if (pagedRankList.value != null &&
+        pagedRankList.value!.allResultsCount <
+            alreadyDownloadedPageNumber.value * pageSize.value) return;
+    loadingList = true.obs;
+
     try {
-      if (pagedRankList.value != null &&
-          pagedRankList.value!.allResultsCount <
-              alreadyDownloadedPageNumber.value * pageSize.value) return;
+      await Future.delayed(const Duration(milliseconds: 10), () {
+        update();
+      });
       final response = await _userDataProvider.getRankList(pageSize.value,
           pageNumber.value, searchText.value.removeAllWhitespace);
       if (response.statusCode == 200) {
@@ -154,10 +165,14 @@ class UserDataController extends GetxController {
           rankList.value += pagedRankList.value?.results ?? [];
           alreadyDownloadedPageNumber.value = pageNumber.value;
         }
-        update();
       }
     } catch (error) {
       log('$error');
+    } finally {
+      loadingList = false.obs;
+      await Future.delayed(const Duration(milliseconds: 10), () {
+        update();
+      });
     }
   }
 

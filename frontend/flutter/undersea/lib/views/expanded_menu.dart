@@ -30,7 +30,7 @@ class ExpandedMenu extends StatelessWidget {
       list.add(UnderseaStyles.militaryIcon(
           BattleDataController.imageNameMap[element.name] ?? 'shark',
           element.count,
-          isSpy ? spiesCount! : actualSoldierMax));
+          isSpy ? (spiesCount ?? 0) : actualSoldierMax));
     });
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: list);
   }
