@@ -45,6 +45,11 @@ class _BuildingsTabState extends State<Buildings> {
             itemBuilder: (BuildContext context, int i) {
               return GetBuilder<BuildingDataController>(builder: (controller) {
                 if (i == 0) {
+                  return UnderseaStyles.infoPanel(
+                      Strings.buildings_manual_title.tr,
+                      Strings.buildings_manual_hint.tr);
+                }
+                if (i > buildingList.value.length) {
                   return controller.buildingInfoData.value.isEmpty
                       ? Center(
                           child: Padding(
@@ -55,11 +60,8 @@ class _BuildingsTabState extends State<Buildings> {
                                 child: CircularProgressIndicator()),
                           ),
                         )
-                      : UnderseaStyles.infoPanel(
-                          Strings.buildings_manual_title.tr,
-                          Strings.buildings_manual_hint.tr);
+                      : SizedBox(height: 100);
                 }
-                if (i > buildingList.value.length) return SizedBox(height: 100);
 
                 final buildingListValue = controller.buildingInfoData.value;
                 return _buildRow(i, buildingListValue);

@@ -50,24 +50,25 @@ class _MilitaryTabState extends State<Military> {
             itemBuilder: (BuildContext context, int i) {
               return GetBuilder<BattleDataController>(builder: (controller) {
                 if (i == 0) {
-                  return controller.unitTypesInfo.value.isEmpty
-                      ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(30.0),
-                            child: const SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: CircularProgressIndicator()),
-                          ),
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                              UnderseaStyles.infoPanel(
-                                  Strings.military_manual_title.tr,
-                                  Strings.military_manual_hint.tr),
-                              SizedBox(height: 25)
-                            ]);
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        UnderseaStyles.infoPanel(
+                            Strings.military_manual_title.tr,
+                            Strings.military_manual_hint.tr),
+                        SizedBox(height: 25),
+                        controller.unitTypesInfo.value.isEmpty
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(30.0),
+                                  child: const SizedBox(
+                                      height: 50,
+                                      width: 50,
+                                      child: CircularProgressIndicator()),
+                                ),
+                              )
+                            : Container()
+                      ]);
                 }
                 if (i > soldierList.value.length * 2 - 1) {
                   return SizedBox(height: 100);

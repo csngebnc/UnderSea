@@ -46,13 +46,6 @@ class _LoginPageState extends State<LoginPage> {
           });*/
         });
     final UserDataController controller = Get.find();
-    final loginButton = UnderseaStyles.elevatedButton(
-        text: Strings.login.tr,
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            controller.login(usernameController.text, passwordController.text);
-          }
-        });
 
     return Form(
         key: _formKey,
