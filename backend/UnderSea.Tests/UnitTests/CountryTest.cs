@@ -18,7 +18,7 @@ namespace UnderSea.Tests.UnitTests
     public class CountryTest : UnitTest
     {
         private readonly ICountryService service;
-        public CountryTest()
+        public CountryTest() : base()
         {
             service = new CountryService(_context,_mapper,identityService);
         }
