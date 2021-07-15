@@ -21,7 +21,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  var hasError = true;
+  var hasError = false;
   @override
   void dispose() {
     usernameController.dispose();
@@ -37,9 +37,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hint: Strings.username.tr,
       controller: usernameController,
       onChanged: (string) {
-        setState(() {
+        /*setState(() {
           hasError = !_formKey.currentState!.validate();
-        });
+        });*/
       },
     );
     final passwordField = UnderseaStyles.inputField(
@@ -47,9 +47,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
         isPassword: true,
         controller: passwordController,
         onChanged: (string) {
-          setState(() {
+          /* setState(() {
             hasError = !_formKey.currentState!.validate();
-          });
+          });*/
         },
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -67,9 +67,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
         isPassword: true,
         controller: confirmPasswordController,
         onChanged: (string) {
-          setState(() {
+          /*setState(() {
             hasError = !_formKey.currentState!.validate();
-          });
+          });*/
         },
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -86,9 +86,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
         hint: Strings.city_name_hint.tr,
         controller: citynameController,
         onChanged: (string) {
-          setState(() {
+          /* setState(() {
             hasError = !_formKey.currentState!.validate();
-          });
+          });*/
         },
         validator: (value) {
           if (value == null || value.isEmpty) {

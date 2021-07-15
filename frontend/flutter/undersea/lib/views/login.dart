@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  var hasError = true;
+  var hasError = false;
 
   @override
   void dispose() {
@@ -32,18 +32,18 @@ class _LoginPageState extends State<LoginPage> {
         hint: Strings.username.tr,
         controller: usernameController,
         onChanged: (string) {
-          setState(() {
+          /*setState(() {
             hasError = !_formKey.currentState!.validate();
-          });
+          });*/
         });
     final passwordField = UnderseaStyles.inputField(
         hint: Strings.password.tr,
         isPassword: true,
         controller: passwordController,
         onChanged: (string) {
-          setState(() {
+          /*setState(() {
             hasError = !_formKey.currentState!.validate();
-          });
+          });*/
         });
     final UserDataController controller = Get.find();
     final loginButton = UnderseaStyles.elevatedButton(
