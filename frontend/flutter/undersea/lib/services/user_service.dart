@@ -11,8 +11,8 @@ import 'package:undersea/models/response/paged_result_of_world_winner_dto.dart';
 import 'package:undersea/models/response/register_dto.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
 import 'package:undersea/models/response/user_rank_dto.dart';
+import 'package:undersea/modules/bottom_nav_bar/bottom_nav_bar_screen.dart';
 import 'package:undersea/network/providers/user_data_provider.dart';
-import 'package:undersea/views/bottom_nav_bar.dart';
 import 'package:undersea/widgets/gradient_button.dart';
 
 import '../core/constants.dart';
@@ -104,7 +104,8 @@ class UserService extends GetxController {
       final response = await _userDataProvider.login(body);
       if (response.statusCode == 200) {
         storage.write(Constants.TOKEN, response.body!.token);
-        Get.off(BottomNavBar());
+
+        Get.offNamed(BottomNavigationBarScreen.routeName);
       } else {
         Constants.snackbar(
             Strings.error_occurred.tr, Strings.invalid_username_password.tr);
@@ -114,7 +115,7 @@ class UserService extends GetxController {
       log('$error');
       Constants.snackbar(Strings.error.tr, Strings.something_went_wrong.tr);
     } finally {
-      //Get.off(BottomNavBar());
+      //Get.off(BottomNavigationBar());
       loggingIn = false.obs;
       update();
     }

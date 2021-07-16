@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/core/theme/colors.dart';
-import 'package:undersea/views/history_tabs/attack_history.dart';
-import 'package:undersea/views/history_tabs/event_log.dart';
-import 'package:undersea/views/history_tabs/spy_history.dart';
+import 'package:undersea/modules/history_tabs/attack_history.dart';
+import 'package:undersea/modules/history_tabs/event_log.dart';
+import 'package:undersea/modules/history_tabs/spy_history.dart';
 import 'package:undersea/widgets/tab_piece.dart';
 
 class HistoryTabBar extends StatelessWidget {

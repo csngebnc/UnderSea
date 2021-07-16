@@ -6,15 +6,15 @@ import 'package:undersea/network/providers/country_data_provider.dart';
 import 'package:undersea/network/providers/event_provider.dart';
 import 'package:undersea/network/providers/next_round_provider.dart';
 import 'package:undersea/network/providers/upgrade_data_provider.dart';
+import 'package:undersea/routes/app_router.dart';
 import 'package:undersea/services/battle_service.dart';
 import 'package:undersea/services/building_service.dart';
 import 'package:undersea/services/country_service.dart';
 import 'package:undersea/services/event_service.dart';
-import 'package:undersea/services/navbar_controller.dart';
 import 'package:undersea/services/round_service.dart';
 import 'package:undersea/services/upgrade_service.dart';
 import 'package:undersea/services/user_service.dart';
-import 'package:undersea/views/login.dart';
+import 'package:undersea/modules/login/login_screen.dart';
 
 import 'core/lang/app_translations.dart';
 import 'core/lang/strings.dart';
@@ -34,7 +34,6 @@ Future<void> initServices() async {
 
   Get.put(RoundService(Get.find()));
   var roundController = Get.find<RoundService>();
-  Get.put(BottomNavBarController());
   Get.put(UserDataProvider());
   Get.put(UserService(Get.find()));
   Get.put(CountryDataProvider());
@@ -67,8 +66,11 @@ class MyApp extends StatelessWidget {
       locale: AppTranslations.locale,
       fallbackLocale: AppTranslations.fallbackLocale,
       translations: AppTranslations(),
+      debugShowCheckedModeBanner: false,
       title: _title,
-      home: LoginPage(),
+      home: LoginScreen(),
+      getPages: AppRouter.routes,
+      initialRoute: AppRouter.INITIAL,
     );
   }
 }

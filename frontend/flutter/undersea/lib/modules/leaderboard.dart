@@ -4,12 +4,14 @@ import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/core/theme/colors.dart';
 import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/user_rank_dto.dart';
-import 'package:undersea/services/navbar_controller.dart';
+
 import 'package:undersea/services/user_service.dart';
 import 'package:undersea/widgets/image_icon.dart';
 import 'package:undersea/widgets/input_field.dart';
 import 'package:undersea/widgets/us_divider.dart';
 import 'package:undersea/widgets/us_progress_indicator.dart';
+
+import 'bottom_nav_bar/bottom_nav_bar_controller.dart';
 
 class Leaderboard extends StatefulWidget {
   Leaderboard({Key? key}) : super(key: key);
@@ -19,8 +21,8 @@ class Leaderboard extends StatefulWidget {
 }
 
 class _LeaderboardState extends State<Leaderboard> {
-  final BottomNavBarController navbarcontroller =
-      Get.find<BottomNavBarController>();
+  final BottomNavigationBarController navbarcontroller =
+      Get.find<BottomNavigationBarController>();
   var controller = Get.find<UserService>();
   late int itemCount;
   List<UserRankDto?> results = [];

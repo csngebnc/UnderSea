@@ -3,29 +3,26 @@ import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/core/theme/colors.dart';
 import 'package:undersea/services/battle_service.dart';
-import 'package:undersea/services/building_service.dart';
-import 'package:undersea/services/upgrade_service.dart';
-import 'package:undersea/views/city_tabs/buildings.dart';
-import 'package:undersea/views/city_tabs/military.dart';
-import 'package:undersea/views/city_tabs/upgrades.dart';
+import 'package:undersea/modules/attack_tabs/spying_tab.dart';
 import 'package:undersea/widgets/tab_piece.dart';
 
-class CityTabBar extends StatelessWidget {
-  CityTabBar() {
-    Get.find<UpgradeService>().getUpgradeDetails();
-    Get.find<BuildingService>().getBuildingDetails();
+import 'attacking_tab.dart';
+
+class AttackTabBar extends StatelessWidget {
+  AttackTabBar(this.onButtonPressed);
+  final Function onButtonPressed;
+
+  @override
+  Widget build(BuildContext context) {
     Get.find<BattleService>().getUnitTypes();
     Get.find<BattleService>().getAllUnits();
     Get.find<BattleService>().getSpies();
-  }
-  @override
-  Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
-        length: 3,
+        length: 2,
         child: Scaffold(
           appBar: PreferredSize(
-            preferredSize: Size(100.0, 100.0),
+            preferredSize: Size(60.0, 60.0),
             child: Container(
               height: 50,
               child: Material(
@@ -36,9 +33,8 @@ class CityTabBar extends StatelessWidget {
                   indicatorSize: TabBarIndicatorSize.label,
                   indicatorWeight: 3,
                   tabs: [
-                    TabPiece(Strings.my_city.tr),
-                    TabPiece(Strings.upgrades.tr),
-                    TabPiece(Strings.my_forces.tr),
+                    TabPiece(Strings.battle.tr),
+                    TabPiece(Strings.spying.tr),
                   ],
                 ),
               ),
@@ -46,9 +42,8 @@ class CityTabBar extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              Buildings(),
-              Upgrades(),
-              Military(),
+              AttackingTab(onButtonPressed: onButtonPressed),
+              SpyingTab(onButtonPressed: onButtonPressed),
             ],
           ),
         ),

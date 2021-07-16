@@ -21,7 +21,7 @@ class USText {
     fontWeight: FontWeight.bold,
   );
 
-  static const bottomNavbarTextStyle = TextStyle(
+  static const BottomNavigationBarTextStyle = TextStyle(
       color: USColors.navbarIconColor,
       fontFamily: 'Baloo 2',
       fontSize: 11,

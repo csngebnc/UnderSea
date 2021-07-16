@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/core/theme/colors.dart';
 import 'package:undersea/core/theme/text_styles.dart';
-import 'package:undersea/views/leaderboard.dart';
+import 'package:undersea/modules/leaderboard.dart';
 
 class LeaderboardButton extends StatelessWidget {
   const LeaderboardButton({Key? key, this.roundNumber, this.placement})

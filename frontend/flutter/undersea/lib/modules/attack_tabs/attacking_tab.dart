@@ -11,8 +11,9 @@ import 'package:undersea/models/response/attack_unit_dto.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/send_attack_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
+import 'package:undersea/modules/bottom_nav_bar/bottom_nav_bar_controller.dart';
 import 'package:undersea/services/battle_service.dart';
-import 'package:undersea/services/navbar_controller.dart';
+
 import 'package:undersea/widgets/asset_icon.dart';
 import 'package:undersea/widgets/list_info_panel.dart';
 import 'package:undersea/widgets/tab_skeleton.dart';
@@ -146,7 +147,7 @@ class _AttackingTabState extends State<AttackingTab> {
             controller.attack(SendAttackDto(
                 attackedCountryId: controller.countryToBeAttacked!,
                 units: units));
-            Get.find<BottomNavBarController>().selectedTab.value = 0;
+            Get.find<BottomNavigationBarController>().selectedTab.value = 0;
           },
           list: ListView.builder(
               itemCount: itemCount,

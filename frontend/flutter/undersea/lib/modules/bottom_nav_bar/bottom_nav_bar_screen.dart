@@ -3,21 +3,21 @@ import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/core/theme/colors.dart';
 import 'package:undersea/core/theme/text_styles.dart';
-import 'package:undersea/services/navbar_controller.dart';
-import 'package:undersea/views/attack_page.dart';
-import 'package:undersea/views/city_tabs/city_tab_bar.dart';
-import 'package:undersea/views/history_tabs/history_tab_bar.dart';
-import 'package:undersea/views/profile.dart';
+import 'package:undersea/modules/bottom_nav_bar/bottom_nav_bar_controller.dart';
+import 'package:undersea/modules/city_tabs/city_tab_bar.dart';
+import 'package:undersea/modules/history_tabs/history_tab_bar.dart';
 import 'package:undersea/widgets/app_bar_title.dart';
 import 'package:undersea/widgets/asset_icon.dart';
 import 'package:undersea/widgets/image_icon.dart';
 
-import 'home_page.dart';
+import '../attack_page.dart';
+import '../home_page.dart';
+import '../profile.dart';
 
-class BottomNavBar extends StatelessWidget {
-  BottomNavBar({Key? key}) : super(key: key);
-  final BottomNavBarController controller = Get.find<BottomNavBarController>();
-  static final List<Widget> _appbarTitleOptions = <Widget>[
+class BottomNavigationBarScreen extends GetView<BottomNavigationBarController> {
+  static const routeName = 'home';
+
+  final List<Widget> _appbarTitleOptions = <Widget>[
     SizedBox(
       height: 35,
       width: 100,
@@ -28,25 +28,21 @@ class BottomNavBar extends StatelessWidget {
     AppBarTitle(text: Strings.attack.tr),
     AppBarTitle(text: Strings.my_forces.tr),
   ];
-  static final List<Widget> _widgetOptions = <Widget>[
+  final List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     CityTabBar(),
     AttackPage(),
     HistoryTabBar(() {})
   ];
 
-  void _onItemTapped(int index) {
-    controller.selectedTab.value = index;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
         appBar: AppBar(
-          toolbarHeight: controller.selectedTab.value == 0 ? 85 : 60,
+          toolbarHeight: controller.tabIndex == 0 ? 85 : 60,
           backgroundColor: USColors.hintColor,
           actions: [
-            if (controller.selectedTab.value == 0)
+            if (controller.tabIndex == 0)
               Padding(
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: GestureDetector(
@@ -57,10 +53,10 @@ class BottomNavBar extends StatelessWidget {
                           height: 40,
                           child: AssetIcon(iconName: "profile", iconSize: 42))))
           ],
-          title: _appbarTitleOptions.elementAt(controller.selectedTab.value),
+          title: _appbarTitleOptions[controller.tabIndex],
         ),
         body: Center(
-          child: _widgetOptions.elementAt(controller.selectedTab.value),
+          child: _widgetOptions[controller.tabIndex],
         ),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -89,17 +85,17 @@ class BottomNavBar extends StatelessWidget {
                 label: Strings.my_forces.tr,
               ),
             ],
-            currentIndex: controller.selectedTab.value,
+            currentIndex: controller.tabIndex,
             iconSize: 30,
             backgroundColor: Colors.transparent,
             selectedItemColor: USColors.navbarIconColor,
-            onTap: _onItemTapped,
+            onTap: controller.setIndex,
             type: BottomNavigationBarType.fixed,
             showUnselectedLabels: true,
             elevation: 0,
-            selectedLabelStyle: USText.bottomNavbarTextStyle,
-            unselectedLabelStyle: USText.bottomNavbarTextStyle
-                .copyWith(color: USColors.unselectedNavbarIconColor),
+            selectedLabelStyle: USText.BottomNavigationBarTextStyle,
+            unselectedLabelStyle: USText.BottomNavigationBarTextStyle.copyWith(
+                color: USColors.unselectedNavbarIconColor),
           ),
         )));
   }

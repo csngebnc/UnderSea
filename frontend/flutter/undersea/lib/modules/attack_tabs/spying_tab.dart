@@ -5,8 +5,9 @@ import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/core/theme/colors.dart';
 import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/send_spy_dto.dart';
+import 'package:undersea/modules/bottom_nav_bar/bottom_nav_bar_controller.dart';
 import 'package:undersea/services/battle_service.dart';
-import 'package:undersea/services/navbar_controller.dart';
+
 import 'package:undersea/widgets/asset_icon.dart';
 import 'package:undersea/widgets/list_info_panel.dart';
 import 'package:undersea/widgets/tab_skeleton.dart';
@@ -38,7 +39,7 @@ class _SpyingTabState extends State<SpyingTab> {
             controller.sendSpies(SendSpyDto(
                 spiedCountryId: controller.countryToBeAttacked!,
                 spyCount: spyNumber));
-            Get.find<BottomNavBarController>().selectedTab.value = 0;
+            Get.find<BottomNavigationBarController>().selectedTab.value = 0;
           },
           list: Column(
             children: [

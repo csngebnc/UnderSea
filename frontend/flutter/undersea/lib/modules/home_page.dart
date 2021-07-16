@@ -7,7 +7,7 @@ import 'package:undersea/services/battle_service.dart';
 import 'package:undersea/services/country_service.dart';
 import 'package:undersea/services/round_service.dart';
 import 'package:undersea/services/user_service.dart';
-import 'package:undersea/views/expandable_menu.dart';
+import 'package:undersea/modules/expandable_menu.dart';
 import 'package:undersea/widgets/gradient_button.dart';
 import 'package:undersea/widgets/leaderboard_button.dart';
 import 'package:undersea/widgets/positioned_building_image.dart';

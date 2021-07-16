@@ -11,7 +11,7 @@ import 'package:undersea/services/event_service.dart';
 import 'package:undersea/services/upgrade_service.dart';
 import 'package:undersea/services/user_service.dart';
 import 'package:undersea/widgets/editable_text.dart';
-import 'package:undersea/views/login.dart';
+import 'package:undersea/modules/login/login_screen.dart';
 import 'package:undersea/widgets/asset_icon.dart';
 import 'package:undersea/widgets/us_divider.dart';
 
@@ -94,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Get.find<BattleService>().reset();
                           Get.find<EventService>().reset();
                           storage.remove(Constants.WINNER_SHOWN);
-                          Get.off(LoginPage());
+                          Get.off(LoginScreen());
                         },
                         child: Text(Strings.logout.tr,
                             style: USText.buttonTextStyle.copyWith(

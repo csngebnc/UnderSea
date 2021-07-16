@@ -9,14 +9,14 @@ class TabSkeleton extends StatelessWidget {
       {Key? key,
       this.buttonText = Strings.buy_button,
       this.isDisabled = true,
-      this.onButtonPressed,
+      required this.onButtonPressed,
       required this.list})
       : super(key: key);
 
   final Widget list;
   final String buttonText;
   final bool isDisabled;
-  final Function? onButtonPressed;
+  final void Function() onButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class TabSkeleton extends StatelessWidget {
                         alignment: Alignment.center,
                         child: ToggleableButton(
                           text: buttonText.tr,
-                          onPressed: onButtonPressed?.call,
+                          onPressed: onButtonPressed,
                           isDisabled: isDisabled,
                         ))))
           ],
