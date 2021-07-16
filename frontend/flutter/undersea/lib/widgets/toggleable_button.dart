@@ -1,34 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 
-class ToggleableElevatedButton extends StatelessWidget {
+class ToggleableButton extends StatelessWidget {
   final String text;
-  final Function onPressed;
+  final VoidCallback onPressed;
   final bool isDisabled;
-  ToggleableElevatedButton(
+  ToggleableButton(
       {required this.text, required this.onPressed, required this.isDisabled});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        if (isDisabled) {
-          () {};
-        } else {
-          onPressed();
-        }
-      },
+      onPressed: isDisabled ? null : onPressed,
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.zero,
           elevation: 10,
-          shadowColor: UnderseaStyles.shadowColor,
+          shadowColor: USColors.shadowColor,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(200))),
       child: Ink(
         decoration: BoxDecoration(
             gradient: isDisabled
-                ? LinearGradient(colors: UnderseaStyles.opaqueGradientColors)
-                : UnderseaStyles.buttonGradient,
+                ? USColors.opaqueButtonGradient
+                : USColors.buttonGradient,
             borderRadius: BorderRadius.circular(200)),
         child: Container(
           width: 200,
@@ -36,7 +31,7 @@ class ToggleableElevatedButton extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             text,
-            style: UnderseaStyles.buttonTextStyle.copyWith(fontSize: 19),
+            style: USText.buttonTextStyle.copyWith(fontSize: 19),
           ),
         ),
       ),

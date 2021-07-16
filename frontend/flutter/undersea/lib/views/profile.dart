@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
 import 'package:undersea/services/battle_service.dart';
 import 'package:undersea/services/building_service.dart';
 import 'package:undersea/services/event_service.dart';
 import 'package:undersea/services/upgrade_service.dart';
 import 'package:undersea/services/user_service.dart';
-import 'package:undersea/styles/style_constants.dart';
-import 'package:undersea/views/editable_text.dart';
+import 'package:undersea/widgets/editable_text.dart';
 import 'package:undersea/views/login.dart';
+import 'package:undersea/widgets/asset_icon.dart';
+import 'package:undersea/widgets/us_divider.dart';
 
 import '../core/constants.dart';
 
@@ -34,10 +37,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: UnderseaStyles.menuDarkBlue,
+        backgroundColor: USColors.menuDarkBlue,
         appBar: AppBar(
           title: Text(Strings.profile.tr),
-          backgroundColor: UnderseaStyles.hintColor,
+          backgroundColor: USColors.hintColor,
         ),
         body: SingleChildScrollView(
           child: Column(children: [
@@ -46,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(
                 height: 40,
               ),
-              UnderseaStyles.assetIcon("profile", iconSize: 70),
+              AssetIcon(iconName: "profile", iconSize: 70),
               SizedBox(
                 height: 25,
               ),
@@ -54,30 +57,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 final userInfoData = controller.userInfoData.value;
                 if (userInfoData != null) {
                   return Text(userInfoData.name!,
-                      style: UnderseaStyles.inputTextStyle.copyWith(
+                      style: USText.inputTextStyle.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 17));
-                }
-                /*else if (snapshot.hasError)
-                      return Text('error',
-                          style: UnderseaStyles.inputTextStyle.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 21));*/
-                else {
+                } else {
                   return CircularProgressIndicator();
-                  /*Text('default',
-                      style: UnderseaStyles.inputTextStyle.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 21));*/
                 }
               }),
               SizedBox(
                 height: 10,
               ),
-              UnderseaStyles.divider(),
+              USDivider(),
               SizedBox(
                 height: 10,
               ),
@@ -89,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: EdgeInsets.all(10),
                     child: CityNameEditableText(),
                   ),
-                  UnderseaStyles.divider(),
+                  USDivider(),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
@@ -106,13 +97,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           Get.off(LoginPage());
                         },
                         child: Text(Strings.logout.tr,
-                            style: UnderseaStyles.buttonTextStyle.copyWith(
-                                color: UnderseaStyles.underseaLogoColor,
+                            style: USText.buttonTextStyle.copyWith(
+                                color: USColors.underseaLogoColor,
                                 fontSize: 17)),
                       ),
                     ),
                   ),
-                  UnderseaStyles.divider()
+                  USDivider()
                 ]))
           ]),
         ));

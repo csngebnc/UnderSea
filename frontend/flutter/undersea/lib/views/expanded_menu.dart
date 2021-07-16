@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/building_info_dto.dart';
 import 'package:undersea/models/response/country_details_dto.dart';
 import 'package:undersea/services/battle_service.dart';
-import 'package:undersea/services/building_service.dart';
 import 'package:undersea/services/country_service.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/building_icon.dart';
+import 'package:undersea/widgets/military_icon.dart';
+import 'package:undersea/widgets/resource_icon.dart';
 
 class ExpandedMenu extends StatelessWidget {
   ExpandedMenu();
@@ -16,10 +18,10 @@ class ExpandedMenu extends StatelessWidget {
     final spiesCount = Get.find<BattleService>().spiesInfo.value?.count;
 
     return units
-        .map((e) => UnderseaStyles.militaryIcon(
-            BattleService.imageNameMap[e.name] ?? 'shark',
-            e.count,
-            e.name == 'Felfedező'
+        .map((e) => MilitaryIcon(
+            assetName: Constants.unitNameMap[e.name] ?? 'shark',
+            current: e.count,
+            max: e.name == 'Felfedező'
                 ? (spiesCount ?? 0)
                 : allUnits
                     .where((a) => a.id == e.id)
@@ -29,18 +31,18 @@ class ExpandedMenu extends StatelessWidget {
 
   List<Widget> _enumerateBuildings(List<BuildingInfoDto> buildingDtos) {
     return buildingDtos
-        .map((e) => UnderseaStyles.buildingIcon(
-            BuildingService.imageNameMap[e.name] ?? 'zatonyvar',
-            e.buildingsCount))
+        .map((e) => BuildingIcon(
+            assetName: Constants.buildingNameMap[e.name] ?? 'zatonyvar',
+            amount: e.buildingsCount))
         .toList();
   }
 
   List<Widget> _enumerateResources(CountryDetailsDto? countryDetails) {
     return countryDetails?.materials
-            ?.map((e) => UnderseaStyles.resourceIcon(
-                UnderseaStyles.resourceNamesMap[e.name] ?? 'stone',
-                e.amount,
-                e.production))
+            ?.map((e) => ResourceIcon(
+                assetName: Constants.resourceNamesMap[e.name] ?? 'stone',
+                currentAmount: e.amount,
+                productionPerRound: e.production))
             .toList() ??
         [];
   }

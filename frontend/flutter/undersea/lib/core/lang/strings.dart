@@ -81,4 +81,8 @@ class Strings {
   static const empty_field = 'empty_field';
   static const events = 'events';
   static const no_user_named_this_way = 'no_user_named_this_way';
+  static const no_element = 'no_element';
+  static const new_game_has_begun = 'new_game_has_begun';
+  static const winner_of_previous_game = 'winner_of_previous_game';
+  static const surprising_event = 'surprising_event';
 }

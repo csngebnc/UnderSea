@@ -3,14 +3,19 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/attack_unit_dto.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/send_attack_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
 import 'package:undersea/services/battle_service.dart';
 import 'package:undersea/services/navbar_controller.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/asset_icon.dart';
+import 'package:undersea/widgets/list_info_panel.dart';
+import 'package:undersea/widgets/tab_skeleton.dart';
 
 class AttackingTab extends StatefulWidget {
   final Function onButtonPressed;
@@ -66,8 +71,7 @@ class _AttackingTabState extends State<AttackingTab> {
                         left: 25,
                       ),
                       child: Text(e.level.toString(),
-                          style:
-                              UnderseaStyles.listRegular.copyWith(height: 1.2)),
+                          style: USText.listRegular.copyWith(height: 1.2)),
                     ),
                     Container(
                       height: 20,
@@ -85,7 +89,7 @@ class _AttackingTabState extends State<AttackingTab> {
                         },
                         min: 0,
                         max: e.count.toDouble(),
-                        activeColor: UnderseaStyles.underseaLogoColor,
+                        activeColor: USColors.underseaLogoColor,
                         inactiveColor: Color(0x883B7DBD),
                       ),
                     ),
@@ -94,8 +98,7 @@ class _AttackingTabState extends State<AttackingTab> {
                         left: 15,
                       ),
                       child: Text('${sliderValues[id]?[e.level]}/${e.count}',
-                          style:
-                              UnderseaStyles.listRegular.copyWith(height: 1.2)),
+                          style: USText.listRegular.copyWith(height: 1.2)),
                     ),
                   ],
                 ),
@@ -123,7 +126,7 @@ class _AttackingTabState extends State<AttackingTab> {
         }
       }
 
-      return UnderseaStyles.tabSkeleton(
+      return TabSkeleton(
           buttonText: Strings.lets_attack,
           isDisabled: !_canAttack(),
           onButtonPressed: () {
@@ -158,7 +161,7 @@ class _AttackingTabState extends State<AttackingTab> {
                           children: [
                             Icon(
                               Icons.arrow_back,
-                              color: UnderseaStyles.underseaLogoColor,
+                              color: USColors.underseaLogoColor,
                               size: 35,
                             ),
                             TextButton(
@@ -166,17 +169,16 @@ class _AttackingTabState extends State<AttackingTab> {
                                 widget.onButtonPressed();
                               },
                               child: Text(Strings.back.tr,
-                                  style: UnderseaStyles.buttonTextStyle
-                                      .copyWith(
-                                          color:
-                                              UnderseaStyles.underseaLogoColor,
-                                          fontSize: 20)),
+                                  style: USText.buttonTextStyle.copyWith(
+                                      color: USColors.underseaLogoColor,
+                                      fontSize: 20)),
                             )
                           ],
                         ),
                       ),
-                      UnderseaStyles.infoPanel(
-                          Strings.second_step.tr, Strings.unit_select.tr,
+                      ListInfoPanel(
+                          title: Strings.second_step.tr,
+                          hint: Strings.unit_select.tr,
                           padding: EdgeInsets.fromLTRB(20, 10, 0, 0)),
                       SizedBox(
                         height: 20,
@@ -196,7 +198,7 @@ class _AttackingTabState extends State<AttackingTab> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(actualSoldier.name,
-                              style: UnderseaStyles.listBold
+                              style: USText.listBold
                                   .copyWith(height: 1.2, fontSize: 16)),
                           SizedBox(
                             height: 10,
@@ -206,8 +208,9 @@ class _AttackingTabState extends State<AttackingTab> {
                               SizedBox(
                                 height: 70,
                                 width: 70,
-                                child: UnderseaStyles.assetIcon(BattleService
-                                    .imageNameMap[actualSoldier.name]!),
+                                child: AssetIcon(
+                                    iconName: Constants
+                                        .buildingNameMap[actualSoldier.name]!),
                               ),
                               /*Expanded(
                                 child: */

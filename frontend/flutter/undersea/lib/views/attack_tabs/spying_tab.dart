@@ -2,10 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/send_spy_dto.dart';
 import 'package:undersea/services/battle_service.dart';
 import 'package:undersea/services/navbar_controller.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/asset_icon.dart';
+import 'package:undersea/widgets/list_info_panel.dart';
+import 'package:undersea/widgets/tab_skeleton.dart';
 
 class SpyingTab extends StatefulWidget {
   final Function onButtonPressed;
@@ -27,7 +31,7 @@ class _SpyingTabState extends State<SpyingTab> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<BattleService>(builder: (controller) {
-      return UnderseaStyles.tabSkeleton(
+      return TabSkeleton(
           buttonText: Strings.send.tr,
           isDisabled: !_canAttack(),
           onButtonPressed: () {
@@ -44,7 +48,7 @@ class _SpyingTabState extends State<SpyingTab> {
                   children: [
                     Icon(
                       Icons.arrow_back,
-                      color: UnderseaStyles.underseaLogoColor,
+                      color: USColors.underseaLogoColor,
                       size: 35,
                     ),
                     TextButton(
@@ -52,17 +56,17 @@ class _SpyingTabState extends State<SpyingTab> {
                         widget.onButtonPressed();
                       },
                       child: Text(Strings.back.tr,
-                          style: UnderseaStyles.buttonTextStyle.copyWith(
-                              color: UnderseaStyles.underseaLogoColor,
-                              fontSize: 20)),
+                          style: USText.buttonTextStyle.copyWith(
+                              color: USColors.underseaLogoColor, fontSize: 20)),
                     )
                   ],
                 ),
               ),
               Align(
                 alignment: Alignment.centerLeft,
-                child: UnderseaStyles.infoPanel(
-                    Strings.second_step.tr, Strings.spying_second_step.tr,
+                child: ListInfoPanel(
+                    title: Strings.second_step.tr,
+                    hint: Strings.spying_second_step.tr,
                     padding: EdgeInsets.fromLTRB(20, 10, 0, 0)),
               ),
               SizedBox(
@@ -71,7 +75,7 @@ class _SpyingTabState extends State<SpyingTab> {
               SizedBox(
                 height: 70,
                 width: 70,
-                child: UnderseaStyles.assetIcon('dora'),
+                child: AssetIcon(iconName: 'dora'),
               ),
               SizedBox(
                 height: 10,
@@ -81,11 +85,11 @@ class _SpyingTabState extends State<SpyingTab> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(Strings.spy.tr,
-                        style: UnderseaStyles.listBold
+                        style: USText.listBold
                             .copyWith(height: 1.2, fontSize: 16)),
                     SizedBox(height: 5),
                     Text('$spyNumber/${controller.spiesInfo.value!.count}',
-                        style: UnderseaStyles.listRegular
+                        style: USText.listRegular
                             .copyWith(height: 1.2, fontSize: 15)),
                     SizedBox(height: 8),
                     Container(
@@ -100,7 +104,7 @@ class _SpyingTabState extends State<SpyingTab> {
                         },
                         min: 0,
                         max: controller.spiesInfo.value!.count.toDouble(),
-                        activeColor: UnderseaStyles.underseaLogoColor,
+                        activeColor: USColors.underseaLogoColor,
                         inactiveColor: Color(0x883B7DBD),
                       ),
                     ),

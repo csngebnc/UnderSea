@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/core/theme/colors.dart';
 import 'package:undersea/views/history_tabs/attack_history.dart';
 import 'package:undersea/views/history_tabs/event_log.dart';
 import 'package:undersea/views/history_tabs/spy_history.dart';
+import 'package:undersea/widgets/tab_piece.dart';
 
 class HistoryTabBar extends StatelessWidget {
   HistoryTabBar(this.onButtonPressed);
@@ -21,16 +22,16 @@ class HistoryTabBar extends StatelessWidget {
             child: Container(
               height: 50,
               child: Material(
-                color: UnderseaStyles.menuDarkBlue,
+                color: USColors.menuDarkBlue,
                 child: TabBar(
-                  indicatorColor: UnderseaStyles.underseaLogoColor,
+                  indicatorColor: USColors.underseaLogoColor,
                   indicatorPadding: EdgeInsets.zero,
                   indicatorSize: TabBarIndicatorSize.label,
                   indicatorWeight: 3,
                   tabs: [
-                    UnderseaStyles.tab(Strings.battle.tr),
-                    UnderseaStyles.tab(Strings.spying.tr),
-                    UnderseaStyles.tab(Strings.events.tr)
+                    TabPiece(Strings.battle.tr),
+                    TabPiece(Strings.spying.tr),
+                    TabPiece(Strings.events.tr)
                   ],
                 ),
               ),

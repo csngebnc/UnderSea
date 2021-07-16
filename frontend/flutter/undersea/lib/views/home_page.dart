@@ -2,13 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
 import 'package:undersea/services/battle_service.dart';
-import 'package:undersea/services/building_service.dart';
 import 'package:undersea/services/country_service.dart';
 import 'package:undersea/services/round_service.dart';
 import 'package:undersea/services/user_service.dart';
-import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/expandable_menu.dart';
+import 'package:undersea/widgets/gradient_button.dart';
+import 'package:undersea/widgets/leaderboard_button.dart';
+import 'package:undersea/widgets/positioned_building_image.dart';
+import 'package:undersea/widgets/us_progress_indicator.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -48,8 +51,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     if (hasCannon) {
-      buildings.add(UnderseaStyles.building(
-          BuildingService.imageNameMap['Szonárágyú']!,
+      buildings.add(PositionedBuildingImage(
+          name: Constants.buildingNameMap['Szonárágyú']!,
           top: tops.last,
           left: lefts.last));
     }
@@ -57,8 +60,8 @@ class _HomePageState extends State<HomePage> {
     if (buildingList != null) {
       for (int i = 0; i < buildingList.length; i++) {
         if (buildingList[i].buildingsCount >= 1) {
-          buildings.add(UnderseaStyles.building(
-              BuildingService.imageNameMap[buildingList[i].name]!,
+          buildings.add(PositionedBuildingImage(
+              name: Constants.buildingNameMap[buildingList[i].name]!,
               top: tops[i],
               left: lefts[i]));
         }
@@ -82,19 +85,19 @@ class _HomePageState extends State<HomePage> {
             final userInfoData = controller.userInfoData.value;
 
             if (userInfoData != null) {
-              return UnderseaStyles.leaderboardButton(
+              return LeaderboardButton(
                   roundNumber: userInfoData.round,
                   placement: userInfoData.placement);
             } else if (controller.userInfoLoading.value) {
-              return UnderseaStyles.leaderboardButton();
+              return LeaderboardButton();
             } else {
-              return CircularProgressIndicator();
+              return USProgressIndicator();
             }
           }),
           SizedBox(
             height: 20,
           ),
-          UnderseaStyles.elevatedButton(
+          GradientButton(
               text: 'Kör++',
               width: 100,
               height: 50,

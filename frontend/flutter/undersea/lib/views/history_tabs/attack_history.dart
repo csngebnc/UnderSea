@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/logged_attack_dto.dart';
 import 'package:undersea/services/battle_service.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/us_divider.dart';
+import 'package:undersea/widgets/us_progress_indicator.dart';
 
 class AttackHistoryPage extends StatefulWidget {
   @override
@@ -38,7 +42,7 @@ class _AttackHistoryPageState extends State<AttackHistoryPage> {
   Widget build(BuildContext context) {
     return Expanded(
         child: Container(
-            decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
+            decoration: BoxDecoration(color: USColors.menuDarkBlue),
             child: GetBuilder<BattleService>(builder: (controller) {
               results = controller.attackLogsList.toList();
               itemCount =
@@ -49,11 +53,11 @@ class _AttackHistoryPageState extends State<AttackHistoryPage> {
                   itemBuilder: (BuildContext context, int i) {
                     if (i == 0) {
                       return controller.loadingList.value
-                          ? UnderseaStyles.listProgressIndicator()
+                          ? USProgressIndicator()
                           : SizedBox(height: 10);
                     }
                     if (i.isEven) {
-                      return UnderseaStyles.divider();
+                      return USDivider();
                     } else {
                       return _buildRow(i, results);
                     }
@@ -68,12 +72,12 @@ class _AttackHistoryPageState extends State<AttackHistoryPage> {
       children: [
         Text(
             (actualAttack?.attackedCountryName ?? '') +
-                ' - ${UnderseaStyles.outcomeMap[actualAttack?.outcome]}',
-            style: UnderseaStyles.listBold),
+                ' - ${Constants.outcomeMap[actualAttack?.outcome]}',
+            style: USText.listBold),
         ...actualAttack?.units
                 ?.map((e) => Text(
                       '${e.name} (${e.level}): ${e.count}',
-                      style: UnderseaStyles.listRegular.copyWith(height: 2),
+                      style: USText.listRegular.copyWith(height: 2),
                     ))
                 .toList() ??
             [],

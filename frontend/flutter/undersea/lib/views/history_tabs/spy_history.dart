@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/spy_report_dto.dart';
 import 'package:undersea/services/battle_service.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/us_divider.dart';
+import 'package:undersea/widgets/us_progress_indicator.dart';
 
 class SpyingHistoryPage extends StatefulWidget {
   @override
@@ -40,7 +44,7 @@ class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
   Widget build(BuildContext context) {
     return Expanded(
         child: Container(
-            decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
+            decoration: BoxDecoration(color: USColors.menuDarkBlue),
             child: GetBuilder<BattleService>(builder: (controller) {
               results = controller.spyLogsList.toList();
               return ListView.builder(
@@ -49,20 +53,20 @@ class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
                   itemBuilder: (BuildContext context, int i) {
                     if (i == 0) {
                       return controller.loadingList.value
-                          ? UnderseaStyles.listProgressIndicator()
+                          ? USProgressIndicator()
                           : results.isEmpty
                               ? Column(
                                   children: [
                                     SizedBox(height: 10),
-                                    Text('Nincs megjeleníthető elem',
-                                        style: UnderseaStyles.listBold
+                                    Text(Strings.no_element.tr,
+                                        style: USText.listBold
                                             .copyWith(fontSize: 13)),
                                   ],
                                 )
                               : SizedBox(height: 10);
                     }
                     if (i.isEven) {
-                      return UnderseaStyles.divider();
+                      return USDivider();
                     } else {
                       return _buildRow(i, results);
                     }
@@ -72,7 +76,7 @@ class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
 
   Widget _buildRow(int i, List<SpyReportDto?> reportList) {
     var report = reportList.elementAt(i ~/ 2);
-    var outcome = UnderseaStyles.outcomeMap[report?.outCome];
+    var outcome = Constants.outcomeMap[report?.outCome];
     return Padding(
         padding: EdgeInsets.only(left: 20, right: 30),
         child: Column(
@@ -81,23 +85,22 @@ class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
             Row(
               children: [
                 Text(report?.spiedCountryName ?? '',
-                    style: UnderseaStyles.listBold.copyWith(fontSize: 16)),
+                    style: USText.listBold.copyWith(fontSize: 16)),
                 Expanded(
                   child: Container(),
                 ),
                 Text(Strings.defense_points.tr,
-                    style: UnderseaStyles.listBold.copyWith(fontSize: 15))
+                    style: USText.listBold.copyWith(fontSize: 15))
               ],
             ),
             Row(
               children: [
-                Text(outcome!,
-                    style: UnderseaStyles.listRegular.copyWith(height: 2)),
+                Text(outcome!, style: USText.listRegular.copyWith(height: 2)),
                 Expanded(
                   child: Container(),
                 ),
                 Text('${report?.defensePoints ?? '?'}',
-                    style: UnderseaStyles.listRegular.copyWith(
+                    style: USText.listRegular.copyWith(
                       height: 2,
                     )),
               ],

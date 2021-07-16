@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
 import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/attackable_user_dto.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
@@ -14,7 +15,6 @@ import 'package:undersea/models/response/send_spy_dto.dart';
 import 'package:undersea/models/response/spy_report_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
 import 'package:undersea/network/providers/battle_data_provider.dart';
-import 'package:undersea/styles/style_constants.dart';
 
 import 'country_service.dart';
 
@@ -50,14 +50,6 @@ class BattleService extends GetxController {
   Rx<BattleUnitDto?> spiesInfo = Rx(null);
 
   Rx<List<UnitDto>> unitTypesInfo = Rx([]);
-
-  static const imageNameMap = {
-    'Lézercápa': 'shark',
-    'Rohamfóka': 'seal',
-    'Csatacsikó': 'seahorse',
-    'Felfedező': 'dora',
-    'Hadvezér': 'obiwan'
-  };
 
   @override
   void onInit() {
@@ -116,7 +108,7 @@ class BattleService extends GetxController {
     try {
       final response = await _battleDataProvider.attack(attackData.toJson());
       if (response.statusCode == 200) {
-        UnderseaStyles.snackbar(
+        Constants.snackbar(
             'Sikeres támadás!', 'Az egységeidet elküldted támadni');
         loggedAttacks = Rx(null);
         attackLogPageNumber.value = 1;
@@ -137,7 +129,7 @@ class BattleService extends GetxController {
     try {
       final response = await _battleDataProvider.sendSpies(spyData.toJson());
       if (response.statusCode == 200) {
-        UnderseaStyles.snackbar(
+        Constants.snackbar(
             Strings.send_spies_title.tr, Strings.send_spies_body.tr);
         spyingHistory = Rx(null);
         spyLogPageNumber.value = 1;
@@ -274,7 +266,7 @@ class BattleService extends GetxController {
         getUnitTypes();
         getSpies();
         Get.find<CountryService>().getCountryDetails();
-        UnderseaStyles.snackbar(
+        Constants.snackbar(
             Strings.successful_purchase.tr, Strings.new_units.tr);
       }
     } catch (error) {

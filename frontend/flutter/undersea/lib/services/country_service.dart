@@ -2,10 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/country_details_dto.dart';
 import 'package:undersea/network/providers/country_data_provider.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/gradient_button.dart';
 
 class CountryService extends GetxController {
   final CountryDataProvider _countryDataProvider;
@@ -32,9 +35,9 @@ class CountryService extends GetxController {
         var event = countryDetailsData.value?.event;
         if (event != null && !eventWindowShown) {
           Get.defaultDialog(
-              title: "Váratlan esemény",
-              backgroundColor: UnderseaStyles.hintColor,
-              titleStyle: UnderseaStyles.listBold.copyWith(fontSize: 16),
+              title: Strings.surprising_event.tr,
+              backgroundColor: USColors.hintColor,
+              titleStyle: USText.listBold.copyWith(fontSize: 16),
               barrierDismissible: true,
               radius: 20,
               content: Padding(
@@ -47,19 +50,18 @@ class CountryService extends GetxController {
                         children: [
                           SizedBox(
                             child: Image.asset(
-                              UnderseaStyles.randomEventImageMap[event.name]!,
+                              Constants.randomEventImageMap[event.name]!,
                               width: 130,
                               height: 130,
                             ),
                           ),
                           SizedBox(height: 10),
-                          Text(event.name!, style: UnderseaStyles.listBold),
+                          Text(event.name!, style: USText.listBold),
                           SizedBox(height: 5),
                           for (var effect in event.effects!)
-                            Text(effect.name!,
-                                style: UnderseaStyles.listRegular),
+                            Text(effect.name!, style: USText.listRegular),
                           Expanded(child: Container()),
-                          UnderseaStyles.elevatedButton(
+                          GradientButton(
                               text: 'Ok',
                               width: 100,
                               height: 40,
@@ -89,17 +91,12 @@ class CountryService extends GetxController {
       if (response.statusCode == 200) {
         countryName = Rx(newName);
         update();
-        UnderseaStyles.snackbar(
+        Constants.snackbar(
           Strings.city_modified_snack_title.tr,
           Strings.city_modified_snack_body.tr + ': $newName',
         );
-        /*userInfoData.update((val) {
-          val = response.body;
-        });*/
-        //return response.body;
       }
     } catch (error) {
-      //countryDetailsData.addError(error);
       log('$error');
     }
   }
@@ -110,13 +107,8 @@ class CountryService extends GetxController {
       if (response.statusCode == 200) {
         countryName = Rx(response.body);
         update();
-        /*userInfoData.update((val) {
-          val = response.body;
-        });*/
-        //return response.body;
       }
     } catch (error) {
-      //countryDetailsData.addError(error);
       log('$error');
     }
   }

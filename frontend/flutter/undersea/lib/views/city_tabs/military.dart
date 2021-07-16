@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/buy_unit_details_dto.dart';
 import 'package:undersea/models/response/buy_unit_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
 import 'package:undersea/services/battle_service.dart';
 import 'package:undersea/services/country_service.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/asset_icon.dart';
+import 'package:undersea/widgets/circle_button.dart';
+import 'package:undersea/widgets/list_info_panel.dart';
+import 'package:undersea/widgets/tab_skeleton.dart';
+import 'package:undersea/widgets/us_divider.dart';
 
 class Military extends StatefulWidget {
   @override
@@ -30,7 +36,7 @@ class _MilitaryTabState extends State<Military> {
   late int count = 2 + soldierList.value.length * 2 - 1;
   @override
   Widget build(BuildContext context) {
-    return UnderseaStyles.tabSkeleton(
+    return TabSkeleton(
         isDisabled: !_canHireSoldiers(),
         onButtonPressed: () {
           var list = <BuyUnitDetailsDto>[];
@@ -51,9 +57,9 @@ class _MilitaryTabState extends State<Military> {
                   return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        UnderseaStyles.infoPanel(
-                            Strings.military_manual_title.tr,
-                            Strings.military_manual_hint.tr),
+                        ListInfoPanel(
+                            title: Strings.military_manual_title.tr,
+                            hint: Strings.military_manual_hint.tr),
                         SizedBox(height: 25),
                         controller.unitTypesInfo.value.isEmpty
                             ? Center(
@@ -72,7 +78,7 @@ class _MilitaryTabState extends State<Military> {
                   return SizedBox(height: 100);
                 }
                 if (i.isEven && i < soldierList.value.length * 2) {
-                  return UnderseaStyles.divider();
+                  return USDivider();
                 }
 
                 final allUnits = controller.allUnitsInfo.value;
@@ -118,7 +124,7 @@ class _MilitaryTabState extends State<Military> {
 
   List<Widget> _listResourceCost(UnitDto unit) =>
       unit.requiredMaterials
-          ?.map((e) => UnderseaStyles.text(
+          ?.map((e) => USText.text(
                 '  ${e.amount} ${e.name}',
               ))
           .toList() ??
@@ -149,19 +155,20 @@ class _MilitaryTabState extends State<Military> {
               SizedBox(
                 height: 70,
                 width: 70,
-                child: UnderseaStyles.assetIcon(
-                    BattleService.imageNameMap[actualSoldier.name] ?? 'shark'),
+                child: AssetIcon(
+                    iconName:
+                        Constants.unitNameMap[actualSoldier.name] ?? 'shark'),
               ),
               SizedBox(height: 8),
               Text(actualSoldier.name,
-                  style: UnderseaStyles.listBold.copyWith(fontSize: 19),
+                  style: USText.listBold.copyWith(fontSize: 19),
                   textAlign: TextAlign.center),
               SizedBox(height: 8),
               Row(
                 children: [
-                  UnderseaStyles.text(Strings.you_possess.tr),
+                  USText.text(Strings.you_possess.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text((isSpy
+                  USText.text((isSpy
                           ? spiesCount.toString()
                           : actualSoldierMax.toString()) +
                       Strings.amount.tr),
@@ -169,32 +176,31 @@ class _MilitaryTabState extends State<Military> {
               ),
               Row(
                 children: [
-                  UnderseaStyles.text(Strings.attack_defence.tr),
+                  USText.text(Strings.attack_defence.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text(
+                  USText.text(
                       '${actualSoldier.unitLevels?.first.attackPoint}/${actualSoldier.unitLevels?.first.defensePoint}'),
                 ],
               ),
               Row(
                 children: [
-                  UnderseaStyles.text(Strings.mercenary_payment.tr),
+                  USText.text(Strings.mercenary_payment.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text(
-                      actualSoldier.mercenaryPerRound.toString() +
-                          Strings.pearl_cost.tr),
+                  USText.text(actualSoldier.mercenaryPerRound.toString() +
+                      Strings.pearl_cost.tr),
                 ],
               ),
               Row(
                 children: [
-                  UnderseaStyles.text(Strings.supply_needs.tr),
+                  USText.text(Strings.supply_needs.tr),
                   Expanded(child: Container()),
-                  UnderseaStyles.text(actualSoldier.supplyPerRound.toString() +
+                  USText.text(actualSoldier.supplyPerRound.toString() +
                       Strings.coral.tr),
                 ],
               ),
               Row(
                 children: [
-                  UnderseaStyles.text(Strings.price.tr),
+                  USText.text(Strings.price.tr),
                   Expanded(child: Container()),
                   Row(
                     children: _listResourceCost(actualSoldier),
@@ -205,19 +211,23 @@ class _MilitaryTabState extends State<Military> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  UnderseaStyles.circleButton("minus", onPressed: () {
-                    setState(() {
-                      if (buyList[idx] == 0) return;
-                      --buyList[idx];
-                    });
-                  }),
+                  CircleButton(
+                      iconName: "minus",
+                      onPressed: () {
+                        setState(() {
+                          if (buyList[idx] == 0) return;
+                          --buyList[idx];
+                        });
+                      }),
                   Text(buyList[idx].toString(),
-                      style: UnderseaStyles.listBold.copyWith(fontSize: 22)),
-                  UnderseaStyles.circleButton("plus", onPressed: () {
-                    setState(() {
-                      ++buyList[idx];
-                    });
-                  }),
+                      style: USText.listBold.copyWith(fontSize: 22)),
+                  CircleButton(
+                      iconName: "plus",
+                      onPressed: () {
+                        setState(() {
+                          ++buyList[idx];
+                        });
+                      }),
                 ],
               )
             ],

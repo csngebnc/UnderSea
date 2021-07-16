@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/services/country_service.dart';
-import 'package:undersea/styles/style_constants.dart';
+
+import 'image_icon.dart';
 
 class CityNameEditableText extends StatefulWidget {
   CityNameEditableText();
@@ -36,7 +38,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
           children: [
             Text(
               Strings.city_name.tr,
-              style: UnderseaStyles.whiteOpenSans
+              style: USText.whiteOpenSans
                   .copyWith(fontWeight: FontWeight.bold, fontSize: 17),
             ),
             SizedBox(height: 5),
@@ -58,7 +60,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
               });
             },
             child:
-                UnderseaStyles.imageIcon("edit", color: Colors.white, size: 32),
+                USImageIcon(assetName: "edit", color: Colors.white, size: 32),
           );
         } else {
           return InkWell(
@@ -69,7 +71,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
               });
             },
             child:
-                UnderseaStyles.imageIcon("edit", color: Colors.white, size: 32),
+                USImageIcon(assetName: "edit", color: Colors.white, size: 32),
           );
         }
       }),
@@ -86,9 +88,9 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
               child: TextField(
                 decoration: InputDecoration(
                     hintText: Strings.new_city_name.tr,
-                    hintStyle: UnderseaStyles.inputTextStyle
+                    hintStyle: USText.inputTextStyle
                         .copyWith(color: Colors.white54, fontSize: 17)),
-                style: UnderseaStyles.whiteOpenSans
+                style: USText.whiteOpenSans
                     .copyWith(fontWeight: FontWeight.normal, fontSize: 21),
                 onSubmitted: (newValue) {
                   setState(() {
@@ -110,7 +112,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
                 if (countryName != null) {
                   return Text(
                     countryName,
-                    style: UnderseaStyles.whiteOpenSans.copyWith(fontSize: 17),
+                    style: USText.whiteOpenSans.copyWith(fontSize: 17),
                   );
                 } else {
                   return CircularProgressIndicator();

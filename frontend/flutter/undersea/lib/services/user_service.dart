@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/paged_result_of_user_rank_dto.dart';
 import 'package:undersea/models/response/paged_result_of_world_winner_dto.dart';
 import 'package:undersea/models/response/register_dto.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
 import 'package:undersea/models/response/user_rank_dto.dart';
 import 'package:undersea/network/providers/user_data_provider.dart';
-import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/bottom_nav_bar.dart';
+import 'package:undersea/widgets/gradient_button.dart';
 
 import '../core/constants.dart';
 
@@ -80,14 +82,13 @@ class UserService extends GetxController {
         var errorMessage = errors.substring(start, end_ != -2 ? end_ : end);
 
         log(errorMessage);
-        UnderseaStyles.snackbar(Strings.error_occurred.tr, errorMessage);
+        Constants.snackbar(Strings.error_occurred.tr, errorMessage);
       } else {
-        UnderseaStyles.snackbar(
+        Constants.snackbar(
             Strings.error_occurred.tr, 'Sikertelen regisztráció :(');
       }
     } catch (error) {
-      UnderseaStyles.snackbar(
-          Strings.error.tr, Strings.something_went_wrong.tr);
+      Constants.snackbar(Strings.error.tr, Strings.something_went_wrong.tr);
     } finally {
       regging = false.obs;
       update();
@@ -105,14 +106,13 @@ class UserService extends GetxController {
         storage.write(Constants.TOKEN, response.body!.token);
         Get.off(BottomNavBar());
       } else {
-        UnderseaStyles.snackbar(
+        Constants.snackbar(
             Strings.error_occurred.tr, Strings.invalid_username_password.tr);
         log('ERROR: ${response.bodyString}');
       }
     } catch (error) {
       log('$error');
-      UnderseaStyles.snackbar(
-          Strings.error.tr, Strings.something_went_wrong.tr);
+      Constants.snackbar(Strings.error.tr, Strings.something_went_wrong.tr);
     } finally {
       //Get.off(BottomNavBar());
       loggingIn = false.obs;
@@ -194,9 +194,9 @@ class UserService extends GetxController {
             winnerList.value?.allResultsCount != 0 &&
             areDatesCorrect) {
           Get.defaultDialog(
-              title: "Új játék indult!",
-              backgroundColor: UnderseaStyles.hintColor,
-              titleStyle: UnderseaStyles.listBold.copyWith(fontSize: 16),
+              title: Strings.new_game_has_begun.tr,
+              backgroundColor: USColors.hintColor,
+              titleStyle: USText.listBold.copyWith(fontSize: 16),
               barrierDismissible: true,
               radius: 20,
               content: Padding(
@@ -215,15 +215,15 @@ class UserService extends GetxController {
                             ),
                           ),
                           SizedBox(height: 10),
-                          Text('Az előző játék győztese',
-                              style: UnderseaStyles.listBold),
+                          Text(Strings.winner_of_previous_game.tr,
+                              style: USText.listBold),
                           SizedBox(height: 5),
                           Text(' ${winner?.userName}',
-                              style: UnderseaStyles.listRegular),
+                              style: USText.listRegular),
                           Text(' ${winner?.countryName}',
-                              style: UnderseaStyles.listRegular),
+                              style: USText.listRegular),
                           Expanded(child: Container()),
-                          UnderseaStyles.elevatedButton(
+                          GradientButton(
                               text: 'Ok',
                               width: 100,
                               height: 40,

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/building_details_dto.dart';
 import 'package:undersea/models/response/material_dto.dart';
 import 'package:undersea/services/building_service.dart';
 import 'package:undersea/services/country_service.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/building_image.dart';
+import 'package:undersea/widgets/list_info_panel.dart';
+import 'package:undersea/widgets/tab_skeleton.dart';
 
 class Buildings extends StatefulWidget {
   @override
@@ -27,7 +32,7 @@ class _BuildingsTabState extends State<Buildings> {
   CountryService playerController = Get.find();
   @override
   Widget build(BuildContext context) {
-    return UnderseaStyles.tabSkeleton(
+    return TabSkeleton(
         onButtonPressed: () {
           controller.buildingInfoData.value[_selectedIndex!].underConstruction =
               true;
@@ -43,9 +48,9 @@ class _BuildingsTabState extends State<Buildings> {
             itemBuilder: (BuildContext context, int i) {
               return GetBuilder<BuildingService>(builder: (controller) {
                 if (i == 0) {
-                  return UnderseaStyles.infoPanel(
-                      Strings.buildings_manual_title.tr,
-                      Strings.buildings_manual_hint.tr);
+                  return ListInfoPanel(
+                      title: Strings.buildings_manual_title.tr,
+                      hint: Strings.buildings_manual_hint.tr);
                 }
                 if (i > buildingList.value.length) {
                   return controller.buildingInfoData.value.isEmpty
@@ -86,14 +91,14 @@ class _BuildingsTabState extends State<Buildings> {
 
   List<Widget> _listEffects(BuildingDetailsDto building) =>
       building.effects
-          ?.map((e) => Text(e.name ?? 'effect', style: UnderseaStyles.listBold))
+          ?.map((e) => Text(e.name ?? 'effect', style: USText.listBold))
           .toList() ??
       [];
 
   List<Widget> _listResourceCost(BuildingDetailsDto building) {
     return building.requiredMaterials
-            ?.map((e) => Text('${e.amount} ${e.name}  ',
-                style: UnderseaStyles.listRegular))
+            ?.map((e) =>
+                Text('${e.amount} ${e.name}  ', style: USText.listRegular))
             .toList() ??
         [];
   }
@@ -124,18 +129,19 @@ class _BuildingsTabState extends State<Buildings> {
                             SizedBox(
                               height: 150,
                               width: 150,
-                              child: UnderseaStyles.buildingImage(
-                                  BuildingService
-                                          .imageNameMap[actualBuilding.name] ??
-                                      '' + '@3x'),
+                              child: BuildingImage(
+                                  name: Constants.buildingNameMap[
+                                          actualBuilding.name] ??
+                                      '',
+                                  additional: '@3x'),
                             ),
                             Text(actualBuilding.name ?? '',
-                                style: UnderseaStyles.listBold),
+                                style: USText.listBold),
                             ..._listEffects(actualBuilding),
                             Text(
                                 actualBuilding.count.toString() +
                                     Strings.amount.tr,
-                                style: UnderseaStyles.listRegular),
+                                style: USText.listRegular),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +156,7 @@ class _BuildingsTabState extends State<Buildings> {
                               child: Text(
                                 Strings.under_construction.tr,
                                 style: TextStyle(
-                                    color: UnderseaStyles.underseaLogoColor,
+                                    color: USColors.underseaLogoColor,
                                     fontSize: 12),
                               ))
                           : Container(),
@@ -159,9 +165,9 @@ class _BuildingsTabState extends State<Buildings> {
                 ),
                 decoration: BoxDecoration(
                     color: _selectedIndex == (index - 1)
-                        ? UnderseaStyles.hintColor
+                        ? USColors.hintColor
                         : null,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: UnderseaStyles.hintColor)))));
+                    border: Border.all(color: USColors.hintColor)))));
   }
 }

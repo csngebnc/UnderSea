@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/services/user_service.dart';
-import 'package:undersea/styles/disablable_elevated_button.dart';
-import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/registration.dart';
+import 'package:undersea/widgets/image_icon.dart';
+import 'package:undersea/widgets/input_field.dart';
+import 'package:undersea/widgets/toggleable_button.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -28,23 +31,15 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    var userField = UnderseaStyles.inputField(
-        hint: Strings.username.tr,
-        controller: usernameController,
-        onChanged: (string) {
-          /*setState(() {
-            hasError = !_formKey.currentState!.validate();
-          });*/
-        });
-    final passwordField = UnderseaStyles.inputField(
-        hint: Strings.password.tr,
-        isPassword: true,
-        controller: passwordController,
-        onChanged: (string) {
-          /*setState(() {
-            hasError = !_formKey.currentState!.validate();
-          });*/
-        });
+    var userField = InputField(
+      hint: Strings.username.tr,
+      controller: usernameController,
+    );
+    final passwordField = InputField(
+      hint: Strings.password.tr,
+      isPassword: true,
+      controller: passwordController,
+    );
     final UserService controller = Get.find();
 
     return Form(
@@ -64,8 +59,9 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 10),
                     SizedBox(
                         height: 100,
-                        child: UnderseaStyles.imageIcon("undersea_big",
-                            color: UnderseaStyles.underseaLogoColor,
+                        child: USImageIcon(
+                            assetName: "undersea_big",
+                            color: USColors.underseaLogoColor,
                             size: 250)),
                     SizedBox(height: 25),
                     Container(
@@ -87,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 30,
                                   child: Text(
                                     Strings.login.tr,
-                                    style: UnderseaStyles.buttonTextStyle
+                                    style: USText.buttonTextStyle
                                         .copyWith(fontSize: 24),
                                   )),
                               GetBuilder<UserService>(builder: (controller) {
@@ -114,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                               SizedBox(
                                 height: 35.0,
                               ),
-                              ToggleableElevatedButton(
+                              ToggleableButton(
                                   text: Strings.login.tr,
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
@@ -131,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                                     Get.to(RegistrationPage());
                                   },
                                   child: Text(Strings.registration.tr,
-                                      style: UnderseaStyles.buttonTextStyle)),
+                                      style: USText.buttonTextStyle)),
                             ],
                           ),
                         ),

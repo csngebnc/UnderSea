@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
 import 'package:undersea/services/battle_service.dart';
-import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/attack_tabs/spying_tab.dart';
+import 'package:undersea/widgets/tab_piece.dart';
 
 import 'attacking_tab.dart';
 
@@ -25,15 +26,15 @@ class AttackTabBar extends StatelessWidget {
             child: Container(
               height: 50,
               child: Material(
-                color: UnderseaStyles.menuDarkBlue,
+                color: USColors.menuDarkBlue,
                 child: TabBar(
-                  indicatorColor: UnderseaStyles.underseaLogoColor,
+                  indicatorColor: USColors.underseaLogoColor,
                   indicatorPadding: EdgeInsets.zero,
                   indicatorSize: TabBarIndicatorSize.label,
                   indicatorWeight: 3,
                   tabs: [
-                    UnderseaStyles.tab(Strings.battle.tr),
-                    UnderseaStyles.tab(Strings.spying.tr),
+                    TabPiece(Strings.battle.tr),
+                    TabPiece(Strings.spying.tr),
                   ],
                 ),
               ),

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
 import 'package:undersea/services/battle_service.dart';
 import 'package:undersea/services/building_service.dart';
 import 'package:undersea/services/upgrade_service.dart';
-import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/city_tabs/buildings.dart';
 import 'package:undersea/views/city_tabs/military.dart';
 import 'package:undersea/views/city_tabs/upgrades.dart';
+import 'package:undersea/widgets/tab_piece.dart';
 
 class CityTabBar extends StatelessWidget {
   CityTabBar() {
@@ -28,16 +29,16 @@ class CityTabBar extends StatelessWidget {
             child: Container(
               height: 50,
               child: Material(
-                color: UnderseaStyles.menuDarkBlue,
+                color: USColors.menuDarkBlue,
                 child: TabBar(
-                  indicatorColor: UnderseaStyles.underseaLogoColor,
+                  indicatorColor: USColors.underseaLogoColor,
                   indicatorPadding: EdgeInsets.zero,
                   indicatorSize: TabBarIndicatorSize.label,
                   indicatorWeight: 3,
                   tabs: [
-                    UnderseaStyles.tab(Strings.my_city.tr),
-                    UnderseaStyles.tab(Strings.upgrades.tr),
-                    UnderseaStyles.tab(Strings.my_forces.tr),
+                    TabPiece(Strings.my_city.tr),
+                    TabPiece(Strings.upgrades.tr),
+                    TabPiece(Strings.my_forces.tr),
                   ],
                 ),
               ),

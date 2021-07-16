@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/services/user_service.dart';
-import 'package:undersea/styles/disablable_elevated_button.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/image_icon.dart';
+import 'package:undersea/widgets/input_field.dart';
+import 'package:undersea/widgets/toggleable_button.dart';
 
 class RegistrationPage extends StatefulWidget {
   RegistrationPage({Key? key}) : super(key: key);
@@ -33,24 +37,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userField = UnderseaStyles.inputField(
+    final userField = InputField(
       hint: Strings.username.tr,
       controller: usernameController,
-      onChanged: (string) {
-        /*setState(() {
-          hasError = !_formKey.currentState!.validate();
-        });*/
-      },
     );
-    final passwordField = UnderseaStyles.inputField(
+    final passwordField = InputField(
         hint: Strings.password.tr,
         isPassword: true,
         controller: passwordController,
-        onChanged: (string) {
-          /* setState(() {
-            hasError = !_formKey.currentState!.validate();
-          });*/
-        },
         validator: (value) {
           if (value == null || value.isEmpty) {
             return Strings.empty_field.tr;
@@ -62,15 +56,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
             return Strings.passwords_differ.tr;
           }
         });
-    final passwordValidationField = UnderseaStyles.inputField(
+    final passwordValidationField = InputField(
         hint: Strings.password_again.tr,
         isPassword: true,
         controller: confirmPasswordController,
-        onChanged: (string) {
-          /*setState(() {
-            hasError = !_formKey.currentState!.validate();
-          });*/
-        },
         validator: (value) {
           if (value == null || value.isEmpty) {
             return Strings.empty_field.tr;
@@ -82,14 +71,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
             return Strings.passwords_differ.tr;
           }
         });
-    final cityNameField = UnderseaStyles.inputField(
+    final cityNameField = InputField(
         hint: Strings.city_name_hint.tr,
         controller: citynameController,
-        onChanged: (string) {
-          /* setState(() {
-            hasError = !_formKey.currentState!.validate();
-          });*/
-        },
         validator: (value) {
           if (value == null || value.isEmpty) {
             return Strings.empty_field.tr;
@@ -113,8 +97,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     SizedBox(height: 25),
                     SizedBox(
                         height: 100,
-                        child: UnderseaStyles.imageIcon("undersea_big",
-                            color: UnderseaStyles.underseaLogoColor,
+                        child: USImageIcon(
+                            assetName: "undersea_big",
+                            color: USColors.underseaLogoColor,
                             size: 250)),
                     Container(
                       color: Colors.transparent,
@@ -134,7 +119,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   height: 30,
                                   child: Text(
                                     Strings.login.tr,
-                                    style: UnderseaStyles.buttonTextStyle
+                                    style: USText.buttonTextStyle
                                         .copyWith(fontSize: 24),
                                   )),
                               SizedBox(height: 25.0),
@@ -165,7 +150,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       ]);
                               }),
                               SizedBox(height: 15),
-                              ToggleableElevatedButton(
+                              ToggleableButton(
                                   text: Strings.registration.tr,
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
@@ -177,7 +162,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                           countryName: citynameController.text,
                                           onSuccess: () {
                                             Get.back();
-                                            UnderseaStyles.snackbar(
+                                            Constants.snackbar(
                                               Strings.registr_snackbar_title.tr,
                                               Strings.registr_snackbar_body.tr,
                                             );
@@ -193,7 +178,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     Get.back();
                                   },
                                   child: Text(Strings.login.tr,
-                                      style: UnderseaStyles.buttonTextStyle)),
+                                      style: USText.buttonTextStyle)),
                             ],
                           ),
                         ),

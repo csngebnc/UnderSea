@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/event_dto.dart';
 import 'package:undersea/services/event_service.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/us_divider.dart';
+import 'package:undersea/widgets/us_progress_indicator.dart';
 
 class EventLogPage extends StatefulWidget {
   @override
@@ -39,7 +43,7 @@ class _EventLogPageState extends State<EventLogPage> {
   Widget build(BuildContext context) {
     return Expanded(
         child: Container(
-            decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
+            decoration: BoxDecoration(color: USColors.menuDarkBlue),
             child: GetBuilder<EventService>(builder: (controller) {
               results = controller.eventList.toList();
               itemCount =
@@ -49,20 +53,20 @@ class _EventLogPageState extends State<EventLogPage> {
                   itemBuilder: (BuildContext context, int i) {
                     if (i == 0) {
                       return controller.loadingList.value
-                          ? UnderseaStyles.listProgressIndicator()
+                          ? USProgressIndicator()
                           : results.isEmpty
                               ? Column(
                                   children: [
                                     SizedBox(height: 10),
-                                    Text('Nincs megjeleníthető elem',
-                                        style: UnderseaStyles.listBold
+                                    Text(Strings.no_element.tr,
+                                        style: USText.listBold
                                             .copyWith(fontSize: 13)),
                                   ],
                                 )
                               : SizedBox(height: 10);
                     }
                     if (i.isEven) {
-                      return UnderseaStyles.divider();
+                      return USDivider();
                     } else {
                       return _buildRow(i);
                     }
@@ -75,9 +79,9 @@ class _EventLogPageState extends State<EventLogPage> {
 
     return Tooltip(
         decoration: BoxDecoration(
-            color: UnderseaStyles.hintColor,
+            color: USColors.hintColor,
             borderRadius: BorderRadius.all(Radius.circular(32))),
-        textStyle: UnderseaStyles.listRegular,
+        textStyle: USText.listRegular,
         showDuration: Duration(milliseconds: 500),
         message: event?.effects?.first.name ?? '-',
         child: ListTile(
@@ -86,12 +90,12 @@ class _EventLogPageState extends State<EventLogPage> {
           child: Row(
             children: [
               Text(event?.name ?? '-',
-                  style: UnderseaStyles.listBold.copyWith(fontSize: 16)),
+                  style: USText.listBold.copyWith(fontSize: 16)),
               Expanded(
                 child: Container(),
               ),
               Text('${event?.eventRound}. kör',
-                  style: UnderseaStyles.listBold.copyWith(fontSize: 15))
+                  style: USText.listBold.copyWith(fontSize: 15))
             ],
           ),
         )));

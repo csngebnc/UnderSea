@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/upgrade_dto.dart';
 import 'package:undersea/services/upgrade_service.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/building_image.dart';
+import 'package:undersea/widgets/list_info_panel.dart';
+import 'package:undersea/widgets/tab_skeleton.dart';
 
 class Upgrades extends StatefulWidget {
   @override
@@ -33,7 +38,7 @@ class _UpgradesTabState extends State<Upgrades> {
 
   @override
   Widget build(BuildContext context) {
-    return UnderseaStyles.tabSkeleton(
+    return TabSkeleton(
         onButtonPressed: () {
           controller.upgradeInfoData.value[_selectedIndex!].remainingTime = 15;
           controller.upgradeInfoData.value[_selectedIndex!]
@@ -53,8 +58,9 @@ class _UpgradesTabState extends State<Upgrades> {
                 if (i == 0) {
                   return Column(
                     children: [
-                      UnderseaStyles.infoPanel(Strings.upgrades_manual_title.tr,
-                          Strings.upgrades_manual_hint.tr),
+                      ListInfoPanel(
+                          title: Strings.upgrades_manual_title.tr,
+                          hint: Strings.upgrades_manual_hint.tr),
                       controller.upgradeInfoData.value.isEmpty
                           ? Center(
                               child: Padding(
@@ -107,17 +113,18 @@ class _UpgradesTabState extends State<Upgrades> {
                             SizedBox(
                               height: 150,
                               width: 150,
-                              child: UnderseaStyles.buildingImage(
-                                  controller.imageNameMap[actualUpgrade.name]! +
-                                      '@3x'),
+                              child: BuildingImage(
+                                  name: Constants
+                                      .buildingNameMap[actualUpgrade.name]!,
+                                  additional: '@3x'),
                             ),
                             Text(actualUpgrade.name,
-                                style: UnderseaStyles.listBold,
+                                style: USText.listBold,
                                 textAlign: TextAlign.center),
                             Text(
                               actualUpgrade.effects?.elementAt(0).name ??
                                   'effect',
-                              style: UnderseaStyles.listRegular,
+                              style: USText.listRegular,
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -128,7 +135,7 @@ class _UpgradesTabState extends State<Upgrades> {
                               padding: EdgeInsets.all(10),
                               child: Icon(
                                 Icons.done_outline_sharp,
-                                color: UnderseaStyles.underseaLogoColor,
+                                color: USColors.underseaLogoColor,
                               ))
                           : Container(),
                       actualUpgrade.isUnderConstruction
@@ -137,7 +144,7 @@ class _UpgradesTabState extends State<Upgrades> {
                               child: Text(
                                 'még ${actualUpgrade.remainingTime} kör',
                                 style: TextStyle(
-                                    color: UnderseaStyles.underseaLogoColor,
+                                    color: USColors.underseaLogoColor,
                                     fontSize: 12),
                               ))
                           : Container(),
@@ -146,9 +153,9 @@ class _UpgradesTabState extends State<Upgrades> {
                 ),
                 decoration: BoxDecoration(
                     color: _selectedIndex == (index - 1)
-                        ? UnderseaStyles.hintColor
+                        ? USColors.hintColor
                         : null,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: UnderseaStyles.hintColor)))));
+                    border: Border.all(color: USColors.hintColor)))));
   }
 }

@@ -1,6 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/image_icon.dart';
 
 import 'expanded_menu.dart';
 
@@ -29,8 +29,8 @@ class _ExpandableMenuState extends State<ExpandableMenu> {
             header: Container(
               padding: EdgeInsets.zero,
               child: isExpanded
-                  ? UnderseaStyles.imageIcon('caret_down', size: 30)
-                  : UnderseaStyles.imageIcon('caret_up', size: 30),
+                  ? USImageIcon(assetName: 'caret_down', size: 30)
+                  : USImageIcon(assetName: 'caret_up', size: 30),
               decoration: BoxDecoration(color: Colors.white),
             ),
             theme: ExpandableThemeData(

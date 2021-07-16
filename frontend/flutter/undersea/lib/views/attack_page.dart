@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/attackable_user_dto.dart';
 import 'package:undersea/services/battle_service.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/circle_button.dart';
+import 'package:undersea/widgets/input_field.dart';
+import 'package:undersea/widgets/tab_skeleton.dart';
+import 'package:undersea/widgets/us_divider.dart';
+import 'package:undersea/widgets/us_progress_indicator.dart';
 
 import 'attack_tabs/attack_tab_bar.dart';
 
@@ -51,7 +57,7 @@ class _AttackPageState extends State<AttackPage> {
 
     return Column(
       children: [
-        UnderseaStyles.divider(),
+        USDivider(),
         ListTile(
             visualDensity: VisualDensity(vertical: -4),
             onTap: () {
@@ -69,16 +75,14 @@ class _AttackPageState extends State<AttackPage> {
                 child: Row(
                   children: [
                     SizedBox(
-                        child: Text('${idx + 1}. ',
-                            style: UnderseaStyles.listRegular),
+                        child: Text('${idx + 1}. ', style: USText.listRegular),
                         width: 30),
                     SizedBox(width: 20),
                     Text(user?.userName ?? '',
-                        style:
-                            UnderseaStyles.listRegular.copyWith(fontSize: 16)),
+                        style: USText.listRegular.copyWith(fontSize: 16)),
                     Expanded(child: Container()),
                     if (idx == _selectedIndex)
-                      UnderseaStyles.iconsFromImages("done", size: 28),
+                      CircleButton.iconsFromImages("done", size: 28),
                     SizedBox(width: 20)
                   ],
                 ))),
@@ -89,7 +93,7 @@ class _AttackPageState extends State<AttackPage> {
   @override
   Widget build(BuildContext context) {
     if (firstPage) {
-      return UnderseaStyles.tabSkeleton(
+      return TabSkeleton(
         buttonText: Strings.proceed.tr,
         isDisabled: _selectedIndex == null ? true : false,
         onButtonPressed: () {
@@ -106,7 +110,7 @@ class _AttackPageState extends State<AttackPage> {
             slivers: [
               SliverAppBar(
                 floating: true,
-                backgroundColor: UnderseaStyles.menuDarkBlue,
+                backgroundColor: USColors.menuDarkBlue,
                 leadingWidth: 0,
                 leading: Container(),
                 toolbarHeight: controller.loadingList.value ? 150 : 100,
@@ -116,15 +120,14 @@ class _AttackPageState extends State<AttackPage> {
                       padding: EdgeInsets.all(30),
                       child: Column(
                         children: [
-                          UnderseaStyles.inputField(
-                              hint: Strings.username.tr,
-                              color: Color(0xFF657A9D),
-                              hintColor: UnderseaStyles.alternativeHintColor,
-                              onChanged: controller.onSearchChanged,
-                              validator: (string) {}),
+                          InputField(
+                            hint: Strings.username.tr,
+                            color: Color(0xFF657A9D),
+                            hintColor: USColors.alternativeHintColor,
+                            onChanged: controller.onSearchChanged,
+                          ),
                           controller.loadingList.value
-                              ? UnderseaStyles.listProgressIndicator(
-                                  size: 30, padding: 10)
+                              ? USProgressIndicator(size: 30, padding: 10)
                               : Container()
                         ],
                       ),
@@ -147,9 +150,9 @@ class _AttackPageState extends State<AttackPage> {
                       ),
                       results.isEmpty && !controller.loadingList.value
                           ? Text(Strings.no_user_named_this_way.tr,
-                              style: UnderseaStyles.listRegular.copyWith(
+                              style: USText.listRegular.copyWith(
                                   fontSize: 15,
-                                  color: UnderseaStyles.underseaLogoColor))
+                                  color: USColors.underseaLogoColor))
                           : Container(),
                       SizedBox(
                           height: 20 + MediaQuery.of(context).padding.bottom),

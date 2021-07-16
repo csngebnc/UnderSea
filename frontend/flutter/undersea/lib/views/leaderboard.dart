@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/core/theme/colors.dart';
+import 'package:undersea/core/theme/text_styles.dart';
 import 'package:undersea/models/response/user_rank_dto.dart';
 import 'package:undersea/services/navbar_controller.dart';
 import 'package:undersea/services/user_service.dart';
-import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/widgets/image_icon.dart';
+import 'package:undersea/widgets/input_field.dart';
+import 'package:undersea/widgets/us_divider.dart';
+import 'package:undersea/widgets/us_progress_indicator.dart';
 
 class Leaderboard extends StatefulWidget {
   Leaderboard({Key? key}) : super(key: key);
@@ -45,20 +50,19 @@ class _LeaderboardState extends State<Leaderboard> {
 
     return Column(
       children: [
-        UnderseaStyles.divider(),
+        USDivider(),
         Padding(
             padding: EdgeInsets.fromLTRB(35, 10, 15, 10),
             child: Row(
               children: [
                 SizedBox(
-                    child: Text('${user?.placement}. ',
-                        style: UnderseaStyles.listRegular),
+                    child:
+                        Text('${user?.placement}. ', style: USText.listRegular),
                     width: 30),
                 SizedBox(width: 20),
-                Text(user?.name ?? '', style: UnderseaStyles.listRegular),
+                Text(user?.name ?? '', style: USText.listRegular),
                 Expanded(child: Container()),
-                Text(user?.points.toString() ?? '',
-                    style: UnderseaStyles.listRegular)
+                Text(user?.points.toString() ?? '', style: USText.listRegular)
               ],
             )),
       ],
@@ -68,11 +72,11 @@ class _LeaderboardState extends State<Leaderboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: UnderseaStyles.menuDarkBlue,
+      backgroundColor: USColors.menuDarkBlue,
       appBar: AppBar(
-        title: Text(Strings.leaderboard.tr, style: UnderseaStyles.listBold),
+        title: Text(Strings.leaderboard.tr, style: USText.listBold),
         toolbarHeight: 85,
-        backgroundColor: UnderseaStyles.hintColor,
+        backgroundColor: USColors.hintColor,
         actions: [
           Padding(
               padding: EdgeInsets.fromLTRB(20, 10, 30, 10),
@@ -84,12 +88,14 @@ class _LeaderboardState extends State<Leaderboard> {
                   child: SizedBox(
                     height: 40,
                     child: ShaderMask(
-                      child: UnderseaStyles.imageIcon("tab_attack",
-                          size: 30, color: UnderseaStyles.underseaLogoColor),
+                      child: USImageIcon(
+                          assetName: "tab_attack",
+                          size: 30,
+                          color: USColors.underseaLogoColor),
                       shaderCallback: (Rect bounds) {
                         final Rect rect = Rect.fromLTRB(0, 0, 30, 30);
                         return LinearGradient(
-                                colors: UnderseaStyles.gradientColors,
+                                colors: USColors.gradientColors,
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter)
                             .createShader(rect);
@@ -107,7 +113,7 @@ class _LeaderboardState extends State<Leaderboard> {
           slivers: [
             SliverAppBar(
               floating: true,
-              backgroundColor: UnderseaStyles.menuDarkBlue,
+              backgroundColor: USColors.menuDarkBlue,
               leadingWidth: 0,
               leading: Container(),
               toolbarHeight: controller.loadingList.value ? 150 : 100,
@@ -117,15 +123,14 @@ class _LeaderboardState extends State<Leaderboard> {
                     padding: EdgeInsets.all(30),
                     child: Column(
                       children: [
-                        UnderseaStyles.inputField(
-                            hint: Strings.username.tr,
-                            color: Color(0xFF657A9D),
-                            hintColor: UnderseaStyles.alternativeHintColor,
-                            onChanged: controller.onSearchChanged,
-                            validator: (string) {}),
+                        InputField(
+                          hint: Strings.username.tr,
+                          color: Color(0xFF657A9D),
+                          hintColor: USColors.alternativeHintColor,
+                          onChanged: controller.onSearchChanged,
+                        ),
                         controller.loadingList.value
-                            ? UnderseaStyles.listProgressIndicator(
-                                size: 30, padding: 10)
+                            ? USProgressIndicator(size: 30, padding: 10)
                             : Container()
                       ],
                     ),
@@ -148,9 +153,9 @@ class _LeaderboardState extends State<Leaderboard> {
                     ),
                     results.isEmpty && !controller.loadingList.value
                         ? Text(Strings.no_user_named_this_way.tr,
-                            style: UnderseaStyles.listRegular.copyWith(
+                            style: USText.listRegular.copyWith(
                                 fontSize: 15,
-                                color: UnderseaStyles.underseaLogoColor))
+                                color: USColors.underseaLogoColor))
                         : Container(),
                     SizedBox(
                         height: 20 + MediaQuery.of(context).padding.bottom),

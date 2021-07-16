@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:undersea/core/constants.dart';
 import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/building_details_dto.dart';
 import 'package:undersea/models/response/buy_building_dto.dart';
 import 'package:undersea/network/providers/building_data_provider.dart';
-import 'package:undersea/styles/style_constants.dart';
 
 class BuildingService extends GetxController {
   final BuildingDataProvider _buildingDataProvider;
@@ -20,7 +20,7 @@ class BuildingService extends GetxController {
           .buyBuilding(BuyBuildingDto(buildingId: id).toJson());
 
       if (response.statusCode == 200) {
-        UnderseaStyles.snackbar(
+        Constants.snackbar(
             Strings.successful_purchase.tr, Strings.new_building.tr);
         getBuildingDetails();
       }
@@ -40,13 +40,6 @@ class BuildingService extends GetxController {
       log('$error');
     }
   }
-
-  static const imageNameMap = {
-    'Szonárágyú': 'szonaragyu',
-    'Zátonyvár': 'zatonyvar',
-    'Áramlásirányító': 'aramlasiranyito',
-    'Kőbánya': 'stone_mine'
-  };
 
   void reset() {
     buildingInfoData = Rx([]);
