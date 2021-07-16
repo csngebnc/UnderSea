@@ -80,4 +80,5 @@ class Strings {
   static const invalid_username = 'invalid_username';
   static const empty_field = 'empty_field';
   static const events = 'events';
+  static const no_user_named_this_way = 'no_user_named_this_way';
 }

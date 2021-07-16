@@ -77,4 +77,5 @@ const Map<String, String> hu_HU = {
   Strings.empty_field: 'Nem hagyhatod üresen ezt a mezőt',
   Strings.invalid_username: 'Nem szerepelhet speciális karakter a mezőben',
   Strings.events: 'Események',
+  Strings.no_user_named_this_way: 'Nincs ilyen nevű felhasználó'
 };

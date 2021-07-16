@@ -48,6 +48,46 @@ class _AttackPageState extends State<AttackPage> {
     super.initState();
   }
 
+  Widget? _itemBuilder(BuildContext ctx, int idx) {
+    var user = results[idx];
+
+    return Column(
+      children: [
+        UnderseaStyles.divider(),
+        ListTile(
+            visualDensity: VisualDensity(vertical: -4),
+            onTap: () {
+              setState(() {
+                idx != _selectedIndex
+                    ? _selectedIndex = idx
+                    : _selectedIndex = null;
+              });
+              controller.countryToBeAttacked = _selectedIndex != null
+                  ? controller.attackableUsers.value!.results![idx].countryId
+                  : null;
+            },
+            title: Padding(
+                padding: EdgeInsets.fromLTRB(25, 0, 15, 0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                        child: Text('${idx + 1}. ',
+                            style: UnderseaStyles.listRegular),
+                        width: 30),
+                    SizedBox(width: 20),
+                    Text(user?.userName ?? '',
+                        style:
+                            UnderseaStyles.listRegular.copyWith(fontSize: 16)),
+                    Expanded(child: Container()),
+                    if (idx == _selectedIndex)
+                      UnderseaStyles.iconsFromImages("done", size: 28),
+                    SizedBox(width: 20)
+                  ],
+                ))),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (firstPage) {
@@ -61,108 +101,66 @@ class _AttackPageState extends State<AttackPage> {
         },
         list: GetBuilder<BattleDataController>(builder: (controller) {
           results = controller.attackableUserList.toList();
-          itemCount = results.length * 2 + 2;
-          return ListView.builder(
-              controller: _scrollController,
-              itemCount: controller.loadingList.value || results.isEmpty
-                  ? 1
-                  : itemCount,
-              itemBuilder: (BuildContext context, int i) {
-                if (i == itemCount - 1) return SizedBox(height: 130);
-                if (i.isOdd) return UnderseaStyles.divider();
-                if (i == 0) {
-                  return Padding(
-                    padding: EdgeInsets.fromLTRB(25, 20, 15, 0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+          itemCount = results.length;
+
+          return CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              SliverAppBar(
+                floating: true,
+                backgroundColor: UnderseaStyles.menuDarkBlue,
+                leadingWidth: 0,
+                leading: Container(),
+                toolbarHeight: controller.loadingList.value ? 150 : 100,
+                title: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(30),
+                      child: Column(
                         children: [
-                          Text(Strings.first_step.tr,
-                              style: UnderseaStyles.listBold
-                                  .copyWith(fontSize: 18)),
-                          Text(Strings.select.tr,
-                              style: UnderseaStyles.listRegular
-                                  .copyWith(fontSize: 18)),
-                          SizedBox(height: 20),
                           UnderseaStyles.inputField(
                               hint: Strings.username.tr,
                               color: Color(0xFF657A9D),
                               hintColor: UnderseaStyles.alternativeHintColor,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedIndex = null;
-                                });
-                                controller.onSearchChanged(value);
-                              },
+                              onChanged: controller.onSearchChanged,
                               validator: (string) {}),
                           controller.loadingList.value
-                              ? Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(30.0),
-                                    child: const SizedBox(
-                                        height: 50,
-                                        width: 50,
-                                        child: CircularProgressIndicator()),
-                                  ),
-                                )
-                              : Container(),
-                          controller.attackableUsers.value?.allResultsCount ==
-                                      0 &&
-                                  !controller.loadingList.value
-                              ? Center(
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 50,
-                                      ),
-                                      Text('Nincs ilyen nevű felhasználó',
-                                          style: UnderseaStyles.listRegular
-                                              .copyWith(
-                                                  fontSize: 15,
-                                                  color: UnderseaStyles
-                                                      .underseaLogoColor)),
-                                      SizedBox(height: 20),
-                                    ],
-                                  ),
-                                )
+                              ? UnderseaStyles.listProgressIndicator(
+                                  size: 30, padding: 10)
                               : Container()
-                        ]),
-                  );
-                }
-
-                var user = results[i ~/ 2 - 1];
-
-                return ListTile(
-                    visualDensity: VisualDensity(vertical: -4),
-                    onTap: () {
-                      setState(() {
-                        i != _selectedIndex
-                            ? _selectedIndex = i
-                            : _selectedIndex = null;
-                      });
-                      controller.countryToBeAttacked = _selectedIndex != null
-                          ? controller.attackableUsers.value!
-                              .results![_selectedIndex! ~/ 2 - 1].countryId
-                          : null;
-                    },
-                    title: Padding(
-                        padding: EdgeInsets.fromLTRB(25, 0, 15, 0),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                                child: Text('${i ~/ 2}. ',
-                                    style: UnderseaStyles.listRegular),
-                                width: 30),
-                            SizedBox(width: 20),
-                            Text(user?.userName ?? '',
-                                style: UnderseaStyles.listRegular
-                                    .copyWith(fontSize: 16)),
-                            Expanded(child: Container()),
-                            if (i == _selectedIndex)
-                              UnderseaStyles.iconsFromImages("done", size: 28),
-                            SizedBox(width: 20)
-                          ],
-                        )));
-              });
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  _itemBuilder,
+                  childCount: itemCount,
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Center(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 100,
+                      ),
+                      results.isEmpty && !controller.loadingList.value
+                          ? Text(Strings.no_user_named_this_way.tr,
+                              style: UnderseaStyles.listRegular.copyWith(
+                                  fontSize: 15,
+                                  color: UnderseaStyles.underseaLogoColor))
+                          : Container(),
+                      SizedBox(
+                          height: 20 + MediaQuery.of(context).padding.bottom),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          );
         }),
       );
     } else {

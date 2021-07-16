@@ -69,7 +69,6 @@ class _LeaderboardState extends State<Leaderboard> {
 
   @override
   Widget build(BuildContext context) {
-    //results = [];
     return Scaffold(
       backgroundColor: UnderseaStyles.menuDarkBlue,
       appBar: AppBar(
@@ -117,7 +116,7 @@ class _LeaderboardState extends State<Leaderboard> {
               title: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(50, 30, 50, 30),
+                    padding: EdgeInsets.all(30),
                     child: Column(
                       children: [
                         UnderseaStyles.inputField(
@@ -150,7 +149,7 @@ class _LeaderboardState extends State<Leaderboard> {
                       height: 100,
                     ),
                     results.isEmpty && !controller.loadingList.value
-                        ? Text('Nincs ilyen nevű felhasználó',
+                        ? Text(Strings.no_user_named_this_way.tr,
                             style: UnderseaStyles.listRegular.copyWith(
                                 fontSize: 15,
                                 color: UnderseaStyles.underseaLogoColor))
