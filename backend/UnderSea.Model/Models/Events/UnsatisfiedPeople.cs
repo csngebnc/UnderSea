@@ -14,10 +14,13 @@ namespace UnderSea.Model.Models.Events
             if (country.CountryBuildings.Any(cb => cb.Building.Name == BuildingNameConstants.Aramlasiranyito))
             {
                 var cb = country.CountryBuildings.SingleOrDefault(cb => cb.Building.Name == BuildingNameConstants.Aramlasiranyito);
-                cb.Count -= 1;
-                foreach (var be in cb.Building.BuildingEffects)
+                if(cb.Count > 0)
                 {
-                    be.Effect.RemoveEffect(country);
+                    cb.Count -= 1;
+                    foreach (var be in cb.Building.BuildingEffects)
+                    {
+                        be.Effect.RemoveEffect(country);
+                    }
                 }
             }
         }
