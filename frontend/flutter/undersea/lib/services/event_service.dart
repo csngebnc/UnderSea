@@ -5,12 +5,12 @@ import 'package:undersea/models/response/event_dto.dart';
 import 'package:undersea/models/response/paged_result_of_event_dto.dart';
 import 'package:undersea/network/providers/event_provider.dart';
 
-class EventDataController extends GetxController {
+class EventService extends GetxController {
   final EventProvider _eventProvider;
 
   Rx<bool> loadingList = false.obs;
 
-  EventDataController(this._eventProvider);
+  EventService(this._eventProvider);
 
   Rx<PagedResultOfEventDto?> pagedEventList = Rx(null);
 

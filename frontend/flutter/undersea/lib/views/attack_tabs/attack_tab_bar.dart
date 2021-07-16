@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/battle_data_controller.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/services/battle_service.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/attack_tabs/spying_tab.dart';
 
@@ -13,9 +13,9 @@ class AttackTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.find<BattleDataController>().getUnitTypes();
-    Get.find<BattleDataController>().getAllUnits();
-    Get.find<BattleDataController>().getSpies();
+    Get.find<BattleService>().getUnitTypes();
+    Get.find<BattleService>().getAllUnits();
+    Get.find<BattleService>().getSpies();
     return MaterialApp(
       home: DefaultTabController(
         length: 2,

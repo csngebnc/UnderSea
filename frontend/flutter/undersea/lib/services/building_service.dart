@@ -1,22 +1,18 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:undersea/lang/strings.dart';
-
+import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/building_details_dto.dart';
-
 import 'package:undersea/models/response/buy_building_dto.dart';
-
 import 'package:undersea/network/providers/building_data_provider.dart';
-
 import 'package:undersea/styles/style_constants.dart';
 
-class BuildingDataController extends GetxController {
+class BuildingService extends GetxController {
   final BuildingDataProvider _buildingDataProvider;
 
   Rx<List<BuildingDetailsDto>> buildingInfoData = Rx([]);
 
-  BuildingDataController(this._buildingDataProvider);
+  BuildingService(this._buildingDataProvider);
 
   buyBuilding(int id) async {
     try {

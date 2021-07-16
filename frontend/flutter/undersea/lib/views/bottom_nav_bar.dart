@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/navbar_controller.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/services/navbar_controller.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/attack_page.dart';
 import 'package:undersea/views/city_tabs/city_tab_bar.dart';

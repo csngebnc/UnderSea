@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:undersea/controllers/upgrades_controller.dart';
-import 'package:undersea/lang/strings.dart';
-import 'package:undersea/models/response/upgrade_dto.dart';
-import 'package:undersea/styles/style_constants.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/models/response/upgrade_dto.dart';
+import 'package:undersea/services/upgrade_service.dart';
+import 'package:undersea/styles/style_constants.dart';
 
 class Upgrades extends StatefulWidget {
   @override
@@ -12,7 +12,7 @@ class Upgrades extends StatefulWidget {
 }
 
 class _UpgradesTabState extends State<Upgrades> {
-  UpgradesController controller = Get.find();
+  UpgradeService controller = Get.find();
   int? _selectedIndex;
   late Rx<List<UpgradeDto>> upgradeList;
 
@@ -49,7 +49,7 @@ class _UpgradesTabState extends State<Upgrades> {
         list: ListView.builder(
             itemCount: 8,
             itemBuilder: (BuildContext context, int i) {
-              return GetBuilder<UpgradesController>(builder: (controller) {
+              return GetBuilder<UpgradeService>(builder: (controller) {
                 if (i == 0) {
                   return Column(
                     children: [

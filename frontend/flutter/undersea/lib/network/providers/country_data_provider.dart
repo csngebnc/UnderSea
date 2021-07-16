@@ -1,19 +1,15 @@
 import 'package:get/get.dart';
 import 'package:undersea/models/response/country_details_dto.dart';
 
-import '../../constants.dart';
-import 'network_provider.dart';
+import '../network_provider.dart';
 
 class CountryDataProvider extends NetworkProvider {
-  Future<Response<CountryDetailsDto>> getCountryDetails() => get("/api/Country",
-          contentType: 'application/json',
-          headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
-          decoder: (response) {
+  Future<Response<CountryDetailsDto>> getCountryDetails() =>
+      get("/api/Country", contentType: 'application/json', decoder: (response) {
         return CountryDetailsDto.fromJson(response);
       });
 
   Future<Response<String>> getCountryName() => get("/api/Country/name",
-      headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
       contentType: 'application/json',
       decoder: (response) => response.toString());
 
@@ -22,6 +18,5 @@ class CountryDataProvider extends NetworkProvider {
         {},
         query: {'name': countryName},
         contentType: 'application/json',
-        headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
       );
 }

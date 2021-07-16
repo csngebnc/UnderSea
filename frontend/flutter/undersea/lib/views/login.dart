@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/user_data_controller.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/services/user_service.dart';
 import 'package:undersea/styles/disablable_elevated_button.dart';
-import 'package:undersea/views/registration.dart';
 import 'package:undersea/styles/style_constants.dart';
+import 'package:undersea/views/registration.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
             hasError = !_formKey.currentState!.validate();
           });*/
         });
-    final UserDataController controller = Get.find();
+    final UserService controller = Get.find();
 
     return Form(
         key: _formKey,
@@ -90,8 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                                     style: UnderseaStyles.buttonTextStyle
                                         .copyWith(fontSize: 24),
                                   )),
-                              GetBuilder<UserDataController>(
-                                  builder: (controller) {
+                              GetBuilder<UserService>(builder: (controller) {
                                 return controller.loggingIn.value
                                     ? Center(
                                         child: Column(

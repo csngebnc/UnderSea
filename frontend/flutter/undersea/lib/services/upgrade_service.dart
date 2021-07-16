@@ -1,15 +1,16 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
+
 import 'package:undersea/models/response/buy_upgrade_dto.dart';
 import 'package:undersea/models/response/upgrade_dto.dart';
 import 'package:undersea/network/providers/upgrade_data_provider.dart';
 import 'package:undersea/styles/style_constants.dart';
 
-class UpgradesController extends GetxController {
+class UpgradeService extends GetxController {
   final UpgradeDataProvider _upgradeDataProvider;
-  UpgradesController(this._upgradeDataProvider);
+  UpgradeService(this._upgradeDataProvider);
 
   Rx<List<UpgradeDto>> upgradeInfoData = Rx([]);
 

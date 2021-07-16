@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/battle_data_controller.dart';
-import 'package:undersea/controllers/building_data_controller.dart';
-
-import 'package:undersea/controllers/country_data_controller.dart';
-
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/building_info_dto.dart';
 import 'package:undersea/models/response/country_details_dto.dart';
+import 'package:undersea/services/battle_service.dart';
+import 'package:undersea/services/building_service.dart';
+import 'package:undersea/services/country_service.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class ExpandedMenu extends StatelessWidget {
   ExpandedMenu();
 
   List<Widget> _enumerateSoldiers(List<BattleUnitDto> units) {
-    final allUnits = Get.find<BattleDataController>().allUnitsInfo.value;
-    final spiesCount = Get.find<BattleDataController>().spiesInfo.value?.count;
+    final allUnits = Get.find<BattleService>().allUnitsInfo.value;
+    final spiesCount = Get.find<BattleService>().spiesInfo.value?.count;
 
     return units
         .map((e) => UnderseaStyles.militaryIcon(
-            BattleDataController.imageNameMap[e.name] ?? 'shark',
+            BattleService.imageNameMap[e.name] ?? 'shark',
             e.count,
             e.name == 'Felfedező'
                 ? (spiesCount ?? 0)
@@ -32,7 +30,7 @@ class ExpandedMenu extends StatelessWidget {
   List<Widget> _enumerateBuildings(List<BuildingInfoDto> buildingDtos) {
     return buildingDtos
         .map((e) => UnderseaStyles.buildingIcon(
-            BuildingDataController.imageNameMap[e.name] ?? 'zatonyvar',
+            BuildingService.imageNameMap[e.name] ?? 'zatonyvar',
             e.buildingsCount))
         .toList();
   }
@@ -49,7 +47,7 @@ class ExpandedMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CountryDataController>(builder: (controller) {
+    return GetBuilder<CountryService>(builder: (controller) {
       final countryData = controller.countryDetailsData.value;
       if (controller.countryDataLoading.value) {
         return Container(

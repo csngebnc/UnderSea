@@ -3,15 +3,13 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/battle_data_controller.dart';
-import 'package:undersea/controllers/navbar_controller.dart';
-
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/attack_unit_dto.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/send_attack_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
-
+import 'package:undersea/services/battle_service.dart';
+import 'package:undersea/services/navbar_controller.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class AttackingTab extends StatefulWidget {
@@ -28,7 +26,7 @@ class _AttackingTabState extends State<AttackingTab> {
   late Rx<List<BattleUnitDto>> soldierList;
   late Rx<List<UnitDto>> unitTypeList;
   Map<int, List<BattleUnitDto>> groupedUnits = {};
-  var controller = Get.find<BattleDataController>();
+  var controller = Get.find<BattleService>();
   Map<int, Map<int, int>> sliderValues = {};
   late int generalIndex;
   var mercenaryPrice = 0;
@@ -107,7 +105,7 @@ class _AttackingTabState extends State<AttackingTab> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<BattleDataController>(builder: (controller) {
+    return GetBuilder<BattleService>(builder: (controller) {
       var itemCount = unitTypeList.value.length + 2;
 
       for (var soldier in soldierList()) {
@@ -208,9 +206,8 @@ class _AttackingTabState extends State<AttackingTab> {
                               SizedBox(
                                 height: 70,
                                 width: 70,
-                                child: UnderseaStyles.assetIcon(
-                                    BattleDataController
-                                        .imageNameMap[actualSoldier.name]!),
+                                child: UnderseaStyles.assetIcon(BattleService
+                                    .imageNameMap[actualSoldier.name]!),
                               ),
                               /*Expanded(
                                 child: */

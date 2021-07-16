@@ -1,23 +1,27 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:undersea/controllers/event_data_controller.dart';
-import 'package:undersea/controllers/upgrades_controller.dart';
-import 'package:undersea/controllers/user_data_controller.dart';
-import 'package:undersea/network/providers/next_round_provider.dart';
+import 'package:undersea/core/constants.dart';
 
-import 'battle_data_controller.dart';
-import 'building_data_controller.dart';
-import 'country_data_controller.dart';
+import 'package:undersea/network/providers/next_round_provider.dart';
+import 'package:undersea/network/urls.dart';
+
+import 'battle_service.dart';
+import 'building_service.dart';
+import 'country_service.dart';
 
 import 'package:signalr_core/signalr_core.dart';
 
-class RoundController extends GetxController {
+import 'event_service.dart';
+import 'upgrade_service.dart';
+import 'user_service.dart';
+
+class RoundService extends GetxController {
   final NextRoundProvider _roundProvider;
   late String serverUrl;
 
-  RoundController(this._roundProvider) {
-    serverUrl = _roundProvider.httpClient.baseUrl! + 'roundHub';
+  RoundService(this._roundProvider) {
+    serverUrl = Urls.SERVER_URL;
   }
 
   void nextRound() async {
@@ -46,27 +50,27 @@ class RoundController extends GetxController {
       log('$error');
     }
 
-    connection.on('SendMessage', (message) {
+    connection.on(Constants.SOCKET, (message) {
       refreshOnNextRound();
       log('ROUND: ${message.toString()}');
     });
   }
 
   void refreshOnNextRound() {
-    var userDataController = Get.find<UserDataController>();
-    userDataController.userInfo();
-    userDataController.getRankList();
-    userDataController.reset();
-    Get.find<CountryDataController>().getCountryDetails();
-    Get.find<CountryDataController>().eventWindowShown = false;
-    Get.find<BuildingDataController>().getBuildingDetails();
-    Get.find<UpgradesController>().getUpgradeDetails();
-    var battleController = Get.find<BattleDataController>();
+    var userService = Get.find<UserService>();
+    userService.userInfo();
+    userService.getRankList();
+    userService.reset();
+    Get.find<CountryService>().getCountryDetails();
+    Get.find<CountryService>().eventWindowShown = false;
+    Get.find<BuildingService>().getBuildingDetails();
+    Get.find<UpgradeService>().getUpgradeDetails();
+    var battleController = Get.find<BattleService>();
     battleController.reset();
     battleController.getUnitTypes();
     battleController.getAllUnits();
     battleController.getSpies();
     battleController.getAvailableUnits();
-    Get.find<EventDataController>().reset();
+    Get.find<EventService>().reset();
   }
 }

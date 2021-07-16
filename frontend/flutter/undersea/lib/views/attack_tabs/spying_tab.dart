@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/battle_data_controller.dart';
-import 'package:undersea/controllers/navbar_controller.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/send_spy_dto.dart';
+import 'package:undersea/services/battle_service.dart';
+import 'package:undersea/services/navbar_controller.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class SpyingTab extends StatefulWidget {
@@ -26,7 +26,7 @@ class _SpyingTabState extends State<SpyingTab> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<BattleDataController>(builder: (controller) {
+    return GetBuilder<BattleService>(builder: (controller) {
       return UnderseaStyles.tabSkeleton(
           buttonText: Strings.send.tr,
           isDisabled: !_canAttack(),

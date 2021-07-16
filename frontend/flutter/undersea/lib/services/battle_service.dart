@@ -1,13 +1,11 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:undersea/controllers/country_data_controller.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/attackable_user_dto.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/buy_unit_dto.dart';
 import 'package:undersea/models/response/logged_attack_dto.dart';
-
 import 'package:undersea/models/response/paged_result_of_attackable_user_dto.dart';
 import 'package:undersea/models/response/paged_result_of_logged_attack_dto.dart';
 import 'package:undersea/models/response/paged_result_of_spy_report_dto.dart';
@@ -15,15 +13,15 @@ import 'package:undersea/models/response/send_attack_dto.dart';
 import 'package:undersea/models/response/send_spy_dto.dart';
 import 'package:undersea/models/response/spy_report_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
-
 import 'package:undersea/network/providers/battle_data_provider.dart';
-
 import 'package:undersea/styles/style_constants.dart';
 
-class BattleDataController extends GetxController {
+import 'country_service.dart';
+
+class BattleService extends GetxController {
   final BattleDataProvider _battleDataProvider;
   int? countryToBeAttacked;
-  BattleDataController(this._battleDataProvider);
+  BattleService(this._battleDataProvider);
 
   Rx<bool> loadingList = false.obs;
 
@@ -275,7 +273,7 @@ class BattleDataController extends GetxController {
         getAllUnits();
         getUnitTypes();
         getSpies();
-        Get.find<CountryDataController>().getCountryDetails();
+        Get.find<CountryService>().getCountryDetails();
         UnderseaStyles.snackbar(
             Strings.successful_purchase.tr, Strings.new_units.tr);
       }

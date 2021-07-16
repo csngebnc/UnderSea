@@ -2,12 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/battle_data_controller.dart';
-import 'package:undersea/controllers/building_data_controller.dart';
-
-import 'package:undersea/controllers/country_data_controller.dart';
-import 'package:undersea/controllers/next_round_controller.dart';
-import 'package:undersea/controllers/user_data_controller.dart';
+import 'package:undersea/services/battle_service.dart';
+import 'package:undersea/services/building_service.dart';
+import 'package:undersea/services/country_service.dart';
+import 'package:undersea/services/round_service.dart';
+import 'package:undersea/services/user_service.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/expandable_menu.dart';
 
@@ -17,23 +16,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final userDataController = Get.find<UserDataController>();
-  final countryDataController = Get.find<CountryDataController>();
-  final battleDatacontroller = Get.find<BattleDataController>();
+  final userService = Get.find<UserService>();
+  final countryService = Get.find<CountryService>();
+  final battleService = Get.find<BattleService>();
   var rng = Random();
   @override
   void initState() {
-    userDataController.userInfo();
-    userDataController.getWinners();
-    userDataController.searchText.value = '';
-    userDataController.getRankList();
-    countryDataController.getCountryDetails();
-    userDataController.getRankList();
-    battleDatacontroller.getAllUnits();
-    battleDatacontroller.getAttackableUsers();
-    battleDatacontroller.getHistory();
-    battleDatacontroller.getAvailableUnits();
-    battleDatacontroller.getSpyingHistory();
+    userService.userInfo();
+    userService.getWinners();
+    userService.searchText.value = '';
+    userService.getRankList();
+    countryService.getCountryDetails();
+    userService.getRankList();
+    battleService.getAllUnits();
+    battleService.getAttackableUsers();
+    battleService.getHistory();
+    battleService.getAvailableUnits();
+    battleService.getSpyingHistory();
 
     super.initState();
   }
@@ -42,16 +41,15 @@ class _HomePageState extends State<HomePage> {
     var buildings = <Widget>[];
     var tops = <double>[120, 160, 60, 80];
     var lefts = <double>[0, 160, 100, 280];
-    var buildingList =
-        countryDataController.countryDetailsData.value?.buildings;
+    var buildingList = countryService.countryDetailsData.value?.buildings;
     bool hasCannon = false;
-    if (countryDataController.countryDetailsData.value?.hasSonarCanon != null) {
-      hasCannon = countryDataController.countryDetailsData.value!.hasSonarCanon;
+    if (countryService.countryDetailsData.value?.hasSonarCanon != null) {
+      hasCannon = countryService.countryDetailsData.value!.hasSonarCanon;
     }
 
     if (hasCannon) {
       buildings.add(UnderseaStyles.building(
-          BuildingDataController.imageNameMap['Szonárágyú']!,
+          BuildingService.imageNameMap['Szonárágyú']!,
           top: tops.last,
           left: lefts.last));
     }
@@ -60,7 +58,7 @@ class _HomePageState extends State<HomePage> {
       for (int i = 0; i < buildingList.length; i++) {
         if (buildingList[i].buildingsCount >= 1) {
           buildings.add(UnderseaStyles.building(
-              BuildingDataController.imageNameMap[buildingList[i].name]!,
+              BuildingService.imageNameMap[buildingList[i].name]!,
               top: tops[i],
               left: lefts[i]));
         }
@@ -80,7 +78,7 @@ class _HomePageState extends State<HomePage> {
         ),
         child: Column(children: [
           SizedBox(height: 10),
-          GetBuilder<UserDataController>(builder: (controller) {
+          GetBuilder<UserService>(builder: (controller) {
             final userInfoData = controller.userInfoData.value;
 
             if (userInfoData != null) {
@@ -91,10 +89,6 @@ class _HomePageState extends State<HomePage> {
               return UnderseaStyles.leaderboardButton();
             } else {
               return CircularProgressIndicator();
-              /* } else {
-              return UnderseaStyles.leaderboardButton(
-                  roundNumber: 4, placement: 23);
-            }*/
             }
           }),
           SizedBox(
@@ -105,7 +99,7 @@ class _HomePageState extends State<HomePage> {
               width: 100,
               height: 50,
               onPressed: () {
-                Get.find<RoundController>().nextRound();
+                Get.find<RoundService>().nextRound();
               }),
           Expanded(
               child: Stack(

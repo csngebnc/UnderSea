@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:undersea/controllers/building_data_controller.dart';
-import 'package:undersea/controllers/country_data_controller.dart';
-
-import 'package:undersea/lang/strings.dart';
-
+import 'package:get/get.dart';
+import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/building_details_dto.dart';
 import 'package:undersea/models/response/material_dto.dart';
+import 'package:undersea/services/building_service.dart';
+import 'package:undersea/services/country_service.dart';
 import 'package:undersea/styles/style_constants.dart';
-import 'package:get/get.dart';
 
 class Buildings extends StatefulWidget {
   @override
@@ -15,7 +13,7 @@ class Buildings extends StatefulWidget {
 }
 
 class _BuildingsTabState extends State<Buildings> {
-  BuildingDataController controller = Get.find();
+  BuildingService controller = Get.find();
   late Rx<List<BuildingDetailsDto>> buildingList;
 
   int? _selectedIndex;
@@ -26,7 +24,7 @@ class _BuildingsTabState extends State<Buildings> {
     super.initState();
   }
 
-  CountryDataController playerController = Get.find();
+  CountryService playerController = Get.find();
   @override
   Widget build(BuildContext context) {
     return UnderseaStyles.tabSkeleton(
@@ -43,7 +41,7 @@ class _BuildingsTabState extends State<Buildings> {
         list: ListView.builder(
             itemCount: buildingList.value.length + 2,
             itemBuilder: (BuildContext context, int i) {
-              return GetBuilder<BuildingDataController>(builder: (controller) {
+              return GetBuilder<BuildingService>(builder: (controller) {
                 if (i == 0) {
                   return UnderseaStyles.infoPanel(
                       Strings.buildings_manual_title.tr,
@@ -127,7 +125,7 @@ class _BuildingsTabState extends State<Buildings> {
                               height: 150,
                               width: 150,
                               child: UnderseaStyles.buildingImage(
-                                  BuildingDataController
+                                  BuildingService
                                           .imageNameMap[actualBuilding.name] ??
                                       '' + '@3x'),
                             ),

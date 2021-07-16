@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/battle_data_controller.dart';
-
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/attackable_user_dto.dart';
-
+import 'package:undersea/services/battle_service.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 import 'attack_tabs/attack_tab_bar.dart';
@@ -15,7 +13,7 @@ class AttackPage extends StatefulWidget {
 }
 
 class _AttackPageState extends State<AttackPage> {
-  var controller = Get.find<BattleDataController>();
+  var controller = Get.find<BattleService>();
   final ScrollController _scrollController = ScrollController();
 
   int? _selectedIndex;
@@ -92,14 +90,14 @@ class _AttackPageState extends State<AttackPage> {
   Widget build(BuildContext context) {
     if (firstPage) {
       return UnderseaStyles.tabSkeleton(
-        buttonText: Strings.proceed,
+        buttonText: Strings.proceed.tr,
         isDisabled: _selectedIndex == null ? true : false,
         onButtonPressed: () {
           setState(() {
             firstPage = false;
           });
         },
-        list: GetBuilder<BattleDataController>(builder: (controller) {
+        list: GetBuilder<BattleService>(builder: (controller) {
           results = controller.attackableUserList.toList();
           itemCount = results.length;
 

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:undersea/controllers/battle_data_controller.dart';
-import 'package:undersea/controllers/building_data_controller.dart';
-import 'package:undersea/controllers/event_data_controller.dart';
-import 'package:undersea/controllers/upgrades_controller.dart';
-import 'package:undersea/controllers/user_data_controller.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
+import 'package:undersea/services/battle_service.dart';
+import 'package:undersea/services/building_service.dart';
+import 'package:undersea/services/event_service.dart';
+import 'package:undersea/services/upgrade_service.dart';
+import 'package:undersea/services/user_service.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/editable_text.dart';
 import 'package:undersea/views/login.dart';
 
-import '../constants.dart';
+import '../core/constants.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage();
@@ -24,7 +24,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   late Future<UserInfoDto?> userInfo;
 
-  final userDataController = Get.find<UserDataController>();
+  final userService = Get.find<UserService>();
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(
                 height: 25,
               ),
-              GetBuilder<UserDataController>(builder: (controller) {
+              GetBuilder<UserService>(builder: (controller) {
                 final userInfoData = controller.userInfoData.value;
                 if (userInfoData != null) {
                   return Text(userInfoData.name!,
@@ -98,10 +98,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPressed: () {
                           var storage = GetStorage();
                           storage.remove(Constants.TOKEN);
-                          Get.find<BuildingDataController>().reset();
-                          Get.find<UpgradesController>().reset();
-                          Get.find<BattleDataController>().reset();
-                          Get.find<EventDataController>().reset();
+                          Get.find<BuildingService>().reset();
+                          Get.find<UpgradeService>().reset();
+                          Get.find<BattleService>().reset();
+                          Get.find<EventService>().reset();
                           storage.remove(Constants.WINNER_SHOWN);
                           Get.off(LoginPage());
                         },

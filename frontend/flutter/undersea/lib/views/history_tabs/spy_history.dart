@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/battle_data_controller.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/spy_report_dto.dart';
+import 'package:undersea/services/battle_service.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class SpyingHistoryPage extends StatefulWidget {
@@ -11,7 +11,7 @@ class SpyingHistoryPage extends StatefulWidget {
 }
 
 class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
-  var controller = Get.find<BattleDataController>();
+  var controller = Get.find<BattleService>();
 
   final ScrollController _scrollController = ScrollController();
   List<SpyReportDto?> results = [];
@@ -41,7 +41,7 @@ class _SpyingHistoryPageState extends State<SpyingHistoryPage> {
     return Expanded(
         child: Container(
             decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
-            child: GetBuilder<BattleDataController>(builder: (controller) {
+            child: GetBuilder<BattleService>(builder: (controller) {
               results = controller.spyLogsList.toList();
               return ListView.builder(
                   controller: _scrollController,

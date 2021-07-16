@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/battle_data_controller.dart';
 import 'package:undersea/models/response/logged_attack_dto.dart';
+import 'package:undersea/services/battle_service.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class AttackHistoryPage extends StatefulWidget {
@@ -10,7 +10,7 @@ class AttackHistoryPage extends StatefulWidget {
 }
 
 class _AttackHistoryPageState extends State<AttackHistoryPage> {
-  var controller = Get.find<BattleDataController>();
+  var controller = Get.find<BattleService>();
 
   final ScrollController _scrollController = ScrollController();
   List<LoggedAttackDto?> results = [];
@@ -39,7 +39,7 @@ class _AttackHistoryPageState extends State<AttackHistoryPage> {
     return Expanded(
         child: Container(
             decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
-            child: GetBuilder<BattleDataController>(builder: (controller) {
+            child: GetBuilder<BattleService>(builder: (controller) {
               results = controller.attackLogsList.toList();
               itemCount =
                   controller.loadingList.value ? 1 : results.length * 2 + 1;

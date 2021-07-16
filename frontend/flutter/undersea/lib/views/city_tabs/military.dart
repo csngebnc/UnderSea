@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:undersea/controllers/battle_data_controller.dart';
-import 'package:undersea/controllers/country_data_controller.dart';
-
-import 'package:undersea/lang/strings.dart';
 import 'package:get/get.dart';
+import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/battle_unit_dto.dart';
 import 'package:undersea/models/response/buy_unit_details_dto.dart';
 import 'package:undersea/models/response/buy_unit_dto.dart';
 import 'package:undersea/models/response/unit_dto.dart';
+import 'package:undersea/services/battle_service.dart';
+import 'package:undersea/services/country_service.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class Military extends StatefulWidget {
@@ -17,7 +16,7 @@ class Military extends StatefulWidget {
 
 class _MilitaryTabState extends State<Military> {
   late Rx<List<UnitDto>> soldierList;
-  var controller = Get.find<BattleDataController>();
+  var controller = Get.find<BattleService>();
 
   @override
   void initState() {
@@ -25,8 +24,7 @@ class _MilitaryTabState extends State<Military> {
     super.initState();
   }
 
-  final countryData =
-      Get.find<CountryDataController>().countryDetailsData.value;
+  final countryData = Get.find<CountryService>().countryDetailsData.value;
   late List<int> buyList =
       List.generate(soldierList.value.length, (index) => 0);
   late int count = 2 + soldierList.value.length * 2 - 1;
@@ -48,7 +46,7 @@ class _MilitaryTabState extends State<Military> {
         list: ListView.builder(
             itemCount: count,
             itemBuilder: (BuildContext context, int i) {
-              return GetBuilder<BattleDataController>(builder: (controller) {
+              return GetBuilder<BattleService>(builder: (controller) {
                 if (i == 0) {
                   return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,8 +150,7 @@ class _MilitaryTabState extends State<Military> {
                 height: 70,
                 width: 70,
                 child: UnderseaStyles.assetIcon(
-                    BattleDataController.imageNameMap[actualSoldier.name] ??
-                        'shark'),
+                    BattleService.imageNameMap[actualSoldier.name] ?? 'shark'),
               ),
               SizedBox(height: 8),
               Text(actualSoldier.name,

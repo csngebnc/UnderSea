@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/user_data_controller.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/services/user_service.dart';
 import 'package:undersea/styles/disablable_elevated_button.dart';
 import 'package:undersea/styles/style_constants.dart';
 
@@ -12,7 +12,7 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  final controller = Get.find<UserDataController>();
+  final controller = Get.find<UserService>();
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -138,8 +138,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                         .copyWith(fontSize: 24),
                                   )),
                               SizedBox(height: 25.0),
-                              GetBuilder<UserDataController>(
-                                  builder: (controller) {
+                              GetBuilder<UserService>(builder: (controller) {
                                 return controller.regging.value
                                     ? Center(
                                         child: Column(

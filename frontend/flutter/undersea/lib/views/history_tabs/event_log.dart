@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/event_data_controller.dart';
 import 'package:undersea/models/response/event_dto.dart';
+import 'package:undersea/services/event_service.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class EventLogPage extends StatefulWidget {
@@ -10,7 +10,7 @@ class EventLogPage extends StatefulWidget {
 }
 
 class _EventLogPageState extends State<EventLogPage> {
-  var controller = Get.find<EventDataController>();
+  var controller = Get.find<EventService>();
   late int itemCount;
   List<EventDto?> results = [];
 
@@ -40,7 +40,7 @@ class _EventLogPageState extends State<EventLogPage> {
     return Expanded(
         child: Container(
             decoration: BoxDecoration(color: UnderseaStyles.menuDarkBlue),
-            child: GetBuilder<EventDataController>(builder: (controller) {
+            child: GetBuilder<EventService>(builder: (controller) {
               results = controller.eventList.toList();
               itemCount =
                   controller.loadingList.value ? 1 : results.length * 2 + 1;

@@ -3,20 +3,19 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/paged_result_of_user_rank_dto.dart';
 import 'package:undersea/models/response/paged_result_of_world_winner_dto.dart';
 import 'package:undersea/models/response/register_dto.dart';
 import 'package:undersea/models/response/user_info_dto.dart';
 import 'package:undersea/models/response/user_rank_dto.dart';
-
 import 'package:undersea/network/providers/user_data_provider.dart';
 import 'package:undersea/styles/style_constants.dart';
 import 'package:undersea/views/bottom_nav_bar.dart';
 
-import '../constants.dart';
+import '../core/constants.dart';
 
-class UserDataController extends GetxController {
+class UserService extends GetxController {
   final UserDataProvider _userDataProvider;
   var storage = GetStorage();
 
@@ -29,7 +28,7 @@ class UserDataController extends GetxController {
 
   Rx<bool> loadingList = false.obs;
 
-  UserDataController(this._userDataProvider);
+  UserService(this._userDataProvider);
 
   Rx<PagedResultOfUserRankDto?> pagedRankList = Rx(null);
   Rx<PagedResultOfWorldWinnerDto?> winnerList = Rx(null);

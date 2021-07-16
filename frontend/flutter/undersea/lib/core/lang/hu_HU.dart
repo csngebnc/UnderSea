@@ -1,4 +1,4 @@
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
 
 const Map<String, String> hu_HU = {
   Strings.my_city: 'Városom',

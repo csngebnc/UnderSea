@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/country_data_controller.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
+import 'package:undersea/services/country_service.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class CityNameEditableText extends StatefulWidget {
@@ -24,7 +24,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
   }
 
   bool _isEditingText = false;
-  final controller = Get.find<CountryDataController>();
+  final controller = Get.find<CountryService>();
   late TextEditingController _editingController;
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
       Expanded(
         child: Container(),
       ),
-      GetBuilder<CountryDataController>(builder: (controller) {
+      GetBuilder<CountryService>(builder: (controller) {
         final countryName = controller.countryName.value;
         if (countryName != null) {
           return InkWell(
@@ -105,7 +105,7 @@ class _CityNameEditableTextState extends State<CityNameEditableText> {
           height: 40,
           child: Align(
               alignment: Alignment.centerLeft,
-              child: GetBuilder<CountryDataController>(builder: (controller) {
+              child: GetBuilder<CountryService>(builder: (controller) {
                 final countryName = controller.countryName.value;
                 if (countryName != null) {
                   return Text(

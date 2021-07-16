@@ -1,11 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:undersea/controllers/navbar_controller.dart';
-import 'package:undersea/controllers/user_data_controller.dart';
-import 'package:undersea/lang/strings.dart';
+import 'package:undersea/core/lang/strings.dart';
 import 'package:undersea/models/response/user_rank_dto.dart';
+import 'package:undersea/services/navbar_controller.dart';
+import 'package:undersea/services/user_service.dart';
 import 'package:undersea/styles/style_constants.dart';
 
 class Leaderboard extends StatefulWidget {
@@ -18,7 +16,7 @@ class Leaderboard extends StatefulWidget {
 class _LeaderboardState extends State<Leaderboard> {
   final BottomNavBarController navbarcontroller =
       Get.find<BottomNavBarController>();
-  var controller = Get.find<UserDataController>();
+  var controller = Get.find<UserService>();
   late int itemCount;
   List<UserRankDto?> results = [];
 
@@ -100,7 +98,7 @@ class _LeaderboardState extends State<Leaderboard> {
                   ))),
         ],
       ),
-      body: GetBuilder<UserDataController>(builder: (controller) {
+      body: GetBuilder<UserService>(builder: (controller) {
         results = controller.rankList.toList();
         itemCount = results.length;
 

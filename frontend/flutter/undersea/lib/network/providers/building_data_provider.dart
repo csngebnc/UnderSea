@@ -1,16 +1,11 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:undersea/models/response/building_details_dto.dart';
 
-import '../../constants.dart';
-import 'network_provider.dart';
+import '../network_provider.dart';
 
 class BuildingDataProvider extends NetworkProvider {
   Future<Response<List<BuildingDetailsDto>>> getBuildingDetails() =>
-      get("/api/Building/user-buildings",
-          contentType: 'application/json',
-          headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
+      get("/api/Building/user-buildings", contentType: 'application/json',
           decoder: (response) {
         //log(response.toString());
         return (response as List)
@@ -20,7 +15,5 @@ class BuildingDataProvider extends NetworkProvider {
 
   Future<Response<void>> buyBuilding(Map<String, dynamic> body) =>
       post("/api/Building/buy", body,
-          headers: {'Authorization': 'Bearer ${storage.read(Constants.TOKEN)}'},
-          contentType: 'application/json',
-          decoder: (response) => {});
+          contentType: 'application/json', decoder: (response) => {});
 }
